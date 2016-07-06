@@ -1,0 +1,8 @@
+/appconfig.json
+/.vscode/
+/build/
+/doc/
+/node_modules/
+/ssl/
+/storage/
+/typings/

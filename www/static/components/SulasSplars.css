@@ -1,0 +1,279 @@
+/**
+ * (C) 2016 printf.jp
+ */
+
+/*
+ * 全体
+ */
+*
+{
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+}
+
+input, textarea
+{
+    -webkit-user-select: auto;
+}
+
+input
+{
+    font-size: 15px;
+}
+
+input:focus
+{
+    outline: 0px;
+}
+
+/*
+ * 上下中央に配置
+ */
+.osha_center
+{
+    display:        table-cell;
+    text-align:     center;
+    vertical-align: middle;
+}
+
+.osha_center_abs
+{
+    margin: auto;
+    height: 0px;
+    text-align: center;
+}
+
+/*
+ * スタックビュー
+ */
+.osha_stack_view
+{
+    box-sizing: border-box;
+    position:   absolute;
+    overflow:   hidden;
+}
+
+/*
+ * コンテナビュー
+ */
+.osha_container_view
+{
+    position: relative;
+    overflow: hidden;
+}
+
+/*
+ * コンテナコンテンツ
+ */
+.osha_container_contents
+{
+    position: absolute;
+    overflow: hidden;
+    left:     0px;
+    top:      0px;
+    width:    100%;
+    height:   100%;
+}
+
+/*
+ * リニアレイアウト
+ */
+.osha_linear_layout
+{
+    position: relative;
+}
+
+/*
+ * ボタン
+ * 利便性のために用意したデフォルト設定
+ */
+.osha_button
+{
+    width: 100%;
+    height: 48px;
+}
+
+/*
+ * ボタンフレーム
+ */
+.osha_button_frame
+{
+    position: relative;
+    overflow: hidden;
+}
+
+/*
+ * ボタンラベル
+ */
+.osha_button_icon,
+.osha_button_label
+{
+    -webkit-user-select: none;
+    position: absolute;
+    cursor:   pointer;
+}
+
+/*
+ * ボタン詳細
+ */
+.osha_button_detail
+{
+    height: 100%;
+}
+
+/*
+ * ボタン（block）
+ */
+.osha_button_normal_block
+{
+    box-sizing:       border-box;
+    position:         absolute;
+    font-weight:      bold;
+    color:            white;
+    border-radius:    3px;
+    background-color: rgb(49, 182, 162);
+    opacity:          1.0;
+    cursor:           pointer;
+}
+
+.osha_button_disable_block
+{
+    opacity: 0.6;
+}
+
+.osha_button_white_block
+{
+    /* 確認ダイアログで使用 */
+    border-radius:    0px;
+    border-top:       1px solid lightgray;
+    border-right:     1px solid lightgray;
+    font-weight:      normal;
+    color:            black;
+    background-color: white;
+}
+
+.osha_button_white_block_right
+{
+    /* 確認ダイアログで使用 */
+    border-right: none;
+}
+
+/*
+ * ボタン（flat）
+ */
+.osha_button_normal_flat
+{
+    box-sizing:  border-box;
+    position:    absolute;
+    font-weight: normal;
+    color:       rgb(49, 182, 162);
+}
+
+.osha_button_disable_flat
+{
+    opacity: 0.4;
+}
+
+/*
+ * タブボタン
+ */
+.osha_tab_button_contents
+{
+    cursor: pointer;
+}
+
+/*
+ * タイトルバー
+ */
+.osha_titlebar
+{
+    position:  relative;
+    boxSizing: border-box;
+    overflow:  hidden;
+}
+
+/*
+ * タイトルバーのタイトル
+ */
+.osha_titlebar_title
+{
+    cursor:     default;
+    box-sizing: border-box;
+    width:      inherit;
+    height:     inherit;
+}
+
+/*
+ * タイトルバーのボタン
+ */
+.osha_titlebar_button
+{
+    position: absolute;
+    top:      0px;
+    cursor:   pointer;
+    z-index:  20;
+}
+
+/**
+ * リストボックス
+ */
+.osha_listbox
+{
+    box-sizing: border-box;
+    position:   absolute;
+    overflow-x: hidden;
+}
+
+/**
+ * リストボックスのタイトル
+ */
+.osha_listbox_title
+{
+    box-sizing:       border-box;
+    color:            white;
+    background-color: rgb(227, 134, 144);
+    font-weight:      bold;
+    text-align:       left;
+}
+
+/**
+ * リストボックスアイテム
+ */
+.osha_listbox_item
+{
+    box-sizing: border-box;
+    border-bottom: 1px solid lightgray;
+}
+
+/**
+ * リストボックスのボタン
+ */
+.osha_listbox_button
+{
+    color:            black;
+    background-color: white;
+    font-weight:      normal;
+    border-radius:    0px;
+}
+
+/*
+ * テキストボックス
+ * 利便性のために用意したデフォルト設定
+ */
+.osha_textbox
+{
+    width: 100%;
+    height: 32px;
+}
+
+/*
+ * テキストエリアフレーム
+ */
+.osha_textarea_frame
+{
+    position: absolute;
+    overflow: hidden;
+    box-sizing: content-box;
+    border: 1px solid lightgray;
+    background-color: white;
+}

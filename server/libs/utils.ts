@@ -1,0 +1,255 @@
+/**
+ * (C) 2016 printf.jp
+ */
+import Config from '../config';
+
+import express = require('express');
+import crypt =   require('crypto');
+import mailer =  require('nodemailer');
+import smtp =    require('nodemailer-smtp-transport');
+const Random =   require("random-js");
+const slog =     require('../slog');
+
+const random = new Random(Random.engines.mt19937().autoSeed());
+
+/**
+ * ユーティリティ
+ */
+export default class Utils
+{
+    private static CLS_NAME = 'Utils';
+
+    /**
+     * @param   query       クエリ文字列
+     * @param   separator   セパレータ
+     *
+     * @return  オブジェクト
+     */
+    static parseRawQueryString(query : string, separator : string = '&') : any
+    {
+        const obj = {};
+        const pairs = query.split(separator);
+
+        for (const pair of pairs)
+        {
+            const [key, value] = pair.split('=');
+            obj[key.trim()] = value;
+        }
+
+        return obj;
+    }
+
+    /**
+     * サーバーエラーを送信する
+     */
+    static internalServerError(err : Error, res : express.Response, log)
+    {
+        res.status(500).send('Internal Server Error');
+        log.e(err.message);
+        log.stepOut();
+    }
+
+    /**
+     * パラメータが存在するかどうか
+     *
+     * @param   target      検査対象のオブジェクト
+     * @param   condition   パラメータの条件
+     *
+     * @return  コマンドパラメータが存在する場合はtrue
+     */
+    static existsParameters(target, condition) : boolean
+    {
+        const log = slog.stepIn(Utils.CLS_NAME, 'existsParameters');
+        let exists = true;
+        let name;
+
+        for (name in condition)
+        {
+            const cond = condition[name];
+            const type : string =     cond[0];
+            const defaultValue =      cond[1];
+            const require : boolean = cond[2];
+            let err = false;
+
+            if ((name in target) === false)
+            {
+                if (require === true)
+                {
+                    log.w(name + 'がありませんでした。');
+                    err = true;
+                }
+                else
+                {
+                    log.i(name + 'がありませんでした。デフォルト値を使用します。');
+                    target[name] = defaultValue;
+                }
+            }
+
+            if (err === false)
+            {
+                // 型チェック
+                if (target[name] !== null && typeof target[name] !== type)
+                {
+                    log.w(name + 'の型が正しくありません。');
+                    err = true;
+                }
+            }
+
+            if (err)
+                exists = false;
+        }
+
+        log.stepOut();
+        return exists;
+    }
+
+    /**
+     * パスワード検証
+     *
+     * @param   password    パスワード
+     */
+    static validatePassword(password : string) : boolean
+    {
+        const len = password.length;
+
+        if (len < 8 || 16 < len)
+            return false;
+
+        return true;
+    }
+
+    /**
+     * ハッシュ化パスワード取得
+     *
+     * @method  _getHashPassword
+     * @private
+     *
+     * @param   name        ユーザー名
+     * @param   password    パスワード
+     * @param   salt        ソルト
+     *
+     * @return  ハッシュ化パスワード
+     */
+    static getHashPassword(name : string, password : string, salt : string) : string
+    {
+        const log = slog.stepIn(Utils.CLS_NAME, 'getHashPassword');
+
+        const stretchingCount = 10000;
+        let hash : crypt.Hash;
+        let p = password;
+
+        for (let i = 0; i < stretchingCount; i++)
+        {
+            hash = crypt.createHash('sha256');
+            hash.update(name + salt + p);
+
+            p = hash.digest(i < stretchingCount - 1 ? 'binary' : 'base64');
+        }
+
+        log.stepOut();
+        return p;
+    }
+
+    /**
+     * ランダムテキスト生成
+     *
+     * @param   size    サイズ
+     *
+     * @return  ランダムテキスト
+     */
+    static createRundomText(size : number) : string
+    {
+        const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const len = chars.length;
+        let text = '';
+
+        for (let i= 0; i < size; i++)
+            text += chars[random.integer(0, len - 1)];
+
+        return text;
+    }
+
+    /**
+     * URL生成
+     *
+     * @param   apiName API名
+     * @param   id      ID
+     *
+     * @return  URL
+     */
+    static generateUrl(path : string, id? : string) : string
+    {
+        let url;
+
+        const host = Config.APP_HOST;
+        const port = Config.APP_PORT;
+
+        if (port === 80) url = `http://${host}/${path}`;
+        else             url = `http://${host}:${port}/${path}`;
+
+        if (id)
+            url += `?id=${id}`;
+
+        return url;
+    }
+
+    /**
+     * メールを送信する
+     *
+     * @param   subject     件名
+     * @param   toAddr      送信先メールアドレス
+     * @param   contents    本文
+     *
+     * @return  送信成功時はtrue
+     */
+    static sendMail(subject : string, toAddr : string, contents : string) : Promise<any>
+    {
+        return new Promise(function (resolve)
+        {
+            const log = slog.stepIn(Utils.CLS_NAME, 'sendMail');
+            const smtpOptions : smtp.SmtpOptions =
+            {
+                host: Config.SMTP_HOST,
+                port: Config.SMTP_PORT,
+                auth:
+                {
+                    user: Config.SMTP_USER,
+                    pass: Config.SMTP_PASSWORD
+                }
+            };
+            const transport = smtp(smtpOptions);
+            const transporter = mailer.createTransport(transport);
+            const mailOptions : mailer.SendMailOptions =
+            {
+                from:    Config.SMTP_FROM,
+                to:      toAddr,
+                subject: subject,
+                text:    contents
+            };
+
+            transporter.sendMail(mailOptions, function (err : Error, response : mailer.SentMessageInfo)
+            {
+                if (err)
+                    log.w(err.message);
+
+                log.stepOut();
+                resolve(err === null);
+            });
+        });
+    }
+
+    /**
+     * オブジェクトをコピーする
+     *
+     * @param   dst コピー先
+     * @param   src コピー元
+     */
+    static copy(dst, src) : void
+    {
+        for (const key in dst)
+        {
+            if (key in src)
+                dst[key] = src[key];
+        }
+    }
+}

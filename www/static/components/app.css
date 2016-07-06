@@ -1,0 +1,10 @@
+@font-face
+{
+  font-family: 'sulas';
+  src: url("../07やさしさゴシック.ttf");
+}
+
+body, input
+{
+  font-family: sulas, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
