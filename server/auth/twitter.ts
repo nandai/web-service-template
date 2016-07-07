@@ -7,9 +7,9 @@ import Config   from '../config';
 
 import express =         require('express');
 import passportTwitter = require('passport-twitter');
+import slog =            require('../slog');
 const co =               require('co');
 const twit =             require('twit');
-const slog =             require('../slog');
 
 /**
  * Twitter

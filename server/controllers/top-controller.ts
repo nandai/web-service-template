@@ -7,7 +7,7 @@ import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 
 import express = require('express');
-const slog =     require('../slog');
+import slog =    require('../slog');
 const co =       require('co');
 
 /**

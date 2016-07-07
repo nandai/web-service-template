@@ -7,8 +7,8 @@ import express = require('express');
 import crypt =   require('crypto');
 import mailer =  require('nodemailer');
 import smtp =    require('nodemailer-smtp-transport');
+import slog =    require('../slog');
 const Random =   require("random-js");
-const slog =     require('../slog');
 
 const random = new Random(Random.engines.mt19937().autoSeed());
 

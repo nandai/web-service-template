@@ -9,8 +9,8 @@ import SessionModel, {Session} from '../models/session-model';
 
 import express =    require('express');
 import bodyParser = require('body-parser');
+import slog =       require('../slog');
 const co =          require('co');
-const slog =        require('../slog');
 
 /**
  * Access

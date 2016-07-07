@@ -2,7 +2,7 @@
  * (C) 2016 printf.jp
  */
 import express = require('express');
-const slog =     require('../slog');
+import slog =    require('../slog');
 
 /**
  * パスワードを忘れたコントローラ

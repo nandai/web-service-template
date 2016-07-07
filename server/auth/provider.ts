@@ -10,8 +10,8 @@ import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
 
 import express =  require('express');
 import passport = require('passport');
+import slog =     require('../slog');
 const co =        require('co');
-const slog =      require('../slog');
 
 /**
  * プロバイダ

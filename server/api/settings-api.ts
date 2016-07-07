@@ -11,8 +11,8 @@ import SessionModel, {Session} from '../models/session-model';
 import DeleteAccountModel      from '../models/delete-account-model';
 
 import express = require('express');
+import slog =    require('../slog');
 const co =       require('co');
-const slog =     require('../slog');
 
 /**
  * 設定API

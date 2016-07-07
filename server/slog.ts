@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-// wget https://github.com/borisyankov/DefinitelyTyped/archive/master.zip
-
 /**
  * @namespace slog
  */
-module slog
-{
+// module slog
+// {
     var STEP_IN    : number = 0;
     var STEP_OUT   : number = 1;
     var MESSAGE    : number = 2;
@@ -825,6 +823,6 @@ module slog
 
     // シーケンスログクライアント生成
     var client : SequenceLogClient = new SequenceLogClient();
-}
+// }
 
-module.exports = slog;
+// module.exports = slog;

@@ -11,9 +11,9 @@ import Cookie            from '../libs/cookie';
 import Twitter           from '../auth/twitter';
 import Facebook          from '../auth/facebook';
 
+import slog =    require('../slog');
 const co =       require('co');
 const readline = require('readline');
-const slog =     require('../slog');
 
 /**
  * 

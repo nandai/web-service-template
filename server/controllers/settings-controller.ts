@@ -5,7 +5,7 @@ import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
-const slog =     require('../slog');
+import slog =    require('../slog');
 const co =       require('co');
 
 /**

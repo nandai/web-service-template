@@ -3,7 +3,7 @@
  */
 import fs =     require('fs');
 import moment = require('moment');
-const slog =    require('../slog');
+import slog =   require('../slog');
 
 /**
  * ログイン履歴

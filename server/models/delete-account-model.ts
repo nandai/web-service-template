@@ -6,7 +6,7 @@ import Utils     from '../libs/utils';
 
 import fs =     require('fs');
 import moment = require('moment');
-const slog =    require('../slog');
+import slog =   require('../slog');
 
 /**
  * 削除アカウントモデル

@@ -5,8 +5,8 @@ import fs =     require('fs');
 import __ =     require('lodash');
 import uuid =   require('node-uuid');
 import moment = require('moment');
+import slog =   require('../slog');
 const co =      require('co');
-const slog =    require('../slog');
 
 /**
  * セッション

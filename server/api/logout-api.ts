@@ -6,8 +6,8 @@ import Utils  from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 
 import express = require('express');
+import slog =    require('../slog');
 const co =       require('co');
-const slog =     require('../slog');
 
 /**
  * ログアウトAPI

@@ -7,7 +7,7 @@ import Utils    from '../libs/utils';
 import fs =     require('fs');
 import __ =     require('lodash');
 import moment = require('moment');
-const slog =    require('../slog');
+import slog =   require('../slog');
 
 /**
  * アカウント

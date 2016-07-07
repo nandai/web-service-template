@@ -1,7 +1,7 @@
 /**
  * (C) 2016 printf.jp
  */
-const slog = require('../slog');
+import slog = require('../slog');
 
 /**
  * レスポンスデータ

@@ -6,9 +6,9 @@ import Utils    from '../libs/utils';
 
 import express =          require('express');
 import passportFacebook = require('passport-facebook');
+import slog =             require('../slog');
 const co =                require('co');
 const fb =                require('fb');
-const slog =              require('../slog');
 
 /**
  * Facebook
