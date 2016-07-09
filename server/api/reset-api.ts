@@ -19,6 +19,9 @@ export default class ResetApi
     private static CLS_NAME = 'ResetApi';
 
     /**
+     * パスワードのリセットを要求する<br>
+     * POST /api/reset
+     *
      * @param   {express.Request}   req httpリクエスト
      * @param   {express.Response}  res httpレスポンス
      */
@@ -45,7 +48,7 @@ export default class ResetApi
                 const account : Account = yield AccountModel.findByProviderId('email', param.email);
                 if (account === null)
                 {
-                    const data = ResponseData.error(-1, 'メールアドレスが正しくありません。');
+                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL));
                     res.json(data);
                     break;
                 }
@@ -58,7 +61,7 @@ export default class ResetApi
                 const data =
                 {
                     status: 1,
-                    message: (result ? 'パスワードリセットのメールを送信しました。' : 'パスワードリセットのメールを送信できませんでした。')
+                    message: R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL)
                 };
                 res.json(data);
             }
@@ -69,6 +72,9 @@ export default class ResetApi
     }
 
     /**
+     * パスワードをリセットする<br>
+     * PUT /api/reset/change
+     *
      * @param   {express.Request}   req httpリクエスト
      * @param   {express.Response}  res httpレスポンス
      */
@@ -96,14 +102,14 @@ export default class ResetApi
 
                 if (Utils.validatePassword(param.password) === false)
                 {
-                    const data = ResponseData.error(-1, 'パスワードが短い、または長すぎます。');
+                    const data = ResponseData.error(-1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG));
                     res.json(data);
                     break;
                 }
 
                 if (param.password !== param.confirm)
                 {
-                    const data = ResponseData.error(-1, 'パスワードが一致していません。');
+                    const data = ResponseData.error(-1, R.text(R.MISMATCH_PASSWORD));
                     res.json(data);
                     break;
                 }
@@ -120,13 +126,16 @@ export default class ResetApi
                     const data =
                     {
                         status: 1,
-                        message: 'パスワードをリセットしました。'
+                        message: R.text(R.PASSWORD_RESET)
                     };
                     res.json(data);
                 }
                 else
                 {
-                    const data = ResponseData.error(-1, 'パスワードはリセット済みです。');
+                    // パスワードリセットの画面でパスワードリセットを完了させた後、再度パスワードリセットを完了させようとした場合にここに到達する想定。
+                    // リセットIDで該当するアカウントがないということが必ずしもパスワードリセット済みを意味するわけではないが、
+                    // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、パスワードリセット済みというメッセージでOK。
+                    const data = ResponseData.error(-1, R.text(R.ALREADY_PASSWORD_RESET));
                     res.json(data);
                 }
             }

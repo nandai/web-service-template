@@ -99,7 +99,11 @@ export default class SignupApi
         while (false);
         log.stepOut();
     }
+
     /**
+     * メールアドレスでのサインアップを確定する<br>
+     * POST /api/signup/email/confirm
+     *
      * @param   {express.Request}   req httpリクエスト
      * @param   {express.Response}  res httpレスポンス
      */
@@ -129,7 +133,10 @@ export default class SignupApi
 
                 if (account === null)
                 {
-                    const data = ResponseData.error(-1, 'サインアップ済みです。');
+                    // サインアップの確認画面でサインアップを完了させた後、再度サインアップを完了させようとした場合にここに到達する想定。
+                    // サインアップIDで該当するアカウントがないということが必ずしもサインアップ済みを意味するわけではないが、
+                    // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、登録済みというメッセージでOK。
+                    const data = ResponseData.error(-1, R.text(R.ALREADY_SIGNUP));
                     res.json(data);
                     break;
                 }

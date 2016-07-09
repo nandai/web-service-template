@@ -237,7 +237,7 @@ export default class AccountModel
     /**
      * アカウントを検索する
      *
-     * @param   changeId    リセットID
+     * @param   changeId    変更ID
      *
      * @return  Account。該当するアカウントを返す
      */

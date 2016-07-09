@@ -92,6 +92,9 @@ export default class SettingsApi
     }
 
     /**
+     * メールアドレスの設定（変更）を確定する<br>
+     * PUT /api/settings/account/email/change
+     *
      * @param   {express.Request}   req httpリクエスト
      * @param   {express.Response}  res httpレスポンス
      */
@@ -125,7 +128,7 @@ export default class SettingsApi
 
                     if (hashPassword !== account.password)
                     {
-                        const data = ResponseData.error(-1, 'パスワードが正しくありません。');
+                        const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD));
                         res.json(data);
                         break;
                     }
@@ -139,13 +142,16 @@ export default class SettingsApi
                     const data =
                     {
                         status: 1,
-                        message: 'メールアドレスを変更しました。'
+                        message: R.text(R.EMAIL_CHANGED)
                     };
                     res.json(data);
                 }
                 else
                 {
-                    const data = ResponseData.error(-1, 'メールアドレスは変更済みです。');
+                    // メールアドレス設定の確認画面でメールアドレスの設定を完了させた後、再度メールアドレスの設定を完了させようとした場合にここに到達する想定。
+                    // 変更IDで該当するアカウントがないということが必ずしもメールアドレスの設定済みを意味するわけではないが、
+                    // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので変更済みというメッセージでOK。
+                    const data = ResponseData.error(-1, R.text(R.ALREADY_EMAIL_CHANGED));
                     res.json(data);
                 }
             }
