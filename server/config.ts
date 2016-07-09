@@ -17,7 +17,11 @@ export default class Config
     static VIEWS_DIR =  __dirname + '/../www/views';
     static APP_HOST = '';
     static APP_PORT = 0;
-    static SESSION_SECRET = 'web service template';
+    static SSL_KEY = '';
+    static SSL_CERT = '';
+    static SSL_CA = '';
+    static SSL_PASSPHRASE = '';
+    static SESSION_SECRET = '';
     static PASSWORD_SALT = '';
 
     static SMTP_HOST = '';
@@ -68,14 +72,18 @@ export default class Config
             process.exit();
         }
 
-        let success = false;
-        const appData = Config.get(data, 'app');
+        const appData = Config.get(data, 'app', 'object');
 
         Config.APP_HOST =                Config.get(appData, 'app-host');
-        Config.APP_PORT =                Config.get(appData, 'app-port');
+        Config.APP_PORT =                Config.get(appData, 'app-port', 'number');
+        Config.SSL_KEY =                 Config.get(appData, 'ssl-key');
+        Config.SSL_CERT =                Config.get(appData, 'ssl-cert');
+        Config.SSL_CA =                  Config.get(appData, 'ssl-ca');
+        Config.SSL_PASSPHRASE =          Config.get(appData, 'ssl-passphrase');
+        Config.SESSION_SECRET =          Config.get(appData, 'session-secret');
         Config.PASSWORD_SALT =           Config.get(appData, 'password-salt');
         Config.SMTP_HOST =               Config.get(appData, 'smtp-host');
-        Config.SMTP_PORT =               Config.get(appData, 'smtp-port');
+        Config.SMTP_PORT =               Config.get(appData, 'smtp-port', 'number');
         Config.SMTP_USER =               Config.get(appData, 'smtp-user');
         Config.SMTP_PASSWORD =           Config.get(appData, 'smtp-password');
         Config.SMTP_FROM =               Config.get(appData, 'smtp-from');
@@ -94,12 +102,18 @@ export default class Config
     /**
      * データを取得する
      */
-    private static get(data, key : string) : any
+    private static get(data, key : string, type : string = 'string') : any
     {
-        const result = data[key];
+        let result = data[key];
         if (result === undefined)
         {
             console.log(`${key}がありません。`);
+            process.exit();
+        }
+
+        if (typeof result !== type)
+        {
+            console.log(`${key}の型が正しくありません。`);
             process.exit();
         }
         return result;

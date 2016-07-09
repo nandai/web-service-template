@@ -5,6 +5,11 @@
     {
         "app-host":                "localhost",
         "app-port":                80,
+        "ssl-key":                 "",
+        "ssl-cert":                "",
+        "ssl-ca":                  "",
+        "ssl-passphrase":          "",
+        "session-secret":          "",
         "password-salt":           "",
         "smtp-host":               "",
         "smtp-port":               587,

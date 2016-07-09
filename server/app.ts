@@ -37,8 +37,8 @@ import passportFacebook = require('passport-facebook');
 import passportGoogle =   require('passport-google-oauth');
 import https =            require('https');
 import fs =               require('fs');
+import slog =             require('./slog');
 const ect =               require('ect');
-const slog =              require('./slog');
 
 /**
  * イニシャライザ
@@ -201,7 +201,7 @@ class Initializer
 }
 
 /**
- * メイン
+ * main
  */
 function main() : void
 {
@@ -220,8 +220,64 @@ function main() : void
     init.passport();
     init.route();
 
-    app.listen(Config.APP_PORT);
+    listen(app);
     log.stepOut();
+}
+
+/**
+ * listen
+ */
+function listen(app : express.Express) : void
+{
+    const log = slog.stepIn('app.ts', 'listen');
+    let server = null;
+
+    if (Config.SSL_KEY  !== ''
+    &&  Config.SSL_CERT !== ''
+    &&  Config.SSL_CA   !== '')
+    {
+        const options : https.ServerOptions =
+        {
+            key:  null,
+            cert: null,
+            ca:   null,
+            passphrase: Config.SSL_PASSPHRASE,
+            requestCert: true,
+            rejectUnauthorized: false
+        };
+
+        try
+        {
+            options.key =  fs.readFileSync(Config.SSL_KEY);
+            options.cert = fs.readFileSync(Config.SSL_CERT);
+            options.ca =   fs.readFileSync(Config.SSL_CA);
+        }
+        catch (err)
+        {
+            const message = `${err.path}を開けませんでした。`;
+            log.w(message);
+            console.error(message);
+        }
+
+        try
+        {
+            server = https.createServer(options, app).listen(Config.APP_PORT);
+        }
+        catch (err)
+        {
+            log.w(err.stack);
+            console.error(err.stack);
+        }
+    }
+    else
+    {
+        server = app.listen(Config.APP_PORT);
+    }
+
+    log.stepOut();
+
+    if (server === null)
+        setTimeout(() => process.exit(), 3000);
 }
 
 main();
