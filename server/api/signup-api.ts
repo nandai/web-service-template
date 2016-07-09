@@ -21,8 +21,11 @@ export default class SignupApi
     private static CLS_NAME = 'SignupApi';
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * Twitterアカウントでサインアップする<br>
+     * POST /api/signup/twitter
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static twitter(req : express.Request, res : express.Response) : void
     {
@@ -32,8 +35,11 @@ export default class SignupApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * Facebookアカウントでサインアップする<br>
+     * POST /api/signup/facebook
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static facebook(req : express.Request, res : express.Response) : void
     {
@@ -43,8 +49,11 @@ export default class SignupApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * Googleアカウントでサインアップする<br>
+     * POST /api/signup/google
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static google(req : express.Request, res : express.Response) : void
     {
@@ -54,8 +63,11 @@ export default class SignupApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * メールアドレスでサインアップする<br>
+     * POST /api/signup/email
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static email(req : express.Request, res : express.Response) : void
     {
@@ -104,8 +116,8 @@ export default class SignupApi
      * メールアドレスでのサインアップを確定する<br>
      * POST /api/signup/email/confirm
      *
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static confirmEmail(req : express.Request, res : express.Response) : void
     {
@@ -167,9 +179,11 @@ export default class SignupApi
     }
 
     /**
-     * @param   {express.Request}   req         httpリクエスト
-     * @param   {express.Response}  res         httpレスポンス
-     * @param   {string}            provider    プロバイダ名
+     * メールアドレスでのサインアップ以外のレスポンス送信
+     *
+     * @param   req         httpリクエスト
+     * @param   res         httpレスポンス
+     * @param   provider    プロバイダ名
      */
     private static sendResponse(req : express.Request, res : express.Response, provider : string) : void
     {

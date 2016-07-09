@@ -22,8 +22,11 @@ export default class SettingsApi
     private static CLS_NAME = 'SettingsApi';
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * アカウント情報を取得する<br>
+     * GET /api/settings/account
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static account(req : express.Request, res : express.Response) : void
     {
@@ -47,8 +50,11 @@ export default class SettingsApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * メールアドレスの設定（変更）を要求する<br>
+     * PUT /api/settings/account/email
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static email(req : express.Request, res : express.Response) : void
     {
@@ -95,8 +101,8 @@ export default class SettingsApi
      * メールアドレスの設定（変更）を確定する<br>
      * PUT /api/settings/account/email/change
      *
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static changeEmail(req : express.Request, res : express.Response) : void
     {
@@ -162,19 +168,23 @@ export default class SettingsApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * Twitterアカウントを紐付ける<br>
+     * POST /api/settings/account/link/twitter
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static linkTwitter(req : express.Request, res : express.Response) : void
     {
-//      const log = slog.stepIn(SettingsApi.CLS_NAME, 'linkTwitter');
         SettingsApi.sendResponse(req, res, 'twitter');
-//      log.stepOut();
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * Facebookアカウントを紐付ける<br>
+     * POST /api/settings/account/link/facebook
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static linkFacebook(req : express.Request, res : express.Response) : void
     {
@@ -182,8 +192,11 @@ export default class SettingsApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * Googleアカウントを紐付ける<br>
+     * POST /api/settings/account/link/google
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static linkGoogle(req : express.Request, res : express.Response) : void
     {
@@ -191,9 +204,11 @@ export default class SettingsApi
     }
 
     /**
-     * @param   {express.Request}   req         httpリクエスト
-     * @param   {express.Response}  res         httpレスポンス
-     * @param   {string}            provider    プロバイダ名
+     * 紐付けのレスポンス送信
+     *
+     * @param   req         httpリクエスト
+     * @param   res         httpレスポンス
+     * @param   provider    プロバイダ名
      */
     private static sendResponse(req : express.Request, res : express.Response, provider : string) : void
     {
@@ -205,8 +220,11 @@ export default class SettingsApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * 退会する<br>
+     * DELETE /api/settings/account/leave
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static leave(req : express.Request, res : express.Response) : void
     {

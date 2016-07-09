@@ -21,8 +21,11 @@ export default class LoginApi
     private static CLS_NAME = 'LoginApi';
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * Twitterアカウントでログインする<br>
+     * POST /api/login/twitter
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static twitter(req : express.Request, res : express.Response) : void
     {
@@ -32,8 +35,11 @@ export default class LoginApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * Facebookアカウントでログインする<br>
+     * POST /api/login/facebook
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static facebook(req : express.Request, res : express.Response) : void
     {
@@ -43,8 +49,11 @@ export default class LoginApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * Gacebookアカウントでログインする<br>
+     * POST /api/login/google
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static google(req : express.Request, res : express.Response) : void
     {
@@ -54,8 +63,11 @@ export default class LoginApi
     }
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * メールアドレスでログインする<br>
+     * POST /api/login/email
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static email(req : express.Request, res : express.Response) : void
     {
@@ -110,9 +122,11 @@ export default class LoginApi
     }
 
     /**
-     * @param   {express.Request}   req         httpリクエスト
-     * @param   {express.Response}  res         httpレスポンス
-     * @param   {string}            provider    プロバイダ名
+     * メールアドレスでのログイン以外のレスポンス送信
+     *
+     * @param   req         httpリクエスト
+     * @param   res         httpレスポンス
+     * @param   provider    プロバイダ名
      */
     private static sendResponse(req : express.Request, res : express.Response, provider : string) : void
     {

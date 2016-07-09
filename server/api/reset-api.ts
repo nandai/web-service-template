@@ -22,8 +22,8 @@ export default class ResetApi
      * パスワードのリセットを要求する<br>
      * POST /api/reset
      *
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static index(req : express.Request, res : express.Response) : void
     {
@@ -75,8 +75,8 @@ export default class ResetApi
      * パスワードをリセットする<br>
      * PUT /api/reset/change
      *
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static change(req : express.Request, res : express.Response) : void
     {

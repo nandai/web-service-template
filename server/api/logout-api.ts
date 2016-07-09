@@ -17,8 +17,11 @@ export default class LogoutApi
     private static CLS_NAME = 'LogoutApi';
 
     /**
-     * @param   {express.Request}   req httpリクエスト
-     * @param   {express.Response}  res httpレスポンス
+     * ログアウト<br>
+     * POST /api/logout
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
      */
     static index(req : express.Request, res : express.Response) : void
     {
