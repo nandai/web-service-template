@@ -232,9 +232,7 @@ function listen(app : express.Express) : void
     const log = slog.stepIn('app.ts', 'listen');
     let server = null;
 
-    if (Config.SSL_KEY  !== ''
-    &&  Config.SSL_CERT !== ''
-    &&  Config.SSL_CA   !== '')
+    if (Config.hasSSL())
     {
         const options : https.ServerOptions =
         {

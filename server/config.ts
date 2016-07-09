@@ -118,4 +118,18 @@ export default class Config
         }
         return result;
     }
+
+    /**
+     * SSLの設定があるかどうか調べる
+     */
+    static hasSSL() : boolean
+    {
+        if (Config.SSL_KEY  !== ''
+        &&  Config.SSL_CERT !== ''
+        &&  Config.SSL_CA   !== '')
+        {
+            return true;
+        }
+        return false;
+    }
 }

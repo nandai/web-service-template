@@ -12,7 +12,10 @@
 
     <!-- デバッグログ -->
     <script src="/components/slog.js"></script>
-    <script>slog.setConfig('ws://localhost:8080', 'webServiceTemplate.log', 'ALL');</script>
+    <script>
+        var serviceAddr = (('https:' === document.location.protocol) ? 'wss://localhost:8443' : 'ws://localhost:8080');
+        slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL');
+    </script>
 
     <!-- SulasSplars -->
     <link  href="/components/SulasSplars.css" rel="stylesheet" />
