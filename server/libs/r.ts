@@ -27,7 +27,9 @@ export default class R
         "passwordTooShortOrTooLong": "パスワードが短い、または長すぎます。",
         "mismatchPassword": "パスワードが一致していません。",
         "passwordReset": "パスワードをリセットしました。",
-        "passwordChanged": "パスワードを変更しました。"
+        "passwordChanged": "パスワードを変更しました。",
+        "accountNameTooShortOrTooLong": "アカウント名が短い、または長すぎます。",
+        "settingsCompleted": "設定を完了しました。"
     };
 
     static INCORRECT_ACCOUNT = 'incorrectAccount';
@@ -49,6 +51,8 @@ export default class R
     static MISMATCH_PASSWORD = 'mismatchPassword';
     static PASSWORD_RESET = 'passwordReset';
     static PASSWORD_CHANGED = 'passwordChanged';
+    static ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG = 'accountNameTooShortOrTooLong';
+    static SETTINGS_COMPLETED = 'settingsCompleted';
 
     /**
      * 文字列を取得する

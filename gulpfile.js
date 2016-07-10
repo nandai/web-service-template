@@ -68,6 +68,7 @@ gulp.task('build-client', ['typeScript'], function ()
     buildClient('forget.js');
     buildClient('reset.js');
     buildClient('settings.js');
+    buildClient('settings-account.js');
     buildClient('settings-account-email.js');
     buildClient('settings-account-email-change.js');
     buildClient('settings-account-password.js');

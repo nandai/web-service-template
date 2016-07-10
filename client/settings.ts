@@ -21,6 +21,7 @@ class SettingsView extends View
     private googleButton;
     private emailButton;
     private passwordButton;
+    private accountButton;
     private leaveButton;
     private backButton;
 
@@ -38,6 +39,7 @@ class SettingsView extends View
         this.googleButton =   new sulas.Button('#google',   0, 50, 'googleを紐づける');
         this.emailButton =    new sulas.Button('#email',    0, 50, 'メールアドレスを設定する');
         this.passwordButton = new sulas.Button('#password', 0, 50, 'パスワードを設定する');
+        this.accountButton =  new sulas.Button('#account',  0, 50, 'アカウント設定');
         this.leaveButton =    new sulas.Button('#leave',    0, 50, '退会する');
         this.backButton =     new sulas.Button('#back',     0, 50, '戻る');
 
@@ -65,6 +67,7 @@ class SettingsView extends View
         this.googleButton.  on('click', this.onClickGoogleButton.  bind(this));
         this.emailButton.   on('click', this.onClickEmailButton.   bind(this));
         this.passwordButton.on('click', this.onClickPasswordButton.bind(this));
+        this.accountButton. on('click', this.onClickAccountButton. bind(this));
         this.leaveButton.   on('click', this.onClickLeaveButton.   bind(this));
         this.backButton.    on('click', this.onClickBackButton.    bind(this));
 
@@ -118,6 +121,16 @@ class SettingsView extends View
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickPasswordButton');
         window.location.href = '/settings/account/password';
+        log.stepOut();
+    }
+
+    /**
+     * @method  onClickAccountButton
+     */
+    private onClickAccountButton() : void
+    {
+        const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickAccountButton');
+        window.location.href = '/settings/account';
         log.stepOut();
     }
 

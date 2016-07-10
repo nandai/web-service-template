@@ -22,29 +22,96 @@ export default class SettingsApi
     private static CLS_NAME = 'SettingsApi';
 
     /**
-     * アカウント情報を取得する<br>
-     * GET /api/settings/account
+     * アカウント情報を取得、または更新する
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
     static account(req : express.Request, res : express.Response) : void
     {
+             if (req.method === 'GET') SettingsApi.getAccount(   req, res);
+        else if (req.method === 'PUT') SettingsApi.updateAccount(req, res);
+    }
+
+    /**
+     * アカウント情報を取得する<br>
+     * GET /api/settings/account
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    private static getAccount(req : express.Request, res : express.Response) : void
+    {
         co(function* ()
         {
-            const log = slog.stepIn(SettingsApi.CLS_NAME, 'account');
+            const log = slog.stepIn(SettingsApi.CLS_NAME, 'getAccount');
             const session : Session = req['sessionObj'];
             const account : Account = yield AccountModel.find(session.account_id);
             const data =
             {
                 status: 0,
                 name:      account.name,
+                email:     account.email,
                 twitter:  (account.twitter  !== null),
                 facebook: (account.facebook !== null),
                 google:   (account.google   !== null)
             };
 
             res.json(data);
+            log.stepOut();
+        });
+    }
+
+    /**
+     * アカウント情報を取得する<br>
+     * PUT /api/settings/account
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    private static updateAccount(req : express.Request, res : express.Response) : void
+    {
+        co(function* ()
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME, 'updateAccount');
+            do
+            {
+                const param = req.body;
+                const condition =
+                {
+                    name: ['string', null, true]
+                }
+
+                if (Utils.existsParameters(param, condition) === false)
+                {
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    res.status(400).json(data);
+                    break;
+                }
+
+                const len = param.name.length;
+
+                if (len < 1 || 20 < len)
+                {
+                    const data = ResponseData.error(-1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG));
+                    res.json(data);
+                    break;
+                }
+
+                const session : Session = req['sessionObj'];
+                const account : Account = yield AccountModel.find(session.account_id);
+
+                account.name = param.name;
+                yield AccountModel.update(account);
+
+                const data =
+                {
+                    status: 1,
+                    message: R.text(R.SETTINGS_COMPLETED)
+                };
+                res.json(data);
+            }
+            while (false);
             log.stepOut();
         });
     }
@@ -206,7 +273,6 @@ export default class SettingsApi
                     res.json(data);
                     break;
                 }
-
 
                 if (Utils.validatePassword(param.new_password) === false)
                 {

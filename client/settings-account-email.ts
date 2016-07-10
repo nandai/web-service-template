@@ -33,6 +33,21 @@ class SettingsAccountEmailView extends View
 
         this.sendMailButton.on('click', this.onClickSendMailButton.bind(this));
 
+        $.ajax({
+            type: 'GET',
+            url: `/api/settings/account`
+        })
+
+        .done((data, status, jqXHR) =>
+        {
+            const account = data;
+            this.emailTextBox.setValue(account.email);
+        })
+
+        .fail((jqXHR, status, error) =>
+        {
+        });
+
         log.stepOut();
     }
 

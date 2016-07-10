@@ -33,6 +33,23 @@ export default class SettingsController
     }
 
     /**
+     * アカウント設定画面
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static account(req : express.Request, res : express.Response) : void
+    {
+        const log = slog.stepIn(SettingsController.CLS_NAME, 'account');
+        co(function* ()
+        {
+            res.render('settings-account');
+            log.stepOut();
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
+    }
+
+    /**
      * 新しいメールアドレスを入力する画面
      *
      * @param   req httpリクエスト
