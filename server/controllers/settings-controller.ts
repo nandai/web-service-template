@@ -74,4 +74,21 @@ export default class SettingsController
         })
         .catch ((err) => Utils.internalServerError(err, res, log));
     }
+
+    /**
+     * 新しいパスワードを入力する画面
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static password(req : express.Request, res : express.Response) : void
+    {
+        const log = slog.stepIn(SettingsController.CLS_NAME, 'password');
+        co(function* ()
+        {
+            res.render('settings-account-password');
+            log.stepOut();
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
+    }
 }

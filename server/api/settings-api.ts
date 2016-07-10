@@ -168,6 +168,77 @@ export default class SettingsApi
     }
 
     /**
+     * パスワードの設定（変更）を要求する<br>
+     * PUT /api/settings/account/password
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static password(req : express.Request, res : express.Response) : void
+    {
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'password');
+        co(function* ()
+        {
+            do
+            {
+                const param = req.body;
+                const condition =
+                {
+                    old_password: ['string', null, true],
+                    new_password: ['string', null, true],
+                    confirm:      ['string', null, true]
+                }
+
+                if (Utils.existsParameters(param, condition) === false)
+                {
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    res.status(400).json(data);
+                    break;
+                }
+
+                const session : Session = req['sessionObj'];
+                const account : Account = yield AccountModel.find(session.account_id);
+                const hashPassword = Utils.getHashPassword(account.email, param.old_password, Config.PASSWORD_SALT);
+
+                if (hashPassword !== account.password)
+                {
+                    const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD));
+                    res.json(data);
+                    break;
+                }
+
+
+                if (Utils.validatePassword(param.new_password) === false)
+                {
+                    const data = ResponseData.error(-1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG));
+                    res.json(data);
+                    break;
+                }
+
+                if (param.new_password !== param.confirm)
+                {
+                    const data = ResponseData.error(-1, R.text(R.MISMATCH_PASSWORD));
+                    res.json(data);
+                    break;
+                }
+
+                account.password = Utils.getHashPassword(account.email, param.new_password, Config.PASSWORD_SALT);
+                yield AccountModel.update(account);
+
+                const data =
+                {
+                    status: 1,
+                    message: R.text(R.PASSWORD_CHANGED)
+                };
+                res.json(data);
+            }
+            while (false);
+            log.stepOut();
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
+    }
+
+    /**
      * Twitterアカウントを紐付ける<br>
      * POST /api/settings/account/link/twitter
      *

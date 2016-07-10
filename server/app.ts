@@ -185,11 +185,13 @@ class Initializer
 
         this.app.use(Access.auth);
 
-        this.app.get(   '/settings',               SettingsController.index);
-        this.app.get(   '/settings/account/email', SettingsController.email);
+        this.app.get(   '/settings',                  SettingsController.index);
+        this.app.get(   '/settings/account/email',    SettingsController.email);
+        this.app.get(   '/settings/account/password', SettingsController.password);
 
         this.app.get(   '/api/settings/account',               SettingsApi.account);
         this.app.put(   '/api/settings/account/email',         SettingsApi.email);
+        this.app.put(   '/api/settings/account/password',      SettingsApi.password);
         this.app.post(  '/api/settings/account/link/twitter',  SettingsApi.linkTwitter);
         this.app.post(  '/api/settings/account/link/facebook', SettingsApi.linkFacebook);
         this.app.post(  '/api/settings/account/link/google',   SettingsApi.linkGoogle);
