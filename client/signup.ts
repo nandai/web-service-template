@@ -4,13 +4,15 @@
 
 /// <reference path='../typings/tsd.d.ts' />;
 
-var sulas;
-var slog;
+import View from './view';
+
+const sulas = window['sulas'];
+const slog =  window['slog'];
 
 /**
  * View
  */
-class SignupView
+class SignupView extends View
 {
     private static CLS_NAME = 'SignupView';
 
@@ -23,11 +25,11 @@ class SignupView
     private topButton;
 
     /**
-     * @constructor
+     * 初期化
      */
-    constructor()
+    protected init(isResize : boolean) : void
     {
-        const log = slog.stepIn(SignupView.CLS_NAME, 'constructor');
+        const log = slog.stepIn(SignupView.CLS_NAME, 'init');
 
         const $emailTextBox =    $('#email');
         const $passwordTextBox = $('#password');
@@ -144,17 +146,7 @@ class SignupView
     }
 }
 
-/**
- * onLoad
- */
-window.addEventListener('load', () =>
-{
-    const view = new SignupView();
-}, false);
+window.addEventListener('load', () => new SignupView(), false);
 
 if (window.location.hash === '#_=_')
-{
-    // facebookのコールバックでなぜかゴミが付いてくるので取り除く
-//  window.location.hash = '';
     window.history.pushState('', document.title, window.location.pathname);
-}

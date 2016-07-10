@@ -4,27 +4,30 @@
 
 /// <reference path='../typings/tsd.d.ts' />;
 
-var sulas;
-var slog;
+import View from './view';
+
+const sulas = window['sulas'];
+const slog =  window['slog'];
 
 /**
  * View
  */
-class TopView
+class TopView extends View
 {
     private static CLS_NAME = 'TopView';
 
-    private settingsButton = new sulas.Button('#settings', 0, 50, '設定画面へ');
-    private logoutButton =   new sulas.Button('#logout',   0, 50, 'ログアウト');
-
-    private account;
+    private settingsButton;
+    private logoutButton;
 
     /**
-     * @constructor
+     * 初期化
      */
-    constructor()
+    protected init(isResize : boolean) : void
     {
-        const log = slog.stepIn(TopView.CLS_NAME, 'constructor');
+        const log = slog.stepIn(TopView.CLS_NAME, 'init');
+
+        this.settingsButton = new sulas.Button('#settings', 0, 50, '設定画面へ');
+        this.logoutButton =   new sulas.Button('#logout',   0, 50, 'ログアウト');
 
         this.settingsButton.on('click', this.onClickSettingsButton.bind(this));
         this.logoutButton.  on('click', this.onClickLogoutButton.  bind(this));
@@ -71,17 +74,5 @@ class TopView
     }
 }
 
-/**
- * onLoad
- */
-window.addEventListener('load', () =>
-{
-    const view = new TopView();
-}, false);
-
-if (window.location.hash === '#_=_')
-{
-    // facebookのコールバックでなぜかゴミが付いてくるので取り除く
-//  window.location.hash = '';
-    window.history.pushState('', document.title, window.location.pathname);
-}
+window.addEventListener('load', () => new TopView(), false);
+window.history.pushState('', document.title, window.location.pathname);

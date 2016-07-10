@@ -4,13 +4,15 @@
 
 /// <reference path='../typings/tsd.d.ts' />;
 
-var sulas;
-var slog;
+import View from './view';
+
+const sulas = window['sulas'];
+const slog =  window['slog'];
 
 /**
  * View
  */
-class ForgetView
+class ForgetView extends View
 {
     private static CLS_NAME = 'ForgetView';
 
@@ -18,11 +20,11 @@ class ForgetView
     private sendMailButton;
 
     /**
-     * @constructor
+     * 初期化
      */
-    constructor()
+    protected init(isResize : boolean) : void
     {
-        const log = slog.stepIn(ForgetView.CLS_NAME, 'constructor');
+        const log = slog.stepIn(ForgetView.CLS_NAME, 'init');
 
         const $emailTextBox = $('#email');
 
@@ -64,10 +66,4 @@ class ForgetView
     }
 }
 
-/**
- * onLoad
- */
-window.addEventListener('load', () =>
-{
-    const view = new ForgetView();
-}, false);
+window.addEventListener('load', () => new ForgetView(), false);

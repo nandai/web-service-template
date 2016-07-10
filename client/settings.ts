@@ -4,32 +4,42 @@
 
 /// <reference path='../typings/tsd.d.ts' />;
 
-var sulas;
-var slog;
+import View from './view';
+
+const sulas = window['sulas'];
+const slog =  window['slog'];
 
 /**
  * View
  */
-class SettingsView
+class SettingsView extends View
 {
     private static CLS_NAME = 'SettingsView';
 
-    private twitterButton =  new sulas.Button('#twitter',  0, 50, 'twitterを紐づける');
-    private facebookButton = new sulas.Button('#facebook', 0, 50, 'facebookを紐づける');
-    private googleButton =   new sulas.Button('#google',   0, 50, 'googleを紐づける');
-    private emailButton =    new sulas.Button('#email',    0, 50, 'メールアドレスを設定する');
-    private passwordButton = new sulas.Button('#password', 0, 50, 'パスワードを設定する');
-    private leaveButton =    new sulas.Button('#leave',    0, 50, '退会する');
-    private backButton =     new sulas.Button('#back',     0, 50, '戻る');
+    private twitterButton;
+    private facebookButton;
+    private googleButton;
+    private emailButton;
+    private passwordButton;
+    private leaveButton;
+    private backButton;
 
     private account;
 
     /**
-     * @constructor
+     * 初期化
      */
-    constructor()
+    protected init(isResize : boolean) : void
     {
-        const log = slog.stepIn(SettingsView.CLS_NAME, 'constructor');
+        const log = slog.stepIn(SettingsView.CLS_NAME, 'init');
+
+        this.twitterButton =  new sulas.Button('#twitter',  0, 50, 'twitterを紐づける');
+        this.facebookButton = new sulas.Button('#facebook', 0, 50, 'facebookを紐づける');
+        this.googleButton =   new sulas.Button('#google',   0, 50, 'googleを紐づける');
+        this.emailButton =    new sulas.Button('#email',    0, 50, 'メールアドレスを設定する');
+        this.passwordButton = new sulas.Button('#password', 0, 50, 'パスワードを設定する');
+        this.leaveButton =    new sulas.Button('#leave',    0, 50, '退会する');
+        this.backButton =     new sulas.Button('#back',     0, 50, '戻る');
 
         $.ajax({
             type: 'GET',
@@ -196,17 +206,7 @@ class SettingsView
     }
 }
 
-/**
- * onLoad
- */
-window.addEventListener('load', () =>
-{
-    const view = new SettingsView();
-}, false);
+window.addEventListener('load', () => new SettingsView(), false);
 
 if (window.location.hash === '#_=_')
-{
-    // facebookのコールバックでなぜかゴミが付いてくるので取り除く
-//  window.location.hash = '';
     window.history.pushState('', document.title, window.location.pathname);
-}

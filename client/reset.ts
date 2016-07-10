@@ -4,13 +4,15 @@
 
 /// <reference path='../typings/tsd.d.ts' />;
 
-var sulas;
-var slog;
+import View from './view';
+
+const sulas = window['sulas'];
+const slog =  window['slog'];
 
 /**
  * View
  */
-class ResetView
+class ResetView extends View
 {
     private static CLS_NAME = 'ResetView';
 
@@ -19,11 +21,11 @@ class ResetView
     private changeButton;
 
     /**
-     * @constructor
+     * 初期化
      */
-    constructor()
+    protected init(isResize : boolean) : void
     {
-        const log = slog.stepIn(ResetView.CLS_NAME, 'constructor');
+        const log = slog.stepIn(ResetView.CLS_NAME, 'init');
 
         const $passwordTextBox = $('#password');
         const $confirmTextBox =  $('#confirm');
@@ -70,10 +72,4 @@ class ResetView
     }
 }
 
-/**
- * onLoad
- */
-window.addEventListener('load', () =>
-{
-    const view = new ResetView();
-}, false);
+window.addEventListener('load', () => new ResetView(), false);

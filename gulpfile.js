@@ -4,6 +4,8 @@
 var gulp =       require('gulp');
 var typescript = require('gulp-typescript');
 var sourcemaps = require('gulp-sourcemaps');
+var browserify = require('browserify');
+var source =     require('vinyl-source-stream');
 
 /**
  * サーバービルド
@@ -41,24 +43,11 @@ gulp.task('build-server', function ()
 /**
  * クライアントビルド
  */
-gulp.task('build-client', function ()
-{
-    buildClient('index.ts');
-    buildClient('signup.ts');
-    buildClient('signup-confirm.ts');
-    buildClient('login.ts');
-    buildClient('forget.ts');
-    buildClient('reset.ts');
-    buildClient('settings.ts');
-    buildClient('settings-account-email.ts');
-    buildClient('settings-account-email-change.ts');
-});
-
-function buildClient(fileName)
+gulp.task('typeScript', function ()
 {
     var src =
     [
-        './client/' + fileName
+        './client/**/*.ts'
     ];
 
     var tsOptions =
@@ -67,7 +56,28 @@ function buildClient(fileName)
 
     gulp.src(src)
         .pipe(typescript(tsOptions))
-        .pipe(gulp.dest('./www/static/components'));
+        .pipe(gulp.dest('./build-client'));
+});
+
+gulp.task('build-client', ['typeScript'], function ()
+{
+    buildClient('index.js');
+    buildClient('signup.js');
+    buildClient('signup-confirm.js');
+    buildClient('login.js');
+    buildClient('forget.js');
+    buildClient('reset.js');
+    buildClient('settings.js');
+    buildClient('settings-account-email.js');
+    buildClient('settings-account-email-change.js');
+});
+
+function buildClient(fileName)
+{
+    browserify({entries: ['./build-client/' + fileName]})
+        .bundle()
+        .pipe(source('./www/static/js/' + fileName))
+        .pipe(gulp.dest('.'));
 }
 
 gulp.task('build', ['build-server', 'build-client']);

@@ -4,13 +4,15 @@
 
 /// <reference path='../typings/tsd.d.ts' />;
 
-var sulas;
-var slog;
+import View from './view';
+
+const sulas = window['sulas'];
+const slog =  window['slog'];
 
 /**
  * View
  */
-class SettingsAccountEmailView
+class SettingsAccountEmailView extends View
 {
     private static CLS_NAME = 'SettingsAccountEmailView';
 
@@ -18,11 +20,11 @@ class SettingsAccountEmailView
     private sendMailButton;
 
     /**
-     * @constructor
+     * 初期化
      */
-    constructor()
+    protected init(isResize : boolean) : void
     {
-        const log = slog.stepIn(SettingsAccountEmailView.CLS_NAME, 'constructor');
+        const log = slog.stepIn(SettingsAccountEmailView.CLS_NAME, 'init');
 
         const $emailTextBox = $('#email');
 
@@ -64,10 +66,4 @@ class SettingsAccountEmailView
     }
 }
 
-/**
- * onLoad
- */
-window.addEventListener('load', () =>
-{
-    const view = new SettingsAccountEmailView();
-}, false);
+window.addEventListener('load', () => new SettingsAccountEmailView(), false);

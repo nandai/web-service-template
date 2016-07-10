@@ -1,7 +1,9 @@
 /appconfig.json
 /build/
+/build-client/
 /doc/
 /node_modules/
 /ssl/
 /storage/
 /typings/
+/www/static/js/

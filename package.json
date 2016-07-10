@@ -9,14 +9,14 @@
     "cookie-parser": "^1.4.3",
     "ect": "^0.5.9",
     "express": "^4.14.0",
-    "express-session": "^1.13.0",
+    "express-session": "^1.14.0",
     "fb": "^1.1.1",
     "googleapis": "^9.0.0",
     "lodash": "^4.13.1",
-    "moment": "^2.13.0",
+    "moment": "^2.14.1",
     "node-uuid": "^1.4.7",
-    "nodemailer": "^2.4.2",
-    "nodemailer-smtp-transport": "^2.5.0",
+    "nodemailer": "^2.5.0",
+    "nodemailer-smtp-transport": "^2.6.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
@@ -27,9 +27,11 @@
     "websocket": "^1.0.23"
   },
   "devDependencies": {
+    "browserify": "^13.0.1",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-typescript": "^2.13.6"
+    "gulp-typescript": "^2.13.6",
+    "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

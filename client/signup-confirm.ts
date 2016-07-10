@@ -4,13 +4,15 @@
 
 /// <reference path='../typings/tsd.d.ts' />;
 
-var sulas;
-var slog;
+import View from './view';
+
+const sulas = window['sulas'];
+const slog =  window['slog'];
 
 /**
  * View
  */
-class SignupConfirmView
+class SignupConfirmView extends View
 {
     private static CLS_NAME = 'SignupConfirmView';
 
@@ -18,11 +20,11 @@ class SignupConfirmView
     private confirmButton;
 
     /**
-     * @constructor
+     * 初期化
      */
-    constructor()
+    protected init(isResize : boolean) : void
     {
-        const log = slog.stepIn(SignupConfirmView.CLS_NAME, 'constructor');
+        const log = slog.stepIn(SignupConfirmView.CLS_NAME, 'init');
 
         const $passwordTextBox = $('#password');
 
@@ -78,10 +80,4 @@ class SignupConfirmView
     }
 }
 
-/**
- * onLoad
- */
-window.addEventListener('load', () =>
-{
-    const view = new SignupConfirmView();
-}, false);
+window.addEventListener('load', () => new SignupConfirmView(), false);
