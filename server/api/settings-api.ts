@@ -52,6 +52,7 @@ export default class SettingsApi
                 status: 0,
                 name:      account.name,
                 email:     account.email,
+                phone_no:  account.phone_no,
                 twitter:  (account.twitter  !== null),
                 facebook: (account.facebook !== null),
                 google:   (account.google   !== null)
@@ -79,7 +80,8 @@ export default class SettingsApi
                 const param = req.body;
                 const condition =
                 {
-                    name: ['string', null, true]
+                    name:     ['string', null, true],
+                    phone_no: ['string', null, true]
                 }
 
                 if (Utils.existsParameters(param, condition) === false)
@@ -101,7 +103,8 @@ export default class SettingsApi
                 const session : Session = req['sessionObj'];
                 const account : Account = yield AccountModel.find(session.account_id);
 
-                account.name = param.name;
+                account.name =      param.name;
+                account.phone_no = (param.phone_no.length > 0 ? param.phone_no : null);
                 yield AccountModel.update(account);
 
                 const data =

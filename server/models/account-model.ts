@@ -21,6 +21,7 @@ export class Account
     google       : string = null;
     email        : string = null;
     password     : string = null;
+    phone_no     : string = null;
     signup_id    : string = null;
     reset_id     : string = null;
     change_id    : string = null;

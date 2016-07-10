@@ -17,6 +17,7 @@ class SettingsAccountView extends View
     private static CLS_NAME = 'SettingsAccountView';
 
     private nameTextBox;
+    private phoneNoTextBox;
     private changeButton;
 
     /**
@@ -26,10 +27,12 @@ class SettingsAccountView extends View
     {
         const log = slog.stepIn(SettingsAccountView.CLS_NAME, 'init');
 
-        const $nameTextBox = $('#name');
+        const $nameTextBox =    $('#name');
+        const $phoneNoTextBox = $('#phone-no');
 
-        this.nameTextBox =   new sulas.TextBox($nameTextBox, $nameTextBox.width(), 30, '名前', 'text');
-        this.changeButton = new sulas.Button('#change', 0, 50, '変更する');
+        this.nameTextBox =    new sulas.TextBox($nameTextBox,    $nameTextBox.width(),    30, 'アカウント名', 'text');
+        this.phoneNoTextBox = new sulas.TextBox($phoneNoTextBox, $phoneNoTextBox.width(), 30, '電話番号',     'text');
+        this.changeButton =   new sulas.Button('#change', 0, 50, '変更する');
 
         this.changeButton.on('click', this.onClickChangeButton.bind(this));
 
@@ -41,7 +44,8 @@ class SettingsAccountView extends View
         .done((data, status, jqXHR) =>
         {
             const account = data;
-            this.nameTextBox.setValue(account.name);
+            this.nameTextBox.   setValue(account.name);
+            this.phoneNoTextBox.setValue(account.phone_no);
         })
 
         .fail((jqXHR, status, error) =>
@@ -61,7 +65,11 @@ class SettingsAccountView extends View
         $.ajax({
             type: 'PUT',
             url: '/api/settings/account',
-            data: {name:this.nameTextBox.getValue()}
+            data:
+            {
+                name:     this.nameTextBox.   getValue(),
+                phone_no: this.phoneNoTextBox.getValue()
+            }
         })
 
         .done((data, status, jqXHR) =>

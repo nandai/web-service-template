@@ -42,6 +42,10 @@ export default class Config
     static GOOGLE_CLIENT_SECRET = '';
     static GOOGLE_CALLBACK = '';
 
+    static TWILIO_ACCOUNT_SID = '';
+    static TWILIO_AUTH_TOKEN = '';
+    static TWILIO_FROM_PHONE_NO = '';
+
     /**
      * コンフィグをJSONファイルからロードする
      */
@@ -93,6 +97,9 @@ export default class Config
         Config.FACEBOOK_APPSECRET =      Config.get(appData, 'facebook-app-secret');
         Config.GOOGLE_CLIENT_ID =        Config.get(appData, 'google-client-id');
         Config.GOOGLE_CLIENT_SECRET =    Config.get(appData, 'google-client-secret');
+        Config.TWILIO_ACCOUNT_SID =      Config.get(appData, 'twilio-account-sid');
+        Config.TWILIO_AUTH_TOKEN =       Config.get(appData, 'twilio-auth-token');
+        Config.TWILIO_FROM_PHONE_NO =    Config.get(appData, 'twilio-from-phone-no');
 
         Config.TWITTER_CALLBACK =  Utils.generateUrl('auth/twitter/callback');
         Config.FACEBOOK_CALLBACK = Utils.generateUrl('auth/facebook/callback');

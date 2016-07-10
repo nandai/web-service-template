@@ -1,6 +1,7 @@
 /**
  * (C) 2016 printf.jp
  */
+import Config                            from '../config';
 import {PassportUser}                    from '../libs/passport';
 import Cookie                            from '../libs/cookie';
 import Utils                             from '../libs/utils';
@@ -12,6 +13,7 @@ import express =  require('express');
 import passport = require('passport');
 import slog =     require('../slog');
 const co =        require('co');
+const twilio =    require('twilio');
 
 /**
  * プロバイダ
@@ -179,6 +181,31 @@ export default class Provider
                             if (session === null)
                             {
                                 log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
+
+                                if (findAccount.phone_no !== null)
+                                {
+                                    // TODO:二段階認証画面へ。いまのところは仮の処理としてSMSを送信する
+                                    if (Config.TWILIO_ACCOUNT_SID   !== ''
+                                    &&  Config.TWILIO_AUTH_TOKEN    !== ''
+                                    &&  Config.TWILIO_FROM_PHONE_NO !== '')
+                                    {
+                                        const accountSid = Config.TWILIO_ACCOUNT_SID;
+                                        const authToken =  Config.TWILIO_AUTH_TOKEN;
+
+                                        var client = new twilio.RestClient(accountSid, authToken);
+
+                                        client.messages.create(
+                                        {
+                                            body: '123 456',
+                                            to: findAccount.phone_no,
+                                            from: Config.TWILIO_FROM_PHONE_NO
+                                        }, (err, message) =>
+                                        {
+                                            if (err)
+                                                log.d(err.message);
+                                        });
+                                    }
+                                }
 
                                 // セッション作成
                                 const session = new Session();

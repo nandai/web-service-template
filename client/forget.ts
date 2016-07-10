@@ -28,7 +28,7 @@ class ForgetView extends View
 
         const $emailTextBox = $('#email');
 
-        this.emailTextBox =   new sulas.TextBox($emailTextBox, $emailTextBox.width(), 30, 'メールアドレス', 'text');
+        this.emailTextBox =   new sulas.TextBox($emailTextBox, $emailTextBox.width(), 30, 'メールアドレス', 'email');
         this.sendMailButton = new sulas.Button('#sendMail', 0, 50, 'メールを送信する');
 
         this.sendMailButton.on('click', this.onClickSendMailButton.bind(this));

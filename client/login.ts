@@ -38,7 +38,7 @@ class LoginView extends View
         this.twitterButton =   new sulas.Button('#twitter',  0, 50, 'twitterでログインする');
         this.facebookButton =  new sulas.Button('#facebook', 0, 50, 'facebookでログインする');
         this.googleButton =    new sulas.Button('#google',   0, 50, 'googleでログインする');
-        this.emailTextBox =    new sulas.TextBox($emailTextBox,    $emailTextBox.   width(), 30, 'メールアドレス', 'text');
+        this.emailTextBox =    new sulas.TextBox($emailTextBox,    $emailTextBox.   width(), 30, 'メールアドレス', 'email');
         this.passwordTextBox = new sulas.TextBox($passwordTextBox, $passwordTextBox.width(), 30, 'パスワード',    'password');
         this.loginButton =     new sulas.Button('#login',    0, 50, 'ログイン');
         this.signupButton =    new sulas.Button('#signup',   0, 50, 'サインアップ画面へ');
