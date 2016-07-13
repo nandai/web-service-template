@@ -172,6 +172,7 @@ class Initializer
         this.app.post('/api/login/facebook',       LoginApi. facebook);
         this.app.post('/api/login/google',         LoginApi. google);
         this.app.post('/api/login/email',          LoginApi. email);
+        this.app.post('/api/login/sms',            LoginApi. sms);
         this.app.post('/api/reset',                ResetApi. index);
         this.app.put( '/api/reset/change',         ResetApi. change);
         this.app.put( '/api/settings/account/email/change', SettingsApi.changeEmail);

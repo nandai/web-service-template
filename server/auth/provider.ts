@@ -189,6 +189,13 @@ export default class Provider
                                     &&  Config.TWILIO_AUTH_TOKEN    !== ''
                                     &&  Config.TWILIO_FROM_PHONE_NO !== '')
                                     {
+                                        findAccount.sms_id =   Utils.createRundomText(32);
+                                        findAccount.sms_code = Utils.createRundomText( 6, true);
+                                        AccountModel.update(findAccount);
+
+                                        self.sendResponse(res, cookie, `?id=${findAccount.sms_id}`);
+
+                                        // ログインコードをSMS送信
                                         const accountSid = Config.TWILIO_ACCOUNT_SID;
                                         const authToken =  Config.TWILIO_AUTH_TOKEN;
 
@@ -196,7 +203,7 @@ export default class Provider
 
                                         client.messages.create(
                                         {
-                                            body: '123 456',
+                                            body: `ログインコード：${findAccount.sms_code}`,
                                             to: findAccount.phone_no,
                                             from: Config.TWILIO_FROM_PHONE_NO
                                         }, (err, message) =>
@@ -206,21 +213,23 @@ export default class Provider
                                         });
                                     }
                                 }
+                                else
+                                {
+                                    // セッション作成
+                                    const session = new Session();
+                                    session.account_id = findAccount.id;
+                                    yield SessionModel.add(session);
 
-                                // セッション作成
-                                const session = new Session();
-                                session.account_id = findAccount.id;
-                                yield SessionModel.add(session);
+                                    // ログイン履歴作成
+                                    const loginHistory = new LoginHistory();
+                                    loginHistory.account_id = findAccount.id;
+                                    loginHistory.device = req.headers['user-agent'];
+                                    yield LoginHistoryModel.add(loginHistory);
 
-                                // ログイン履歴作成
-                                const loginHistory = new LoginHistory();
-                                loginHistory.account_id = findAccount.id;
-                                loginHistory.device = req.headers['user-agent'];
-                                yield LoginHistoryModel.add(loginHistory);
-
-                                // トップ画面へ
-                                cookie.sessionId = session.id;
-                                self.sendResponse(res, cookie, '/');
+                                    // トップ画面へ
+                                    cookie.sessionId = session.id;
+                                    self.sendResponse(res, cookie, '/');
+                                }
                             }
                             else
                             {
@@ -257,7 +266,7 @@ export default class Provider
                         {
                             if (session)
                             {
-                                log.i('紐付け可能。ログインしているので、紐付けを続行し、トップ画面へ移動する');
+                                log.i('紐付け可能。ログインしているので、紐付けを続行し、設定画面へ移動する');
 
                                 // アカウント更新
                                 const account : Account = yield AccountModel.find(session.account_id);

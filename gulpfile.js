@@ -65,6 +65,7 @@ gulp.task('build-client', ['typeScript'], function ()
     buildClient('signup.js');
     buildClient('signup-confirm.js');
     buildClient('login.js');
+    buildClient('sms.js');
     buildClient('forget.js');
     buildClient('reset.js');
     buildClient('settings.js');

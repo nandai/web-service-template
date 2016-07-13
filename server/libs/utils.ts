@@ -153,13 +153,17 @@ export default class Utils
     /**
      * ランダムテキスト生成
      *
-     * @param   size    サイズ
+     * @param   size        サイズ
+     * @param   numberOnly  数字だけを使うかどうか
      *
      * @return  ランダムテキスト
      */
-    static createRundomText(size : number) : string
+    static createRundomText(size : number, numberOnly = false) : string
     {
-        const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const chars = (numberOnly
+            ? '0123456789'
+            : '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
         const len = chars.length;
         let text = '';
 

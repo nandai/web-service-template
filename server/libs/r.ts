@@ -26,6 +26,7 @@ export default class R
         "emailChanged": "メールアドレスを変更しました。",
         "passwordTooShortOrTooLong": "パスワードが短い、または長すぎます。",
         "mismatchPassword": "パスワードが一致していません。",
+        "mismatchSmsCode": "ログインコードが一致していません。",
         "passwordReset": "パスワードをリセットしました。",
         "passwordChanged": "パスワードを変更しました。",
         "accountNameTooShortOrTooLong": "アカウント名が短い、または長すぎます。",
@@ -49,6 +50,7 @@ export default class R
     static EMAIL_CHANGED = 'emailChanged';
     static PASSWORD_TOO_SHORT_OR_TOO_LONG = 'passwordTooShortOrTooLong';
     static MISMATCH_PASSWORD = 'mismatchPassword';
+    static MISMATCH_SMS_CODE = 'mismatchSmsCode';
     static PASSWORD_RESET = 'passwordReset';
     static PASSWORD_CHANGED = 'passwordChanged';
     static ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG = 'accountNameTooShortOrTooLong';

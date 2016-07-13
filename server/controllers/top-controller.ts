@@ -5,6 +5,7 @@ import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
+import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -47,7 +48,17 @@ export default class TopController
                     break;
             }
 
-            if (session === null || message)
+            const param = req.query;
+            const smsId = param.id;
+
+            if (smsId)
+            {
+                const account : Account = yield AccountModel.findBySmsId(smsId);
+
+                if (account) res.render('sms', {smsId});
+                else         res.status(404).render('404');
+            }
+            else if (session === null || message)
             {
                 log.d('ログイン画面を表示');
                 res.render('login', {message});
