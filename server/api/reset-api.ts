@@ -46,7 +46,7 @@ export default class ResetApi
                 }
 
                 const account : Account = yield AccountModel.findByProviderId('email', param.email);
-                if (account === null)
+                if (account === null || account.signup_id)
                 {
                     const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL));
                     res.json(data);
