@@ -56,6 +56,9 @@ class SettingsView extends View
             if (this.account.twitter)  this.twitterButton. setLabel('twitterとの紐づけを解除する');
             if (this.account.facebook) this.facebookButton.setLabel('facebookとの紐づけを解除する');
             if (this.account.google)   this.googleButton.  setLabel('googleとの紐づけを解除する');
+
+            if (this.account.email === null)
+                this.passwordButton.setEnabled(false);
         })
 
         .fail((jqXHR, status, error) =>

@@ -146,8 +146,10 @@ export default class SettingsApi
                     break;
                 }
 
-                const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', param.email);
-//              if (alreadyExistsAccount !== null)
+                // メールアドレスの重複チェック
+                const email = param.email;
+                const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', email);
+
                 if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                 {
                     const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL));
@@ -155,20 +157,37 @@ export default class SettingsApi
                     break;
                 }
 
+                // パスワードがなければメールアドレスを設定し、あれば変更メールを送信する
                 const session : Session = req['sessionObj'];
                 const account : Account = yield AccountModel.find(session.account_id);
-                account.change_id = Utils.createRundomText(32);
-                account.change_email = param.email;
-                yield AccountModel.update(account);
 
-                const url = Utils.generateUrl('settings/account/email/change', account.change_id);
-                const result = yield Utils.sendMail('メールアドレス変更手続きのお知らせ', account.change_email, `メールアドレス変更手続き。\n${url}`);
-                const data =
+                if (account.password === null)
                 {
-                    status: 1,
-                    message: R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL)
-                };
-                res.json(data);
+                    account.email = (email !== '' ? email : null);
+                    yield AccountModel.update(account);
+
+                    const data =
+                    {
+                        status: 1,
+                        message: R.text(R.EMAIL_CHANGED)
+                    };
+                    res.json(data);
+                }
+                else
+                {
+                    account.change_id = Utils.createRundomText(32);
+                    account.change_email = email;
+                    yield AccountModel.update(account);
+
+                    const url = Utils.generateUrl('settings/account/email/change', account.change_id);
+                    const result = yield Utils.sendMail('メールアドレス変更手続きのお知らせ', account.change_email, `メールアドレス変更手続き。\n${url}`);
+                    const data =
+                    {
+                        status: 1,
+                        message: R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL)
+                    };
+                    res.json(data);
+                }
             }
             while (false);
             log.stepOut();
@@ -209,7 +228,11 @@ export default class SettingsApi
 
                 if (account)
                 {
-                    const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', account.change_email);
+                    // メールアドレス変更メールを送信してから確認までの間に同じメールアドレスが本登録される可能性があるため、
+                    // メールアドレスの重複チェックを行う
+                    const changeEmail = account.change_email;
+                    const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', changeEmail);
+
                     if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                     {
                         const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL));
@@ -217,7 +240,9 @@ export default class SettingsApi
                         break;
                     }
 
-                    const hashPassword = Utils.getHashPassword(account.email, param.password, Config.PASSWORD_SALT);
+                    // パスワードチェック
+                    const password = param.password;
+                    const hashPassword = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
 
                     if (hashPassword !== account.password)
                     {
@@ -226,8 +251,9 @@ export default class SettingsApi
                         break;
                     }
 
-                    account.email = account.change_email;
-                    account.password = Utils.getHashPassword(account.change_email, param.password, Config.PASSWORD_SALT);
+                    // メールアドレス設定（変更）
+                    account.email = changeEmail;
+                    account.password = Utils.getHashPassword(changeEmail, password, Config.PASSWORD_SALT);
                     account.change_id = null;
                     account.change_email = null;
                     yield AccountModel.update(account);

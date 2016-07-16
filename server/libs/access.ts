@@ -27,7 +27,7 @@ export default class Access
      */
     static jsonBodyParser(req : express.Request, res : express.Response, next : express.NextFunction)
     {
-        const log = slog.stepIn(Access.CLS_NAME, 'jsonBodyParse');
+        const log = slog.stepIn(Access.CLS_NAME, 'jsonBodyParser');
         let bodyBuffer : Buffer;
 
         const fn = bodyParser.json(
@@ -95,6 +95,40 @@ export default class Access
 //          if (key !== 'cookie')
 //              log.d(`${key}: ${headers[key]}`)
 //      }
+
+        // アクセス元IP
+        let ip = '0.0.0.0';
+        let kind = '-';
+
+        if (req.headers['x-forwarded-for'])
+        {
+            ip = req.headers['x-forwarded-for'];
+            kind = 'a';
+        }
+
+        if (req.connection && req.connection.remoteAddress)
+        {
+            ip = req.connection.remoteAddress;
+            kind = 'b';
+        }
+
+        if (req.connection['socket'] && req.connection['socket'].remoteAddress)
+        {
+            ip = req.connection['socket'].remoteAddress;
+            kind = 'c';
+        }
+
+        if (req.socket && req.socket.remoteAddress)
+        {
+            ip = req.socket.remoteAddress;
+            kind = 'd';
+        }
+
+        const pos = ip.lastIndexOf(':');
+        if (pos > 0)
+            ip = ip.substr(pos + 1);
+
+        log.d(`(${kind}) IP:${ip}`);
 
         log.stepOut();
         next();
