@@ -166,11 +166,7 @@ export default class SignupApi
                 account.signup_id = null;
                 yield AccountModel.update(account);
 
-                const data =
-                {
-                    status: 1,
-                    message: 'サインアップが完了しました。'
-                };
+                const data = ResponseData.ok(1, R.text(R.SIGNUP_COMPLETED));
                 res.json(data);
             }
             while (false);

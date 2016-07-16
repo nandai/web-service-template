@@ -22,6 +22,8 @@ export default class R
         "badRequest": "リクエストが正しくありません。",
         "notFound": "存在しませんでした。",
         "noLogin": "ログインしていません。",
+        "signupMailSended": "仮登録のメールを送信しました。",
+        "couldNotSendSignupMail": "仮登録のメールを送信できませんでした。",
         "resetMailSended": "パスワードリセットのメールを送信しました。",
         "couldNotSendResetMail": "パスワードリセットのメールを送信できませんでした。",
         "changeMailSended": "メールアドレス変更手続きのメールを送信しました。",
@@ -33,6 +35,7 @@ export default class R
         "passwordReset": "パスワードをリセットしました。",
         "passwordChanged": "パスワードを変更しました。",
         "accountNameTooShortOrTooLong": "アカウント名が短い、または長すぎます。",
+        "signupCompleted": "登録が完了しました。",
         "settingsCompleted": "設定を完了しました。"
     };
 
@@ -49,6 +52,8 @@ export default class R
     static BAD_REQUEST = 'badRequest';
     static NOT_FOUND = 'notFound';
     static NO_LOGIN = 'noLogin';
+    static SIGNUP_MAIL_SENDED = 'signupMailSended';
+    static COULD_NOT_SEND_SIGNUP_MAIL = 'couldNotSendSignupMail';
     static RESET_MAIL_SENDED = 'resetMailSended';
     static COULD_NOT_SEND_RESET_MAIL = 'couldNotSendResetMail';
     static CHANGE_MAIL_SENDED = 'changeMailSended';
@@ -60,6 +65,7 @@ export default class R
     static PASSWORD_RESET = 'passwordReset';
     static PASSWORD_CHANGED = 'passwordChanged';
     static ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG = 'accountNameTooShortOrTooLong';
+    static SIGNUP_COMPLETED = 'signupCompleted';
     static SETTINGS_COMPLETED = 'settingsCompleted';
 
     /**

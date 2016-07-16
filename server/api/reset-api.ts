@@ -58,11 +58,7 @@ export default class ResetApi
 
                 const url = Utils.generateUrl('reset', account.reset_id);
                 const result = yield Utils.sendMail('パスワードリセットのお知らせ', account.email, `パスワードリセット。\n${url}`);
-                const data =
-                {
-                    status: 1,
-                    message: R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL)
-                };
+                const data = ResponseData.ok(1, R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL));
                 res.json(data);
             }
             while (false);
@@ -123,11 +119,7 @@ export default class ResetApi
                     account.reset_id = null;
                     yield AccountModel.update(account);
 
-                    const data =
-                    {
-                        status: 1,
-                        message: R.text(R.PASSWORD_RESET)
-                    };
+                    const data = ResponseData.ok(1, R.text(R.PASSWORD_RESET));
                     res.json(data);
                 }
                 else

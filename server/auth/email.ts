@@ -60,11 +60,7 @@ export default class Email extends Provider
                     {
                         const url = Utils.generateUrl('signup', account.signup_id);
                         const result : boolean = yield Utils.sendMail('仮登録のお知らせ', account.email, `仮登録しました。\n${url}`);
-                        const data =
-                        {
-                            status: 1,
-                            message: (result ? '仮登録のメールを送信しました。' : '仮登録のメールを送信できませんでした。')
-                        };
+                        const data = ResponseData.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL));
                         res.json(data);
                         resolve(result);
                     });

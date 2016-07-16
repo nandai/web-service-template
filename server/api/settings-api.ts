@@ -64,7 +64,7 @@ export default class SettingsApi
     }
 
     /**
-     * アカウント情報を取得する<br>
+     * アカウント情報を更新する<br>
      * PUT /api/settings/account
      *
      * @param   req httpリクエスト
@@ -91,6 +91,7 @@ export default class SettingsApi
                     break;
                 }
 
+                // アカウント名チェック
                 const len = param.name.length;
 
                 if (len < 1 || 20 < len)
@@ -100,6 +101,7 @@ export default class SettingsApi
                     break;
                 }
 
+                // アカウント情報更新
                 const session : Session = req['sessionObj'];
                 const account : Account = yield AccountModel.find(session.account_id);
 
@@ -107,11 +109,7 @@ export default class SettingsApi
                 account.phone_no = (param.phone_no.length > 0 ? param.phone_no : null);
                 yield AccountModel.update(account);
 
-                const data =
-                {
-                    status: 1,
-                    message: R.text(R.SETTINGS_COMPLETED)
-                };
+                const data = ResponseData.ok(1, R.text(R.SETTINGS_COMPLETED));
                 res.json(data);
             }
             while (false);
@@ -166,11 +164,7 @@ export default class SettingsApi
                     account.email = (email !== '' ? email : null);
                     yield AccountModel.update(account);
 
-                    const data =
-                    {
-                        status: 1,
-                        message: R.text(R.EMAIL_CHANGED)
-                    };
+                    const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED));
                     res.json(data);
                 }
                 else
@@ -181,11 +175,7 @@ export default class SettingsApi
 
                     const url = Utils.generateUrl('settings/account/email/change', account.change_id);
                     const result = yield Utils.sendMail('メールアドレス変更手続きのお知らせ', account.change_email, `メールアドレス変更手続き。\n${url}`);
-                    const data =
-                    {
-                        status: 1,
-                        message: R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL)
-                    };
+                    const data = ResponseData.ok(1, R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL));
                     res.json(data);
                 }
             }
@@ -258,11 +248,7 @@ export default class SettingsApi
                     account.change_email = null;
                     yield AccountModel.update(account);
 
-                    const data =
-                    {
-                        status: 1,
-                        message: R.text(R.EMAIL_CHANGED)
-                    };
+                    const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED));
                     res.json(data);
                 }
                 else
@@ -337,11 +323,7 @@ export default class SettingsApi
                 account.password = Utils.getHashPassword(account.email, param.new_password, Config.PASSWORD_SALT);
                 yield AccountModel.update(account);
 
-                const data =
-                {
-                    status: 1,
-                    message: R.text(R.PASSWORD_CHANGED)
-                };
+                const data = ResponseData.ok(1, R.text(R.PASSWORD_CHANGED));
                 res.json(data);
             }
             while (false);
