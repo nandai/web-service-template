@@ -68,10 +68,36 @@ export default class R
     static SIGNUP_COMPLETED = 'signupCompleted';
     static SETTINGS_COMPLETED = 'settingsCompleted';
 
+    private static mailTemplates =
+    {
+        'notice-signup':
+        {
+            subject: '仮登録のお知らせ',
+            contents: '仮登録しました。\n${url}'
+        },
+
+        'notice-change-mail-address':
+        {
+            subject: 'メールアドレス変更手続きのお知らせ',
+            contents: 'メールアドレス変更手続き。\n${url}'
+        },
+
+        'notice-reset-password':
+        {
+            subject: 'パスワードリセットのお知らせ',
+            contents: 'パスワードリセット。\n${url}'
+        }
+    };
+
+    static NOTICE_SIGNUP = 'notice-signup';
+    static NOTICE_CHANGE_MAIL_ADDRESS = 'notice-change-mail-address';
+    static NOTICE_RESET_PASSWORD = 'notice-reset-password';
+
     /**
      * 文字列を取得する
      *
      * @param   phrase  フレーズ
+     *
      * @return  文字列
      */
     static text(phrase : string) : string
@@ -81,4 +107,28 @@ export default class R
 
         return null;
     }
+
+    /**
+     * メールテンプレートを取得する
+     *
+     * @param   phrase  フレーズ
+     *
+     * @return  メールテンプレート
+     */
+    static mail(phrase : string) : MailTemplate
+    {
+        if (phrase in R.mailTemplates)
+            return R.mailTemplates[phrase];
+
+        return null;
+    }
+}
+
+/**
+ * メールテンプレート
+ */
+export interface MailTemplate
+{
+    subject  : string;
+    contents : string;
 }

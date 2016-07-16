@@ -174,7 +174,9 @@ export default class SettingsApi
                     yield AccountModel.update(account);
 
                     const url = Utils.generateUrl('settings/account/email/change', account.change_id);
-                    const result = yield Utils.sendMail('メールアドレス変更手続きのお知らせ', account.change_email, `メールアドレス変更手続き。\n${url}`);
+                    const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS);
+                    const contents = Utils.formatString(template.contents, {url});
+                    const result = yield Utils.sendMail(template.subject, account.change_email, contents);
                     const data = ResponseData.ok(1, R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL));
                     res.json(data);
                 }

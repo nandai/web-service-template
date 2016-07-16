@@ -121,9 +121,6 @@ export default class Utils
     /**
      * ハッシュ化パスワード取得
      *
-     * @method  _getHashPassword
-     * @private
-     *
      * @param   name        ユーザー名
      * @param   password    パスワード
      * @param   salt        ソルト
@@ -258,4 +255,21 @@ export default class Utils
                 dst[key] = src[key];
         }
     }
+
+    /**
+     * 文字列フォーマット<br>
+     * 使用方法: formatString('Hello ${name} !', {name:'Taro'});
+     *
+     * @param   format  フォーマット
+     * @param   args    引数
+     *
+     * @return  文字列
+     */
+    static formatString(format : string, args : Object) : string
+    {
+        return format.replace(/\${(.*?)}/g, (match, key) =>
+        {
+            return (key in args ? args[key] : match);
+        });
+    };
 }
