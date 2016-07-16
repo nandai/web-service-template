@@ -23,48 +23,6 @@ export default class LoginApi
     private static CLS_NAME = 'LoginApi';
 
     /**
-     * Twitterアカウントでログインする<br>
-     * POST /api/login/twitter
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
-     */
-    static twitter(req : express.Request, res : express.Response) : void
-    {
-        const log = slog.stepIn(LoginApi.CLS_NAME, 'twitter');
-        LoginApi.sendResponse(req, res, 'twitter');
-        log.stepOut();
-    }
-
-    /**
-     * Facebookアカウントでログインする<br>
-     * POST /api/login/facebook
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
-     */
-    static facebook(req : express.Request, res : express.Response) : void
-    {
-        const log = slog.stepIn(LoginApi.CLS_NAME, 'facebook');
-        LoginApi.sendResponse(req, res, 'facebook');
-        log.stepOut();
-    }
-
-    /**
-     * Gacebookアカウントでログインする<br>
-     * POST /api/login/google
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
-     */
-    static google(req : express.Request, res : express.Response) : void
-    {
-        const log = slog.stepIn(LoginApi.CLS_NAME, 'google');
-        LoginApi.sendResponse(req, res, 'google');
-        log.stepOut();
-    }
-
-    /**
      * メールアドレスでログインする<br>
      * POST /api/login/email
      *
@@ -190,21 +148,5 @@ export default class LoginApi
             log.stepOut();
         })
         .catch ((err) => Utils.internalServerError(err, res, log));
-    }
-
-    /**
-     * メールアドレスでのログイン以外のレスポンス送信
-     *
-     * @param   req         httpリクエスト
-     * @param   res         httpレスポンス
-     * @param   provider    プロバイダ名
-     */
-    private static sendResponse(req : express.Request, res : express.Response, provider : string) : void
-    {
-        const cookie = new Cookie(req, res);
-        cookie.command = 'login';
-
-        const data = ResponseData.auth(provider);
-        res.json(data);
     }
 }

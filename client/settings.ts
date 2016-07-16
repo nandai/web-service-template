@@ -83,7 +83,7 @@ class SettingsView extends View
     private onClickTwitterButton() : void
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickTwitterButton');
-        this.link('twitter');
+        location.href = '/settings/account/link/twitter';
         log.stepOut();
     }
 
@@ -93,7 +93,7 @@ class SettingsView extends View
     private onClickFacebookButton() : void
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickFacebookButton');
-        this.link('facebook');
+        location.href = '/settings/account/link/facebook';
         log.stepOut();
     }
 
@@ -103,7 +103,7 @@ class SettingsView extends View
     private onClickGoogleButton() : void
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickGoogleButton');
-        this.link('google');
+        location.href = '/settings/account/link/google';
         log.stepOut();
     }
 
@@ -181,43 +181,6 @@ class SettingsView extends View
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickBackButton');
         window.location.href = '/';
-        log.stepOut();
-    }
-
-    /**
-     * @method  login
-     */
-    private link(sns : string) : void
-    {
-        const log = slog.stepIn(SettingsView.CLS_NAME, 'link');
-
-        $.ajax({
-            type: 'POST',
-            url: `/api/settings/account/link/${sns}`
-        })
-
-        .done((data, status, jqXHR) =>
-        {
-            const log = slog.stepIn(SettingsView.CLS_NAME, 'link.done');
-
-            if (data.status === 0)
-            {
-                location.href = data.redirect;
-            }
-            else
-            {
-                $('#message').text(data.message);
-            }
-
-            log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(SettingsView.CLS_NAME, 'link.fail');
-            log.stepOut();
-        });
-
         log.stepOut();
     }
 }

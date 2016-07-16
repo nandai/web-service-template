@@ -11,17 +11,6 @@ export default class ResponseData
     private static CLS_NAME = 'ResponseData';
 
     /**
-     * 認証レスポンス
-     *
-     * @param   provider    プロバイダ名
-     */
-    static auth(provider : string) : any
-    {
-        const data = ResponseData.redirect(`/auth/${provider}`);
-        return data;
-    }
-
-    /**
      * リダイレクトレスポンス
      *
      * @param   redirect    リダイレクト先URL

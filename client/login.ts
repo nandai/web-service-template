@@ -60,7 +60,7 @@ class LoginView extends View
     private onClickTwitterButton() : void
     {
         const log = slog.stepIn(LoginView.CLS_NAME, 'onClickTwitterButton');
-        this.login('twitter');
+        location.href = '/login/twitter';
         log.stepOut();
     }
 
@@ -70,7 +70,7 @@ class LoginView extends View
     private onClickFacebookButton() : void
     {
         const log = slog.stepIn(LoginView.CLS_NAME, 'onClickFacebookButton');
-        this.login('facebook');
+        location.href = '/login/facebook';
         log.stepOut();
     }
 
@@ -80,7 +80,7 @@ class LoginView extends View
     private onClickGoogleButton() : void
     {
         const log = slog.stepIn(LoginView.CLS_NAME, 'onClickGoogleButton');
-        this.login('google');
+        location.href = '/login/google';
         log.stepOut();
     }
 

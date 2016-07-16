@@ -157,32 +157,37 @@ class Initializer
      */
     route() : void
     {
+        const authTwitter =  passport.authenticate('twitter');
+        const authFacebook = passport.authenticate('facebook');
+        const authGoogle =   passport.authenticate('google', {scope:['https://www.googleapis.com/auth/plus.login']});
+
         this.app.get( '/',       TopController.   index);
         this.app.get( '/signup', SignupController.index);
         this.app.get( '/forget', ForgetController.index);
         this.app.get( '/reset',  ResetController. index);
         this.app.get( '/settings/account/email/change', SettingsController.changeEmail);
 
-        this.app.post('/api/signup/twitter',       SignupApi.twitter);
-        this.app.post('/api/signup/facebook',      SignupApi.facebook);
-        this.app.post('/api/signup/google',        SignupApi.google);
+        this.app.get( '/signup/twitter',                 signup, authTwitter);
+        this.app.get( '/signup/facebook',                signup, authFacebook);
+        this.app.get( '/signup/google',                  signup, authGoogle);
+        this.app.get( '/login/twitter',                  login,  authTwitter);
+        this.app.get( '/login/facebook',                 login,  authFacebook);
+        this.app.get( '/login/google',                   login,  authGoogle);
+        this.app.get( '/settings/account/link/twitter',  link,   authTwitter);
+        this.app.get( '/settings/account/link/facebook', link,   authFacebook);
+        this.app.get( '/settings/account/link/google',   link,   authGoogle);
+
         this.app.post('/api/signup/email',         SignupApi.email);
         this.app.post('/api/signup/email/confirm', SignupApi.confirmEmail);
-        this.app.post('/api/login/twitter',        LoginApi. twitter);
-        this.app.post('/api/login/facebook',       LoginApi. facebook);
-        this.app.post('/api/login/google',         LoginApi. google);
         this.app.post('/api/login/email',          LoginApi. email);
         this.app.post('/api/login/sms',            LoginApi. sms);
         this.app.post('/api/reset',                ResetApi. index);
         this.app.put( '/api/reset/change',         ResetApi. change);
         this.app.put( '/api/settings/account/email/change', SettingsApi.changeEmail);
 
-        this.app.get( '/auth/twitter',           passport.authenticate('twitter'));
-        this.app.get( '/auth/twitter/callback',  Twitter.customCallback, Twitter.callback);
-        this.app.get( '/auth/facebook',          passport.authenticate('facebook'));
+        this.app.get( '/auth/twitter/callback',  Twitter. customCallback, Twitter. callback);
         this.app.get( '/auth/facebook/callback', Facebook.customCallback, Facebook.callback);
-        this.app.get( '/auth/google',            passport.authenticate('google', {scope:['https://www.googleapis.com/auth/plus.login']}));
-        this.app.get( '/auth/google/callback',   Google.customCallback, Google.callback);
+        this.app.get( '/auth/google/callback',   Google.  customCallback, Google.  callback);
 
         this.app.use(Access.auth);
 
@@ -195,9 +200,6 @@ class Initializer
         this.app.put(   '/api/settings/account',               SettingsApi.account);
         this.app.put(   '/api/settings/account/email',         SettingsApi.email);
         this.app.put(   '/api/settings/account/password',      SettingsApi.password);
-        this.app.post(  '/api/settings/account/link/twitter',  SettingsApi.linkTwitter);
-        this.app.post(  '/api/settings/account/link/facebook', SettingsApi.linkFacebook);
-        this.app.post(  '/api/settings/account/link/google',   SettingsApi.linkGoogle);
         this.app.delete('/api/settings/account/leave',         SettingsApi.leave);
         this.app.post(  '/api/logout',                         LogoutApi.  index);
 
@@ -227,6 +229,36 @@ function main() : void
 
     listen(app);
     log.stepOut();
+}
+
+/**
+ * signup
+ */
+function signup(req : express.Request, res : express.Response, next : express.NextFunction) : void
+{
+    const cookie = new Cookie(req, res);
+    cookie.command = 'signup';
+    next();
+}
+
+/**
+ * login
+ */
+function login(req : express.Request, res : express.Response, next : express.NextFunction) : void
+{
+    const cookie = new Cookie(req, res);
+    cookie.command = 'login';
+    next();
+}
+
+/**
+ * link
+ */
+function link(req : express.Request, res : express.Response, next : express.NextFunction) : void
+{
+    const cookie = new Cookie(req, res);
+    cookie.command = 'link';
+    next();
 }
 
 /**

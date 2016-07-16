@@ -57,7 +57,7 @@ class SignupView extends View
     private onClickTwitterButton() : void
     {
         const log = slog.stepIn(SignupView.CLS_NAME, 'onClickTwitterButton');
-        this.signup('twitter');
+        location.href = '/signup/twitter';
         log.stepOut();
     }
 
@@ -67,7 +67,7 @@ class SignupView extends View
     private onClickFacebookButton() : void
     {
         const log = slog.stepIn(SignupView.CLS_NAME, 'onClickFacebookButton');
-        this.signup('facebook');
+        location.href = '/signup/facebook';
         log.stepOut();
     }
 
@@ -77,7 +77,7 @@ class SignupView extends View
     private onClickGoogleButton() : void
     {
         const log = slog.stepIn(SignupView.CLS_NAME, 'onClickGoogleButton');
-        this.signup('google');
+        location.href = '/signup/google';
         log.stepOut();
     }
 

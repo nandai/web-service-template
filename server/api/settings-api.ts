@@ -335,58 +335,6 @@ export default class SettingsApi
     }
 
     /**
-     * Twitterアカウントを紐付ける<br>
-     * POST /api/settings/account/link/twitter
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
-     */
-    static linkTwitter(req : express.Request, res : express.Response) : void
-    {
-        SettingsApi.sendResponse(req, res, 'twitter');
-    }
-
-    /**
-     * Facebookアカウントを紐付ける<br>
-     * POST /api/settings/account/link/facebook
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
-     */
-    static linkFacebook(req : express.Request, res : express.Response) : void
-    {
-        SettingsApi.sendResponse(req, res, 'facebook');
-    }
-
-    /**
-     * Googleアカウントを紐付ける<br>
-     * POST /api/settings/account/link/google
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
-     */
-    static linkGoogle(req : express.Request, res : express.Response) : void
-    {
-        SettingsApi.sendResponse(req, res, 'google');
-    }
-
-    /**
-     * 紐付けのレスポンス送信
-     *
-     * @param   req         httpリクエスト
-     * @param   res         httpレスポンス
-     * @param   provider    プロバイダ名
-     */
-    private static sendResponse(req : express.Request, res : express.Response, provider : string) : void
-    {
-        const cookie = new Cookie(req, res);
-        cookie.command = 'link';
-
-        const data = ResponseData.auth(provider);
-        res.json(data);
-    }
-
-    /**
      * 退会する<br>
      * DELETE /api/settings/account/leave
      *
