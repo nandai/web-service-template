@@ -52,20 +52,21 @@ export default class Email extends Provider
         co(function* ()
         {
             const email = new Email();
-            yield email.signupOrLogin(req, res, (account : Account) =>
+            yield email.signupOrLogin(req, res, (account : Account) : Promise<any> =>
             {
                 return new Promise((resolve) =>
                 {
                     co(function* ()
                     {
                         const url = Utils.generateUrl('signup', account.signup_id);
-                        const result = yield Utils.sendMail('仮登録のお知らせ', account.email, `仮登録しました。\n${url}`);
+                        const result : boolean = yield Utils.sendMail('仮登録のお知らせ', account.email, `仮登録しました。\n${url}`);
                         const data =
                         {
                             status: 1,
                             message: (result ? '仮登録のメールを送信しました。' : '仮登録のメールを送信できませんでした。')
                         };
                         res.json(data);
+                        resolve(result);
                     });
                 });
             });

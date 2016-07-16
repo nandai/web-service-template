@@ -146,6 +146,15 @@ export default class SettingsApi
                     break;
                 }
 
+                const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', param.email);
+//              if (alreadyExistsAccount !== null)
+                if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
+                {
+                    const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL));
+                    res.json(data);
+                    break;
+                }
+
                 const session : Session = req['sessionObj'];
                 const account : Account = yield AccountModel.find(session.account_id);
                 account.change_id = Utils.createRundomText(32);
@@ -157,7 +166,7 @@ export default class SettingsApi
                 const data =
                 {
                     status: 1,
-                    message: (result ? 'メールアドレス変更手続きのメールを送信しました。' : 'メールアドレス変更手続きのメールを送信できませんでした。')
+                    message: R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL)
                 };
                 res.json(data);
             }
@@ -200,6 +209,14 @@ export default class SettingsApi
 
                 if (account)
                 {
+                    const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', account.change_email);
+                    if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
+                    {
+                        const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL));
+                        res.json(data);
+                        break;
+                    }
+
                     const hashPassword = Utils.getHashPassword(account.email, param.password, Config.PASSWORD_SALT);
 
                     if (hashPassword !== account.password)

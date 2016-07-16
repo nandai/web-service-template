@@ -14,6 +14,7 @@ export default class R
         "alreadySignup": "既に登録されています。",
         "alreadyEmailChanged": "メールアドレスは変更済みです。",
         "alreadyPasswordReset": "パスワードはリセット済みです。",
+        "alreadyExistsEmail": "そのメールアドレスは既に登録されています。",
         "cannotSignup": "ログインしているので登録できません。",
         "invalidEmailAuth": "メールアドレス、またはパスワードが正しくありません。",
         "invalidEmail": "メールアドレスが正しくありません。",
@@ -23,6 +24,8 @@ export default class R
         "noLogin": "ログインしていません。",
         "resetMailSended": "パスワードリセットのメールを送信しました。",
         "couldNotSendResetMail": "パスワードリセットのメールを送信できませんでした。",
+        "changeMailSended": "メールアドレス変更手続きのメールを送信しました。",
+        "couldNotSendChangeMail": "メールアドレス変更手続きのメールを送信できませんでした。",
         "emailChanged": "メールアドレスを変更しました。",
         "passwordTooShortOrTooLong": "パスワードが短い、または長すぎます。",
         "mismatchPassword": "パスワードが一致していません。",
@@ -38,6 +41,7 @@ export default class R
     static ALREADY_SIGNUP = 'alreadySignup';
     static ALREADY_EMAIL_CHANGED = 'alreadyEmailChanged';
     static ALREADY_PASSWORD_RESET = 'alreadyPasswordReset';
+    static ALREADY_EXISTS_EMAIL = 'alreadyExistsEmail';
     static CANNOT_SIGNUP = 'cannotSignup';
     static INVALID_EMAIL_AUTH = 'invalidEmailAuth';
     static INVALID_EMAIL = 'invalidEmail';
@@ -47,6 +51,8 @@ export default class R
     static NO_LOGIN = 'noLogin';
     static RESET_MAIL_SENDED = 'resetMailSended';
     static COULD_NOT_SEND_RESET_MAIL = 'couldNotSendResetMail';
+    static CHANGE_MAIL_SENDED = 'changeMailSended';
+    static COULD_NOT_SEND_CHANGE_MAIL = 'couldNotSendChangeMail';
     static EMAIL_CHANGED = 'emailChanged';
     static PASSWORD_TOO_SHORT_OR_TOO_LONG = 'passwordTooShortOrTooLong';
     static MISMATCH_PASSWORD = 'mismatchPassword';

@@ -123,7 +123,8 @@ export default class Provider
                     case 'signup':
                     {
                         // サインアップ処理
-                        if (findAccount === null)
+//                      if (findAccount === null)
+                        if (findAccount === null || findAccount.signup_id)
                         {
                             if (session === null)
                             {
@@ -131,11 +132,23 @@ export default class Provider
 
                                 // アカウント作成
                                 const account = self.createAccount(user);
-                                yield AccountModel.add(account);
+
+                                if (findAccount === null)
+                                {
+                                    yield AccountModel.add(account);
+                                }
+                                else
+                                {
+                                    // 仮登録中のメールアドレスのアカウントに新たなサインアップIDを設定する
+                                    account.id = findAccount.id;
+                                    yield AccountModel.update(account);
+                                }
 
                                 if (signupCallback)
                                 {
-                                    yield signupCallback(account);
+                                    const result : boolean = yield signupCallback(account);
+                                    if (result === false)
+                                        yield AccountModel.remove(account.id);
                                 }
                                 else
                                 {
