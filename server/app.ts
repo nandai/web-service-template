@@ -20,10 +20,10 @@ import LoginApi           from './api/login-api';
 import LogoutApi          from './api/logout-api';
 import ResetApi           from './api/reset-api';
 import SettingsApi        from './api/settings-api';
-import Twitter            from './auth/twitter';
-import Facebook           from './auth/facebook';
-import Google             from './auth/google';
-import Email              from './auth/email';
+import Twitter            from './provider/twitter';
+import Facebook           from './provider/facebook';
+import Google             from './provider/google';
+import Email              from './provider/email';
 import Access             from './libs/access';
 import Cookie             from './libs/cookie';
 

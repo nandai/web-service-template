@@ -6,7 +6,7 @@ import Cookie       from '../libs/cookie';
 import R            from '../libs/r';
 import Utils        from '../libs/utils';
 import ResponseData from '../libs/response-data';
-import Email        from '../auth/email';
+import Email        from '../provider/email';
 import AccountModel, {Account} from '../models/account-model';
 import SessionModel, {Session} from '../models/session-model';
 import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';

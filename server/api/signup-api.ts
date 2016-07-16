@@ -6,7 +6,7 @@ import Cookie       from '../libs/cookie';
 import Utils        from '../libs/utils';
 import ResponseData from '../libs/response-data';
 import R            from '../libs/r';
-import Email        from '../auth/email';
+import Email        from '../provider/email';
 import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');

@@ -8,8 +8,8 @@ import AccountModel      from '../models/account-model';
 import SessionModel      from '../models/session-model';
 import LoginHistoryModel from '../models/login-history-model';
 import Cookie            from '../libs/cookie';
-import Twitter           from '../auth/twitter';
-import Facebook          from '../auth/facebook';
+import Twitter           from '../provider/twitter';
+import Facebook          from '../provider/facebook';
 
 import slog =    require('../slog');
 const co =       require('co');
