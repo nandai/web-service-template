@@ -206,7 +206,7 @@ export default class SettingsApi
      */
     static email(req : express.Request, res : express.Response) : void
     {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'index');
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'email');
         co(function* ()
         {
             do
@@ -225,8 +225,8 @@ export default class SettingsApi
                 }
 
                 // メールアドレスの重複チェック
-                const email = param.email;
-                const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', email);
+                const changeEmail = param.email;
+                const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', changeEmail);
 
                 if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                 {
@@ -239,24 +239,57 @@ export default class SettingsApi
                 const session : Session = req['sessionObj'];
                 const account : Account = yield AccountModel.find(session.account_id);
 
-                if (account.password === null)
+                if (changeEmail === '')
                 {
-                    account.email = (email !== '' ? email : null);
-                    yield AccountModel.update(account);
+                    // メールアドレスを削除する場合
+                    if (account.canUnlink('email'))
+                    {
+                        account.email = null;
+                        account.password = null;
+                        yield AccountModel.update(account);
 
-                    const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED));
+                        const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED));
+                        res.json(data);
+                    }
+                    else
+                    {
+                        const data = ResponseData.error(-1, R.text(R.CANNOT_EMPTY_EMAIL));
+                        res.json(data);
+                    }
+                }
+
+                else if (account.password === null)
+                {
+                    // パスワードが設定されていない場合
+                    const template = R.mail(R.NOTICE_SET_MAIL_ADDRESS);
+                    const result = yield Utils.sendMail(template.subject, changeEmail, template.contents);
+
+                    if (result)
+                    {
+                        account.email = changeEmail;
+                        yield AccountModel.update(account);
+                    }
+
+                    const data = ResponseData.ok(1, R.text(result ? R.EMAIL_CHANGED : R.COULD_NOT_CHANGE_EMAIL));
                     res.json(data);
                 }
+
                 else
                 {
-                    account.change_id = Utils.createRundomText(32);
-                    account.change_email = email;
-                    yield AccountModel.update(account);
-
-                    const url = Utils.generateUrl('settings/account/email/change', account.change_id);
+                    // パスワードが設定されている場合
+                    const changeId = Utils.createRundomText(32);
+                    const url = Utils.generateUrl('settings/account/email/change', changeId);
                     const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS);
                     const contents = Utils.formatString(template.contents, {url});
-                    const result = yield Utils.sendMail(template.subject, account.change_email, contents);
+                    const result = yield Utils.sendMail(template.subject, changeEmail, contents);
+
+                    if (result)
+                    {
+                        account.change_id = changeId;
+                        account.change_email = changeEmail;
+                        yield AccountModel.update(account);
+                    }
+
                     const data = ResponseData.ok(1, R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL));
                     res.json(data);
                 }
@@ -379,13 +412,17 @@ export default class SettingsApi
 
                 const session : Session = req['sessionObj'];
                 const account : Account = yield AccountModel.find(session.account_id);
-                const hashPassword = Utils.getHashPassword(account.email, param.old_password, Config.PASSWORD_SALT);
 
-                if (hashPassword !== account.password)
+                if (account.password !== null || param.old_password !== '')
                 {
-                    const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD));
-                    res.json(data);
-                    break;
+                    const hashPassword = Utils.getHashPassword(account.email, param.old_password, Config.PASSWORD_SALT);
+
+                    if (hashPassword !== account.password)
+                    {
+                        const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD));
+                        res.json(data);
+                        break;
+                    }
                 }
 
                 if (Utils.validatePassword(param.new_password) === false)

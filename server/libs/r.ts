@@ -29,6 +29,7 @@ export default class R
         "changeMailSended": "メールアドレス変更手続きのメールを送信しました。",
         "couldNotSendChangeMail": "メールアドレス変更手続きのメールを送信できませんでした。",
         "emailChanged": "メールアドレスを変更しました。",
+        "couldNotChangeEmail": "メールアドレスを変更できませんでした。",
         "passwordTooShortOrTooLong": "パスワードが短い、または長すぎます。",
         "mismatchPassword": "パスワードが一致していません。",
         "mismatchSmsCode": "ログインコードが一致していません。",
@@ -38,7 +39,8 @@ export default class R
         "signupCompleted": "登録が完了しました。",
         "settingsCompleted": "設定を完了しました。",
         "cannotLink": "紐づけできません。",
-        "cannotUnlink": "紐づけを解除できません。"
+        "cannotUnlink": "紐づけを解除できません。",
+        "cannotEmptyEmail": "メールアドレスを未設定にできません。"
     };
 
     static INCORRECT_ACCOUNT = 'incorrectAccount';
@@ -61,6 +63,7 @@ export default class R
     static CHANGE_MAIL_SENDED = 'changeMailSended';
     static COULD_NOT_SEND_CHANGE_MAIL = 'couldNotSendChangeMail';
     static EMAIL_CHANGED = 'emailChanged';
+    static COULD_NOT_CHANGE_EMAIL = 'couldNotChangeEmail';
     static PASSWORD_TOO_SHORT_OR_TOO_LONG = 'passwordTooShortOrTooLong';
     static MISMATCH_PASSWORD = 'mismatchPassword';
     static MISMATCH_SMS_CODE = 'mismatchSmsCode';
@@ -71,6 +74,7 @@ export default class R
     static SETTINGS_COMPLETED = 'settingsCompleted';
     static CANNOT_LINK = 'cannotLink';
     static CANNOT_UNLINK = 'cannotUnlink';
+    static CANNOT_EMPTY_EMAIL = 'cannotEmptyEmail';
 
     private static mailTemplates =
     {
@@ -78,6 +82,12 @@ export default class R
         {
             subject: '仮登録のお知らせ',
             contents: '仮登録しました。\n${url}'
+        },
+
+        'notice-set-mail-address':
+        {
+            subject: 'メールアドレス設定のお知らせ',
+            contents: 'メールアドレスを設定しました。'
         },
 
         'notice-change-mail-address':
@@ -94,6 +104,7 @@ export default class R
     };
 
     static NOTICE_SIGNUP = 'notice-signup';
+    static NOTICE_SET_MAIL_ADDRESS = 'notice-set-mail-address';
     static NOTICE_CHANGE_MAIL_ADDRESS = 'notice-change-mail-address';
     static NOTICE_RESET_PASSWORD = 'notice-reset-password';
 
