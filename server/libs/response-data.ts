@@ -11,31 +11,12 @@ export default class ResponseData
     private static CLS_NAME = 'ResponseData';
 
     /**
-     * リダイレクトレスポンス
-     *
-     * @param   redirect    リダイレクト先URL
-     */
-    static redirect(redirect : string) : any
-    {
-        const log = slog.stepIn(ResponseData.CLS_NAME, 'redirect');
-        const data =
-        {
-            status: 0,
-            redirect: redirect
-        };
-
-        log.d(JSON.stringify(data, null, 2));
-        log.stepOut();
-        return data;
-    }
-
-    /**
      * OKレスポンス
      *
      * @param   status  ステータス
      * @param   message メッセージ
      */
-    static ok(status : number, message : string) : any
+    static ok(status : number, message? : string) : any
     {
         const log = slog.stepIn(ResponseData.CLS_NAME, 'ok');
         const data =

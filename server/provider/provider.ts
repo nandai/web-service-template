@@ -197,7 +197,6 @@ export default class Provider
 
                                 if (findAccount.phone_no !== null)
                                 {
-                                    // TODO:二段階認証画面へ。いまのところは仮の処理としてSMSを送信する
                                     if (Config.TWILIO_ACCOUNT_SID   !== ''
                                     &&  Config.TWILIO_AUTH_TOKEN    !== ''
                                     &&  Config.TWILIO_FROM_PHONE_NO !== '')
@@ -206,7 +205,7 @@ export default class Provider
                                         findAccount.sms_code = Utils.createRundomText( 6, true);
                                         AccountModel.update(findAccount);
 
-                                        self.sendResponse(res, cookie, `?id=${findAccount.sms_id}`);
+                                        self.sendResponse(res, cookie, '/', null, findAccount.sms_id);
 
                                         // ログインコードをSMS送信
                                         const accountSid = Config.TWILIO_ACCOUNT_SID;
@@ -329,10 +328,13 @@ export default class Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(res : express.Response, cookie : Cookie, redirect : string, messageId? : string) : void
+    protected sendResponse(res : express.Response, cookie : Cookie, redirect : string, messageId? : string, smsId? : string) : void
     {
         if (messageId)
             cookie.messageId = messageId;
+
+        if (smsId)
+            redirect += `?id=${smsId}`;
 
         res.redirect(redirect);
     }

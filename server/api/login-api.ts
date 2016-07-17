@@ -141,7 +141,7 @@ export default class LoginApi
                 }
 
                 // トップ画面へ
-                const data = ResponseData.redirect('/');
+                const data = ResponseData.ok(0);
                 res.json(data);
             }
             while (false);

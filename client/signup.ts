@@ -126,7 +126,7 @@ class SignupView extends View
 
             if (data.status === 0)
             {
-                location.href = data.redirect;
+                location.href = '/';
             }
             else
             {

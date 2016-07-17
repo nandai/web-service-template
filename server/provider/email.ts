@@ -109,7 +109,7 @@ export default class Email extends Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(res : express.Response, cookie : Cookie, redirect : string, messageId? : string) : void
+    protected sendResponse(res : express.Response, cookie : Cookie, redirect : string, messageId? : string, smsId? : string) : void
     {
         let data = {};
         if (messageId)
@@ -137,7 +137,11 @@ export default class Email extends Provider
         }
         else
         {
-            data = ResponseData.redirect(redirect);
+            data =
+            {
+                status: 0,
+                id: smsId
+            };
         }
 
         res.json(data);

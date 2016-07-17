@@ -167,15 +167,12 @@ class Initializer
         this.app.get( '/reset',  ResetController. index);
         this.app.get( '/settings/account/email/change', SettingsController.changeEmail);
 
-        this.app.get( '/signup/twitter',                 signup, authTwitter);
-        this.app.get( '/signup/facebook',                signup, authFacebook);
-        this.app.get( '/signup/google',                  signup, authGoogle);
-        this.app.get( '/login/twitter',                  login,  authTwitter);
-        this.app.get( '/login/facebook',                 login,  authFacebook);
-        this.app.get( '/login/google',                   login,  authGoogle);
-        this.app.get( '/settings/account/link/twitter',  link,   authTwitter);
-        this.app.get( '/settings/account/link/facebook', link,   authFacebook);
-        this.app.get( '/settings/account/link/google',   link,   authGoogle);
+        this.app.get( '/signup/twitter',  signup, authTwitter);
+        this.app.get( '/signup/facebook', signup, authFacebook);
+        this.app.get( '/signup/google',   signup, authGoogle);
+        this.app.get( '/login/twitter',   login,  authTwitter);
+        this.app.get( '/login/facebook',  login,  authFacebook);
+        this.app.get( '/login/google',    login,  authGoogle);
 
         this.app.post('/api/signup/email',         SignupApi.email);
         this.app.post('/api/signup/email/confirm', SignupApi.confirmEmail);
@@ -189,19 +186,25 @@ class Initializer
         this.app.get( '/auth/facebook/callback', Facebook.customCallback, Facebook.callback);
         this.app.get( '/auth/google/callback',   Google.  customCallback, Google.  callback);
 
+        //
+        // これより下は認証が必要なURL
+        //
         this.app.use(Access.auth);
 
         this.app.get(   '/settings',                  SettingsController.index);
         this.app.get(   '/settings/account',          SettingsController.account);
         this.app.get(   '/settings/account/email',    SettingsController.email);
         this.app.get(   '/settings/account/password', SettingsController.password);
+        this.app.get(   '/settings/account/link/twitter',  link, authTwitter);
+        this.app.get(   '/settings/account/link/facebook', link, authFacebook);
+        this.app.get(   '/settings/account/link/google',   link, authGoogle);
 
-        this.app.get(   '/api/settings/account',               SettingsApi.account);
-        this.app.put(   '/api/settings/account',               SettingsApi.account);
-        this.app.put(   '/api/settings/account/email',         SettingsApi.email);
-        this.app.put(   '/api/settings/account/password',      SettingsApi.password);
-        this.app.delete('/api/settings/account/leave',         SettingsApi.leave);
-        this.app.post(  '/api/logout',                         LogoutApi.  index);
+        this.app.get(   '/api/settings/account',          SettingsApi.account);
+        this.app.put(   '/api/settings/account',          SettingsApi.account);
+        this.app.put(   '/api/settings/account/email',    SettingsApi.email);
+        this.app.put(   '/api/settings/account/password', SettingsApi.password);
+        this.app.delete('/api/settings/account/leave',    SettingsApi.leave);
+        this.app.post(  '/api/logout',                    LogoutApi.  index);
 
         this.app.use(Access.notFound);
     }

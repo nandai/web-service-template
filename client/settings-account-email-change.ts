@@ -57,16 +57,7 @@ class SettingsAccountEmailChangeView extends View
         .done((data, status, jqXHR) =>
         {
             const log = slog.stepIn(SettingsAccountEmailChangeView.CLS_NAME, 'settings-account-email-change.done');
-
-            if (data.status === 0)
-            {
-                location.href = data.redirect;
-            }
-            else
-            {
-                $('#message').text(data.message);
-            }
-
+            $('#message').text(data.message);
             log.stepOut();
         })
 
