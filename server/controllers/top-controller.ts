@@ -28,23 +28,16 @@ export default class TopController
         co(function* ()
         {
             const cookie = new Cookie(req, res);
-            const session : Session = req['sessionObj'];
-
             cookie.clearPassport();
 
-            let    message;
-            const  messageId = cookie.messageId;
-            cookie.messageId = null;
+            const session : Session = req['sessionObj'];
+            let message;
 
-            switch (messageId)
+            if (session.message_id)
             {
-                case Cookie.MESSAGE_INCORRECT_ACCOUNT:
-                    message = R.text(R.INCORRECT_ACCOUNT);
-                    break;
-
-                case Cookie.MESSAGE_ALREADY_LOGIN_ANOTHER_ACCOUNT:
-                    message = R.text(R.ALREADY_LOGIN_ANOTHER_ACCOUNT);
-                    break;
+                message = R.text(session.message_id);
+                session.message_id = null;
+                yield SessionModel.update(session);
             }
 
             const param = req.query;

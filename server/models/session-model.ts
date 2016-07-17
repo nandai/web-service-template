@@ -15,6 +15,7 @@ export class Session
 {
     id         : string = null;
     account_id : number = null;
+    message_id : string = null;
     created_at : string = null;
 }
 

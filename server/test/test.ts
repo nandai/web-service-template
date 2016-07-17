@@ -119,8 +119,6 @@ class Test
             const res = new Response(() =>
             {
 //              console.log(JSON.stringify(res._cookies, null, 2));
-                const messageId = res._cookies['messageId'];
-                log.assert('クッキーに想定するメッセージIDがあること', messageId === Cookie.MESSAGE_ALREADY_SIGNUP);
                 log.assert('リダイレクト先がサインアップページであること', res._redirect === '/signup');
                 resolve();
             });
@@ -184,8 +182,6 @@ class Test
             const res = new Response(() =>
             {
 //              console.log(JSON.stringify(res._cookies, null, 2));
-                const messageId = res._cookies['messageId'];
-                log.assert('クッキーに想定するメッセージIDがあること', messageId === Cookie.MESSAGE_ALREADY_SIGNUP);
                 log.assert('リダイレクト先がサインアップページであること', res._redirect === '/signup');
                 resolve();
             });

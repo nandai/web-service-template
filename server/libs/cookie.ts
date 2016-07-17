@@ -12,14 +12,6 @@ export default class Cookie
     // クッキー名
     private static SESSION_ID = 'sessionId';
     private static COMMAND =    'command';
-    private static MESSAGE_ID = 'messageId';
-
-    // メッセージID
-    static MESSAGE_INCORRECT_ACCOUNT = '001';
-    static MESSAGE_ALREADY_LOGIN_ANOTHER_ACCOUNT = '002';
-    static MESSAGE_ALREADY_SIGNUP = '003';
-    static MESSAGE_CANNOT_SIGNUP = '004';
-    static MESSAGE_CANNOT_LINK = '005';
 
     private req : express.Request;
     private res : express.Response;
@@ -48,19 +40,6 @@ export default class Cookie
     {
         this.req.cookies[Cookie.COMMAND] = command;
         this.setCookie(  Cookie.COMMAND,   command);
-    }
-
-    /**
-     * メッセージID
-     *
-     * @property    messageId
-     * @type        string
-     */
-    get messageId() : string {return this.req.cookies[Cookie.MESSAGE_ID];}
-    set messageId(messageId : string)
-    {
-        this.req.cookies[Cookie.MESSAGE_ID] = messageId;
-        this.setCookie(  Cookie.MESSAGE_ID,   messageId);
     }
 
     /**

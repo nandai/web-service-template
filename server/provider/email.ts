@@ -3,11 +3,11 @@
  */
 import Provider       from './provider';
 import {PassportUser} from '../libs/passport';
-import Cookie         from '../libs/cookie';
 import R              from '../libs/r';
 import Utils          from '../libs/utils';
 import ResponseData   from '../libs/response-data';
 import {Account}      from '../models/account-model';
+import {Session}      from '../models/session-model';
 
 import express =  require('express');
 import passport = require('passport');
@@ -109,41 +109,23 @@ export default class Email extends Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(res : express.Response, cookie : Cookie, redirect : string, messageId? : string, smsId? : string) : void
+    protected sendResponse(res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string) : Promise<any>
     {
-        let data = {};
-        if (messageId)
+        return new Promise((resolve, reject) =>
         {
-            let phrase;
-            switch (messageId)
+            if (phrase)
             {
-                case Cookie.MESSAGE_ALREADY_SIGNUP:
-                    phrase = R.ALREADY_SIGNUP;
-                    break;
+                if (phrase === R.INCORRECT_ACCOUNT)
+                    phrase =   R.INVALID_EMAIL_AUTH;
 
-                case Cookie.MESSAGE_CANNOT_SIGNUP:
-                    phrase = R.CANNOT_SIGNUP;
-                    break;
-
-                case Cookie.MESSAGE_INCORRECT_ACCOUNT:
-                    phrase = R.INVALID_EMAIL_AUTH;
-                    break;
-
-                case Cookie.MESSAGE_ALREADY_LOGIN_ANOTHER_ACCOUNT:
-                    phrase = R.ALREADY_LOGIN_ANOTHER_ACCOUNT;
-                    break;
+                const data = ResponseData.error(-1, R.text(phrase));
+                res.json(data);
             }
-            data = ResponseData.error(-1, R.text(phrase));
-        }
-        else
-        {
-            data =
+            else
             {
-                status: 0,
-                id: smsId
-            };
-        }
-
-        res.json(data);
+                const data = {status:0, id:smsId};
+                res.json(data);
+            }
+        });
     }
 }

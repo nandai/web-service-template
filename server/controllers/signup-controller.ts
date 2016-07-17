@@ -1,10 +1,10 @@
 /**
  * (C) 2016 printf.jp
  */
-import Cookie       from '../libs/cookie';
-import R            from '../libs/r';
-import Utils        from '../libs/utils';
-import ResponseData from '../libs/response-data';
+import R                       from '../libs/r';
+import Utils                   from '../libs/utils';
+import ResponseData            from '../libs/response-data';
+import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
@@ -32,21 +32,14 @@ export default class SignupController
 
             if (signupId === undefined)
             {
-                const cookie = new Cookie(req, res);
+                const session : Session = req['sessionObj'];
+                let message;
 
-                let    message;
-                const  messageId = cookie.messageId;
-                cookie.messageId = null;
-
-                switch (messageId)
+                if (session.message_id)
                 {
-                    case Cookie.MESSAGE_ALREADY_SIGNUP:
-                        message = R.text(R.ALREADY_SIGNUP);
-                        break;
-
-                    case Cookie.MESSAGE_CANNOT_SIGNUP:
-                        message = R.text(R.CANNOT_SIGNUP);
-                        break;
+                    message = R.text(session.message_id);
+                    session.message_id = null;
+                    yield SessionModel.update(session);
                 }
 
                 log.d('サインアップ画面を表示');

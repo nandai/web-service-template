@@ -4,6 +4,7 @@
 import Config                            from '../config';
 import {PassportUser}                    from '../libs/passport';
 import Cookie                            from '../libs/cookie';
+import R                                 from '../libs/r';
 import Utils                             from '../libs/utils';
 import AccountModel, {Account}           from '../models/account-model';
 import SessionModel, {Session}           from '../models/session-model';
@@ -40,7 +41,10 @@ export default class Provider
             if (!user)
             {
                 const cookie = new Cookie(req, res);
-                switch (cookie.command)
+                const command = cookie.command;
+                cookie.command = null;
+
+                switch (command)
                 {
                     case 'signup': res.redirect('/signup');   break;
                     case 'login':  res.redirect('/');         break;
@@ -163,7 +167,7 @@ export default class Provider
                                     yield LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
-                                    self.sendResponse(res, cookie, '/');
+                                    yield self.sendResponse(res, session, '/');
                                 }
                             }
                             else
@@ -171,7 +175,7 @@ export default class Provider
                                 log.i('サインアップ可能だが、ログイン中なので、サインアップはせず、サインアップ画面へ移動する');
 
                                 // サインアップ画面へ
-                                self.sendResponse(res, cookie, '/signup', Cookie.MESSAGE_CANNOT_SIGNUP);
+                                yield self.sendResponse(res, session, '/signup', R.CANNOT_SIGNUP);
                             }
                         }
                         else
@@ -179,7 +183,7 @@ export default class Provider
                             log.i('サインアップ済みなので、サインアップはせず、サインアップ画面へ移動する');
 
                             // サインアップ画面へ
-                            self.sendResponse(res, cookie, '/signup', Cookie.MESSAGE_ALREADY_SIGNUP);
+                            yield self.sendResponse(res, session, '/signup', R.ALREADY_SIGNUP);
                         }
                         break;
                     }
@@ -203,7 +207,7 @@ export default class Provider
                                         findAccount.sms_code = Utils.createRundomText( 6, true);
                                         AccountModel.update(findAccount);
 
-                                        self.sendResponse(res, cookie, '/', null, findAccount.sms_id);
+                                        yield self.sendResponse(res, session, '/', null, findAccount.sms_id);
 
                                         // ログインコードをSMS送信
                                         const accountSid = Config.TWILIO_ACCOUNT_SID;
@@ -237,7 +241,7 @@ export default class Provider
                                     yield LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
-                                    self.sendResponse(res, cookie, '/');
+                                    yield self.sendResponse(res, session, '/');
                                 }
                             }
                             else
@@ -247,14 +251,14 @@ export default class Provider
                                     log.i('サインアップ済み。既に同じアカウントでログインしているので、トップ画面へ移動するだけ');
 
                                     // トップ画面へ
-                                    self.sendResponse(res, cookie, '/');
+                                    yield self.sendResponse(res, session, '/');
                                 }
                                 else
                                 {
                                     log.i('サインアップ済みだが、別のアカウントでログイン中なので、トップ画面ではなくログイン画面へ移動する');
 
                                     // ログイン画面へ
-                                    self.sendResponse(res, cookie, '/', Cookie.MESSAGE_ALREADY_LOGIN_ANOTHER_ACCOUNT);
+                                    yield self.sendResponse(res, session, '/', R.ALREADY_LOGIN_ANOTHER_ACCOUNT);
                                 }
                             }
                         }
@@ -263,7 +267,7 @@ export default class Provider
                             log.i('サインアップしていないので、ログイン画面へ移動する');
 
                             // ログイン画面へ
-                            self.sendResponse(res, cookie, '/', Cookie.MESSAGE_INCORRECT_ACCOUNT);
+                            yield self.sendResponse(res, session, '/', R.INCORRECT_ACCOUNT);
                         }
                         break;
                     }
@@ -283,7 +287,7 @@ export default class Provider
                                 yield AccountModel.update(account);
 
                                 // 設定画面へ
-                                self.sendResponse(res, cookie, '/settings');
+                                yield self.sendResponse(res, session, '/settings');
                             }
                             else
                             {
@@ -292,7 +296,7 @@ export default class Provider
                         else
                         {
                             // 設定画面へ
-                            self.sendResponse(res, cookie, '/settings', Cookie.MESSAGE_CANNOT_LINK);
+                            yield self.sendResponse(res, session, '/settings', R.CANNOT_LINK);
                         }
                         break;
                     }
@@ -327,14 +331,27 @@ export default class Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(res : express.Response, cookie : Cookie, redirect : string, messageId? : string, smsId? : string) : void
+    protected sendResponse(res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string) : Promise<any>
     {
-        if (messageId)
-            cookie.messageId = messageId;
+        const log = slog.stepIn(Provider.CLS_NAME, 'sendResponse');
+        return new Promise((resolve, reject) =>
+        {
+            co(function* ()
+            {
+                if (phrase)
+                {
+                    session.message_id = phrase;
+                    yield SessionModel.update(session);
+                }
 
-        if (smsId)
-            redirect += `?id=${smsId}`;
+                if (smsId)
+                    redirect += `?id=${smsId}`;
 
-        res.redirect(redirect);
+                res.redirect(redirect);
+                log.stepOut();
+                resolve();
+            })
+            .catch ((err) => Utils.internalServerError(err, res, log));
+        });
     }
 }

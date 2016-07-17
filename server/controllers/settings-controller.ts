@@ -32,15 +32,14 @@ export default class SettingsController
             const cookie = new Cookie(req, res);
             cookie.clearPassport();
 
-            let    message;
-            const  messageId = cookie.messageId;
-            cookie.messageId = null;
+            const session : Session = req['sessionObj'];
+            let message;
 
-            switch (messageId)
+            if (session.message_id)
             {
-                case Cookie.MESSAGE_CANNOT_LINK:
-                    message = R.text(R.CANNOT_LINK);
-                    break;
+                message = R.text(session.message_id);
+                session.message_id = null;
+                yield SessionModel.update(session);
             }
 
             res.render('settings', {message});
