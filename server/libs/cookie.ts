@@ -2,6 +2,7 @@
  * (C) 2016 printf.jp
  */
 import express = require('express');
+import Config from '../config';
 
 /**
  * Cookie
@@ -84,7 +85,11 @@ export default class Cookie
     {
         if (value)
         {
-            const options : express.CookieOptions = {httpOnly:true};
+            const options : express.CookieOptions =
+            {
+                httpOnly: true,
+                secure: Config.hasSSL()
+            };
             this.res.cookie(name, value, options);
         }
         else

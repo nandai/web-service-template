@@ -79,26 +79,54 @@ export default class SessionModel
     }
 
     /**
-     * セッションを削除する
+     * セッションを更新する
      *
-     * @param   sessionId   セッションID
+     * @param   session セッション
      *
      * @return  なし
      */
-    static remove(cond : SessionFindCondition) : Promise<any>
+    static update(session : Session) : Promise<any>
     {
-        const log = slog.stepIn(SessionModel.CLS_NAME, 'remove');
-        log.d(`sessionId:${cond.sessionId}, accountId:${cond.accountId}`);
+        const log = slog.stepIn(SessionModel.CLS_NAME, 'update');
+        return new Promise((resolve, reject) =>
+        {
+            for (let i in SessionModel.list)
+            {
+                if (SessionModel.list[i].id === session.id)
+                {
+                    __.extend(SessionModel.list[i], session);
+                    SessionModel.save();
+                    log.d('更新しました。');
+                    break;
+                }
+            }
+
+            log.stepOut();
+            resolve();
+        });
+    }
+
+    /**
+     * ログアウトする
+     *
+     * @param   cond    検索条件
+     *
+     * @return  なし
+     */
+    static logout(cond : SessionFindCondition) : Promise<any>
+    {
+        const log = slog.stepIn(SessionModel.CLS_NAME, 'logout');
+        log.d(JSON.stringify(cond, null, 2));
 
         return new Promise((resolve, reject) =>
         {
-            for (let i = SessionModel.list.length - 1; i >= 0; i--)
+            for (const session of SessionModel.list)
             {
-                if ((cond.sessionId === undefined || SessionModel.list[i].id         === cond.sessionId)
-                &&  (cond.accountId === undefined || SessionModel.list[i].account_id === cond.accountId))
+                if ((cond.sessionId === undefined || session.id         === cond.sessionId)
+                &&  (cond.accountId === undefined || session.account_id === cond.accountId))
                 {
-                    SessionModel.list.splice(Number(i), 1);
-                    log.d('削除しました。');
+                    session.account_id = null;
+                    log.d('ログアウトしました。');
                 }
             }
             SessionModel.save();

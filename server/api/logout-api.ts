@@ -31,8 +31,7 @@ export default class LogoutApi
             const cookie = new Cookie(req, res);
             const sessionId = cookie.sessionId;
 
-            yield SessionModel.remove({sessionId});
-            cookie.sessionId = null;
+            yield SessionModel.logout({sessionId});
 
             const data = {status:0};
             res.json(data);

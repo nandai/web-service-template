@@ -30,9 +30,6 @@ export default class SettingsController
         co(function* ()
         {
             const cookie = new Cookie(req, res);
-            const sessionId = cookie.sessionId;
-            const session : Session = yield SessionModel.find(sessionId);
-
             cookie.clearPassport();
 
             let    message;

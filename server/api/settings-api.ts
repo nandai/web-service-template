@@ -470,10 +470,9 @@ export default class SettingsApi
 
             yield DeleteAccountModel.add(account);
             yield AccountModel.remove( accountId);
-            yield SessionModel.remove({accountId});
+            yield SessionModel.logout({accountId});
 
 //          req.logout();
-            cookie.sessionId = null;
 
             const data = {status:0};
             res.json(data);

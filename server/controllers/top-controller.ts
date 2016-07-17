@@ -28,8 +28,7 @@ export default class TopController
         co(function* ()
         {
             const cookie = new Cookie(req, res);
-            const sessionId = cookie.sessionId;
-            const session : Session = yield SessionModel.find(sessionId);
+            const session : Session = req['sessionObj'];
 
             cookie.clearPassport();
 
@@ -58,7 +57,7 @@ export default class TopController
                 if (account) res.render('sms', {smsId});
                 else         res.status(404).render('404');
             }
-            else if (session === null || message)
+            else if (session.account_id === null || message)
             {
                 log.d('ログイン画面を表示');
                 res.render('login', {message});

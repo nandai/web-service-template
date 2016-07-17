@@ -125,19 +125,16 @@ export default class LoginApi
                     account.sms_code = null;
                     yield AccountModel.update(account);
 
-                    // セッション作成
-                    const session = new Session();
+                    // セッション更新
+                    const session : Session = req['sessionObj'];
                     session.account_id = account.id;
-                    yield SessionModel.add(session);
+                    yield SessionModel.update(session);
 
                     // ログイン履歴作成
                     const loginHistory = new LoginHistory();
                     loginHistory.account_id = account.id;
                     loginHistory.device = req.headers['user-agent'];
                     yield LoginHistoryModel.add(loginHistory);
-
-                    const cookie = new Cookie(req, res);
-                    cookie.sessionId = session.id;
                 }
 
                 // トップ画面へ

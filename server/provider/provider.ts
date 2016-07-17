@@ -112,8 +112,7 @@ export default class Provider
 
                 const findAccount : Account = yield AccountModel.findByProviderId(user.provider, self.id);
                 const cookie = new Cookie(req, res);
-                const sessionId = cookie.sessionId;
-                const session : Session = yield SessionModel.find(sessionId);
+                const session : Session = req['sessionObj'];
 
                 const command = cookie.command;
                 cookie.command = null;
@@ -126,7 +125,7 @@ export default class Provider
 //                      if (findAccount === null)
                         if (findAccount === null || findAccount.signup_id)
                         {
-                            if (session === null)
+                            if (session.account_id === null)
                             {
                                 log.i('サインアップ可能。ログインもしていないので、サインアップを続行し、トップ画面へ移動する');
 
@@ -152,10 +151,10 @@ export default class Provider
                                 }
                                 else
                                 {
-                                    // セッション作成
-                                    const session = new Session();
+                                    // セッション更新
+                                    const session : Session = req['sessionObj'];
                                     session.account_id = account.id;
-                                    yield SessionModel.add(session);
+                                    yield SessionModel.update(session);
 
                                     // ログイン履歴作成
                                     const loginHistory = new LoginHistory();
@@ -164,7 +163,6 @@ export default class Provider
                                     yield LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
-                                    cookie.sessionId = session.id;
                                     self.sendResponse(res, cookie, '/');
                                 }
                             }
@@ -191,7 +189,7 @@ export default class Provider
                         // ログイン処理
                         if (findAccount)
                         {
-                            if (session === null)
+                            if (session.account_id === null)
                             {
                                 log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
 
@@ -228,9 +226,9 @@ export default class Provider
                                 else
                                 {
                                     // セッション作成
-                                    const session = new Session();
+                                    const session : Session = req['sessionObj'];
                                     session.account_id = findAccount.id;
-                                    yield SessionModel.add(session);
+                                    yield SessionModel.update(session);
 
                                     // ログイン履歴作成
                                     const loginHistory = new LoginHistory();
@@ -239,7 +237,6 @@ export default class Provider
                                     yield LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
-                                    cookie.sessionId = session.id;
                                     self.sendResponse(res, cookie, '/');
                                 }
                             }
@@ -276,7 +273,7 @@ export default class Provider
                         // 紐付け処理
                         if (findAccount === null)
                         {
-                            if (session)
+                            if (session.account_id)
                             {
                                 log.i('紐付け可能。ログインしているので、紐付けを続行し、設定画面へ移動する');
 

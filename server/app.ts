@@ -142,6 +142,7 @@ class Initializer
         };
 
         this.app.use(session(options));
+        this.app.use(Access.session);
     }
 
     /**

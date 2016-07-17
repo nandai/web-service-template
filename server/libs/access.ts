@@ -135,6 +135,36 @@ export default class Access
     }
 
     /**
+     * セッション
+     *
+     * @param   req httpリクエスト
+     * @param   req httpレスポンス
+     */
+    static session(req : express.Request, res : express.Response, next : express.NextFunction) : void
+    {
+        const log = slog.stepIn(Access.CLS_NAME, 'session');
+        co(function* ()
+        {
+            const cookie = new Cookie(req, res);
+            const sessionId = cookie.sessionId;
+            let session : Session = yield SessionModel.find(sessionId);
+
+            if (session === null)
+            {
+                session = new Session();
+                SessionModel.add(session);
+                cookie.sessionId = session.id;
+            }
+
+            req['sessionObj'] = session;
+
+            log.stepOut();
+            next();
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
+    }
+
+    /**
      * 認証確認
      *
      * @param   req httpリクエスト
@@ -145,12 +175,10 @@ export default class Access
         const log = slog.stepIn(Access.CLS_NAME, 'auth');
         co(function* ()
         {
-            const cookie = new Cookie(req, res);
-            const sessionId = cookie.sessionId;
-            const session : Session = yield SessionModel.find(sessionId);
-
-            if (session === null)
+            const session : Session = req['sessionObj'];
+            if (session.account_id === null)
             {
+                // 未認証
                 if (req.path.startsWith('/api/'))
                 {
                     const data = ResponseData.error(-1, R.text(R.NO_LOGIN));
@@ -160,14 +188,14 @@ export default class Access
                 {
                     res.redirect('/');
                 }
+                log.stepOut();
             }
             else
             {
-                req['sessionObj'] = session;
+                // 認証済み
+                log.stepOut();
                 next();
             }
-
-            log.stepOut();
         })
         .catch ((err) => Utils.internalServerError(err, res, log));
     }
