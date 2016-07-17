@@ -42,9 +42,9 @@ export default class SettingsApi
      */
     private static getAccount(req : express.Request, res : express.Response) : void
     {
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'getAccount');
         co(function* ()
         {
-            const log = slog.stepIn(SettingsApi.CLS_NAME, 'getAccount');
             const session : Session = req['sessionObj'];
             const account : Account = yield AccountModel.find(session.account_id);
             const data =
@@ -60,7 +60,8 @@ export default class SettingsApi
 
             res.json(data);
             log.stepOut();
-        });
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
     }
 
     /**
@@ -72,9 +73,9 @@ export default class SettingsApi
      */
     private static updateAccount(req : express.Request, res : express.Response) : void
     {
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'updateAccount');
         co(function* ()
         {
-            const log = slog.stepIn(SettingsApi.CLS_NAME, 'updateAccount');
             do
             {
                 const param = req.body;
@@ -114,6 +115,85 @@ export default class SettingsApi
             }
             while (false);
             log.stepOut();
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
+    }
+
+    /**
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static unlinkTwitter(req : express.Request, res : express.Response) : void
+    {
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlinkTwitter');
+        co(function* ()
+        {
+            yield SettingsApi.unlink(req, res, 'twitter');
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
+    }
+
+    /**
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static unlinkFacebook(req : express.Request, res : express.Response) : void
+    {
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlinkFacebook');
+        co(function* ()
+        {
+            yield SettingsApi.unlink(req, res, 'facebook');
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
+    }
+
+    /**
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static unlinkGoogle(req : express.Request, res : express.Response) : void
+    {
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlinkGoogle');
+        co(function* ()
+        {
+            yield SettingsApi.unlink(req, res, 'google');
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
+    }
+
+    /**
+     * @param   req         httpリクエスト
+     * @param   res         httpレスポンス
+     * @param   provider    プロバイダ名
+     */
+    static unlink(req : express.Request, res : express.Response, provider : string) : Promise<any>
+    {
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlink');
+        return new Promise((resolve, reject) =>
+        {
+            co(function* ()
+            {
+                // アカウント更新
+                const session : Session = req['sessionObj'];
+                const account : Account = yield AccountModel.find(session.account_id);
+                let data = {};
+
+                if (account.canUnlink(provider))
+                {
+                    account[provider] = null;
+                    yield AccountModel.update(account);
+
+                    data = ResponseData.ok(0);
+                }
+                else
+                {
+                    data = ResponseData.error(-1, R.text(R.CANNOT_UNLINK));
+                }
+
+                res.json(data);
+                resolve();
+            })
+            .catch ((err) => Utils.internalServerError(err, res, log));
         });
     }
 
@@ -343,9 +423,9 @@ export default class SettingsApi
      */
     static leave(req : express.Request, res : express.Response) : void
     {
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'leave');
         co(function* ()
         {
-            const log = slog.stepIn(SettingsApi.CLS_NAME, 'leave');
             const cookie = new Cookie(req, res);
             const session : Session = req['sessionObj'];
             const accountId = session.account_id;
@@ -361,6 +441,7 @@ export default class SettingsApi
             const data = {status:0};
             res.json(data);
             log.stepOut();
-        });
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
     }
 }

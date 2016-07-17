@@ -30,6 +30,34 @@ export class Account
     sms_code     : string = null;
     created_at   : string = null;
     deleted_at   : string = null;
+
+    /**
+     * 紐づけを解除できるかどうか調べる
+     *
+     * @param   provider    プロバイダ名
+     *
+     * @return  解除できる場合はtrueを返す
+     */
+    canUnlink(provider : string) : boolean
+    {
+        let count = 0;
+        let existsProvider = null;
+
+        if (this.twitter)  {count++; existsProvider = 'twitter';}
+        if (this.facebook) {count++; existsProvider = 'facebook';}
+        if (this.google)   {count++; existsProvider = 'google';}
+
+        if (this.email && this.password)
+        {
+            count++;
+            existsProvider = 'email';
+        }
+
+        if (count === 1 && existsProvider === provider)
+            return false;
+
+        return true;
+    }
 }
 
 /**

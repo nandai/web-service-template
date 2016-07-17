@@ -129,6 +129,7 @@ export default class SignupApi
             }
             while (false);
             log.stepOut();
-        });
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
     }
 }

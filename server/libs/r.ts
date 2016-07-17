@@ -36,7 +36,9 @@ export default class R
         "passwordChanged": "パスワードを変更しました。",
         "accountNameTooShortOrTooLong": "アカウント名が短い、または長すぎます。",
         "signupCompleted": "登録が完了しました。",
-        "settingsCompleted": "設定を完了しました。"
+        "settingsCompleted": "設定を完了しました。",
+        "cannotLink": "紐づけできません。",
+        "cannotUnlink": "紐づけを解除できません。"
     };
 
     static INCORRECT_ACCOUNT = 'incorrectAccount';
@@ -67,6 +69,8 @@ export default class R
     static ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG = 'accountNameTooShortOrTooLong';
     static SIGNUP_COMPLETED = 'signupCompleted';
     static SETTINGS_COMPLETED = 'settingsCompleted';
+    static CANNOT_LINK = 'cannotLink';
+    static CANNOT_UNLINK = 'cannotUnlink';
 
     private static mailTemplates =
     {

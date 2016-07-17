@@ -1,7 +1,10 @@
 /**
  * (C) 2016 printf.jp
  */
+import Cookie                  from '../libs/cookie';
+import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
+import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
@@ -26,7 +29,24 @@ export default class SettingsController
         const log = slog.stepIn(SettingsController.CLS_NAME, 'index');
         co(function* ()
         {
-            res.render('settings');
+            const cookie = new Cookie(req, res);
+            const sessionId = cookie.sessionId;
+            const session : Session = yield SessionModel.find(sessionId);
+
+            cookie.clearPassport();
+
+            let    message;
+            const  messageId = cookie.messageId;
+            cookie.messageId = null;
+
+            switch (messageId)
+            {
+                case Cookie.MESSAGE_CANNOT_LINK:
+                    message = R.text(R.CANNOT_LINK);
+                    break;
+            }
+
+            res.render('settings', {message});
             log.stepOut();
         })
         .catch ((err) => Utils.internalServerError(err, res, log));

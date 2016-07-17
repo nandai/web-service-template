@@ -34,9 +34,9 @@ class SettingsView extends View
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'init');
 
-        this.twitterButton =  new sulas.Button('#twitter',  0, 50, 'twitterを紐づける');
-        this.facebookButton = new sulas.Button('#facebook', 0, 50, 'facebookを紐づける');
-        this.googleButton =   new sulas.Button('#google',   0, 50, 'googleを紐づける');
+        this.twitterButton =  new sulas.Button('#twitter',  0, 50, '');
+        this.facebookButton = new sulas.Button('#facebook', 0, 50, '');
+        this.googleButton =   new sulas.Button('#google',   0, 50, '');
         this.emailButton =    new sulas.Button('#email',    0, 50, 'メールアドレスを設定する');
         this.passwordButton = new sulas.Button('#password', 0, 50, 'パスワードを設定する');
         this.accountButton =  new sulas.Button('#account',  0, 50, 'アカウント設定');
@@ -53,9 +53,7 @@ class SettingsView extends View
             this.account = data;
             $('#name').text(this.account.name);
 
-            if (this.account.twitter)  this.twitterButton. setLabel('twitterとの紐づけを解除する');
-            if (this.account.facebook) this.facebookButton.setLabel('facebookとの紐づけを解除する');
-            if (this.account.google)   this.googleButton.  setLabel('googleとの紐づけを解除する');
+            this.updateSnsButtons();
 
             if (this.account.email === null)
                 this.passwordButton.setEnabled(false);
@@ -77,13 +75,33 @@ class SettingsView extends View
         log.stepOut();
     }
 
+    private updateSnsButtons()
+    {
+        this.twitterButton. setLabel(this.getLinkLabel('twitter'));
+        this.facebookButton.setLabel(this.getLinkLabel('facebook'));
+        this.googleButton.  setLabel(this.getLinkLabel('google'));
+    }
+
+    private getLinkLabel(sns : string) : string
+    {
+        const label = (this.account[sns]
+            ? `${sns}との紐づけを解除する`
+            : `${sns}を紐づける`);
+        return label;
+    }
+
     /**
      * @method  onClickTwitterButton
      */
     private onClickTwitterButton() : void
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickTwitterButton');
-        location.href = '/settings/account/link/twitter';
+
+        if (this.account.twitter === false)
+            location.href = '/settings/account/link/twitter';
+        else
+            this.unlink('twitter');
+
         log.stepOut();
     }
 
@@ -93,7 +111,12 @@ class SettingsView extends View
     private onClickFacebookButton() : void
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickFacebookButton');
-        location.href = '/settings/account/link/facebook';
+
+        if (this.account.facebook === false)
+            location.href = '/settings/account/link/facebook';
+        else
+            this.unlink('facebook');
+
         log.stepOut();
     }
 
@@ -103,7 +126,12 @@ class SettingsView extends View
     private onClickGoogleButton() : void
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickGoogleButton');
-        location.href = '/settings/account/link/google';
+
+        if (this.account.google === false)
+            location.href = '/settings/account/link/google';
+        else
+            this.unlink('google');
+
         log.stepOut();
     }
 
@@ -181,6 +209,44 @@ class SettingsView extends View
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickBackButton');
         window.location.href = '/';
+        log.stepOut();
+    }
+
+    /**
+     * @method  unlink
+     */
+    private unlink(sns : string) : void
+    {
+        const log = slog.stepIn(SettingsView.CLS_NAME, 'unlink');
+
+        $.ajax({
+            type: 'PUT',
+            url: `/api/settings/account/unlink/${sns}`
+        })
+
+        .done((data, status, jqXHR) =>
+        {
+            const log = slog.stepIn(SettingsView.CLS_NAME, 'unlink.done');
+
+            if (data.status === 0)
+            {
+                this.account[sns] = false;
+                this.updateSnsButtons();
+            }
+            else
+            {
+                $('#message').text(data.message);
+            }
+
+            log.stepOut();
+        })
+
+        .fail((jqXHR, status, error) =>
+        {
+            const log = slog.stepIn(SettingsView.CLS_NAME, 'unlink.fail');
+            log.stepOut();
+        });
+
         log.stepOut();
     }
 }

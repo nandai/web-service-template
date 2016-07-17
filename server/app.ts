@@ -174,6 +174,7 @@ class Initializer
         this.app.get( '/login/facebook',  login,  authFacebook);
         this.app.get( '/login/google',    login,  authGoogle);
 
+        // APIs
         this.app.post('/api/signup/email',         SignupApi.email);
         this.app.post('/api/signup/email/confirm', SignupApi.confirmEmail);
         this.app.post('/api/login/email',          LoginApi. email);
@@ -199,12 +200,16 @@ class Initializer
         this.app.get(   '/settings/account/link/facebook', link, authFacebook);
         this.app.get(   '/settings/account/link/google',   link, authGoogle);
 
-        this.app.get(   '/api/settings/account',          SettingsApi.account);
-        this.app.put(   '/api/settings/account',          SettingsApi.account);
-        this.app.put(   '/api/settings/account/email',    SettingsApi.email);
-        this.app.put(   '/api/settings/account/password', SettingsApi.password);
-        this.app.delete('/api/settings/account/leave',    SettingsApi.leave);
-        this.app.post(  '/api/logout',                    LogoutApi.  index);
+        // APIs
+        this.app.get(   '/api/settings/account',                 SettingsApi.account);
+        this.app.put(   '/api/settings/account',                 SettingsApi.account);
+        this.app.put(   '/api/settings/account/unlink/twitter',  SettingsApi.unlinkTwitter);
+        this.app.put(   '/api/settings/account/unlink/facebook', SettingsApi.unlinkFacebook);
+        this.app.put(   '/api/settings/account/unlink/google',   SettingsApi.unlinkGoogle);
+        this.app.put(   '/api/settings/account/email',           SettingsApi.email);
+        this.app.put(   '/api/settings/account/password',        SettingsApi.password);
+        this.app.delete('/api/settings/account/leave',           SettingsApi.leave);
+        this.app.post(  '/api/logout',                           LogoutApi.  index);
 
         this.app.use(Access.notFound);
     }

@@ -18,6 +18,7 @@ export default class Cookie
     static MESSAGE_ALREADY_LOGIN_ANOTHER_ACCOUNT = '002';
     static MESSAGE_ALREADY_SIGNUP = '003';
     static MESSAGE_CANNOT_SIGNUP = '004';
+    static MESSAGE_CANNOT_LINK = '005';
 
     private req : express.Request;
     private res : express.Response;

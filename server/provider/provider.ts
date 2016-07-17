@@ -282,7 +282,7 @@ export default class Provider
 
                                 // アカウント更新
                                 const account : Account = yield AccountModel.find(session.account_id);
-                                account[`${user.provider}`] = self.id;
+                                account[user.provider] = self.id;
                                 yield AccountModel.update(account);
 
                                 // 設定画面へ
@@ -294,6 +294,8 @@ export default class Provider
                         }
                         else
                         {
+                            // 設定画面へ
+                            self.sendResponse(res, cookie, '/settings', Cookie.MESSAGE_CANNOT_LINK);
                         }
                         break;
                     }
@@ -320,7 +322,7 @@ export default class Provider
     protected createAccount(user : PassportUser) : Account
     {
         const account = new Account();
-        account[`${user.provider}`] = this.id;
+        account[user.provider] = this.id;
         account.name = user.name;
         return account;
     }
