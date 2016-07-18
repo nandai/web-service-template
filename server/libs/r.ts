@@ -1,12 +1,15 @@
 /**
  * (C) 2016 printf.jp
  */
+import fs = require('fs');
 
 /**
  * リソース
  */
 export default class R
 {
+    private static path = __dirname + '/../../resources';
+
     private static dict =
     {
         "incorrectAccount": "アカウントが正しくありません。",
@@ -78,35 +81,58 @@ export default class R
 
     private static mailTemplates =
     {
-        'notice-signup':
-        {
-            subject: '仮登録のお知らせ',
-            contents: '仮登録しました。\n${url}'
-        },
-
-        'notice-set-mail-address':
-        {
-            subject: 'メールアドレス設定のお知らせ',
-            contents: 'メールアドレスを設定しました。'
-        },
-
-        'notice-change-mail-address':
-        {
-            subject: 'メールアドレス変更手続きのお知らせ',
-            contents: 'メールアドレス変更手続き。\n${url}'
-        },
-
-        'notice-reset-password':
-        {
-            subject: 'パスワードリセットのお知らせ',
-            contents: 'パスワードリセット。\n${url}'
-        }
+        'en': {},
+        'ja': {}
     };
 
     static NOTICE_SIGNUP = 'notice-signup';
     static NOTICE_SET_MAIL_ADDRESS = 'notice-set-mail-address';
     static NOTICE_CHANGE_MAIL_ADDRESS = 'notice-change-mail-address';
     static NOTICE_RESET_PASSWORD = 'notice-reset-password';
+
+    /**
+     * リソースをロードする
+     */
+    static load() : void
+    {
+        const locales = ['en', 'ja'];
+        for (const locale of locales)
+        {
+            this.loadMailTemplate(R.NOTICE_SIGNUP,              locale);
+            this.loadMailTemplate(R.NOTICE_SET_MAIL_ADDRESS,    locale);
+            this.loadMailTemplate(R.NOTICE_CHANGE_MAIL_ADDRESS, locale);
+            this.loadMailTemplate(R.NOTICE_RESET_PASSWORD,      locale);
+        }
+    }
+
+    /**
+     * メールテンプレートをロードする
+     *
+     * @param   phrase  フレーズ
+     * @param   locale  ロケール
+     */
+    private static loadMailTemplate(phrase : string, locale : string) : void
+    {
+        const path = `${R.path}/mail/${locale}.${phrase}.txt`;
+
+        try
+        {
+            fs.statSync(path);
+            const text = fs.readFileSync(path, 'utf8');
+            let pos = text.indexOf('\n');
+
+            const subject =  text.substr(0, pos);
+            const contents = text.substr(pos + 1 + 1);
+
+            const mailTemplates = R.mailTemplates[locale];
+            mailTemplates[phrase] = {subject, contents};
+        }
+        catch (err)
+        {
+            console.log(`${path}が見つかりません。`);
+            process.exit();
+        }
+    }
 
     /**
      * 文字列を取得する
@@ -127,13 +153,16 @@ export default class R
      * メールテンプレートを取得する
      *
      * @param   phrase  フレーズ
+     * @param   locale  ロケール
      *
      * @return  メールテンプレート
      */
-    static mail(phrase : string) : MailTemplate
+    static mail(phrase : string, locale : string) : MailTemplate
     {
-        if (phrase in R.mailTemplates)
-            return R.mailTemplates[phrase];
+        const mailTemplates = R.mailTemplates[locale];
+
+        if (phrase in mailTemplates)
+            return mailTemplates[phrase];
 
         return null;
     }

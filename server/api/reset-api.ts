@@ -57,7 +57,7 @@ export default class ResetApi
                 yield AccountModel.update(account);
 
                 const url = Utils.generateUrl('reset', account.reset_id);
-                const template = R.mail(R.NOTICE_RESET_PASSWORD);
+                const template = R.mail(R.NOTICE_RESET_PASSWORD, req['locale']);
                 const contents = Utils.formatString(template.contents, {url});
                 const result = yield Utils.sendMail(template.subject, account.email, contents);
                 const data = ResponseData.ok(1, R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL));

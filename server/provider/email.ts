@@ -59,7 +59,7 @@ export default class Email extends Provider
                     co(function* ()
                     {
                         const url = Utils.generateUrl('signup', account.signup_id);
-                        const template = R.mail(R.NOTICE_SIGNUP);
+                        const template = R.mail(R.NOTICE_SIGNUP, req['locale']);
                         const contents = Utils.formatString(template.contents, {url});
                         const result : boolean = yield Utils.sendMail(template.subject, account.email, contents);
                         const data = ResponseData.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL));

@@ -96,6 +96,25 @@ export default class Access
 //              log.d(`${key}: ${headers[key]}`)
 //      }
 
+        // 言語
+        let locale = 'en';
+
+        if ('accept-language' in headers)
+            locale = headers['accept-language'].substr(0, 2);
+
+        if ('x-locale' in headers)
+            locale = headers['x-locale'];
+
+        locale = locale.toLowerCase();
+
+        if (locale !== 'en'
+        &&  locale !== 'ja')
+        {
+            locale = 'en';
+        }
+
+        req['locale'] = locale;
+
         // アクセス元IP
         let ip = '0.0.0.0';
         let kind = '-';

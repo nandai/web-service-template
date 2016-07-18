@@ -260,7 +260,7 @@ export default class SettingsApi
                 else if (account.password === null)
                 {
                     // パスワードが設定されていない場合
-                    const template = R.mail(R.NOTICE_SET_MAIL_ADDRESS);
+                    const template = R.mail(R.NOTICE_SET_MAIL_ADDRESS, req['locale']);
                     const result = yield Utils.sendMail(template.subject, changeEmail, template.contents);
 
                     if (result)
@@ -278,7 +278,7 @@ export default class SettingsApi
                     // パスワードが設定されている場合
                     const changeId = Utils.createRundomText(32);
                     const url = Utils.generateUrl('settings/account/email/change', changeId);
-                    const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS);
+                    const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS, req['locale']);
                     const contents = Utils.formatString(template.contents, {url});
                     const result = yield Utils.sendMail(template.subject, changeEmail, contents);
 

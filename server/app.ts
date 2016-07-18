@@ -26,6 +26,7 @@ import Google                  from './provider/google';
 import Email                   from './provider/email';
 import Access                  from './libs/access';
 import Utils                   from './libs/utils';
+import R                       from './libs/r';
 
 import express =          require('express');
 import session =          require('express-session');
@@ -59,6 +60,7 @@ class Initializer
         SessionModel.      load();
         LoginHistoryModel. load();
         DeleteAccountModel.load();
+        R.                 load();
 
         this.app = app;
         this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
@@ -242,6 +244,7 @@ function main() : void
     init.route();
 
     listen(app);
+    console.log('ready.');
     log.stepOut();
 }
 
