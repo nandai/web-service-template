@@ -1,6 +1,9 @@
 /**
  * (C) 2016 printf.jp
  */
+import SeqModel from './seq-model';
+import Utils    from '../libs/utils';
+
 import fs =     require('fs');
 import __ =     require('lodash');
 import uuid =   require('node-uuid');
@@ -13,10 +16,19 @@ const co =      require('co');
  */
 export class Session
 {
+    pk         : number = null;
     id         : string = null;
     account_id : number = null;
     message_id : string = null;
     created_at : string = null;
+
+    /**
+     * リフレッシュ
+     */
+    refresh() : void
+    {
+        this.id = uuid.v4();
+    }
 }
 
 /**
@@ -36,9 +48,18 @@ export default class SessionModel
     {
         try
         {
+            SessionModel.list = [];
+
             fs.statSync(SessionModel.path);
             const text = fs.readFileSync(SessionModel.path, 'utf8');
-            SessionModel.list = JSON.parse(text);
+            const list = JSON.parse(text);
+
+            for (const obj of list)
+            {
+                const session = new Session();
+                Utils.copy(session, obj);
+                SessionModel.list.push(session);
+            }
         }
         catch (err)
         {
@@ -69,6 +90,7 @@ export default class SessionModel
         {
             const m = moment();
 
+            session.pk = SeqModel.next('session');
             session.id = uuid.v4();
             session.created_at = m.format('YYYY/MM/DD HH:mm:ss');
             SessionModel.list.push(session);
@@ -93,7 +115,7 @@ export default class SessionModel
         {
             for (let i in SessionModel.list)
             {
-                if (SessionModel.list[i].id === session.id)
+                if (SessionModel.list[i].pk === session.pk)
                 {
                     __.extend(SessionModel.list[i], session);
                     SessionModel.save();

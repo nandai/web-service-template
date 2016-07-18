@@ -111,6 +111,7 @@ export default class Email extends Provider
      */
     protected sendResponse(res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string) : Promise<any>
     {
+        const log = slog.stepIn(Email.CLS_NAME_2, 'sendResponse');
         return new Promise((resolve, reject) =>
         {
             if (phrase)
@@ -126,6 +127,9 @@ export default class Email extends Provider
                 const data = {status:0, id:smsId};
                 res.json(data);
             }
+
+            log.stepOut();
+            resolve();
         });
     }
 }

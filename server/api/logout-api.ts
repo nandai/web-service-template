@@ -1,8 +1,7 @@
 /**
  * (C) 2016 printf.jp
  */
-import Cookie from '../libs/cookie';
-import Utils  from '../libs/utils';
+import Utils from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 
 import express = require('express');
@@ -28,10 +27,8 @@ export default class LogoutApi
         const log = slog.stepIn(LogoutApi.CLS_NAME, 'index');
         co(function* ()
         {
-            const cookie = new Cookie(req, res);
-            const sessionId = cookie.sessionId;
-
-            yield SessionModel.logout({sessionId});
+            const session : Session = req['sessionObj'];
+            yield SessionModel.logout({sessionId:session.id});
 
             const data = {status:0};
             res.json(data);

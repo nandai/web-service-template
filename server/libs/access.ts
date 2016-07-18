@@ -68,7 +68,7 @@ export default class Access
 
         // パス
         log.d(`${req.method} ${req.path}`);
-        let referrer = req.header('referrer');
+        const referrer = req.header('referrer');
 
         if (referrer)
             log.d(`referrer:${referrer}`);
@@ -147,15 +147,30 @@ export default class Access
         {
             const cookie = new Cookie(req, res);
             const sessionId = cookie.sessionId;
-            let session : Session = yield SessionModel.find(sessionId);
+            let   session : Session = null;
 
-            if (session === null)
+            if (sessionId === undefined)
             {
                 session = new Session();
-                SessionModel.add(session);
-                cookie.sessionId = session.id;
+                yield SessionModel.add(session);
+                log.d('セッションを生成しました。');
+            }
+            else
+            {
+                session = yield SessionModel.find(sessionId);
+                if (session === null)
+                {
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    res.status(400).json(data);
+                    log.stepOut();
+                    return;
+                }
+
+                session.refresh();
+                yield SessionModel.update(session);
             }
 
+            cookie.sessionId = session.id;
             req['sessionObj'] = session;
 
             log.stepOut();
