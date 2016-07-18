@@ -3,7 +3,6 @@
  */
 import Config                            from '../config';
 import {PassportUser}                    from '../libs/passport';
-import Cookie                            from '../libs/cookie';
 import R                                 from '../libs/r';
 import Utils                             from '../libs/utils';
 import AccountModel, {Account}           from '../models/account-model';
@@ -40,11 +39,7 @@ export default class Provider
         {
             if (!user)
             {
-                const cookie = new Cookie(req, res);
-                const command = cookie.command;
-                cookie.command = null;
-
-                switch (command)
+                switch (req['command'])
                 {
                     case 'signup': res.redirect('/signup');   break;
                     case 'login':  res.redirect('/');         break;
@@ -115,11 +110,8 @@ export default class Provider
                 }
 
                 const findAccount : Account = yield AccountModel.findByProviderId(user.provider, self.id);
-                const cookie = new Cookie(req, res);
                 const session : Session = req['sessionObj'];
-
-                const command = cookie.command;
-                cookie.command = null;
+                const command : string =  req['command'];
 
                 switch (command)
                 {

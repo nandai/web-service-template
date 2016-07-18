@@ -11,7 +11,6 @@ export default class Cookie
 {
     // クッキー名
     private static SESSION_ID = 'sessionId';
-    private static COMMAND =    'command';
 
     private req : express.Request;
     private res : express.Response;
@@ -27,19 +26,6 @@ export default class Cookie
     {
         this.req.cookies[Cookie.SESSION_ID] = sessionId;
         this.setCookie(  Cookie.SESSION_ID,   sessionId);
-    }
-
-    /**
-     * コマンド
-     *
-     * @property    command
-     * @type        string
-     */
-    get command() : string {return this.req.cookies[Cookie.COMMAND];}
-    set command(command : string)
-    {
-        this.req.cookies[Cookie.COMMAND] = command;
-        this.setCookie(  Cookie.COMMAND,   command);
     }
 
     /**

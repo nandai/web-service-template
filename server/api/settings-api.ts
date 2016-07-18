@@ -2,7 +2,6 @@
  * (C) 2016 printf.jp
  */
 import Config                  from '../config';
-import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import ResponseData            from '../libs/response-data';
@@ -463,7 +462,6 @@ export default class SettingsApi
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'leave');
         co(function* ()
         {
-            const cookie = new Cookie(req, res);
             const session : Session = req['sessionObj'];
             const accountId = session.account_id;
             const account : Account = yield AccountModel.find(accountId);

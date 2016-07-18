@@ -19,6 +19,7 @@ export class Session
     pk         : number = null;
     id         : string = null;
     account_id : number = null;
+    command_id : string = null;
     message_id : string = null;
     created_at : string = null;
 

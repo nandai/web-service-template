@@ -2,7 +2,6 @@
  * (C) 2016 printf.jp
  */
 import Config       from '../config';
-import Cookie       from '../libs/cookie';
 import R            from '../libs/r';
 import Utils        from '../libs/utils';
 import ResponseData from '../libs/response-data';
@@ -67,9 +66,7 @@ export default class LoginApi
                 {
                     Email.verify(param.email, hashPassword, (err, user) =>
                     {
-                        const cookie = new Cookie(req, res);
-                        cookie.command = 'login';
-
+                        req['command'] = 'login';
                         req.user = user;
                         Email.callback(req, res);
                     });

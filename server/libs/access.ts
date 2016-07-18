@@ -166,7 +166,10 @@ export default class Access
                     return;
                 }
 
+                req['command'] = session.command_id;
+
                 session.refresh();
+                session.command_id = null;
                 yield SessionModel.update(session);
             }
 

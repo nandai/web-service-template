@@ -4,28 +4,28 @@
 
 /// <reference path='../typings/tsd.d.ts' />;
 
-import Config             from './config';
-import SeqModel           from './models/seq-model';
-import AccountModel       from './models/account-model';
-import SessionModel       from './models/session-model';
-import LoginHistoryModel  from './models/login-history-model';
-import DeleteAccountModel from './models/delete-account-model';
-import TopController      from './controllers/top-controller';
-import SignupController   from './controllers/signup-controller';
-import ForgetController   from './controllers/forget-controller';
-import ResetController    from './controllers/reset-controller';
-import SettingsController from './controllers/settings-controller';
-import SignupApi          from './api/signup-api';
-import LoginApi           from './api/login-api';
-import LogoutApi          from './api/logout-api';
-import ResetApi           from './api/reset-api';
-import SettingsApi        from './api/settings-api';
-import Twitter            from './provider/twitter';
-import Facebook           from './provider/facebook';
-import Google             from './provider/google';
-import Email              from './provider/email';
-import Access             from './libs/access';
-import Cookie             from './libs/cookie';
+import Config                  from './config';
+import SeqModel                from './models/seq-model';
+import AccountModel            from './models/account-model';
+import SessionModel, {Session} from './models/session-model';
+import LoginHistoryModel       from './models/login-history-model';
+import DeleteAccountModel      from './models/delete-account-model';
+import TopController           from './controllers/top-controller';
+import SignupController        from './controllers/signup-controller';
+import ForgetController        from './controllers/forget-controller';
+import ResetController         from './controllers/reset-controller';
+import SettingsController      from './controllers/settings-controller';
+import SignupApi               from './api/signup-api';
+import LoginApi                from './api/login-api';
+import LogoutApi               from './api/logout-api';
+import ResetApi                from './api/reset-api';
+import SettingsApi             from './api/settings-api';
+import Twitter                 from './provider/twitter';
+import Facebook                from './provider/facebook';
+import Google                  from './provider/google';
+import Email                   from './provider/email';
+import Access                  from './libs/access';
+import Utils                   from './libs/utils';
 
 import express =          require('express');
 import session =          require('express-session');
@@ -39,6 +39,7 @@ import https =            require('https');
 import fs =               require('fs');
 import slog =             require('./slog');
 const ect =               require('ect');
+const co =                require('co');
 
 /**
  * イニシャライザ
@@ -158,6 +159,10 @@ class Initializer
      */
     route() : void
     {
+        const signupCommand = command('signup');
+        const loginCommand =  command('login');
+        const linkCommand =   command('link');
+
         const authTwitter =  passport.authenticate('twitter');
         const authFacebook = passport.authenticate('facebook');
         const authGoogle =   passport.authenticate('google', {scope:['https://www.googleapis.com/auth/plus.login']});
@@ -168,12 +173,12 @@ class Initializer
         this.app.get( '/reset',  ResetController. index);
         this.app.get( '/settings/account/email/change', SettingsController.changeEmail);
 
-        this.app.get( '/signup/twitter',  signup, authTwitter);
-        this.app.get( '/signup/facebook', signup, authFacebook);
-        this.app.get( '/signup/google',   signup, authGoogle);
-        this.app.get( '/login/twitter',   login,  authTwitter);
-        this.app.get( '/login/facebook',  login,  authFacebook);
-        this.app.get( '/login/google',    login,  authGoogle);
+        this.app.get( '/signup/twitter',  signupCommand, authTwitter);
+        this.app.get( '/signup/facebook', signupCommand, authFacebook);
+        this.app.get( '/signup/google',   signupCommand, authGoogle);
+        this.app.get( '/login/twitter',   loginCommand,  authTwitter);
+        this.app.get( '/login/facebook',  loginCommand,  authFacebook);
+        this.app.get( '/login/google',    loginCommand,  authGoogle);
 
         // APIs
         this.app.post('/api/signup/email',         SignupApi.email);
@@ -197,9 +202,9 @@ class Initializer
         this.app.get(   '/settings/account',          SettingsController.account);
         this.app.get(   '/settings/account/email',    SettingsController.email);
         this.app.get(   '/settings/account/password', SettingsController.password);
-        this.app.get(   '/settings/account/link/twitter',  link, authTwitter);
-        this.app.get(   '/settings/account/link/facebook', link, authFacebook);
-        this.app.get(   '/settings/account/link/google',   link, authGoogle);
+        this.app.get(   '/settings/account/link/twitter',  linkCommand, authTwitter);
+        this.app.get(   '/settings/account/link/facebook', linkCommand, authFacebook);
+        this.app.get(   '/settings/account/link/google',   linkCommand, authGoogle);
 
         // APIs
         this.app.get(   '/api/settings/account',                 SettingsApi.account);
@@ -241,33 +246,29 @@ function main() : void
 }
 
 /**
- * signup
+ * コマンド設定
+ *
+ * @param   command コマンド
  */
-function signup(req : express.Request, res : express.Response, next : express.NextFunction) : void
+function command(command : string) : express.Handler
 {
-    const cookie = new Cookie(req, res);
-    cookie.command = 'signup';
-    next();
-}
+    const handler = function(req : express.Request, res : express.Response, next : express.NextFunction) : void
+    {
+        const log = slog.stepIn('app.ts', 'command');
+        log.d(command);
 
-/**
- * login
- */
-function login(req : express.Request, res : express.Response, next : express.NextFunction) : void
-{
-    const cookie = new Cookie(req, res);
-    cookie.command = 'login';
-    next();
-}
+        co(function* ()
+        {
+            const session : Session = req['sessionObj'];
+            session.command_id = command;
+            yield SessionModel.update(session);
 
-/**
- * link
- */
-function link(req : express.Request, res : express.Response, next : express.NextFunction) : void
-{
-    const cookie = new Cookie(req, res);
-    cookie.command = 'link';
-    next();
+            log.stepOut();
+            next();
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
+    };
+    return handler;
 }
 
 /**
