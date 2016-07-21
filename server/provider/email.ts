@@ -62,7 +62,8 @@ export default class Email extends Provider
                         const template = R.mail(R.NOTICE_SIGNUP, req['locale']);
                         const contents = Utils.formatString(template.contents, {url});
                         const result : boolean = yield Utils.sendMail(template.subject, account.email, contents);
-                        const data = ResponseData.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL));
+                        const locale : string = req['locale'];
+                        const data = ResponseData.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL, locale));
                         res.json(data);
                         resolve(result);
                     });
@@ -109,7 +110,7 @@ export default class Email extends Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string) : Promise<any>
+    protected sendResponse(req : express.Request, res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string) : Promise<any>
     {
         const log = slog.stepIn(Email.CLS_NAME_2, 'sendResponse');
         return new Promise((resolve, reject) =>
@@ -119,7 +120,8 @@ export default class Email extends Provider
                 if (phrase === R.INCORRECT_ACCOUNT)
                     phrase =   R.INVALID_EMAIL_AUTH;
 
-                const data = ResponseData.error(-1, R.text(phrase));
+                const locale = req['locale'];
+                const data = ResponseData.error(-1, R.text(phrase, locale));
                 res.json(data);
             }
             else

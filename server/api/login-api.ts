@@ -35,6 +35,7 @@ export default class LoginApi
         {
             do
             {
+                const locale : string = req['locale'];
                 const param = req.body;
                 const condition =
                 {
@@ -44,7 +45,7 @@ export default class LoginApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     break;
                 }
@@ -57,7 +58,7 @@ export default class LoginApi
 
                 if (account === null || account.password !== hashPassword || account.signup_id)
                 {
-                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL_AUTH));
+                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL_AUTH, locale));
                     res.json(data);
                     break;
                 }
@@ -92,6 +93,7 @@ export default class LoginApi
         {
             do
             {
+                const locale : string = req['locale'];
                 const param = req.body;
                 const condition =
                 {
@@ -101,7 +103,7 @@ export default class LoginApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     break;
                 }
@@ -113,7 +115,7 @@ export default class LoginApi
                 {
                     if (account.sms_code !== param.sms_code)
                     {
-                        const data = ResponseData.error(-1, R.text(R.MISMATCH_SMS_CODE));
+                        const data = ResponseData.error(-1, R.text(R.MISMATCH_SMS_CODE, locale));
                         res.json(data);
                         break;
                     }

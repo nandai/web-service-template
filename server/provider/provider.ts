@@ -159,7 +159,7 @@ export default class Provider
                                     yield LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
-                                    yield self.sendResponse(res, session, '/');
+                                    yield self.sendResponse(req, res, session, '/');
                                 }
                             }
                             else
@@ -167,7 +167,7 @@ export default class Provider
                                 log.i('サインアップ可能だが、ログイン中なので、サインアップはせず、サインアップ画面へ移動する');
 
                                 // サインアップ画面へ
-                                yield self.sendResponse(res, session, '/signup', R.CANNOT_SIGNUP);
+                                yield self.sendResponse(req, res, session, '/signup', R.CANNOT_SIGNUP);
                             }
                         }
                         else
@@ -175,7 +175,7 @@ export default class Provider
                             log.i('サインアップ済みなので、サインアップはせず、サインアップ画面へ移動する');
 
                             // サインアップ画面へ
-                            yield self.sendResponse(res, session, '/signup', R.ALREADY_SIGNUP);
+                            yield self.sendResponse(req, res, session, '/signup', R.ALREADY_SIGNUP);
                         }
                         break;
                     }
@@ -199,7 +199,7 @@ export default class Provider
                                         findAccount.sms_code = Utils.createRundomText( 6, true);
                                         AccountModel.update(findAccount);
 
-                                        yield self.sendResponse(res, session, '/', null, findAccount.sms_id);
+                                        yield self.sendResponse(req, res, session, '/', null, findAccount.sms_id);
 
                                         // ログインコードをSMS送信
                                         const accountSid = Config.TWILIO_ACCOUNT_SID;
@@ -233,7 +233,7 @@ export default class Provider
                                     yield LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
-                                    yield self.sendResponse(res, session, '/');
+                                    yield self.sendResponse(req, res, session, '/');
                                 }
                             }
                             else
@@ -243,14 +243,14 @@ export default class Provider
                                     log.i('サインアップ済み。既に同じアカウントでログインしているので、トップ画面へ移動するだけ');
 
                                     // トップ画面へ
-                                    yield self.sendResponse(res, session, '/');
+                                    yield self.sendResponse(req, res, session, '/');
                                 }
                                 else
                                 {
                                     log.i('サインアップ済みだが、別のアカウントでログイン中なので、トップ画面ではなくログイン画面へ移動する');
 
                                     // ログイン画面へ
-                                    yield self.sendResponse(res, session, '/', R.ALREADY_LOGIN_ANOTHER_ACCOUNT);
+                                    yield self.sendResponse(req, res, session, '/', R.ALREADY_LOGIN_ANOTHER_ACCOUNT);
                                 }
                             }
                         }
@@ -259,7 +259,7 @@ export default class Provider
                             log.i('サインアップしていないので、ログイン画面へ移動する');
 
                             // ログイン画面へ
-                            yield self.sendResponse(res, session, '/', R.INCORRECT_ACCOUNT);
+                            yield self.sendResponse(req, res, session, '/', R.INCORRECT_ACCOUNT);
                         }
                         break;
                     }
@@ -279,7 +279,7 @@ export default class Provider
                                 yield AccountModel.update(account);
 
                                 // 設定画面へ
-                                yield self.sendResponse(res, session, '/settings');
+                                yield self.sendResponse(req, res, session, '/settings');
                             }
                             else
                             {
@@ -288,7 +288,7 @@ export default class Provider
                         else
                         {
                             // 設定画面へ
-                            yield self.sendResponse(res, session, '/settings', R.CANNOT_LINK);
+                            yield self.sendResponse(req, res, session, '/settings', R.CANNOT_LINK);
                         }
                         break;
                     }
@@ -323,7 +323,7 @@ export default class Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string) : Promise<any>
+    protected sendResponse(req : express.Request, res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string) : Promise<any>
     {
         const log = slog.stepIn(Provider.CLS_NAME, 'sendResponse');
         return new Promise((resolve, reject) =>

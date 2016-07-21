@@ -32,6 +32,7 @@ export default class ResetApi
         {
             do
             {
+                const locale : string = req['locale'];
                 const param = req.body;
                 const condition =
                 {
@@ -40,7 +41,7 @@ export default class ResetApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     break;
                 }
@@ -48,7 +49,7 @@ export default class ResetApi
                 const account : Account = yield AccountModel.findByProviderId('email', param.email);
                 if (account === null || account.signup_id)
                 {
-                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL));
+                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL, locale));
                     res.json(data);
                     break;
                 }
@@ -57,10 +58,10 @@ export default class ResetApi
                 yield AccountModel.update(account);
 
                 const url = Utils.generateUrl('reset', account.reset_id);
-                const template = R.mail(R.NOTICE_RESET_PASSWORD, req['locale']);
+                const template = R.mail(R.NOTICE_RESET_PASSWORD, locale);
                 const contents = Utils.formatString(template.contents, {url});
                 const result = yield Utils.sendMail(template.subject, account.email, contents);
-                const data = ResponseData.ok(1, R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL));
+                const data = ResponseData.ok(1, R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL, locale));
                 res.json(data);
             }
             while (false);
@@ -83,6 +84,7 @@ export default class ResetApi
         {
             do
             {
+                const locale : string = req['locale'];
                 const param = req.body;
                 const condition =
                 {
@@ -93,21 +95,21 @@ export default class ResetApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     break;
                 }
 
                 if (Utils.validatePassword(param.password) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG));
+                    const data = ResponseData.error(-1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
                     res.json(data);
                     break;
                 }
 
                 if (param.password !== param.confirm)
                 {
-                    const data = ResponseData.error(-1, R.text(R.MISMATCH_PASSWORD));
+                    const data = ResponseData.error(-1, R.text(R.MISMATCH_PASSWORD, locale));
                     res.json(data);
                     break;
                 }
@@ -121,7 +123,7 @@ export default class ResetApi
                     account.reset_id = null;
                     yield AccountModel.update(account);
 
-                    const data = ResponseData.ok(1, R.text(R.PASSWORD_RESET));
+                    const data = ResponseData.ok(1, R.text(R.PASSWORD_RESET, locale));
                     res.json(data);
                 }
                 else
@@ -129,7 +131,7 @@ export default class ResetApi
                     // パスワードリセットの画面でパスワードリセットを完了させた後、再度パスワードリセットを完了させようとした場合にここに到達する想定。
                     // リセットIDで該当するアカウントがないということが必ずしもパスワードリセット済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、パスワードリセット済みというメッセージでOK。
-                    const data = ResponseData.error(-1, R.text(R.ALREADY_PASSWORD_RESET));
+                    const data = ResponseData.error(-1, R.text(R.ALREADY_PASSWORD_RESET, locale));
                     res.json(data);
                 }
             }

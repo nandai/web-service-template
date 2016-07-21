@@ -77,6 +77,7 @@ export default class SettingsApi
         {
             do
             {
+                const locale : string = req['locale'];
                 const param = req.body;
                 const condition =
                 {
@@ -86,7 +87,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     break;
                 }
@@ -96,7 +97,7 @@ export default class SettingsApi
 
                 if (len < 1 || 20 < len)
                 {
-                    const data = ResponseData.error(-1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG));
+                    const data = ResponseData.error(-1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
                     res.json(data);
                     break;
                 }
@@ -109,7 +110,7 @@ export default class SettingsApi
                 account.phone_no = (param.phone_no.length > 0 ? param.phone_no : null);
                 yield AccountModel.update(account);
 
-                const data = ResponseData.ok(1, R.text(R.SETTINGS_COMPLETED));
+                const data = ResponseData.ok(1, R.text(R.SETTINGS_COMPLETED, locale));
                 res.json(data);
             }
             while (false);
@@ -186,7 +187,8 @@ export default class SettingsApi
                 }
                 else
                 {
-                    data = ResponseData.error(-1, R.text(R.CANNOT_UNLINK));
+                    const locale : string = req['locale'];
+                    data = ResponseData.error(-1, R.text(R.CANNOT_UNLINK, locale));
                 }
 
                 res.json(data);
@@ -210,6 +212,7 @@ export default class SettingsApi
         {
             do
             {
+                const locale : string = req['locale'];
                 const param = req.body;
                 const condition =
                 {
@@ -218,7 +221,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     break;
                 }
@@ -229,7 +232,7 @@ export default class SettingsApi
 
                 if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                 {
-                    const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL));
+                    const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL, locale));
                     res.json(data);
                     break;
                 }
@@ -247,12 +250,12 @@ export default class SettingsApi
                         account.password = null;
                         yield AccountModel.update(account);
 
-                        const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED));
+                        const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED, locale));
                         res.json(data);
                     }
                     else
                     {
-                        const data = ResponseData.error(-1, R.text(R.CANNOT_EMPTY_EMAIL));
+                        const data = ResponseData.error(-1, R.text(R.CANNOT_EMPTY_EMAIL, locale));
                         res.json(data);
                     }
                 }
@@ -260,7 +263,7 @@ export default class SettingsApi
                 else if (account.password === null)
                 {
                     // パスワードが設定されていない場合
-                    const template = R.mail(R.NOTICE_SET_MAIL_ADDRESS, req['locale']);
+                    const template = R.mail(R.NOTICE_SET_MAIL_ADDRESS, locale);
                     const result = yield Utils.sendMail(template.subject, changeEmail, template.contents);
 
                     if (result)
@@ -269,7 +272,7 @@ export default class SettingsApi
                         yield AccountModel.update(account);
                     }
 
-                    const data = ResponseData.ok(1, R.text(result ? R.EMAIL_CHANGED : R.COULD_NOT_CHANGE_EMAIL));
+                    const data = ResponseData.ok(1, R.text(result ? R.EMAIL_CHANGED : R.COULD_NOT_CHANGE_EMAIL, locale));
                     res.json(data);
                 }
 
@@ -278,7 +281,7 @@ export default class SettingsApi
                     // パスワードが設定されている場合
                     const changeId = Utils.createRundomText(32);
                     const url = Utils.generateUrl('settings/account/email/change', changeId);
-                    const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS, req['locale']);
+                    const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS, locale);
                     const contents = Utils.formatString(template.contents, {url});
                     const result = yield Utils.sendMail(template.subject, changeEmail, contents);
 
@@ -289,7 +292,7 @@ export default class SettingsApi
                         yield AccountModel.update(account);
                     }
 
-                    const data = ResponseData.ok(1, R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL));
+                    const data = ResponseData.ok(1, R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL, locale));
                     res.json(data);
                 }
             }
@@ -313,6 +316,7 @@ export default class SettingsApi
         {
             do
             {
+                const locale : string = req['locale'];
                 const param = req.body;
                 const condition =
                 {
@@ -322,7 +326,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     break;
                 }
@@ -339,7 +343,7 @@ export default class SettingsApi
 
                     if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                     {
-                        const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL));
+                        const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL, locale));
                         res.json(data);
                         break;
                     }
@@ -350,7 +354,7 @@ export default class SettingsApi
 
                     if (hashPassword !== account.password)
                     {
-                        const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD));
+                        const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD, locale));
                         res.json(data);
                         break;
                     }
@@ -362,7 +366,7 @@ export default class SettingsApi
                     account.change_email = null;
                     yield AccountModel.update(account);
 
-                    const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED));
+                    const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED, locale));
                     res.json(data);
                 }
                 else
@@ -370,7 +374,7 @@ export default class SettingsApi
                     // メールアドレス設定の確認画面でメールアドレスの設定を完了させた後、再度メールアドレスの設定を完了させようとした場合にここに到達する想定。
                     // 変更IDで該当するアカウントがないということが必ずしもメールアドレスの設定済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので変更済みというメッセージでOK。
-                    const data = ResponseData.error(-1, R.text(R.ALREADY_EMAIL_CHANGED));
+                    const data = ResponseData.error(-1, R.text(R.ALREADY_EMAIL_CHANGED, locale));
                     res.json(data);
                 }
             }
@@ -394,6 +398,7 @@ export default class SettingsApi
         {
             do
             {
+                const locale : string = req['locale'];
                 const param = req.body;
                 const condition =
                 {
@@ -404,7 +409,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     break;
                 }
@@ -418,7 +423,7 @@ export default class SettingsApi
 
                     if (hashPassword !== account.password)
                     {
-                        const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD));
+                        const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD, locale));
                         res.json(data);
                         break;
                     }
@@ -426,14 +431,14 @@ export default class SettingsApi
 
                 if (Utils.validatePassword(param.new_password) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG));
+                    const data = ResponseData.error(-1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
                     res.json(data);
                     break;
                 }
 
                 if (param.new_password !== param.confirm)
                 {
-                    const data = ResponseData.error(-1, R.text(R.MISMATCH_PASSWORD));
+                    const data = ResponseData.error(-1, R.text(R.MISMATCH_PASSWORD, locale));
                     res.json(data);
                     break;
                 }
@@ -441,7 +446,7 @@ export default class SettingsApi
                 account.password = Utils.getHashPassword(account.email, param.new_password, Config.PASSWORD_SALT);
                 yield AccountModel.update(account);
 
-                const data = ResponseData.ok(1, R.text(R.PASSWORD_CHANGED));
+                const data = ResponseData.ok(1, R.text(R.PASSWORD_CHANGED, locale));
                 res.json(data);
             }
             while (false);

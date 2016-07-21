@@ -31,6 +31,7 @@ export default class SignupApi
         const log = slog.stepIn(SignupApi.CLS_NAME, 'email');
         do
         {
+            const locale : string = req['locale'];
             const param = req.body;
             const condition =
             {
@@ -40,14 +41,14 @@ export default class SignupApi
 
             if (Utils.existsParameters(param, condition) === false)
             {
-                const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                 res.status(400).json(data);
                 break;
             }
 
             if (Utils.validatePassword(param.password) === false)
             {
-                const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL_AUTH));
+                const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL_AUTH, locale));
                 res.json(data);
                 break;
             }
@@ -81,6 +82,7 @@ export default class SignupApi
         {
             do
             {
+                const locale : string = req['locale'];
                 const param = req.body;
                 const condition =
                 {
@@ -90,7 +92,7 @@ export default class SignupApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     break;
                 }
@@ -103,7 +105,7 @@ export default class SignupApi
                     // サインアップの確認画面でサインアップを完了させた後、再度サインアップを完了させようとした場合にここに到達する想定。
                     // サインアップIDで該当するアカウントがないということが必ずしもサインアップ済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、登録済みというメッセージでOK。
-                    const data = ResponseData.error(-1, R.text(R.ALREADY_SIGNUP));
+                    const data = ResponseData.error(-1, R.text(R.ALREADY_SIGNUP, locale));
                     res.json(data);
                     break;
                 }
@@ -113,7 +115,7 @@ export default class SignupApi
 
                 if (account.password !== hashPassword)
                 {
-                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL_AUTH));
+                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL_AUTH, locale));
                     res.json(data);
                     break;
                 }
@@ -121,7 +123,7 @@ export default class SignupApi
                 account.signup_id = null;
                 yield AccountModel.update(account);
 
-                const data = ResponseData.ok(1, R.text(R.SIGNUP_COMPLETED));
+                const data = ResponseData.ok(1, R.text(R.SIGNUP_COMPLETED, locale));
                 res.json(data);
             }
             while (false);

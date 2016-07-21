@@ -45,7 +45,7 @@ export default class Access
                 log.d(`${req.method} ${req.path}`);
                 log.w('param: ' + bodyBuffer.toString());
 
-                const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, 'en'));
                 res.status(err.status).json(data);
                 log.stepOut();
                 return;
@@ -179,7 +179,8 @@ export default class Access
                 session = yield SessionModel.find(sessionId);
                 if (session === null)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST));
+                    const locale : string = req['locale'];
+                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
                     res.status(400).json(data);
                     log.stepOut();
                     return;
@@ -218,7 +219,8 @@ export default class Access
                 // 未認証
                 if (req.path.startsWith('/api/'))
                 {
-                    const data = ResponseData.error(-1, R.text(R.NO_LOGIN));
+                    const locale : string = req['locale'];
+                    const data = ResponseData.error(-1, R.text(R.NO_LOGIN, locale));
                     res.json(data);
                 }
                 else
@@ -247,7 +249,8 @@ export default class Access
     {
         if (req.path.startsWith('/api/'))
         {
-            const data = ResponseData.error(-1, R.text(R.NOT_FOUND));
+            const locale : string = req['locale'];
+            const data = ResponseData.error(-1, R.text(R.NOT_FOUND, locale));
             res.status(404).json(data);
         }
         else

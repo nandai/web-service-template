@@ -10,40 +10,10 @@ export default class R
 {
     private static path = __dirname + '/../../resources';
 
-    private static dict =
+    private static texts =
     {
-        "incorrectAccount": "アカウントが正しくありません。",
-        "alreadyLoginAnotherAccount": "既に別のアカウントでログインしています。",
-        "alreadySignup": "既に登録されています。",
-        "alreadyEmailChanged": "メールアドレスは変更済みです。",
-        "alreadyPasswordReset": "パスワードはリセット済みです。",
-        "alreadyExistsEmail": "そのメールアドレスは既に登録されています。",
-        "cannotSignup": "ログインしているので登録できません。",
-        "invalidEmailAuth": "メールアドレス、またはパスワードが正しくありません。",
-        "invalidEmail": "メールアドレスが正しくありません。",
-        "invalidPassword": "パスワードが正しくありません。",
-        "badRequest": "リクエストが正しくありません。",
-        "notFound": "存在しませんでした。",
-        "noLogin": "ログインしていません。",
-        "signupMailSended": "仮登録のメールを送信しました。",
-        "couldNotSendSignupMail": "仮登録のメールを送信できませんでした。",
-        "resetMailSended": "パスワードリセットのメールを送信しました。",
-        "couldNotSendResetMail": "パスワードリセットのメールを送信できませんでした。",
-        "changeMailSended": "メールアドレス変更手続きのメールを送信しました。",
-        "couldNotSendChangeMail": "メールアドレス変更手続きのメールを送信できませんでした。",
-        "emailChanged": "メールアドレスを変更しました。",
-        "couldNotChangeEmail": "メールアドレスを変更できませんでした。",
-        "passwordTooShortOrTooLong": "パスワードが短い、または長すぎます。",
-        "mismatchPassword": "パスワードが一致していません。",
-        "mismatchSmsCode": "ログインコードが一致していません。",
-        "passwordReset": "パスワードをリセットしました。",
-        "passwordChanged": "パスワードを変更しました。",
-        "accountNameTooShortOrTooLong": "アカウント名が短い、または長すぎます。",
-        "signupCompleted": "登録が完了しました。",
-        "settingsCompleted": "設定を完了しました。",
-        "cannotLink": "紐づけできません。",
-        "cannotUnlink": "紐づけを解除できません。",
-        "cannotEmptyEmail": "メールアドレスを未設定にできません。"
+        'en': {},
+        'ja': {}
     };
 
     static INCORRECT_ACCOUNT = 'incorrectAccount';
@@ -98,10 +68,33 @@ export default class R
         const locales = ['en', 'ja'];
         for (const locale of locales)
         {
+            this.loadTextResources(locale);
             this.loadMailTemplate(R.NOTICE_SIGNUP,              locale);
             this.loadMailTemplate(R.NOTICE_SET_MAIL_ADDRESS,    locale);
             this.loadMailTemplate(R.NOTICE_CHANGE_MAIL_ADDRESS, locale);
             this.loadMailTemplate(R.NOTICE_RESET_PASSWORD,      locale);
+        }
+    }
+
+    /**
+     * テキストリソースをロードする
+     *
+     * @param   locale  ロケール
+     */
+    private static loadTextResources(locale : string) : void
+    {
+        const path = `${R.path}/text/${locale}.txt`;
+
+        try
+        {
+            fs.statSync(path);
+            const text = fs.readFileSync(path, 'utf8');
+            R.texts[locale] = JSON.parse(text);
+        }
+        catch (err)
+        {
+            console.log(`${path}が見つかりません。`);
+            process.exit();
         }
     }
 
@@ -138,13 +131,16 @@ export default class R
      * 文字列を取得する
      *
      * @param   phrase  フレーズ
+     * @param   locale  ロケール
      *
      * @return  文字列
      */
-    static text(phrase : string) : string
+    static text(phrase : string, locale : string) : string
     {
-        if (phrase in R.dict)
-            return R.dict[phrase];
+        const texts = R.texts[locale];
+
+        if (phrase in texts)
+            return texts[phrase];
 
         return null;
     }

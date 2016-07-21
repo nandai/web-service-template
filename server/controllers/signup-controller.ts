@@ -37,7 +37,8 @@ export default class SignupController
 
                 if (session.message_id)
                 {
-                    message = R.text(session.message_id);
+                    const locale : string = req['locale'];
+                    message = R.text(session.message_id, locale);
                     session.message_id = null;
                     yield SessionModel.update(session);
                 }
