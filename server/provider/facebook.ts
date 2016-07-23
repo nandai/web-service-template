@@ -75,7 +75,7 @@ export default class Facebook extends Provider
             {
                 try
                 {
-                    const success : boolean = yield self.debugToken(accessToken);
+                    const success : boolean = yield self.validateAccessToken(accessToken);
 
                     if (success)
                         yield self.me(accessToken);
@@ -93,13 +93,13 @@ export default class Facebook extends Provider
     }
 
     /**
-     * @param   accessToken     アクセストークン
+     * @param   accessToken アクセストークン
      *
      * @return  boolean
      */
-    private debugToken(accessToken : string) : Promise<any>
+    private validateAccessToken(accessToken : string) : Promise<any>
     {
-        const log = slog.stepIn(Facebook.CLS_NAME_2, 'debugToken');
+        const log = slog.stepIn(Facebook.CLS_NAME_2, 'validateAccessToken');
         return new Promise((resolve, reject) =>
         {
             fb.api('debug_token',

@@ -85,11 +85,13 @@ export default class Twitter extends Provider
                     .then(function (result)
                     {
 //                      console.log(JSON.stringify(result, null, 2));
+                        const success = self.validateAccessToken(accessToken, result);
 
-                        if ('id_str' in result.data)
+                        if (success)
                         {
-                            self.id = result.data.id_str;
-                            log.d(`name:${result.data.name}`);
+                            const data = result.data;
+                            self.id = data.id_str;
+                            log.d(`name:${data.name}`);
                         }
 
                         log.stepOut();
@@ -109,5 +111,37 @@ export default class Twitter extends Provider
                 resolve();
             }
         });
+    }
+
+    /**
+     * @param   accessToken アクセストークン
+     * @param   result      account/verify_credentialsのレスポンス
+     */
+    private validateAccessToken(accessToken : string, result) : boolean
+    {
+        const log = slog.stepIn(Twitter.CLS_NAME_2, 'validateAccessToken');
+        let success = false;
+
+        if ('errors' in result.data === false)
+        {
+            const auths : string[] = result.resp.request.headers.Authorization.split(',');
+            for (const auth of auths)
+            {
+                const pair = auth.split('=');
+                if (pair[0] === 'OAuth oauth_consumer_key')
+                {
+                    const consumerKey = pair[1].replace(/"/g, '');
+                    success = (consumerKey === Config.TWITTER_CONSUMER_KEY);
+
+                    if (success === false)
+                        log.w(consumerKey);
+
+                    break;
+                }
+            }
+        }
+
+        log.stepOut();
+        return success;
     }
 }
