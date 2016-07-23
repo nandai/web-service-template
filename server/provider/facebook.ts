@@ -1,8 +1,9 @@
 /**
  * (C) 2016 printf.jp
  */
-import Provider from './provider';
+import Config   from '../config';
 import Utils    from '../libs/utils';
+import Provider from './provider';
 
 import express =          require('express');
 import passportFacebook = require('passport-facebook');
@@ -16,6 +17,7 @@ const fb =                require('fb');
 export default class Facebook extends Provider
 {
     private static CLS_NAME_2 = 'Facebook';
+    private static APP_ACCESS_TOKEN = null;
 
     /**
      * カスタムコールバック
@@ -69,36 +71,114 @@ export default class Facebook extends Provider
 
         return new Promise((resolve, reject) =>
         {
-            try
+            co(function* ()
             {
-                fb.api('me',
+                try
                 {
-                    fields:       ['id', 'name'],
-                    access_token: accessToken
-                },
-                function (result)
+                    const success : boolean = yield self.debugToken(accessToken);
+
+                    if (success)
+                        yield self.me(accessToken);
+
+                    resolve();
+                }
+                catch (err)
                 {
-//                  console.log(JSON.stringify(result, null, 2));
-
-                    if ('id' in result)
-                    {
-                        self.id = result.id;
-                        log.d(`name:${result.name}`);
-                    }
-                    else
-                    {
-                        log.d(JSON.stringify(result, null, 2));
-                    }
-
+                    log.d(err);
                     log.stepOut();
                     resolve();
-                });
-            }
-            catch (err)
+                }
+            });
+        });
+    }
+
+    /**
+     * @param   accessToken     アクセストークン
+     *
+     * @return  boolean
+     */
+    private debugToken(accessToken : string) : Promise<any>
+    {
+        const log = slog.stepIn(Facebook.CLS_NAME_2, 'debugToken');
+        return new Promise((resolve, reject) =>
+        {
+            fb.api('debug_token',
             {
-                log.d(err);
+                input_token: accessToken,
+                access_token: Facebook.APP_ACCESS_TOKEN
+            },
+            (result) =>
+            {
+                let error = ('error' in result);
+
+                if (error)
+                    log.w(JSON.stringify(result, null, 2));
+
+                log.stepOut();
+                resolve(error === false);
+            });
+        });
+    }
+
+    /**
+     * @param   accessToken     アクセストークン
+     *
+     * @return  なし
+     */
+    private me(accessToken : string) : Promise<any>
+    {
+        const log = slog.stepIn(Facebook.CLS_NAME_2, 'me');
+        return new Promise((resolve, reject) =>
+        {
+            fb.api('me',
+            {
+                fields:       ['id', 'name'],
+                access_token: accessToken
+            },
+            (result) =>
+            {
+                if ('id' in result)
+                {
+                    this.id = result.id;
+                    log.d(`name:${result.name}`);
+                }
+                else
+                {
+                    log.d(JSON.stringify(result, null, 2));
+                }
+
                 log.stepOut();
                 resolve();
+            });
+        });
+    }
+
+    /**
+     * 初期化
+     */
+    static init() : void
+    {
+        fb.api('oauth/access_token',
+        {
+            client_id:     Config.FACEBOOK_APPID,
+            client_secret: Config.FACEBOOK_APPSECRET,
+            grant_type:    'client_credentials'
+        },
+        (result) =>
+        {
+            const log = slog.stepIn(Facebook.CLS_NAME_2, 'init');
+            if ('error' in result)
+            {
+                log.e(JSON.stringify(result, null, 2));
+                log.stepOut();
+
+                console.log('Facebook init failed.');
+                setTimeout(() => process.exit(), 3000);
+            }
+            else
+            {
+                Facebook.APP_ACCESS_TOKEN = result.access_token;
+                log.stepOut();
             }
         });
     }

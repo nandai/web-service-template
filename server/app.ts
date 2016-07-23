@@ -98,6 +98,7 @@ class Initializer
         };
 
         passport.use(new passportFacebook.Strategy(options, Facebook.verify));
+        Facebook.init();
     }
 
     /**
