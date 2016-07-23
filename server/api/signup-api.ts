@@ -23,6 +23,14 @@ export default class SignupApi
      * メールアドレスでサインアップする<br>
      * POST /api/signup/email
      *
+     * <table>
+     * <tr><td>email</td>
+     *     <td>メールアドレス</td></tr>
+     *
+     * <tr><td>password</td>
+     *     <td>パスワード</td></tr>
+     * </table>
+     *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
@@ -71,6 +79,14 @@ export default class SignupApi
     /**
      * メールアドレスでのサインアップを確定する<br>
      * POST /api/signup/email/confirm
+     *
+     * <table>
+     * <tr><td>signup_id</td>
+     *     <td>サインアップID</td></tr>
+     *
+     * <tr><td>password</td>
+     *     <td>パスワード</td></tr>
+     * </table>
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス

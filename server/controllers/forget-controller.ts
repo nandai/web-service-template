@@ -12,6 +12,8 @@ export default class ForgetController
     private static CLS_NAME = 'ForgetController';
 
     /**
+     * GET /forget
+     *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */

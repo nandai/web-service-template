@@ -67,6 +67,14 @@ export default class SettingsApi
      * アカウント情報を更新する<br>
      * PUT /api/settings/account
      *
+     * <table>
+     * <tr><td>name</td>
+     *     <td>アカウント名</td></tr>
+     *
+     * <tr><td>phone_no</td>
+     *     <td>電話番号。+81xxxxxxxxxxx</td></tr>
+     * </table>
+     *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
@@ -202,6 +210,11 @@ export default class SettingsApi
      * メールアドレスの設定（変更）を要求する<br>
      * PUT /api/settings/account/email
      *
+     * <table>
+     * <tr><td>email</td>
+     *     <td>メールアドレス</td></tr>
+     * </table>
+     *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
@@ -306,6 +319,14 @@ export default class SettingsApi
      * メールアドレスの設定（変更）を確定する<br>
      * PUT /api/settings/account/email/change
      *
+     * <table>
+     * <tr><td>change_id</td>
+     *     <td>変更ID</td></tr>
+     *
+     * <tr><td>password</td>
+     *     <td>パスワード</td></tr>
+     * </table>
+     *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
@@ -387,6 +408,17 @@ export default class SettingsApi
     /**
      * パスワードの設定（変更）を要求する<br>
      * PUT /api/settings/account/password
+     *
+     * <table>
+     * <tr><td>old_password</td>
+     *     <td>現在のパスワード</td></tr>
+     *
+     * <tr><td>new_password</td>
+     *     <td>新しいパスワード</td></tr>
+     *
+     * <tr><td>confirm</td>
+     *     <td>確認のパスワード</td></tr>
+     * </table>
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス

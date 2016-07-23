@@ -19,6 +19,8 @@ export default class SignupController
     private static CLS_NAME = 'SignupController';
 
     /**
+     * GET /signup
+     *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */

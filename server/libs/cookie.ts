@@ -1,14 +1,18 @@
 /**
  * (C) 2016 printf.jp
  */
-import express = require('express');
 import Config from '../config';
+
+import express = require('express');
+import slog =    require('../slog');
 
 /**
  * Cookie
  */
 export default class Cookie
 {
+    private static CLS_NAME = 'Cookie';
+
     // クッキー名
     private static SESSION_ID = 'sessionId';
 
@@ -48,6 +52,9 @@ export default class Cookie
      */
     private setCookie(name : string, value : string) : void
     {
+        const log = slog.stepIn(Cookie.CLS_NAME, 'setCookie');
+        log.d(`${name}: ${value}`);
+
         if (value)
         {
             const options : express.CookieOptions =
@@ -61,12 +68,13 @@ export default class Cookie
         {
             this.res.clearCookie(name);
         }
+        log.stepOut();
     }
 
     /**
      * Passportのクッキーを削除する
      */
-    clearPassport()
+    clearPassport() : void
     {
         this.res.clearCookie('connect.sid');
     }

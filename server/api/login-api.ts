@@ -23,7 +23,15 @@ export default class LoginApi
 
     /**
      * メールアドレスでログインする<br>
-     * POST /api/login/email
+     * POST /api/login/email<br>
+     *
+     * <table>
+     * <tr><td>email</td>
+     *     <td>メールアドレス</td></tr>
+     *
+     * <tr><td>password</td>
+     *     <td>パスワード</td></tr>
+     * </table>
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -82,6 +90,14 @@ export default class LoginApi
     /**
      * SMSに送信したログインコードでログインする<br>
      * POST /api/login/sms
+     *
+     * <table>
+     * <tr><td>id</td>
+     *     <td>SMS ID。二段階認証画面に遷移する前に発行されるID</td></tr>
+     *
+     * <tr><td>sms_code</td>
+     *     <td>SMSコード（ログインコード）。二段階認証画面に遷移する前に発行されるコード</td></tr>
+     * </table>
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス

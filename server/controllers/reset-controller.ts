@@ -16,6 +16,8 @@ export default class ResetController
     private static CLS_NAME = 'ResetController';
 
     /**
+     * GET /reset
+     *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */

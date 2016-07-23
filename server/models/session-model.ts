@@ -24,9 +24,9 @@ export class Session
     created_at : string = null;
 
     /**
-     * リフレッシュ
+     * 再生成
      */
-    refresh() : void
+    regenerate() : void
     {
         this.id = uuid.v4();
     }

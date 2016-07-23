@@ -19,6 +19,8 @@ export default class TopController
     private static CLS_NAME = 'TopController';
 
     /**
+     * GET /
+     *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */

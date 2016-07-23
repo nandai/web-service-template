@@ -148,7 +148,6 @@ export default class Provider
                                 else
                                 {
                                     // セッション更新
-                                    const session : Session = req['sessionObj'];
                                     session.account_id = account.id;
                                     yield SessionModel.update(session);
 
@@ -222,7 +221,6 @@ export default class Provider
                                 else
                                 {
                                     // セッション作成
-                                    const session : Session = req['sessionObj'];
                                     session.account_id = findAccount.id;
                                     yield SessionModel.update(session);
 

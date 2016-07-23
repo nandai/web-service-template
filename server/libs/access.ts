@@ -25,7 +25,7 @@ export default class Access
      * @param   req httpリクエスト
      * @param   req httpレスポンス
      */
-    static jsonBodyParser(req : express.Request, res : express.Response, next : express.NextFunction)
+    static jsonBodyParser(req : express.Request, res : express.Response, next : express.NextFunction) : void
     {
         const log = slog.stepIn(Access.CLS_NAME, 'jsonBodyParser');
         let bodyBuffer : Buffer;
@@ -116,41 +116,55 @@ export default class Access
         req['locale'] = locale;
 
         // アクセス元IP
-        let ip = '0.0.0.0';
-        let kind = '-';
-
-        if (req.headers['x-forwarded-for'])
-        {
-            ip = req.headers['x-forwarded-for'];
-            kind = 'a';
-        }
-
-        if (req.connection && req.connection.remoteAddress)
-        {
-            ip = req.connection.remoteAddress;
-            kind = 'b';
-        }
-
-        if (req.connection['socket'] && req.connection['socket'].remoteAddress)
-        {
-            ip = req.connection['socket'].remoteAddress;
-            kind = 'c';
-        }
-
-        if (req.socket && req.socket.remoteAddress)
-        {
-            ip = req.socket.remoteAddress;
-            kind = 'd';
-        }
-
-        const pos = ip.lastIndexOf(':');
-        if (pos > 0)
-            ip = ip.substr(pos + 1);
-
-        log.d(`(${kind}) IP:${ip}`);
+        const ip = Access.getIp(req);
+        log.d(`(${ip.src}) IP:${ip.address}`);
 
         log.stepOut();
         next();
+    }
+
+    /**
+     * IPアドレスを取得する
+     *
+     * @param   req httpリクエスト
+     */
+    private static getIp(req : express.Request) : {address : string, src : string}
+    {
+        let address = '0.0.0.0';
+        let src = '-';  // 取得元
+
+        if (req.headers['x-forwarded-for'])
+        {
+            address = req.headers['x-forwarded-for'];
+            src = 'a';
+        }
+
+        else if (req.connection && req.connection.remoteAddress)
+        {
+            address = req.connection.remoteAddress;
+            src = 'b';
+        }
+
+        else if (req.connection['socket'] && req.connection['socket'].remoteAddress)
+        {
+            address = req.connection['socket'].remoteAddress;
+            src = 'c';
+        }
+
+        else if (req.socket && req.socket.remoteAddress)
+        {
+            address = req.socket.remoteAddress;
+            src = 'd';
+        }
+
+        const pos = address.lastIndexOf(':');
+        if (pos > 0)
+            address = address.substr(pos + 1);
+
+        if (address === '1')
+            address = '127.0.0.1';
+
+        return {address, src};
     }
 
     /**
@@ -188,12 +202,12 @@ export default class Access
 
                 req['command'] = session.command_id;
 
-                session.refresh();
+                session.regenerate();
                 session.command_id = null;
                 yield SessionModel.update(session);
             }
 
-            cookie.sessionId = session.id;
+            cookie.sessionId =  session.id;
             req['sessionObj'] = session;
 
             log.stepOut();

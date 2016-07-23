@@ -19,7 +19,8 @@ export default class SettingsController
     private static CLS_NAME = 'SettingsController';
 
     /**
-     * 設定画面
+     * 設定画面<br>
+     * GET /settings
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -50,7 +51,8 @@ export default class SettingsController
     }
 
     /**
-     * アカウント設定画面
+     * アカウント設定画面<br>
+     * GET /settings/account
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -67,7 +69,8 @@ export default class SettingsController
     }
 
     /**
-     * 新しいメールアドレスを入力する画面
+     * 新しいメールアドレスを入力する画面<br>
+     * GET /settings/account/email
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -84,7 +87,8 @@ export default class SettingsController
     }
 
     /**
-     * メールアドレス変更メールのリンクから遷移してくる画面
+     * メールアドレス変更メールのリンクから遷移してくる画面<br>
+     * GET /settings/account/email/change
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -110,7 +114,8 @@ export default class SettingsController
     }
 
     /**
-     * 新しいパスワードを入力する画面
+     * 新しいパスワードを入力する画面<br>
+     * GET /settings/account/password
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
