@@ -42,13 +42,13 @@ class SmsView extends View
     {
         const log = slog.stepIn(SmsView.CLS_NAME, 'onClickSendButton');
 
-        const id = $('#sms-id').val();
+        const sms_id = $('#sms-id').val();
         const sms_code = this.smsCodeTextBox.getValue();
 
         $.ajax({
             type: 'POST',
             url: '/api/login/sms',
-            data: {id, sms_code}
+            data: {sms_id, sms_code}
         })
 
         .done((data, status, jqXHR) =>

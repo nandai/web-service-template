@@ -80,7 +80,7 @@ export default class ResetApi
      * PUT /api/reset/change
      *
      * <table>
-     * <tr><td>id</td>
+     * <tr><td>reset_id</td>
      *     <td>リセットID</td></tr>
      *
      * <tr><td>password</td>
@@ -104,7 +104,7 @@ export default class ResetApi
                 const param = req.body;
                 const condition =
                 {
-                    id:       ['string', null, true],
+                    reset_id: ['string', null, true],
                     password: ['string', null, true],
                     confirm:  ['string', null, true]
                 }
@@ -130,7 +130,7 @@ export default class ResetApi
                     break;
                 }
 
-                const resetId = param.id;
+                const resetId = param.reset_id;
                 const account : Account = yield AccountModel.findByResetId(resetId);
 
                 if (account)

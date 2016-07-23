@@ -92,7 +92,7 @@ export default class LoginApi
      * POST /api/login/sms
      *
      * <table>
-     * <tr><td>id</td>
+     * <tr><td>sms_id</td>
      *     <td>SMS ID。二段階認証画面に遷移する前に発行されるID</td></tr>
      *
      * <tr><td>sms_code</td>
@@ -113,7 +113,7 @@ export default class LoginApi
                 const param = req.body;
                 const condition =
                 {
-                    id:       ['string', null, true],
+                    sms_id:   ['string', null, true],
                     sms_code: ['string', null, true]
                 }
 
@@ -124,7 +124,7 @@ export default class LoginApi
                     break;
                 }
 
-                const smsId = param.id;
+                const smsId = param.sms_id;
                 const account : Account = yield AccountModel.findBySmsId(smsId);
 
                 if (account)
