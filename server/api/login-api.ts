@@ -5,6 +5,9 @@ import Config       from '../config';
 import R            from '../libs/r';
 import Utils        from '../libs/utils';
 import ResponseData from '../libs/response-data';
+import Twitter      from '../provider/twitter';
+import Facebook     from '../provider/facebook';
+import Google       from '../provider/google';
 import Email        from '../provider/email';
 import AccountModel, {Account} from '../models/account-model';
 import SessionModel, {Session} from '../models/session-model';
@@ -20,6 +23,149 @@ const co =       require('co');
 export default class LoginApi
 {
     private static CLS_NAME = 'LoginApi';
+
+    /**
+     * Twitterでログインする<br>
+     * POST /api/login/twitter<br>
+     *
+     * <table>
+     * <tr><td>accessToken</td>
+     *     <td>アクセストークン</td></tr>
+     *
+     * <tr><td>accessTokenSecret</td>
+     *     <td>アクセストークンシークレット</td></tr>
+     * </table>
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static twitter(req : express.Request, res : express.Response) : void
+    {
+        const log = slog.stepIn(LoginApi.CLS_NAME, 'twitter');
+        do
+        {
+            const locale : string = req['locale'];
+            const param = req.body;
+            const condition =
+            {
+                accessToken:       ['string', null, true],
+                accessTokenSecret: ['string', null, true]
+            }
+
+            if (Utils.existsParameters(param, condition) === false)
+            {
+                const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
+                res.status(400).json(data);
+                break;
+            }
+
+            const accessToken       : string = param.accessToken;
+            const accessTokenSecret : string = param.accessTokenSecret;
+            process.nextTick(() =>
+            {
+                Twitter.verify(accessToken, accessTokenSecret, undefined, (err, user) =>
+                {
+                    req['command'] = 'login';
+                    req.user = user;
+                    Twitter.callback(req, res);
+                });
+            });
+        }
+        while (false);
+        log.stepOut();
+    }
+
+    /**
+     * Facebookでログインする<br>
+     * POST /api/login/facebook<br>
+     *
+     * <table>
+     * <tr><td>accessToken</td>
+     *     <td>アクセストークン</td></tr>
+     * </table>
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static facebook(req : express.Request, res : express.Response) : void
+    {
+        const log = slog.stepIn(LoginApi.CLS_NAME, 'facebook');
+        do
+        {
+            const locale : string = req['locale'];
+            const param = req.body;
+            const condition =
+            {
+                accessToken: ['string', null, true]
+            }
+
+            if (Utils.existsParameters(param, condition) === false)
+            {
+                const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
+                res.status(400).json(data);
+                break;
+            }
+
+            const accessToken : string = param.accessToken;
+            process.nextTick(() =>
+            {
+                Facebook.verify(accessToken, undefined, undefined, (err, user) =>
+                {
+                    req['command'] = 'login';
+                    req.user = user;
+                    Facebook.callback(req, res);
+                });
+            });
+        }
+        while (false);
+        log.stepOut();
+    }
+
+    /**
+     * Googleでログインする<br>
+     * POST /api/login/google<br>
+     *
+     * <table>
+     * <tr><td>accessToken</td>
+     *     <td>アクセストークン</td></tr>
+     * </table>
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static google(req : express.Request, res : express.Response) : void
+    {
+        const log = slog.stepIn(LoginApi.CLS_NAME, 'google');
+        do
+        {
+            const locale : string = req['locale'];
+            const param = req.body;
+            const condition =
+            {
+                accessToken: ['string', null, true]
+            }
+
+            if (Utils.existsParameters(param, condition) === false)
+            {
+                const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
+                res.status(400).json(data);
+                break;
+            }
+
+            const accessToken : string = param.accessToken;
+            process.nextTick(() =>
+            {
+                Google.verify(accessToken, undefined, undefined, (err, user) =>
+                {
+                    req['command'] = 'login';
+                    req.user = user;
+                    Google.callback(req, res);
+                });
+            });
+        }
+        while (false);
+        log.stepOut();
+    }
 
     /**
      * メールアドレスでログインする<br>
@@ -58,11 +204,12 @@ export default class LoginApi
                     break;
                 }
 
-                const account : Account = yield AccountModel.findByProviderId('email', param.email);
+                const email : string = param.email;
+                const account : Account = yield AccountModel.findByProviderId('email', email);
                 let hashPassword : string;
 
                 if (account)
-                    hashPassword = Utils.getHashPassword(param.email, param.password, Config.PASSWORD_SALT);
+                    hashPassword = Utils.getHashPassword(email, param.password, Config.PASSWORD_SALT);
 
                 if (account === null || account.password !== hashPassword || account.signup_id)
                 {
@@ -73,7 +220,7 @@ export default class LoginApi
 
                 process.nextTick(() =>
                 {
-                    Email.verify(param.email, hashPassword, (err, user) =>
+                    Email.verify(email, hashPassword, (err, user) =>
                     {
                         req['command'] = 'login';
                         req.user = user;

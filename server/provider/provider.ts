@@ -343,7 +343,7 @@ export default class Provider
                     }
                     else
                     {
-                        const data = {status:0, id:smsId};
+                        const data = {status:0, id:smsId, sessionId:session.id};
                         res.json(data);
                     }
                 }
