@@ -22,8 +22,6 @@ export default class Email extends Provider
     private static CLS_NAME_2 = 'Email';
 
     /**
-     * passportEmail.Strategyに渡すコールバック
-     *
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      * @param   profile         プロフィール
@@ -31,13 +29,7 @@ export default class Email extends Provider
      */
     static verify(email : string, password : string, done : Function) : void
     {
-        const profile : passport.Profile =
-        {
-            provider: 'email',
-            displayName: email,
-            id: undefined
-        };
-        super._verify(email, password, profile, done);
+        super._verify('email', email, password, done);
     }
 
     /**

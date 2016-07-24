@@ -5,6 +5,7 @@ import Config                            from '../config';
 import {PassportUser}                    from '../libs/passport';
 import R                                 from '../libs/r';
 import Utils                             from '../libs/utils';
+import ResponseData                      from '../libs/response-data';
 import AccountModel, {Account}           from '../models/account-model';
 import SessionModel, {Session}           from '../models/session-model';
 import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
@@ -27,6 +28,12 @@ export default class Provider
      * inquiry()により設定される
      */
     id : string = null;
+
+    /**
+     * プロバイダでのアカウント名
+     * inquiry()により設定される
+     */
+    name : string = null;
 
     /**
      * カスタムコールバック
@@ -57,23 +64,21 @@ export default class Provider
     }
 
     /**
+     * @param   provider        プロバイダ名
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
-     * @param   profile         プロフィール
      * @param   done
      */
-    protected static _verify(accessToken : string, refreshToken : string, profile : passport.Profile, done : Function) : void
+    protected static _verify(provider : string, accessToken : string, refreshToken : string, done : Function) : void
     {
         const log = slog.stepIn(Provider.CLS_NAME, '_verify');
         const user : PassportUser =
         {
-            provider:     profile.provider,
-            name:         profile.displayName,
+            provider:     provider,
             accessToken:  accessToken,
             refreshToken: refreshToken
         };
-        log.d('user:'    + JSON.stringify(user,    null, 2));
-        log.d('profile:' + JSON.stringify(profile, null, 2));
+        log.d('user:' + JSON.stringify(user, null, 2));
 
         process.nextTick(() => done(null, user));
         log.stepOut();
@@ -314,7 +319,7 @@ export default class Provider
     {
         const account = new Account();
         account[user.provider] = this.id;
-        account.name = user.name;
+        account.name = this.name;
         return account;
     }
 
@@ -328,16 +333,34 @@ export default class Provider
         {
             co(function* ()
             {
-                if (phrase)
+                if (req.path.startsWith('/api/'))
                 {
-                    session.message_id = phrase;
-                    yield SessionModel.update(session);
+                    if (phrase)
+                    {
+                        const locale = req['locale'];
+                        const data = ResponseData.error(-1, R.text(phrase, locale));
+                        res.json(data);
+                    }
+                    else
+                    {
+                        const data = {status:0, id:smsId};
+                        res.json(data);
+                    }
+                }
+                else
+                {
+                    if (phrase)
+                    {
+                        session.message_id = phrase;
+                        yield SessionModel.update(session);
+                    }
+
+                    if (smsId)
+                        redirect += `?id=${smsId}`;
+
+                    res.redirect(redirect);
                 }
 
-                if (smsId)
-                    redirect += `?id=${smsId}`;
-
-                res.redirect(redirect);
                 log.stepOut();
                 resolve();
             })

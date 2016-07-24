@@ -39,7 +39,7 @@ export default class Google extends Provider
      */
     static verify(accessToken : string, refreshToken : string, profile : passportGoogle.Profile, done : Function) : void
     {
-        super._verify(accessToken, refreshToken, profile, done);
+        super._verify('google', accessToken, refreshToken, done);
     }
 
     /**
@@ -86,8 +86,11 @@ export default class Google extends Provider
 //                  console.log(err);
 //                  console.log(JSON.stringify(profile, null, 2));
 
-                    if (profile && 'id' in profile)
-                        self.id = profile.id;
+                    if (profile)
+                    {
+                        self.id =   profile.id;
+                        self.name = profile.displayName;
+                    }
 
                     log.stepOut();
                     resolve();

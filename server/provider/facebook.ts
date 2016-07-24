@@ -37,7 +37,7 @@ export default class Facebook extends Provider
      */
     static verify(accessToken : string, refreshToken : string, profile : passportFacebook.Profile, done : Function) : void
     {
-        super._verify(accessToken, refreshToken, profile, done);
+        super._verify('facebook', accessToken, refreshToken, done);
     }
 
     /**
@@ -137,10 +137,11 @@ export default class Facebook extends Provider
             },
             (result) =>
             {
+//              console.log(JSON.stringify(result, null, 2));
                 if ('id' in result)
                 {
-                    this.id = result.id;
-                    log.d(`name:${result.name}`);
+                    this.id =   result.id;
+                    this.name = result.name;
                 }
                 else
                 {

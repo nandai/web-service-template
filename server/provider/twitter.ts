@@ -27,7 +27,7 @@ export default class Twitter extends Provider
     }
 
     /**
-     * passportFacebook.Strategyに渡すコールバック
+     * passportTwitter.Strategyに渡すコールバック
      *
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
@@ -36,7 +36,7 @@ export default class Twitter extends Provider
      */
     static verify(accessToken : string, refreshToken : string, profile : passportTwitter.Profile, done : Function) : void
     {
-        super._verify(accessToken, refreshToken, profile, done);
+        super._verify('twitter', accessToken, refreshToken, done);
     }
 
     /**
@@ -66,8 +66,6 @@ export default class Twitter extends Provider
     protected inquiry(accessToken : string, refreshToken : string) : Promise<any>
     {
         const log = slog.stepIn(Twitter.CLS_NAME_2, 'inquiry');
-        const self = this;
-
         return new Promise((resolve, reject) =>
         {
             try
@@ -82,16 +80,16 @@ export default class Twitter extends Provider
 
                 provider
                     .get('account/verify_credentials', {skip_status:true})
-                    .then(function (result)
+                    .then((result) =>
                     {
 //                      console.log(JSON.stringify(result, null, 2));
-                        const success = self.validateAccessToken(accessToken, result);
+                        const success = this.validateAccessToken(accessToken, result);
 
                         if (success)
                         {
                             const data = result.data;
-                            self.id = data.id_str;
-                            log.d(`name:${data.name}`);
+                            this.id =   data.id_str;
+                            this.name = data.name;
                         }
 
                         log.stepOut();
