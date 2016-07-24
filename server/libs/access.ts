@@ -1,6 +1,7 @@
 /**
  * (C) 2016 printf.jp
  */
+import Config       from '../config';
 import Cookie       from './cookie';
 import R            from './r';
 import Utils        from './utils';
@@ -201,9 +202,11 @@ export default class Access
                 }
 
                 req['command'] = session.command_id;
-
-                session.regenerate();
                 session.command_id = null;
+
+                if (Config.SESSION_REGENERATE)
+                    session.regenerate();
+
                 yield SessionModel.update(session);
             }
 

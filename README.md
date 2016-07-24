@@ -9,6 +9,7 @@
         "ssl-cert":                "",
         "ssl-ca":                  "",
         "ssl-passphrase":          "",
+        "session-regenerate":      false,
         "session-secret":          "",
         "password-salt":           "",
         "smtp-host":               "",
