@@ -186,9 +186,7 @@ class Initializer
         // APIs
         this.app.post('/api/signup/email',         SignupApi.email);
         this.app.post('/api/signup/email/confirm', SignupApi.confirmEmail);
-        this.app.post('/api/login/twitter',        LoginApi. twitter);
-        this.app.post('/api/login/facebook',       LoginApi. facebook);
-        this.app.post('/api/login/google',         LoginApi. google);
+        this.app.post('/api/login/:provider',      LoginApi. provider);
         this.app.post('/api/login/email',          LoginApi. email);
         this.app.post('/api/login/sms',            LoginApi. sms);
         this.app.post('/api/reset',                ResetApi. index);
