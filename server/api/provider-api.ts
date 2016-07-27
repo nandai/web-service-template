@@ -19,6 +19,51 @@ export default class ProviderApi
     private static CLS_NAME = 'ProviderApi';
 
     /**
+     * ログインする<br>
+     * POST /api/{command}/:provider<br>
+     *
+     * <table>
+     * <tr><td>accessToken</td>
+     *     <td>アクセストークン</td></tr>
+     *
+     * <tr><td>accessTokenSecret</td>
+     *     <td>アクセストークンシークレット。Twitterのみ</td></tr>
+     * </table>
+     *
+     * @param   req     httpリクエスト
+     * @param   res     httpレスポンス
+     * @param   command コマンド（'signup', 'login', 'link'）
+     */
+    protected static provider(req : express.Request, res : express.Response, command : string) : void
+    {
+        const log = slog.stepIn(ProviderApi.CLS_NAME, 'provider');
+        const provider = req.params.provider;
+        let fn : (req : express.Request, res : express.Response, command : string) => void = null;
+
+        log.d(`${provider}`);
+
+        switch (provider)
+        {
+            case 'twitter':  fn = ProviderApi.twitter;  break;
+            case 'facebook': fn = ProviderApi.facebook; break;
+            case 'google':   fn = ProviderApi.google;   break;
+        }
+
+        if (fn === null)
+        {
+            const locale : string = req['locale'];
+            const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
+            res.status(400).json(data);
+        }
+        else
+        {
+            fn(req, res, command);
+        }
+
+        log.stepOut();
+    }
+
+    /**
      * Twitterでサインアップ、ログイン、または紐づけをする<br>
      * POST /api/login/twitter<br>
      *
@@ -34,7 +79,7 @@ export default class ProviderApi
      * @param   res     httpレスポンス
      * @param   command コマンド（'signup', 'login', 'link'）
      */
-    protected static twitter(req : express.Request, res : express.Response, command : string) : void
+    private static twitter(req : express.Request, res : express.Response, command : string) : void
     {
         const log = slog.stepIn(ProviderApi.CLS_NAME, 'twitter');
         do
@@ -83,7 +128,7 @@ export default class ProviderApi
      * @param   res     httpレスポンス
      * @param   command コマンド（'signup', 'login', 'link'）
      */
-    protected static facebook(req : express.Request, res : express.Response, command : string) : void
+    private static facebook(req : express.Request, res : express.Response, command : string) : void
     {
         const log = slog.stepIn(ProviderApi.CLS_NAME, 'facebook');
         do
@@ -130,7 +175,7 @@ export default class ProviderApi
      * @param   res     httpレスポンス
      * @param   command コマンド（'signup', 'login', 'link'）
      */
-    protected static google(req : express.Request, res : express.Response, command : string) : void
+    private static google(req : express.Request, res : express.Response, command : string) : void
     {
         const log = slog.stepIn(ProviderApi.CLS_NAME, 'google');
         do

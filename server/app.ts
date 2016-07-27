@@ -184,6 +184,7 @@ class Initializer
         this.app.get( '/login/google',    loginCommand,  authGoogle);
 
         // APIs
+        this.app.post('/api/signup/:provider',     SignupApi. provider);
         this.app.post('/api/signup/email',         SignupApi.email);
         this.app.post('/api/signup/email/confirm', SignupApi.confirmEmail);
         this.app.post('/api/login/:provider',      LoginApi. provider);

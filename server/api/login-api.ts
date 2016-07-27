@@ -2,9 +2,9 @@
  * (C) 2016 printf.jp
  */
 import Config       from '../config';
-import R            from '../libs/r';
 import Utils        from '../libs/utils';
 import ResponseData from '../libs/response-data';
+import R            from '../libs/r';
 import Email        from '../provider/email';
 import ProviderApi  from './provider-api';
 import AccountModel, {Account} from '../models/account-model';
@@ -24,7 +24,7 @@ export default class LoginApi extends ProviderApi
 
     /**
      * ログインする<br>
-     * POST /api/login/twitter<br>
+     * POST /api/login/:provider<br>
      *
      * <table>
      * <tr><td>accessToken</td>
@@ -39,29 +39,7 @@ export default class LoginApi extends ProviderApi
      */
     static provider(req : express.Request, res : express.Response) : void
     {
-        const log = slog.stepIn(LoginApi.CLS_NAME_2, 'provider');
-        const provider = req.params.provider;
-        let fn : (req : express.Request, res : express.Response, command : string) => void = null;
-
-        switch (provider)
-        {
-            case 'twitter':  fn = ProviderApi.twitter;  break;
-            case 'facebook': fn = ProviderApi.facebook; break;
-            case 'google':   fn = ProviderApi.google;   break;
-        }
-
-        if (fn === null)
-        {
-            const locale : string = req['locale'];
-            const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-            res.status(400).json(data);
-        }
-        else
-        {
-            fn(req, res, 'login');
-        }
-
-        log.stepOut();
+        ProviderApi.provider(req, res, 'login');
     }
 
     /**

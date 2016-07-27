@@ -6,6 +6,7 @@ import Utils        from '../libs/utils';
 import ResponseData from '../libs/response-data';
 import R            from '../libs/r';
 import Email        from '../provider/email';
+import ProviderApi  from './provider-api';
 import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
@@ -15,9 +16,29 @@ const co =       require('co');
 /**
  * サインアップAPI
  */
-export default class SignupApi
+export default class SignupApi extends ProviderApi
 {
-    private static CLS_NAME = 'SignupApi';
+    private static CLS_NAME_2 = 'SignupApi';
+
+    /**
+     * サインアップする<br>
+     * POST /api/signup/:provider<br>
+     *
+     * <table>
+     * <tr><td>accessToken</td>
+     *     <td>アクセストークン</td></tr>
+     *
+     * <tr><td>accessTokenSecret</td>
+     *     <td>アクセストークンシークレット。Twitterのみ</td></tr>
+     * </table>
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static provider(req : express.Request, res : express.Response) : void
+    {
+        ProviderApi.provider(req, res, 'signup');
+    }
 
     /**
      * メールアドレスでサインアップする<br>
@@ -36,7 +57,7 @@ export default class SignupApi
      */
     static email(req : express.Request, res : express.Response) : void
     {
-        const log = slog.stepIn(SignupApi.CLS_NAME, 'email');
+        const log = slog.stepIn(SignupApi.CLS_NAME_2, 'email');
         do
         {
             const locale : string = req['locale'];
@@ -93,7 +114,7 @@ export default class SignupApi
      */
     static confirmEmail(req : express.Request, res : express.Response) : void
     {
-        const log = slog.stepIn(SignupApi.CLS_NAME, 'confirmEmail');
+        const log = slog.stepIn(SignupApi.CLS_NAME_2, 'confirmEmail');
         co(function* ()
         {
             do
