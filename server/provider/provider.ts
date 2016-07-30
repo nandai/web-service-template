@@ -269,12 +269,12 @@ export default class Provider
 
                     case 'link':
                     {
-                        // 紐付け処理
+                        // 紐づけ処理
                         if (findAccount === null)
                         {
                             if (session.account_id)
                             {
-                                log.i('紐付け可能。ログインしているので、紐付けを続行し、設定画面へ移動する');
+                                log.i('紐づけ可能。ログインしているので、紐づけを続行し、設定画面へ移動する');
 
                                 // アカウント更新
                                 const account : Account = yield AccountModel.find(session.account_id);

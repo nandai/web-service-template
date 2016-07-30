@@ -170,6 +170,8 @@ class Initializer
         const authFacebook = passport.authenticate('facebook');
         const authGoogle =   passport.authenticate('google', {scope:['https://www.googleapis.com/auth/plus.login']});
 
+        const provider = ':provider(twitter|facebook|google)';
+
         this.app.get( '/',       TopController.   index);
         this.app.get( '/signup', SignupController.index);
         this.app.get( '/forget', ForgetController.index);
@@ -184,10 +186,10 @@ class Initializer
         this.app.get( '/login/google',    loginCommand,  authGoogle);
 
         // APIs
-        this.app.post('/api/signup/:provider',     SignupApi. provider);
+        this.app.post(`/api/signup/${provider}`,   SignupApi.provider);
         this.app.post('/api/signup/email',         SignupApi.email);
         this.app.post('/api/signup/email/confirm', SignupApi.confirmEmail);
-        this.app.post('/api/login/:provider',      LoginApi. provider);
+        this.app.post(`/api/login/${provider}`,    LoginApi. provider);
         this.app.post('/api/login/email',          LoginApi. email);
         this.app.post('/api/login/sms',            LoginApi. sms);
         this.app.post('/api/reset',                ResetApi. index);
@@ -212,15 +214,13 @@ class Initializer
         this.app.get(   '/settings/account/link/google',   linkCommand, authGoogle);
 
         // APIs
-        this.app.get(   '/api/settings/account',                 SettingsApi.account);
-        this.app.put(   '/api/settings/account',                 SettingsApi.account);
-        this.app.put(   '/api/settings/account/unlink/twitter',  SettingsApi.unlinkTwitter);
-        this.app.put(   '/api/settings/account/unlink/facebook', SettingsApi.unlinkFacebook);
-        this.app.put(   '/api/settings/account/unlink/google',   SettingsApi.unlinkGoogle);
-        this.app.put(   '/api/settings/account/email',           SettingsApi.email);
-        this.app.put(   '/api/settings/account/password',        SettingsApi.password);
-        this.app.delete('/api/settings/account/leave',           SettingsApi.leave);
-        this.app.post(  '/api/logout',                           LogoutApi.  index);
+        this.app.get(   '/api/settings/account',                    SettingsApi.account);
+        this.app.put(   '/api/settings/account',                    SettingsApi.account);
+        this.app.put(   `/api/settings/account/unlink/${provider}`, SettingsApi.unlink);
+        this.app.put(   '/api/settings/account/email',              SettingsApi.email);
+        this.app.put(   '/api/settings/account/password',           SettingsApi.password);
+        this.app.delete('/api/settings/account/leave',              SettingsApi.leave);
+        this.app.post(  '/api/logout',                              LogoutApi.  index);
 
         this.app.use(Access.notFound);
     }

@@ -40,25 +40,21 @@ export default class ProviderApi
         const provider = req.params.provider;
         let fn : (req : express.Request, res : express.Response, command : string) => void = null;
 
-        log.d(`${provider}`);
+        log.d(`provider:${provider}, command:${command}`);
 
         switch (provider)
         {
             case 'twitter':  fn = ProviderApi.twitter;  break;
             case 'facebook': fn = ProviderApi.facebook; break;
             case 'google':   fn = ProviderApi.google;   break;
+            default:
+                // ルートパスの正規表現に誤りがない限りここに到達することはない
+                log.e('無効なプロバイダ');
+                break;
         }
 
-        if (fn === null)
-        {
-            const locale : string = req['locale'];
-            const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-            res.status(400).json(data);
-        }
-        else
-        {
+        if (fn)
             fn(req, res, command);
-        }
 
         log.stepOut();
     }

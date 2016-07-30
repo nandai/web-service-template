@@ -128,82 +128,41 @@ export default class SettingsApi
     }
 
     /**
+     * 紐づけを解除する<br>
+     * PUT /api/settings/account/unlink/:provider
+     *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static unlinkTwitter(req : express.Request, res : express.Response) : void
-    {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlinkTwitter');
-        co(function* ()
-        {
-            yield SettingsApi.unlink(req, res, 'twitter');
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
-    }
-
-    /**
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
-     */
-    static unlinkFacebook(req : express.Request, res : express.Response) : void
-    {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlinkFacebook');
-        co(function* ()
-        {
-            yield SettingsApi.unlink(req, res, 'facebook');
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
-    }
-
-    /**
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
-     */
-    static unlinkGoogle(req : express.Request, res : express.Response) : void
-    {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlinkGoogle');
-        co(function* ()
-        {
-            yield SettingsApi.unlink(req, res, 'google');
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
-    }
-
-    /**
-     * @param   req         httpリクエスト
-     * @param   res         httpレスポンス
-     * @param   provider    プロバイダ名
-     */
-    static unlink(req : express.Request, res : express.Response, provider : string) : Promise<any>
+    static unlink(req : express.Request, res : express.Response) : void
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlink');
-        return new Promise((resolve, reject) =>
+        co(function* ()
         {
-            co(function* ()
+            // アカウント更新
+            const provider : string = req.params.provider;
+            log.d(`${provider}`);
+
+            const session : Session = req['sessionObj'];
+            const account : Account = yield AccountModel.find(session.account_id);
+            let data = {};
+
+            if (account.canUnlink(provider))
             {
-                // アカウント更新
-                const session : Session = req['sessionObj'];
-                const account : Account = yield AccountModel.find(session.account_id);
-                let data = {};
+                account[provider] = null;
+                yield AccountModel.update(account);
 
-                if (account.canUnlink(provider))
-                {
-                    account[provider] = null;
-                    yield AccountModel.update(account);
+                data = ResponseData.ok(0);
+            }
+            else
+            {
+                const locale : string = req['locale'];
+                data = ResponseData.error(-1, R.text(R.CANNOT_UNLINK, locale));
+            }
 
-                    data = ResponseData.ok(0);
-                }
-                else
-                {
-                    const locale : string = req['locale'];
-                    data = ResponseData.error(-1, R.text(R.CANNOT_UNLINK, locale));
-                }
-
-                res.json(data);
-                resolve();
-            })
-            .catch ((err) => Utils.internalServerError(err, res, log));
-        });
+            res.json(data);
+        })
+        .catch ((err) => Utils.internalServerError(err, res, log));
     }
 
     /**
