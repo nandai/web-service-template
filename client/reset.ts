@@ -45,14 +45,14 @@ class ResetView extends View
     {
         const log = slog.stepIn(ResetView.CLS_NAME, 'onClickChangeButton');
 
-        const reset_id = $('#reset-id').val();
+        const resetId = $('#reset-id').val();
         const password = this.passwordTextBox.getValue();
         const confirm =  this.confirmTextBox. getValue();
 
         $.ajax({
             type: 'PUT',
             url: '/api/reset/change',
-            data: {reset_id, password, confirm}
+            data: {resetId, password, confirm}
         })
 
         .done((data, status, jqXHR) =>

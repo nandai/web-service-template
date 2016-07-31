@@ -51,7 +51,7 @@ export default class SettingsApi
                 status: 0,
                 name:      account.name,
                 email:     account.email,
-                phone_no:  account.phone_no,
+                phoneNo:   account.phone_no,
                 twitter:  (account.twitter  !== null),
                 facebook: (account.facebook !== null),
                 google:   (account.google   !== null)
@@ -89,8 +89,8 @@ export default class SettingsApi
                 const param = req.body;
                 const condition =
                 {
-                    name:     ['string', null, true],
-                    phone_no: ['string', null, true]
+                    name:    ['string', null, true],
+                    phoneNo: ['string', null, true]
                 }
 
                 if (Utils.existsParameters(param, condition) === false)
@@ -115,7 +115,7 @@ export default class SettingsApi
                 const account : Account = yield AccountModel.find(session.account_id);
 
                 account.name =      param.name;
-                account.phone_no = (param.phone_no.length > 0 ? param.phone_no : null);
+                account.phone_no = (param.phoneNo.length > 0 ? param.phoneNo : null);
                 yield AccountModel.update(account);
 
                 const data = ResponseData.ok(1, R.text(R.SETTINGS_COMPLETED, locale));
@@ -300,8 +300,8 @@ export default class SettingsApi
                 const param = req.body;
                 const condition =
                 {
-                    change_id: ['string', null, true],
-                    password:  ['string', null, true]
+                    changeId: ['string', null, true],
+                    password: ['string', null, true]
                 }
 
                 if (Utils.existsParameters(param, condition) === false)
@@ -311,7 +311,7 @@ export default class SettingsApi
                     break;
                 }
 
-                const changeId = param.change_id;
+                const changeId = param.changeId;
                 const account : Account = yield AccountModel.findByChangeId(changeId);
 
                 if (account)
@@ -393,9 +393,9 @@ export default class SettingsApi
                 const param = req.body;
                 const condition =
                 {
-                    old_password: ['string', null, true],
-                    new_password: ['string', null, true],
-                    confirm:      ['string', null, true]
+                    oldPassword: ['string', null, true],
+                    newPassword: ['string', null, true],
+                    confirm:     ['string', null, true]
                 }
 
                 if (Utils.existsParameters(param, condition) === false)
@@ -408,9 +408,9 @@ export default class SettingsApi
                 const session : Session = req['sessionObj'];
                 const account : Account = yield AccountModel.find(session.account_id);
 
-                if (account.password !== null || param.old_password !== '')
+                if (account.password !== null || param.oldPassword !== '')
                 {
-                    const hashPassword = Utils.getHashPassword(account.email, param.old_password, Config.PASSWORD_SALT);
+                    const hashPassword = Utils.getHashPassword(account.email, param.oldPassword, Config.PASSWORD_SALT);
 
                     if (hashPassword !== account.password)
                     {
@@ -420,14 +420,14 @@ export default class SettingsApi
                     }
                 }
 
-                if (Utils.validatePassword(param.new_password) === false)
+                if (Utils.validatePassword(param.newPassword) === false)
                 {
                     const data = ResponseData.error(-1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
                     res.json(data);
                     break;
                 }
 
-                if (param.new_password !== param.confirm)
+                if (param.newPassword !== param.confirm)
                 {
                     const data = ResponseData.error(-1, R.text(R.MISMATCH_PASSWORD, locale));
                     res.json(data);

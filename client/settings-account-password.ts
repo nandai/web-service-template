@@ -48,14 +48,14 @@ class SettingsAccountPasswordView extends View
     {
         const log = slog.stepIn(SettingsAccountPasswordView.CLS_NAME, 'onClickChangeButton');
 
-        const old_password = this.oldPasswordTextBox.getValue();
-        const new_password = this.newPasswordTextBox.getValue();
-        const confirm =      this.confirmTextBox.    getValue();
+        const oldPassword = this.oldPasswordTextBox.getValue();
+        const newPassword = this.newPasswordTextBox.getValue();
+        const confirm =     this.confirmTextBox.    getValue();
 
         $.ajax({
             type: 'PUT',
             url: '/api/settings/account/password',
-            data: {old_password, new_password, confirm}
+            data: {oldPassword, newPassword, confirm}
         })
 
         .done((data, status, jqXHR) =>

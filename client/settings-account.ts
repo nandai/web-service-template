@@ -45,7 +45,7 @@ class SettingsAccountView extends View
         {
             const account = data;
             this.nameTextBox.   setValue(account.name);
-            this.phoneNoTextBox.setValue(account.phone_no);
+            this.phoneNoTextBox.setValue(account.phoneNo);
         })
 
         .fail((jqXHR, status, error) =>
@@ -62,14 +62,13 @@ class SettingsAccountView extends View
     {
         const log = slog.stepIn(SettingsAccountView.CLS_NAME, 'onClickChangeButton');
 
+        const name =    this.nameTextBox.   getValue();
+        const phoneNo = this.phoneNoTextBox.getValue();
+
         $.ajax({
             type: 'PUT',
             url: '/api/settings/account',
-            data:
-            {
-                name:     this.nameTextBox.   getValue(),
-                phone_no: this.phoneNoTextBox.getValue()
-            }
+            data: {name, phoneNo}
         })
 
         .done((data, status, jqXHR) =>

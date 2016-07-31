@@ -44,7 +44,7 @@ class SettingsAccountEmailChangeView extends View
         const log = slog.stepIn(SettingsAccountEmailChangeView.CLS_NAME, 'onClickChangeButton');
         const data =
         {
-            change_id: $('#change-id').val(),
+            changeId: $('#change-id').val(),
             password: this.passwordTextBox.getValue()
         };
 

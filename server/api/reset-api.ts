@@ -104,7 +104,7 @@ export default class ResetApi
                 const param = req.body;
                 const condition =
                 {
-                    reset_id: ['string', null, true],
+                    resetId:  ['string', null, true],
                     password: ['string', null, true],
                     confirm:  ['string', null, true]
                 }
@@ -130,7 +130,7 @@ export default class ResetApi
                     break;
                 }
 
-                const resetId = param.reset_id;
+                const resetId = param.resetId;
                 const account : Account = yield AccountModel.findByResetId(resetId);
 
                 if (account)

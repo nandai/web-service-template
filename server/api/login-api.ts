@@ -135,8 +135,8 @@ export default class LoginApi extends ProviderApi
                 const param = req.body;
                 const condition =
                 {
-                    sms_id:   ['string', null, true],
-                    sms_code: ['string', null, true]
+                    smsId:   ['string', null, true],
+                    smsCode: ['string', null, true]
                 }
 
                 if (Utils.existsParameters(param, condition) === false)
@@ -146,12 +146,12 @@ export default class LoginApi extends ProviderApi
                     break;
                 }
 
-                const smsId = param.sms_id;
+                const smsId = param.smsId;
                 const account : Account = yield AccountModel.findBySmsId(smsId);
 
                 if (account)
                 {
-                    if (account.sms_code !== param.sms_code)
+                    if (account.sms_code !== param.smsCode)
                     {
                         const data = ResponseData.error(-1, R.text(R.MISMATCH_SMS_CODE, locale));
                         res.json(data);

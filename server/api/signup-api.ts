@@ -123,8 +123,8 @@ export default class SignupApi extends ProviderApi
                 const param = req.body;
                 const condition =
                 {
-                    signup_id: ['string', null, true],
-                    password:  ['string', null, true]
+                    signupId: ['string', null, true],
+                    password: ['string', null, true]
                 }
 
                 if (Utils.existsParameters(param, condition) === false)
@@ -134,7 +134,7 @@ export default class SignupApi extends ProviderApi
                     break;
                 }
 
-                const signupId : string = param.signup_id;
+                const signupId : string = param.signupId;
                 const account : Account = yield AccountModel.findBySignupId(signupId);
 
                 if (account === null)

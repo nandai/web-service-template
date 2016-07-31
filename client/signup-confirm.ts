@@ -44,7 +44,7 @@ class SignupConfirmView extends View
         const log = slog.stepIn(SignupConfirmView.CLS_NAME, 'onClickConfirmButton');
         const data =
         {
-            signup_id: $('#signup-id').val(),
+            signupId: $('#signup-id').val(),
             password: this.passwordTextBox.getValue()
         };
 
