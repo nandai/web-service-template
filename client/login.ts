@@ -137,7 +137,7 @@ class LoginView extends View
 
             if (data.status === 0)
             {
-                location.href = (data.id === undefined ? '/' : `?id=${data.id}`);
+                location.href = (data.smsId === undefined ? '/' : `?id=${data.smsId}`);
             }
             else
             {

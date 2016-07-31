@@ -59,7 +59,7 @@ gulp.task('typeScript', function ()
         .pipe(gulp.dest('./build-client'));
 });
 
-gulp.task('build-client', ['typeScript'], function ()
+gulp.task('build-client', ['typeScript', 'build-server'], function ()
 {
     buildClient('index.js');
     buildClient('signup.js');
@@ -83,5 +83,5 @@ function buildClient(fileName)
         .pipe(gulp.dest('.'));
 }
 
-gulp.task('build', ['build-server', 'build-client']);
+gulp.task('build', ['build-client']);
 gulp.task('default', ['build']);
