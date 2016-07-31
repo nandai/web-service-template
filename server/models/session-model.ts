@@ -22,14 +22,6 @@ export class Session
     command_id : string = null;
     message_id : string = null;
     created_at : string = null;
-
-    /**
-     * 再生成
-     */
-    regenerate() : void
-    {
-        this.id = uuid.v4();
-    }
 }
 
 /**

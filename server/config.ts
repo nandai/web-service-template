@@ -21,7 +21,6 @@ export default class Config
     static SSL_CERT = '';
     static SSL_CA = '';
     static SSL_PASSPHRASE = '';
-    static SESSION_REGENERATE = false;
     static SESSION_SECRET = '';
     static PASSWORD_SALT = '';
 
@@ -85,7 +84,6 @@ export default class Config
         Config.SSL_CERT =                Config.get(appData, 'ssl-cert');
         Config.SSL_CA =                  Config.get(appData, 'ssl-ca');
         Config.SSL_PASSPHRASE =          Config.get(appData, 'ssl-passphrase');
-        Config.SESSION_REGENERATE =      Config.get(appData, 'session-regenerate', 'boolean');
         Config.SESSION_SECRET =          Config.get(appData, 'session-secret');
         Config.PASSWORD_SALT =           Config.get(appData, 'password-salt');
         Config.SMTP_HOST =               Config.get(appData, 'smtp-host');

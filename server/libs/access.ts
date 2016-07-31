@@ -203,10 +203,6 @@ export default class Access
 
                 req['command'] = session.command_id;
                 session.command_id = null;
-
-                if (Config.SESSION_REGENERATE)
-                    session.regenerate();
-
                 yield SessionModel.update(session);
             }
 
