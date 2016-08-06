@@ -5,6 +5,7 @@
 /// <reference path='../typings/tsd.d.ts' />;
 
 import View from './view';
+import R    from './r';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];
@@ -32,10 +33,10 @@ class SettingsAccountPasswordView extends View
         const $newPasswordTextBox = $('#new-password');
         const $confirmTextBox =     $('#confirm');
 
-        this.oldPasswordTextBox = new sulas.TextBox($oldPasswordTextBox, $oldPasswordTextBox.width(), 30, '現在のパスワード', 'password');
-        this.newPasswordTextBox = new sulas.TextBox($newPasswordTextBox, $newPasswordTextBox.width(), 30, '新しいパスワード', 'password');
-        this.confirmTextBox =     new sulas.TextBox($confirmTextBox,     $confirmTextBox.    width(), 30, 'パスワードの確認', 'password');
-        this.changeButton =       new sulas.Button('#change',   0, 50, '変更する');
+        this.oldPasswordTextBox = new sulas.TextBox($oldPasswordTextBox, $oldPasswordTextBox.width(), 30, R.text(R.CURRENT_PASSWORD),   'password');
+        this.newPasswordTextBox = new sulas.TextBox($newPasswordTextBox, $newPasswordTextBox.width(), 30, R.text(R.NEW_PASSWORD),       'password');
+        this.confirmTextBox =     new sulas.TextBox($confirmTextBox,     $confirmTextBox.    width(), 30, R.text(R.NEW_PASSWORD_AGAIN), 'password');
+        this.changeButton =       new sulas.Button('#change',   0, 50, R.text(R.CHANGE));
 
         this.changeButton.on('click', this.onClickChangeButton.  bind(this));
         log.stepOut();

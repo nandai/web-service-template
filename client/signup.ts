@@ -5,6 +5,7 @@
 /// <reference path='../typings/tsd.d.ts' />;
 
 import View from './view';
+import R    from './r';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];
@@ -34,13 +35,13 @@ class SignupView extends View
         const $emailTextBox =    $('#email');
         const $passwordTextBox = $('#password');
 
-        this.twitterButton =   new sulas.Button('#twitter',  0, 50, 'twitterでサインアップする');
-        this.facebookButton =  new sulas.Button('#facebook', 0, 50, 'facebookサインアップする');
-        this.googleButton =    new sulas.Button('#google',   0, 50, 'googleでサインアップする');
-        this.emailTextBox =    new sulas.TextBox($emailTextBox,    $emailTextBox.   width(), 30, 'メールアドレス', 'email');
-        this.passwordTextBox = new sulas.TextBox($passwordTextBox, $passwordTextBox.width(), 30, 'パスワード',    'password');
-        this.signupButton =    new sulas.Button('#signup',   0, 50, 'サインアップ');
-        this.topButton =       new sulas.Button('#top',      0, 50, 'トップ画面へ');
+        this.twitterButton =   new sulas.Button('#twitter',  0, 50, R.text(R.SIGNUP_WITH_TWITTER));
+        this.facebookButton =  new sulas.Button('#facebook', 0, 50, R.text(R.SIGNUP_WITH_FACEBOOK));
+        this.googleButton =    new sulas.Button('#google',   0, 50, R.text(R.SIGNUP_WITH_GOOGLE));
+        this.emailTextBox =    new sulas.TextBox($emailTextBox,    $emailTextBox.   width(), 30, R.text(R.EMAIL),    'email');
+        this.passwordTextBox = new sulas.TextBox($passwordTextBox, $passwordTextBox.width(), 30, R.text(R.PASSWORD), 'password');
+        this.signupButton =    new sulas.Button('#signup',   0, 50, R.text(R.SIGNUP));
+        this.topButton =       new sulas.Button('#top',      0, 50, R.text(R.GO_TOP));
 
         this.twitterButton. on('click', this.onClickTwitterButton. bind(this));
         this.facebookButton.on('click', this.onClickFacebookButton.bind(this));

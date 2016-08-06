@@ -1,7 +1,6 @@
 /**
  * (C) 2016 printf.jp
  */
-import Config       from '../config';
 import Cookie       from './cookie';
 import R            from './r';
 import Utils        from './utils';
@@ -179,8 +178,9 @@ export default class Access
         const log = slog.stepIn(Access.CLS_NAME, 'session');
         co(function* ()
         {
+            const headers = req.headers;
             const cookie = new Cookie(req, res);
-            const sessionId = cookie.sessionId;
+            const sessionId = ('x-session-id' in headers ? headers['x-session-id'] : cookie.sessionId);
             let   session : Session = null;
 
             if (sessionId === undefined)

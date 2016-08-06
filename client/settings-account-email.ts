@@ -5,6 +5,7 @@
 /// <reference path='../typings/tsd.d.ts' />;
 
 import View from './view';
+import R    from './r';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];
@@ -28,8 +29,8 @@ class SettingsAccountEmailView extends View
 
         const $emailTextBox = $('#email');
 
-        this.emailTextBox =   new sulas.TextBox($emailTextBox, $emailTextBox.width(), 30, 'メールアドレス', 'email');
-        this.sendMailButton = new sulas.Button('#sendMail', 0, 50, '変更する');
+        this.emailTextBox =   new sulas.TextBox($emailTextBox, $emailTextBox.width(), 30, R.text(R.EMAIL), 'email');
+        this.sendMailButton = new sulas.Button('#sendMail', 0, 50, R.text(R.CHANGE));
 
         this.sendMailButton.on('click', this.onClickSendMailButton.bind(this));
 

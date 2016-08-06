@@ -4,7 +4,9 @@
 
 /// <reference path='../typings/tsd.d.ts' />;
 
-import View from './view';
+import View  from './view';
+import R     from './r';
+import Utils from './utils';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];
@@ -37,11 +39,11 @@ class SettingsView extends View
         this.twitterButton =  new sulas.Button('#twitter',  0, 50, '');
         this.facebookButton = new sulas.Button('#facebook', 0, 50, '');
         this.googleButton =   new sulas.Button('#google',   0, 50, '');
-        this.emailButton =    new sulas.Button('#email',    0, 50, 'メールアドレスを設定する');
-        this.passwordButton = new sulas.Button('#password', 0, 50, 'パスワードを設定する');
-        this.accountButton =  new sulas.Button('#account',  0, 50, 'アカウント設定');
-        this.leaveButton =    new sulas.Button('#leave',    0, 50, '退会する');
-        this.backButton =     new sulas.Button('#back',     0, 50, '戻る');
+        this.emailButton =    new sulas.Button('#email',    0, 50, R.text(R.GO_EMAIL_SETTINGS));
+        this.passwordButton = new sulas.Button('#password', 0, 50, R.text(R.GO_PASSWORD_SETTINGS));
+        this.accountButton =  new sulas.Button('#account',  0, 50, R.text(R.GO_ACCOUNT_SETTINGS));
+        this.leaveButton =    new sulas.Button('#leave',    0, 50, R.text(R.DELETE_ACCOUNT));
+        this.backButton =     new sulas.Button('#back',     0, 50, R.text(R.BACK));
 
         $.ajax({
             type: 'GET',
@@ -77,17 +79,17 @@ class SettingsView extends View
 
     private updateSnsButtons()
     {
-        this.twitterButton. setLabel(this.getLinkLabel('twitter'));
-        this.facebookButton.setLabel(this.getLinkLabel('facebook'));
-        this.googleButton.  setLabel(this.getLinkLabel('google'));
+        this.twitterButton. setLabel(this.getLinkLabel('Twitter',  'twitter'));
+        this.facebookButton.setLabel(this.getLinkLabel('Facebook', 'facebook'));
+        this.googleButton.  setLabel(this.getLinkLabel('Google',   'google'));
     }
 
-    private getLinkLabel(sns : string) : string
+    private getLinkLabel(provider : string, key : string) : string
     {
-        const label = (this.account[sns]
-            ? `${sns}との紐づけを解除する`
-            : `${sns}を紐づける`);
-        return label;
+        const format = R.text(this.account[key]
+            ? R.UNLINK_PROVIDER
+            : R.LINK_PROVIDER);
+        return Utils.formatString(format, {provider});
     }
 
     /**

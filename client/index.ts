@@ -5,6 +5,7 @@
 /// <reference path='../typings/tsd.d.ts' />;
 
 import View from './view';
+import R    from './r';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];
@@ -26,8 +27,8 @@ class TopView extends View
     {
         const log = slog.stepIn(TopView.CLS_NAME, 'init');
 
-        this.settingsButton = new sulas.Button('#settings', 0, 50, '設定画面へ');
-        this.logoutButton =   new sulas.Button('#logout',   0, 50, 'ログアウト');
+        this.settingsButton = new sulas.Button('#settings', 0, 50, R.text(R.GO_SETTINGS));
+        this.logoutButton =   new sulas.Button('#logout',   0, 50, R.text(R.LOGOUT));
 
         this.settingsButton.on('click', this.onClickSettingsButton.bind(this));
         this.logoutButton.  on('click', this.onClickLogoutButton.  bind(this));

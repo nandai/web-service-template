@@ -5,6 +5,7 @@
 /// <reference path='../typings/tsd.d.ts' />;
 
 import View from './view';
+import R    from './r';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];
@@ -28,8 +29,8 @@ class SettingsAccountEmailChangeView extends View
 
         const $passwordTextBox = $('#password');
 
-        this.passwordTextBox = new sulas.TextBox($passwordTextBox, $passwordTextBox.width(), 30, 'パスワード', 'password');
-        this.changeButton =    new sulas.Button('#change', 0, 50, '送信する');
+        this.passwordTextBox = new sulas.TextBox($passwordTextBox, $passwordTextBox.width(), 30, R.text(R.PASSWORD), 'password');
+        this.changeButton =    new sulas.Button('#change', 0, 50, R.text(R.SEND));
 
         this.changeButton.on('click', this.onClickChangeButton.bind(this));
 

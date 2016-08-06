@@ -5,6 +5,7 @@
 /// <reference path='../typings/tsd.d.ts' />;
 
 import View from './view';
+import R    from './r';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];
@@ -30,9 +31,9 @@ class SettingsAccountView extends View
         const $nameTextBox =    $('#name');
         const $phoneNoTextBox = $('#phone-no');
 
-        this.nameTextBox =    new sulas.TextBox($nameTextBox,    $nameTextBox.width(),    30, 'アカウント名', 'text');
-        this.phoneNoTextBox = new sulas.TextBox($phoneNoTextBox, $phoneNoTextBox.width(), 30, '電話番号',     'text');
-        this.changeButton =   new sulas.Button('#change', 0, 50, '変更する');
+        this.nameTextBox =    new sulas.TextBox($nameTextBox,    $nameTextBox.width(),    30, R.text(R.ACCOUNT_NAME), 'text');
+        this.phoneNoTextBox = new sulas.TextBox($phoneNoTextBox, $phoneNoTextBox.width(), 30, R.text(R.TEL),          'text');
+        this.changeButton =   new sulas.Button('#change', 0, 50, R.text(R.CHANGE));
 
         this.changeButton.on('click', this.onClickChangeButton.bind(this));
 

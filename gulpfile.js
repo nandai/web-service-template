@@ -1,16 +1,17 @@
 /**
  * (C) 2016 printf.jp
  */
-var gulp =       require('gulp');
-var typescript = require('gulp-typescript');
-var sourcemaps = require('gulp-sourcemaps');
-var browserify = require('browserify');
-var source =     require('vinyl-source-stream');
+var gulp =        require('gulp');
+var typescript =  require('gulp-typescript');
+var sourcemaps =  require('gulp-sourcemaps');
+var browserify =  require('browserify');
+var source =      require('vinyl-source-stream');
+var runSequence = require('run-sequence');
 
 /**
  * サーバービルド
  */
-gulp.task('build-server', function ()
+gulp.task('server', function ()
 {
     var src =
     [
@@ -43,7 +44,7 @@ gulp.task('build-server', function ()
 /**
  * クライアントビルド
  */
-gulp.task('typeScript', function ()
+gulp.task('client-typeScript', function ()
 {
     var src =
     [
@@ -54,12 +55,12 @@ gulp.task('typeScript', function ()
     {
     };
 
-    gulp.src(src)
+    return gulp.src(src)
         .pipe(typescript(tsOptions))
         .pipe(gulp.dest('./build-client'));
 });
 
-gulp.task('build-client', ['typeScript', 'build-server'], function ()
+gulp.task('client-browserify', function ()
 {
     buildClient('index.js');
     buildClient('signup.js');
@@ -83,5 +84,13 @@ function buildClient(fileName)
         .pipe(gulp.dest('.'));
 }
 
-gulp.task('build', ['build-client']);
-gulp.task('default', ['build']);
+gulp.task('client', function (callback)
+{
+    return runSequence(
+        'client-typeScript',
+        'client-browserify',
+        callback
+    )
+});
+
+gulp.task('default', ['server', 'client']);

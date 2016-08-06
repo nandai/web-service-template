@@ -5,6 +5,7 @@
 /// <reference path='../typings/tsd.d.ts' />;
 
 import View from './view';
+import R    from './r';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];
@@ -35,14 +36,14 @@ class LoginView extends View
         const $emailTextBox =    $('#email');
         const $passwordTextBox = $('#password');
 
-        this.twitterButton =   new sulas.Button('#twitter',  0, 50, 'twitterでログインする');
-        this.facebookButton =  new sulas.Button('#facebook', 0, 50, 'facebookでログインする');
-        this.googleButton =    new sulas.Button('#google',   0, 50, 'googleでログインする');
-        this.emailTextBox =    new sulas.TextBox($emailTextBox,    $emailTextBox.   width(), 30, 'メールアドレス', 'email');
-        this.passwordTextBox = new sulas.TextBox($passwordTextBox, $passwordTextBox.width(), 30, 'パスワード',    'password');
-        this.loginButton =     new sulas.Button('#login',    0, 50, 'ログイン');
-        this.signupButton =    new sulas.Button('#signup',   0, 50, 'サインアップ画面へ');
-        this.forgetButton =    new sulas.Button('#forget',   0, 50, 'パスワードを忘れた');
+        this.twitterButton =   new sulas.Button('#twitter',  0, 50, R.text(R.LOGIN_WITH_TWITTER));
+        this.facebookButton =  new sulas.Button('#facebook', 0, 50, R.text(R.LOGIN_WITH_FACEBOOK));
+        this.googleButton =    new sulas.Button('#google',   0, 50, R.text(R.LOGIN_WITH_GOOGLE));
+        this.emailTextBox =    new sulas.TextBox($emailTextBox,    $emailTextBox.   width(), 30, R.text(R.EMAIL),    'email');
+        this.passwordTextBox = new sulas.TextBox($passwordTextBox, $passwordTextBox.width(), 30, R.text(R.PASSWORD), 'password');
+        this.loginButton =     new sulas.Button('#login',    0, 50, R.text(R.LOGIN));
+        this.signupButton =    new sulas.Button('#signup',   0, 50, R.text(R.GO_SIGNUP));
+        this.forgetButton =    new sulas.Button('#forget',   0, 50, R.text(R.GO_FORGET));
 
         this.twitterButton. on('click', this.onClickTwitterButton. bind(this));
         this.facebookButton.on('click', this.onClickFacebookButton.bind(this));

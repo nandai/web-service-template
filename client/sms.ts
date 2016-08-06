@@ -5,6 +5,7 @@
 /// <reference path='../typings/tsd.d.ts' />;
 
 import View from './view';
+import R    from './r';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];
@@ -28,8 +29,8 @@ class SmsView extends View
 
         const $smsCodeTextBox = $('#sms-code');
 
-        this.smsCodeTextBox = new sulas.TextBox($smsCodeTextBox, $smsCodeTextBox.width(), 30, 'ログインコード', 'text');
-        this.sendButton =     new sulas.Button('#send', 0, 50, '送信する');
+        this.smsCodeTextBox = new sulas.TextBox($smsCodeTextBox, $smsCodeTextBox.width(), 30, R.text(R.LOGIN_CODE), 'text');
+        this.sendButton =     new sulas.Button('#send', 0, 50, R.text(R.SEND));
 
         this.sendButton.on('click', this.onClickSendButton.bind(this));
         log.stepOut();
