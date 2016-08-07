@@ -107,7 +107,7 @@ export default class Provider
 
                 if (self.id === null)
                 {
-                    log.i('プロバイダにアカウントが存在しない。');
+                    log.w('プロバイダにアカウントが存在しない。');
                     res.status(400).send('!?');
                     log.stepOut();
                     resolve();
@@ -117,6 +117,9 @@ export default class Provider
                 const findAccount : Account = yield AccountModel.findByProviderId(user.provider, self.id);
                 const session : Session = req['sessionObj'];
                 const command : string =  req['command'];
+
+                if (session === undefined)
+                    log.e('sessionObjがありません。');
 
                 switch (command)
                 {
@@ -293,6 +296,13 @@ export default class Provider
                             // 設定画面へ
                             yield self.sendResponse(req, res, session, '/settings', R.CANNOT_LINK);
                         }
+                        break;
+                    }
+
+                    default:
+                    {
+                        log.e(`command '${command}' が正しくありません。`);
+                        res.status(400).send('!?');
                         break;
                     }
                 }

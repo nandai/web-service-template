@@ -138,6 +138,11 @@ export default class Twitter extends Provider
                 }
             }
         }
+        else
+        {
+//          log.w(JSON.stringify(result, null, 2));
+            log.w(result.data.errors.message);
+        }
 
         log.stepOut();
         return success;

@@ -19,7 +19,7 @@ export default class ProviderApi
     private static CLS_NAME = 'ProviderApi';
 
     /**
-     * ログインする<br>
+     * サインアップ、またはログインする<br>
      * POST /api/{command}/:provider<br>
      *
      * <table>

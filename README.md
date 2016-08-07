@@ -25,15 +25,6 @@
         "twilio-account_sid":      "",
         "twilio-auth-token":       "",
         "twilio-from-phone-no":    ""
-    },
-
-    "test":
-    {
-        "twitter-access-token":  "",
-        "twitter-refresh-token": "",
-        "twitter-id":            "",
-        "facebook-access-token": "",
-        "facebook-id":           ""
     }
 }
 ```
