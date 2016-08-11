@@ -6,7 +6,7 @@ SNSアカウント認証にはpassportを使用し、認証後はカスタムコ
 # 設定
 SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し、ルートディレクトリ（package.jsonのあるディレクトリ）に配置します。フォーマットは以下の通り。
 
-```
+```json
 {
     "app":
     {
@@ -36,3 +36,5 @@ SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し
 }
 ```
 
+# 起動方法
+node build/app
