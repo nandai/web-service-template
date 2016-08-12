@@ -29,7 +29,7 @@ SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し
         "facebook-app-secret":     "",
         "google-client-id":        "",
         "google-client-secret":    "",
-        "twilio-account_sid":      "",
+        "twilio-account-sid":      "",
         "twilio-auth-token":       "",
         "twilio-from-phone-no":    ""
     }
