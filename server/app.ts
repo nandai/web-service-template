@@ -47,7 +47,7 @@ const co =                require('co');
  */
 class Initializer
 {
-    app : express.Express;
+    private app : express.Express;
 
     /**
      * @constructor
