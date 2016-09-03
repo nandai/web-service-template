@@ -77,14 +77,22 @@ class Initializer
      */
     twitter() : void
     {
-        const options : passportTwitter.IStrategyOption =
+        if (Config.TWITTER_CONSUMER_KEY    !== ''
+        &&  Config.TWITTER_CONSUMER_SECRET !== '')
         {
-            consumerKey:    Config.TWITTER_CONSUMER_KEY,
-            consumerSecret: Config.TWITTER_CONSUMER_SECRET,
-            callbackURL:    Config.TWITTER_CALLBACK
-        };
+            const options : passportTwitter.IStrategyOption =
+            {
+                consumerKey:    Config.TWITTER_CONSUMER_KEY,
+                consumerSecret: Config.TWITTER_CONSUMER_SECRET,
+                callbackURL:    Config.TWITTER_CALLBACK
+            };
 
-        passport.use(new passportTwitter.Strategy(options, Twitter.verify));
+            passport.use(new passportTwitter.Strategy(options, Twitter.verify));
+        }
+        else
+        {
+            console.warn('Twitter認証は未設定です。');
+        }
     }
 
     /**
@@ -92,15 +100,23 @@ class Initializer
      */
     facebook() : void
     {
-        const options : passportFacebook.IStrategyOption =
+        if (Config.FACEBOOK_APPID     !== ''
+        &&  Config.FACEBOOK_APPSECRET !== '')
         {
-            clientID:     Config.FACEBOOK_APPID,
-            clientSecret: Config.FACEBOOK_APPSECRET,
-            callbackURL:  Config.FACEBOOK_CALLBACK
-        };
+            const options : passportFacebook.IStrategyOption =
+            {
+                clientID:     Config.FACEBOOK_APPID,
+                clientSecret: Config.FACEBOOK_APPSECRET,
+                callbackURL:  Config.FACEBOOK_CALLBACK
+            };
 
-        passport.use(new passportFacebook.Strategy(options, Facebook.verify));
-        Facebook.init();
+            passport.use(new passportFacebook.Strategy(options, Facebook.verify));
+            Facebook.init();
+        }
+        else
+        {
+            console.warn('Facebook認証は未設定です。');
+        }
     }
 
     /**
@@ -108,14 +124,22 @@ class Initializer
      */
     google() : void
     {
-        const options : passportGoogle.IOAuth2StrategyOption =
+        if (Config.GOOGLE_CLIENT_ID     !== ''
+        &&  Config.GOOGLE_CLIENT_SECRET !== '')
         {
-            clientID:     Config.GOOGLE_CLIENT_ID,
-            clientSecret: Config.GOOGLE_CLIENT_SECRET,
-            callbackURL:  Config.GOOGLE_CALLBACK
-        };
+            const options : passportGoogle.IOAuth2StrategyOption =
+            {
+                clientID:     Config.GOOGLE_CLIENT_ID,
+                clientSecret: Config.GOOGLE_CLIENT_SECRET,
+                callbackURL:  Config.GOOGLE_CALLBACK
+            };
 
-        passport.use(new passportGoogle.OAuth2Strategy(options, Google.verify));
+            passport.use(new passportGoogle.OAuth2Strategy(options, Google.verify));
+        }
+        else
+        {
+            console.warn('Google認証は未設定です。');
+        }
     }
 
     /**
