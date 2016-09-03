@@ -194,16 +194,21 @@ export default class Access
                 session = yield SessionModel.find(sessionId);
                 if (session === null)
                 {
-                    const locale : string = req['locale'];
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
-                    log.stepOut();
-                    return;
+                    // const locale : string = req['locale'];
+                    // const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
+                    // res.status(400).json(data);
+                    // log.stepOut();
+                    // return;
+                    session = new Session();
+                    yield SessionModel.add(session);
+                    log.d('セッションを再生成しました。');
                 }
-
-                req['command'] = session.command_id;
-                session.command_id = null;
-                yield SessionModel.update(session);
+                else
+                {
+                    req['command'] = session.command_id;
+                    session.command_id = null;
+                    yield SessionModel.update(session);
+                }
             }
 
             cookie.sessionId =  session.id;
