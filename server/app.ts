@@ -54,6 +54,8 @@ class Initializer
      */
     constructor(app : express.Express)
     {
+        fs.mkdir(__dirname + '/../storage', '0755', () => {});
+
         Config.            load();
         SeqModel.          load();
         AccountModel.      load();
