@@ -125,9 +125,10 @@ export default class R
     {
         const languages = window.navigator['languages'];
         let locale : string = (languages && languages[0]) ||
-            window.navigator.language ||
-            window.navigator.userLanguage ||
-            window.navigator.browserLanguage;
+            window.navigator.language;
+//          window.navigator.language ||
+//          window.navigator.userLanguage ||
+//          window.navigator.browserLanguage;
 
         locale = locale.substr(0, 2);
         const texts = R.texts[locale];

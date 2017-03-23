@@ -56,9 +56,6 @@
     "node-uuid/node-uuid-base.d.ts": {
       "commit": "1315d46f8066eec8c197914da88e98629ebc2254"
     },
-    "lodash/lodash.d.ts": {
-      "commit": "1315d46f8066eec8c197914da88e98629ebc2254"
-    },
     "moment/moment.d.ts": {
       "commit": "1315d46f8066eec8c197914da88e98629ebc2254"
     },
