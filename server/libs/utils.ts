@@ -140,7 +140,7 @@ export default class Utils
             hash = crypt.createHash('sha256');
             hash.update(name + salt + p);
 
-            p = hash.digest(i < stretchingCount - 1 ? 'binary' : 'base64');
+            p = hash.digest(i < stretchingCount - 1 ? 'hex' : 'base64');
         }
 
         log.stepOut();

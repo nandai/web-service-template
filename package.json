@@ -4,6 +4,8 @@
   "description": "web service template",
   "main": "app.js",
   "dependencies": {
+    "@types/jquery": "^2.0.41",
+    "@types/node": "^7.0.10",
     "body-parser": "^1.15.2",
     "co": "^4.6.0",
     "cookie-parser": "^1.4.3",

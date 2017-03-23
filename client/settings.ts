@@ -1,9 +1,6 @@
 /**
  * (C) 2016 printf.jp
  */
-
-/// <reference path='../typings/tsd.d.ts' />;
-
 import View  from './view';
 import R     from './r';
 import Utils from './utils';

@@ -1,9 +1,6 @@
 /**
  * (C) 2016 printf.jp
  */
-
-/// <reference path='../typings/tsd.d.ts' />;
-
 import Config                  from './config';
 import SeqModel                from './models/seq-model';
 import AccountModel            from './models/account-model';
