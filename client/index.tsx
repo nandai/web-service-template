@@ -3,21 +3,25 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
-import TopView       from './components/topView';
+import {Store}       from './components/views/topView/store';
+import TopView       from './components/views/topView/topView';
 
 const slog =  window['slog'];
 
 class TopApp
 {
     private static CLS_NAME = 'TopApp';
+    private store : Store;
 
     /**
      * @constructor
      */
     constructor()
     {
-        this.onSettings = this.onSettings.bind(this);
-        this.onLogout =   this.onLogout.  bind(this);
+        this.store = {
+            onSettings: this.onSettings.bind(this),
+            onLogout:   this.onLogout.  bind(this)
+        };
     }
 
     /**
@@ -26,8 +30,7 @@ class TopApp
     render() : void
     {
         ReactDOM.render(
-            <TopView onSettings = {this.onSettings}
-                     onLogout =   {this.onLogout} />,
+            <TopView store={this.store} />,
             document.getElementById('root'));
     }
 
