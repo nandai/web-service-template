@@ -8,6 +8,13 @@ var browserify =  require('browserify');
 var source =      require('vinyl-source-stream');
 var runSequence = require('run-sequence');
 
+var tsOptions =
+{
+    target: 'es6',
+    module: 'commonjs',
+    jsx:    'react'
+};
+
 /**
  * サーバービルド
  */
@@ -18,12 +25,6 @@ gulp.task('server', function ()
 //      '!./node_modules/**',
         './server/**/*.ts'
     ];
-
-    var tsOptions =
-    {
-        target: 'es6',
-        module: 'commonjs'
-    };
 
     var smOptions =
     {
@@ -48,12 +49,9 @@ gulp.task('client-typeScript', function ()
 {
     var src =
     [
-        './client/**/*.ts'
+        './client/**/*.ts',
+        './client/**/*.tsx'
     ];
-
-    var tsOptions =
-    {
-    };
 
     return gulp.src(src)
         .pipe(typescript(tsOptions))

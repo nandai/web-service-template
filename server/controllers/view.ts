@@ -1,9 +1,15 @@
+/**
+ * (C) 2016-2017 printf.jp
+ */
+export function view(title : string, js : string) : string
+{
+    const view = `
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>トップ</title>
+    <title>${title}</title>
 
     <!-- jQuery -->
     <script src="//code.jquery.com/jquery-2.2.0.js"></script>
@@ -23,11 +29,14 @@
     <script src="/components/SulasSplars.min.js"></script>
 
     <link  href="/components/app.css" rel="stylesheet" />
-    <script src="/js/index.js"></script>
+    <script src="/js/${js}"></script>
 </head>
 
 <body>
-    <div id="settings" style="height:60px"></div>
-    <div id="logout"   style="height:60px"></div>
+    <div id="root"></div>
 </body>
 </html>
+    `;
+
+    return view;
+}

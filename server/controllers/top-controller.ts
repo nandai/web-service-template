@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {view}                  from './view';
 import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
@@ -60,7 +61,7 @@ export default class TopController
             else
             {
                 log.d('トップ画面を表示');
-                res.render('index');
+                res.send(view('トップ', 'index.js'));
             }
 
             log.stepOut();
