@@ -2,8 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
+import R          from 'client/utils/r';
 import {Store}    from './store';
-import R          from '../../../r';
 
 interface LoginViewProps
 {

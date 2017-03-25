@@ -2,6 +2,7 @@
  * (C) 2016 printf.jp
  */
 var gulp =        require('gulp');
+var abspath =     require('gulp-absolute-path');
 var typescript =  require('gulp-typescript');
 var sourcemaps =  require('gulp-sourcemaps');
 var browserify =  require('browserify');
@@ -54,6 +55,7 @@ gulp.task('client-typeScript', function ()
     ];
 
     return gulp.src(src)
+        .pipe(abspath())
         .pipe(typescript(tsOptions))
         .pipe(gulp.dest('./build-client'));
 });

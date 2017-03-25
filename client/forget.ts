@@ -1,8 +1,8 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import View from './view';
-import R    from './r';
+import R    from './utils/r';
 
 const sulas = window['sulas'];
 const slog =  window['slog'];

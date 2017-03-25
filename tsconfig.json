@@ -4,6 +4,7 @@
         "target": "es6",
         "module": "commonjs",
         "jsx": "react",
+        "baseUrl": "./",
         "sourceMap": false,
         "removeComments": false
     },

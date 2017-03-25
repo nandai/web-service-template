@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 
 /**
@@ -16,7 +16,7 @@ export default class View
 
         const interval = Math.floor(1000 / 60 * 10);
         let resizeTimer = null;
-        
+
         window.addEventListener('resize', () =>
         {
             if (resizeTimer !== null)
