@@ -9,6 +9,22 @@ body, input, button
   font-family: sulas, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 }
 
+input
+{
+    display: block;
+    width: 100%;
+    margin: 16px 0 16px 0;
+    font-size: 15px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    transition: all .3s;
+}
+
+input:focus
+{
+    border-bottom: 1px solid blue;
+}
+
 button
 {
     display: block;
