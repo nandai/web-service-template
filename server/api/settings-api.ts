@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Config                  from '../config';
 import R                       from '../libs/r';
@@ -11,7 +11,6 @@ import DeleteAccountModel      from '../models/delete-account-model';
 
 import express = require('express');
 import slog =    require('../slog');
-const co =       require('co');
 
 /**
  * 設定API
@@ -39,13 +38,13 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    private static getAccount(req : express.Request, res : express.Response) : void
+    private static async getAccount(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'getAccount');
-        co(function* ()
+        try
         {
             const session : Session = req['sessionObj'];
-            const account : Account = yield AccountModel.find(session.account_id);
+            const account = await AccountModel.find(session.account_id);
             const data =
             {
                 status: 0,
@@ -59,8 +58,8 @@ export default class SettingsApi
 
             res.json(data);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -78,10 +77,10 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    private static updateAccount(req : express.Request, res : express.Response) : void
+    private static async updateAccount(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'updateAccount');
-        co(function* ()
+        try
         {
             do
             {
@@ -112,19 +111,19 @@ export default class SettingsApi
 
                 // アカウント情報更新
                 const session : Session = req['sessionObj'];
-                const account : Account = yield AccountModel.find(session.account_id);
+                const account = await AccountModel.find(session.account_id);
 
                 account.name =      param.name;
                 account.phone_no = (param.phoneNo.length > 0 ? param.phoneNo : null);
-                yield AccountModel.update(account);
+                await AccountModel.update(account);
 
                 const data = ResponseData.ok(1, R.text(R.SETTINGS_COMPLETED, locale));
                 res.json(data);
             }
             while (false);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -134,23 +133,23 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static unlink(req : express.Request, res : express.Response) : void
+    static async unlink(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlink');
-        co(function* ()
+        try
         {
             // アカウント更新
             const provider : string = req.params.provider;
             log.d(`${provider}`);
 
             const session : Session = req['sessionObj'];
-            const account : Account = yield AccountModel.find(session.account_id);
+            const account = await AccountModel.find(session.account_id);
             let data = {};
 
             if (account.canUnlink(provider))
             {
                 account[provider] = null;
-                yield AccountModel.update(account);
+                await AccountModel.update(account);
 
                 data = ResponseData.ok(0);
             }
@@ -161,8 +160,8 @@ export default class SettingsApi
             }
 
             res.json(data);
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -177,10 +176,10 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static email(req : express.Request, res : express.Response) : void
+    static async email(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'email');
-        co(function* ()
+        try
         {
             do
             {
@@ -200,7 +199,7 @@ export default class SettingsApi
 
                 // メールアドレスの重複チェック
                 const changeEmail = param.email;
-                const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', changeEmail);
+                const alreadyExistsAccount = await AccountModel.findByProviderId('email', changeEmail);
 
                 if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                 {
@@ -211,7 +210,7 @@ export default class SettingsApi
 
                 // パスワードがなければメールアドレスを設定し、あれば変更メールを送信する
                 const session : Session = req['sessionObj'];
-                const account : Account = yield AccountModel.find(session.account_id);
+                const account = await AccountModel.find(session.account_id);
 
                 if (changeEmail === '')
                 {
@@ -220,7 +219,7 @@ export default class SettingsApi
                     {
                         account.email = null;
                         account.password = null;
-                        yield AccountModel.update(account);
+                        await AccountModel.update(account);
 
                         const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED, locale));
                         res.json(data);
@@ -236,12 +235,12 @@ export default class SettingsApi
                 {
                     // パスワードが設定されていない場合
                     const template = R.mail(R.NOTICE_SET_MAIL_ADDRESS, locale);
-                    const result = yield Utils.sendMail(template.subject, changeEmail, template.contents);
+                    const result = await Utils.sendMail(template.subject, changeEmail, template.contents);
 
                     if (result)
                     {
                         account.email = changeEmail;
-                        yield AccountModel.update(account);
+                        await AccountModel.update(account);
                     }
 
                     const data = ResponseData.ok(1, R.text(result ? R.EMAIL_CHANGED : R.COULD_NOT_CHANGE_EMAIL, locale));
@@ -255,13 +254,13 @@ export default class SettingsApi
                     const url = Utils.generateUrl('settings/account/email/change', changeId);
                     const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS, locale);
                     const contents = Utils.formatString(template.contents, {url});
-                    const result = yield Utils.sendMail(template.subject, changeEmail, contents);
+                    const result = await Utils.sendMail(template.subject, changeEmail, contents);
 
                     if (result)
                     {
                         account.change_id = changeId;
                         account.change_email = changeEmail;
-                        yield AccountModel.update(account);
+                        await AccountModel.update(account);
                     }
 
                     const data = ResponseData.ok(1, R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL, locale));
@@ -270,8 +269,8 @@ export default class SettingsApi
             }
             while (false);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -289,10 +288,10 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static changeEmail(req : express.Request, res : express.Response) : void
+    static async changeEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'changeEmail');
-        co(function* ()
+        try
         {
             do
             {
@@ -312,14 +311,14 @@ export default class SettingsApi
                 }
 
                 const changeId = param.changeId;
-                const account : Account = yield AccountModel.findByChangeId(changeId);
+                const account = await AccountModel.findByChangeId(changeId);
 
                 if (account)
                 {
                     // メールアドレス変更メールを送信してから確認までの間に同じメールアドレスが本登録される可能性があるため、
                     // メールアドレスの重複チェックを行う
                     const changeEmail = account.change_email;
-                    const alreadyExistsAccount : Account = yield AccountModel.findByProviderId('email', changeEmail);
+                    const alreadyExistsAccount = await AccountModel.findByProviderId('email', changeEmail);
 
                     if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                     {
@@ -344,7 +343,7 @@ export default class SettingsApi
                     account.password = Utils.getHashPassword(changeEmail, password, Config.PASSWORD_SALT);
                     account.change_id = null;
                     account.change_email = null;
-                    yield AccountModel.update(account);
+                    await AccountModel.update(account);
 
                     const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED, locale));
                     res.json(data);
@@ -360,8 +359,8 @@ export default class SettingsApi
             }
             while (false);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -382,10 +381,10 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static password(req : express.Request, res : express.Response) : void
+    static async password(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'password');
-        co(function* ()
+        try
         {
             do
             {
@@ -406,7 +405,7 @@ export default class SettingsApi
                 }
 
                 const session : Session = req['sessionObj'];
-                const account : Account = yield AccountModel.find(session.account_id);
+                const account = await AccountModel.find(session.account_id);
 
                 if (account.password !== null || param.oldPassword !== '')
                 {
@@ -435,15 +434,15 @@ export default class SettingsApi
                 }
 
                 account.password = Utils.getHashPassword(account.email, param.new_password, Config.PASSWORD_SALT);
-                yield AccountModel.update(account);
+                await AccountModel.update(account);
 
                 const data = ResponseData.ok(1, R.text(R.PASSWORD_CHANGED, locale));
                 res.json(data);
             }
             while (false);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -453,25 +452,25 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static leave(req : express.Request, res : express.Response) : void
+    static async leave(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'leave');
-        co(function* ()
+        try
         {
             const session : Session = req['sessionObj'];
             const accountId = session.account_id;
-            const account : Account = yield AccountModel.find(accountId);
+            const account = await AccountModel.find(accountId);
 
-            yield DeleteAccountModel.add(account);
-            yield AccountModel.remove( accountId);
-            yield SessionModel.logout({accountId});
+            await DeleteAccountModel.add(account);
+            await AccountModel.remove( accountId);
+            await SessionModel.logout({accountId});
 
 //          req.logout();
 
             const data = {status:0};
             res.json(data);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 }

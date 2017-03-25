@@ -1,12 +1,11 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Utils from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
 import slog =    require('../slog');
-const co =       require('co');
 
 /**
  * パスワードリセットコントローラ
@@ -21,23 +20,23 @@ export default class ResetController
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static index(req : express.Request, res : express.Response) : void
+    static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(ResetController.CLS_NAME, 'index');
-        co(function* ()
+        try
         {
             const param = req.query;
             const resetId = param.id;
             let account : Account = null;
 
             if (resetId)
-                account = yield AccountModel.findByResetId(resetId);
+                account = await AccountModel.findByResetId(resetId);
 
             if (account) res.render('reset', {resetId});
             else         res.status(404).render('404');
 
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 }

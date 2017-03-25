@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Config                  from './config';
 import SeqModel                from './models/seq-model';
@@ -37,7 +37,6 @@ import https =            require('https');
 import fs =               require('fs');
 import slog =             require('./slog');
 const ect =               require('ect');
-const co =                require('co');
 
 /**
  * イニシャライザ
@@ -281,21 +280,21 @@ function main() : void
  */
 function command(command : string) : express.Handler
 {
-    const handler = function(req : express.Request, res : express.Response, next : express.NextFunction) : void
+    const handler = async function(req : express.Request, res : express.Response, next : express.NextFunction)
     {
         const log = slog.stepIn('app.ts', 'command');
         log.d(command);
 
-        co(function* ()
+        try
         {
             const session : Session = req['sessionObj'];
             session.command_id = command;
-            yield SessionModel.update(session);
+            await SessionModel.update(session);
 
             log.stepOut();
             next();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     };
     return handler;
 }

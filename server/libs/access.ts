@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Cookie       from './cookie';
 import R            from './r';
@@ -10,7 +10,6 @@ import SessionModel, {Session} from '../models/session-model';
 import express =    require('express');
 import bodyParser = require('body-parser');
 import slog =       require('../slog');
-const co =          require('co');
 
 /**
  * Access
@@ -173,10 +172,10 @@ export default class Access
      * @param   req httpリクエスト
      * @param   req httpレスポンス
      */
-    static session(req : express.Request, res : express.Response, next : express.NextFunction) : void
+    static async session(req : express.Request, res : express.Response, next : express.NextFunction)
     {
         const log = slog.stepIn(Access.CLS_NAME, 'session');
-        co(function* ()
+        try
         {
             const headers = req.headers;
             const cookie = new Cookie(req, res);
@@ -186,12 +185,12 @@ export default class Access
             if (sessionId === undefined)
             {
                 session = new Session();
-                yield SessionModel.add(session);
+                await SessionModel.add(session);
                 log.d('セッションを生成しました。');
             }
             else
             {
-                session = yield SessionModel.find(sessionId);
+                session = await SessionModel.find(sessionId);
                 if (session === null)
                 {
                     // const locale : string = req['locale'];
@@ -200,14 +199,14 @@ export default class Access
                     // log.stepOut();
                     // return;
                     session = new Session();
-                    yield SessionModel.add(session);
+                    await SessionModel.add(session);
                     log.d('セッションを再生成しました。');
                 }
                 else
                 {
                     req['command'] = session.command_id;
                     session.command_id = null;
-                    yield SessionModel.update(session);
+                    await SessionModel.update(session);
                 }
             }
 
@@ -216,8 +215,8 @@ export default class Access
 
             log.stepOut();
             next();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -229,7 +228,7 @@ export default class Access
     static auth(req : express.Request, res : express.Response, next : express.NextFunction) : void
     {
         const log = slog.stepIn(Access.CLS_NAME, 'auth');
-        co(function* ()
+        try
         {
             const session : Session = req['sessionObj'];
             if (session.account_id === null)
@@ -253,8 +252,8 @@ export default class Access
                 log.stepOut();
                 next();
             }
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**

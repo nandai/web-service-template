@@ -8,7 +8,6 @@ import Provider from './provider';
 import express =          require('express');
 import passportFacebook = require('passport-facebook');
 import slog =             require('../slog');
-const co =                require('co');
 const fb =                require('fb');
 
 /**
@@ -46,16 +45,16 @@ export default class Facebook extends Provider
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static callback(req : express.Request, res : express.Response) : void
+    static async callback(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(Facebook.CLS_NAME_2, 'callback');
-        co(function* ()
+        try
         {
             const facebook = new Facebook();
-            yield facebook.signupOrLogin(req, res);
+            await facebook.signupOrLogin(req, res);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -64,31 +63,28 @@ export default class Facebook extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, refreshToken : string) : Promise<any>
+    protected inquiry(accessToken : string, refreshToken : string)
     {
         const log = slog.stepIn(Facebook.CLS_NAME_2, 'inquiry');
         const self = this;
 
-        return new Promise((resolve, reject) =>
+        return new Promise(async (resolve : () => void, reject) =>
         {
-            co(function* ()
+            try
             {
-                try
-                {
-                    const success : boolean = yield self.validateAccessToken(accessToken);
+                const success = await self.validateAccessToken(accessToken);
 
-                    if (success)
-                        yield self.me(accessToken);
+                if (success)
+                    await self.me(accessToken);
 
-                    resolve();
-                }
-                catch (err)
-                {
-                    log.d(err);
-                    log.stepOut();
-                    resolve();
-                }
-            });
+                resolve();
+            }
+            catch (err)
+            {
+                log.d(err);
+                log.stepOut();
+                resolve();
+            }
         });
     }
 
@@ -97,10 +93,10 @@ export default class Facebook extends Provider
      *
      * @return  boolean
      */
-    private validateAccessToken(accessToken : string) : Promise<any>
+    private validateAccessToken(accessToken : string) : Promise<boolean>
     {
         const log = slog.stepIn(Facebook.CLS_NAME_2, 'validateAccessToken');
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : BooleanResolve, reject) =>
         {
             fb.api('debug_token',
             {
@@ -125,10 +121,10 @@ export default class Facebook extends Provider
      *
      * @return  なし
      */
-    private me(accessToken : string) : Promise<any>
+    private me(accessToken : string)
     {
         const log = slog.stepIn(Facebook.CLS_NAME_2, 'me');
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             fb.api('me',
             {

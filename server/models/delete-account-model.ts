@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import {Account} from './account-model';
 import Utils     from '../libs/utils';
@@ -61,10 +61,10 @@ export default class DeleteAccountModel
      *
      * @return  なし
      */
-    static add(account : Account) : Promise<any>
+    static add(account : Account)
     {
         const log = slog.stepIn(DeleteAccountModel.CLS_NAME, 'add');
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             account.deleted_at = moment().format('YYYY/MM/DD HH:mm:ss');
             DeleteAccountModel.list.push(account);

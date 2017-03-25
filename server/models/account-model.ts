@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import SeqModel from './seq-model';
 import Utils    from '../libs/utils';
@@ -113,10 +113,10 @@ export default class AccountModel
      *
      * @return  なし
      */
-    static add(account : Account) : Promise<any>
+    static add(account : Account)
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'add');
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             account.id = SeqModel.next('account');
             account.created_at = moment().format('YYYY/MM/DD HH:mm:ss');
@@ -135,10 +135,10 @@ export default class AccountModel
      *
      * @return  なし
      */
-    static update(account : Account) : Promise<any>
+    static update(account : Account)
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'update');
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             for (let i in AccountModel.list)
             {
@@ -163,12 +163,12 @@ export default class AccountModel
      *
      * @return  なし
      */
-    static remove(accountId : number) : Promise<any>
+    static remove(accountId : number)
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'remove');
         log.d(`sessionId:${accountId}`);
 
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             for (let i in AccountModel.list)
             {
@@ -193,12 +193,12 @@ export default class AccountModel
      *
      * @return  Account。該当するアカウントを返す
      */
-    static findByCondition(cond : AccountFindCondition) : Promise<any>
+    static findByCondition(cond : AccountFindCondition) : Promise<Account>
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'findByCondition');
         log.d(JSON.stringify(cond, null, 2));
 
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : AccountResolve, reject) =>
         {
             if (AccountModel.isUninitialize())
             {
@@ -237,7 +237,7 @@ export default class AccountModel
      *
      * @return  Account。該当するアカウントを返す
      */
-    static find(accountId : number) : Promise<any>
+    static find(accountId : number) : Promise<Account>
     {
         return AccountModel.findByCondition({accountId});
     }
@@ -249,7 +249,7 @@ export default class AccountModel
      *
      * @return  Account。該当するアカウントを返す
      */
-    static findBySignupId(signupId : string) : Promise<any>
+    static findBySignupId(signupId : string) : Promise<Account>
     {
         return AccountModel.findByCondition({signupId});
     }
@@ -261,7 +261,7 @@ export default class AccountModel
      *
      * @return  Account。該当するアカウントを返す
      */
-    static findByResetId(resetId : string) : Promise<any>
+    static findByResetId(resetId : string) : Promise<Account>
     {
         return AccountModel.findByCondition({resetId});
     }
@@ -273,7 +273,7 @@ export default class AccountModel
      *
      * @return  Account。該当するアカウントを返す
      */
-    static findByChangeId(changeId : string) : Promise<any>
+    static findByChangeId(changeId : string) : Promise<Account>
     {
         return AccountModel.findByCondition({changeId});
     }
@@ -285,7 +285,7 @@ export default class AccountModel
      *
      * @return  Account。該当するアカウントを返す
      */
-    static findBySmsId(smsId : string) : Promise<any>
+    static findBySmsId(smsId : string)
     {
         return AccountModel.findByCondition({smsId});
     }
@@ -298,12 +298,12 @@ export default class AccountModel
      *
      * @return  Account。該当するアカウントを返す
      */
-    static findByProviderId(provider : string, id : string) : Promise<any>
+    static findByProviderId(provider : string, id : string)
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'findByProviderId');
         log.d(`provider:${provider}, id:${id}`);
 
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : AccountResolve, reject) =>
         {
             if (AccountModel.isUninitialize())
             {
@@ -390,3 +390,5 @@ export interface AccountFindCondition
     changeId?  : string;
     smsId?     : string;
 }
+
+interface AccountResolve {(account : Account) : void}

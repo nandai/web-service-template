@@ -12,7 +12,6 @@ import {Session}      from '../models/session-model';
 import express =  require('express');
 import passport = require('passport');
 import slog =     require('../slog');
-const co =        require('co');
 
 /**
  * Email
@@ -38,32 +37,29 @@ export default class Email extends Provider
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static callback(req : express.Request, res : express.Response) : void
+    static async callback(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(Email.CLS_NAME_2, 'callback');
-        co(function* ()
+        try
         {
             const email = new Email();
-            yield email.signupOrLogin(req, res, (account : Account) : Promise<any> =>
+            await email.signupOrLogin(req, res, (account : Account) : Promise<boolean> =>
             {
-                return new Promise((resolve) =>
+                return new Promise(async (resolve : BooleanResolve) =>
                 {
-                    co(function* ()
-                    {
-                        const url = Utils.generateUrl('signup', account.signup_id);
-                        const template = R.mail(R.NOTICE_SIGNUP, req['locale']);
-                        const contents = Utils.formatString(template.contents, {url});
-                        const result : boolean = yield Utils.sendMail(template.subject, account.email, contents);
-                        const locale : string = req['locale'];
-                        const data = ResponseData.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL, locale));
-                        res.json(data);
-                        resolve(result);
-                    });
+                    const url = Utils.generateUrl('signup', account.signup_id);
+                    const template = R.mail(R.NOTICE_SIGNUP, req['locale']);
+                    const contents = Utils.formatString(template.contents, {url});
+                    const result = await Utils.sendMail(template.subject, account.email, contents);
+                    const locale : string = req['locale'];
+                    const data = ResponseData.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL, locale));
+                    res.json(data);
+                    resolve(result);
                 });
             });
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -72,12 +68,12 @@ export default class Email extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, refreshToken : string) : Promise<any>
+    protected inquiry(accessToken : string, refreshToken : string)
     {
         const log = slog.stepIn(Email.CLS_NAME_2, 'inquiry');
         const self = this;
 
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             self.id = accessToken;  // email
             log.stepOut();
@@ -102,10 +98,10 @@ export default class Email extends Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(req : express.Request, res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string) : Promise<any>
+    protected sendResponse(req : express.Request, res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string)
     {
         const log = slog.stepIn(Email.CLS_NAME_2, 'sendResponse');
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             if (phrase)
             {

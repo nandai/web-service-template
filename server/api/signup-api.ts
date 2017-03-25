@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Config       from '../config';
 import Utils        from '../libs/utils';
@@ -11,7 +11,6 @@ import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
 import slog =    require('../slog');
-const co =       require('co');
 
 /**
  * サインアップAPI
@@ -112,10 +111,10 @@ export default class SignupApi extends ProviderApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static confirmEmail(req : express.Request, res : express.Response) : void
+    static async confirmEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SignupApi.CLS_NAME_2, 'confirmEmail');
-        co(function* ()
+        try
         {
             do
             {
@@ -135,7 +134,7 @@ export default class SignupApi extends ProviderApi
                 }
 
                 const signupId : string = param.signupId;
-                const account : Account = yield AccountModel.findBySignupId(signupId);
+                const account = await AccountModel.findBySignupId(signupId);
 
                 if (account === null)
                 {
@@ -158,14 +157,14 @@ export default class SignupApi extends ProviderApi
                 }
 
                 account.signup_id = null;
-                yield AccountModel.update(account);
+                await AccountModel.update(account);
 
                 const data = ResponseData.ok(1, R.text(R.SIGNUP_COMPLETED, locale));
                 res.json(data);
             }
             while (false);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 }

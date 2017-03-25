@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
@@ -9,7 +9,6 @@ import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
 import slog =    require('../slog');
-const co =       require('co');
 
 /**
  * トップコントローラ
@@ -24,10 +23,10 @@ export default class TopController
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static index(req : express.Request, res : express.Response) : void
+    static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(TopController.CLS_NAME, 'index');
-        co(function* ()
+        try
         {
             const cookie = new Cookie(req, res);
             cookie.clearPassport();
@@ -40,7 +39,7 @@ export default class TopController
                 const locale : string = req['locale'];
                 message = R.text(session.message_id, locale);
                 session.message_id = null;
-                yield SessionModel.update(session);
+                await SessionModel.update(session);
             }
 
             const param = req.query;
@@ -48,7 +47,7 @@ export default class TopController
 
             if (smsId)
             {
-                const account : Account = yield AccountModel.findBySmsId(smsId);
+                const account = await AccountModel.findBySmsId(smsId);
 
                 if (account) res.render('sms', {smsId});
                 else         res.status(404).render('404');
@@ -65,7 +64,7 @@ export default class TopController
             }
 
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 }

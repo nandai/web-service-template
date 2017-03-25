@@ -13,7 +13,6 @@ import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
 import express =  require('express');
 import passport = require('passport');
 import slog =     require('../slog');
-const co =        require('co');
 const twilio =    require('twilio');
 
 /**
@@ -91,19 +90,19 @@ export default class Provider
      * @param   res             httpレスポンス
      * @param   sugnupCallback  サインアップコールバック
      */
-    protected signupOrLogin(req : express.Request, res : express.Response, signupCallback? : (account : Account) => Promise<any>) : Promise<any>
+    protected signupOrLogin(req : express.Request, res : express.Response, signupCallback? : (account : Account) => Promise<boolean>)
     {
         const log = slog.stepIn(Provider.CLS_NAME, 'signupOrLogin');
         const self = this;
 
-        return new Promise((resolve, reject) =>
+        return new Promise(async (resolve : () => void, reject) =>
         {
-            co(function* ()
+            try
             {
                 const user : PassportUser = req.user;
 
                 self.id = null;
-                yield self.inquiry(user.accessToken, user.refreshToken);
+                await self.inquiry(user.accessToken, user.refreshToken);
 
                 if (self.id === null)
                 {
@@ -114,7 +113,7 @@ export default class Provider
                     return;
                 }
 
-                const findAccount : Account = yield AccountModel.findByProviderId(user.provider, self.id);
+                const findAccount = await AccountModel.findByProviderId(user.provider, self.id);
                 const session : Session = req['sessionObj'];
                 const command : string =  req['command'];
 
@@ -138,35 +137,35 @@ export default class Provider
 
                                 if (findAccount === null)
                                 {
-                                    yield AccountModel.add(account);
+                                    await AccountModel.add(account);
                                 }
                                 else
                                 {
                                     // 仮登録中のメールアドレスのアカウントに新たなサインアップIDを設定する
                                     account.id = findAccount.id;
-                                    yield AccountModel.update(account);
+                                    await AccountModel.update(account);
                                 }
 
                                 if (signupCallback)
                                 {
-                                    const result : boolean = yield signupCallback(account);
+                                    const result = await signupCallback(account);
                                     if (result === false)
-                                        yield AccountModel.remove(account.id);
+                                        await AccountModel.remove(account.id);
                                 }
                                 else
                                 {
                                     // セッション更新
                                     session.account_id = account.id;
-                                    yield SessionModel.update(session);
+                                    await SessionModel.update(session);
 
                                     // ログイン履歴作成
                                     const loginHistory = new LoginHistory();
                                     loginHistory.account_id = account.id;
                                     loginHistory.device = req.headers['user-agent'];
-                                    yield LoginHistoryModel.add(loginHistory);
+                                    await LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
-                                    yield self.sendResponse(req, res, session, '/');
+                                    await self.sendResponse(req, res, session, '/');
                                 }
                             }
                             else
@@ -174,7 +173,7 @@ export default class Provider
                                 log.i('サインアップ可能だが、ログイン中なので、サインアップはせず、サインアップ画面へ移動する');
 
                                 // サインアップ画面へ
-                                yield self.sendResponse(req, res, session, '/signup', R.CANNOT_SIGNUP);
+                                await self.sendResponse(req, res, session, '/signup', R.CANNOT_SIGNUP);
                             }
                         }
                         else
@@ -182,7 +181,7 @@ export default class Provider
                             log.i('サインアップ済みなので、サインアップはせず、サインアップ画面へ移動する');
 
                             // サインアップ画面へ
-                            yield self.sendResponse(req, res, session, '/signup', R.ALREADY_SIGNUP);
+                            await self.sendResponse(req, res, session, '/signup', R.ALREADY_SIGNUP);
                         }
                         break;
                     }
@@ -206,7 +205,7 @@ export default class Provider
                                         findAccount.sms_code = Utils.createRundomText( 6, true);
                                         AccountModel.update(findAccount);
 
-                                        yield self.sendResponse(req, res, session, '/', null, findAccount.sms_id);
+                                        await self.sendResponse(req, res, session, '/', null, findAccount.sms_id);
 
                                         // ログインコードをSMS送信
                                         const accountSid = Config.TWILIO_ACCOUNT_SID;
@@ -230,16 +229,16 @@ export default class Provider
                                 {
                                     // セッション作成
                                     session.account_id = findAccount.id;
-                                    yield SessionModel.update(session);
+                                    await SessionModel.update(session);
 
                                     // ログイン履歴作成
                                     const loginHistory = new LoginHistory();
                                     loginHistory.account_id = findAccount.id;
                                     loginHistory.device = req.headers['user-agent'];
-                                    yield LoginHistoryModel.add(loginHistory);
+                                    await LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
-                                    yield self.sendResponse(req, res, session, '/');
+                                    await self.sendResponse(req, res, session, '/');
                                 }
                             }
                             else
@@ -249,14 +248,14 @@ export default class Provider
                                     log.i('サインアップ済み。既に同じアカウントでログインしているので、トップ画面へ移動するだけ');
 
                                     // トップ画面へ
-                                    yield self.sendResponse(req, res, session, '/');
+                                    await self.sendResponse(req, res, session, '/');
                                 }
                                 else
                                 {
                                     log.i('サインアップ済みだが、別のアカウントでログイン中なので、トップ画面ではなくログイン画面へ移動する');
 
                                     // ログイン画面へ
-                                    yield self.sendResponse(req, res, session, '/', R.ALREADY_LOGIN_ANOTHER_ACCOUNT);
+                                    await self.sendResponse(req, res, session, '/', R.ALREADY_LOGIN_ANOTHER_ACCOUNT);
                                 }
                             }
                         }
@@ -265,7 +264,7 @@ export default class Provider
                             log.i('サインアップしていないので、ログイン画面へ移動する');
 
                             // ログイン画面へ
-                            yield self.sendResponse(req, res, session, '/', R.INCORRECT_ACCOUNT);
+                            await self.sendResponse(req, res, session, '/', R.INCORRECT_ACCOUNT);
                         }
                         break;
                     }
@@ -280,12 +279,12 @@ export default class Provider
                                 log.i('紐づけ可能。ログインしているので、紐づけを続行し、設定画面へ移動する');
 
                                 // アカウント更新
-                                const account : Account = yield AccountModel.find(session.account_id);
+                                const account = await AccountModel.find(session.account_id);
                                 account[user.provider] = self.id;
-                                yield AccountModel.update(account);
+                                await AccountModel.update(account);
 
                                 // 設定画面へ
-                                yield self.sendResponse(req, res, session, '/settings');
+                                await self.sendResponse(req, res, session, '/settings');
                             }
                             else
                             {
@@ -294,7 +293,7 @@ export default class Provider
                         else
                         {
                             // 設定画面へ
-                            yield self.sendResponse(req, res, session, '/settings', R.CANNOT_LINK);
+                            await self.sendResponse(req, res, session, '/settings', R.CANNOT_LINK);
                         }
                         break;
                     }
@@ -309,17 +308,17 @@ export default class Provider
 
                 log.stepOut();
                 resolve();
-            })
-            .catch ((err) => Utils.internalServerError(err, res, log));
+            }
+            catch (err) {Utils.internalServerError(err, res, log)};
         });
     }
 
     /**
      * プロバイダに問い合わせる
      */
-    protected inquiry(accessToken : string, refreshToken : string) : Promise<any>
+    protected inquiry(accessToken : string, refreshToken : string)
     {
-        return new Promise((resolve, reject) => reject());
+        return new Promise((resolve : () => void, reject) => reject());
     }
 
     /**
@@ -336,12 +335,12 @@ export default class Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(req : express.Request, res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string) : Promise<any>
+    protected sendResponse(req : express.Request, res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string)
     {
         const log = slog.stepIn(Provider.CLS_NAME, 'sendResponse');
-        return new Promise((resolve, reject) =>
+        return new Promise(async (resolve : () => void, reject) =>
         {
-            co(function* ()
+            try
             {
                 if (req.path.startsWith('/api/'))
                 {
@@ -362,7 +361,7 @@ export default class Provider
                     if (phrase)
                     {
                         session.message_id = phrase;
-                        yield SessionModel.update(session);
+                        await SessionModel.update(session);
                     }
 
                     if (smsId)
@@ -373,8 +372,8 @@ export default class Provider
 
                 log.stepOut();
                 resolve();
-            })
-            .catch ((err) => Utils.internalServerError(err, res, log));
+            }
+            catch (err) {Utils.internalServerError(err, res, log)};
         });
     }
 }

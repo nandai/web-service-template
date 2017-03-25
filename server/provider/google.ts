@@ -8,7 +8,6 @@ import Config   from '../config';
 import express =        require('express');
 import passportGoogle = require('passport-google-oauth');
 import slog =           require('../slog');
-const co =              require('co');
 const google =          require('googleapis');
 
 const plus = google.plus('v1');
@@ -48,16 +47,16 @@ export default class Google extends Provider
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static callback(req : express.Request, res : express.Response) : void
+    static async callback(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(Google.CLS_NAME_2, 'callback');
-        co(function* ()
+        try
         {
             const google = new Google();
-            yield google.signupOrLogin(req, res);
+            await google.signupOrLogin(req, res);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -66,12 +65,12 @@ export default class Google extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, refreshToken : string) : Promise<any>
+    protected inquiry(accessToken : string, refreshToken : string)
     {
         const log = slog.stepIn(Google.CLS_NAME_2, 'inquiry');
         const self = this;
 
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             try
             {

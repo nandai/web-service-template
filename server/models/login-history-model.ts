@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import fs =     require('fs');
 import moment = require('moment');
@@ -58,10 +58,10 @@ export default class LoginHistoryModel
      *
      * @return  なし
      */
-    static add(loginHistory : LoginHistory) : Promise<any>
+    static add(loginHistory : LoginHistory)
     {
         const log = slog.stepIn(LoginHistoryModel.CLS_NAME, 'add');
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             const m = moment();
 

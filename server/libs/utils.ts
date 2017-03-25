@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Config from '../config';
 
@@ -205,9 +205,9 @@ export default class Utils
      *
      * @return  送信成功時はtrue
      */
-    static sendMail(subject : string, toAddr : string, contents : string) : Promise<any>
+    static sendMail(subject : string, toAddr : string, contents : string) : Promise<boolean>
     {
-        return new Promise(function (resolve)
+        return new Promise((resolve : BooleanResolve) =>
         {
             const log = slog.stepIn(Utils.CLS_NAME, 'sendMail');
             const smtpOptions : smtp.SmtpOptions =

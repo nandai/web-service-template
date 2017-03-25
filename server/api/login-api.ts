@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Config       from '../config';
 import Utils        from '../libs/utils';
@@ -13,7 +13,6 @@ import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
 
 import express = require('express');
 import slog =    require('../slog');
-const co =       require('co');
 
 /**
  * ログインAPI
@@ -57,10 +56,10 @@ export default class LoginApi extends ProviderApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static email(req : express.Request, res : express.Response) : void
+    static async email(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(LoginApi.CLS_NAME_2, 'email');
-        co(function* ()
+        try
         {
             do
             {
@@ -80,7 +79,7 @@ export default class LoginApi extends ProviderApi
                 }
 
                 const email : string = param.email;
-                const account : Account = yield AccountModel.findByProviderId('email', email);
+                const account = await AccountModel.findByProviderId('email', email);
                 let hashPassword : string;
 
                 if (account)
@@ -105,8 +104,8 @@ export default class LoginApi extends ProviderApi
             }
             while (false);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -124,10 +123,10 @@ export default class LoginApi extends ProviderApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static sms(req : express.Request, res : express.Response) : void
+    static async sms(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(LoginApi.CLS_NAME_2, 'sms');
-        co(function* ()
+        try
         {
             do
             {
@@ -147,7 +146,7 @@ export default class LoginApi extends ProviderApi
                 }
 
                 const smsId = param.smsId;
-                const account : Account = yield AccountModel.findBySmsId(smsId);
+                const account = await AccountModel.findBySmsId(smsId);
 
                 if (account)
                 {
@@ -160,18 +159,18 @@ export default class LoginApi extends ProviderApi
 
                     account.sms_id =   null;
                     account.sms_code = null;
-                    yield AccountModel.update(account);
+                    await AccountModel.update(account);
 
                     // セッション更新
                     const session : Session = req['sessionObj'];
                     session.account_id = account.id;
-                    yield SessionModel.update(session);
+                    await SessionModel.update(session);
 
                     // ログイン履歴作成
                     const loginHistory = new LoginHistory();
                     loginHistory.account_id = account.id;
                     loginHistory.device = req.headers['user-agent'];
-                    yield LoginHistoryModel.add(loginHistory);
+                    await LoginHistoryModel.add(loginHistory);
                 }
 
                 // トップ画面へ
@@ -180,7 +179,7 @@ export default class LoginApi extends ProviderApi
             }
             while (false);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 }

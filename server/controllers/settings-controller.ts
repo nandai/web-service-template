@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
@@ -9,7 +9,6 @@ import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
 import slog =    require('../slog');
-const co =       require('co');
 
 /**
  * 設定コントローラ
@@ -25,10 +24,10 @@ export default class SettingsController
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static index(req : express.Request, res : express.Response) : void
+    static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'index');
-        co(function* ()
+        try
         {
             const cookie = new Cookie(req, res);
             cookie.clearPassport();
@@ -41,13 +40,13 @@ export default class SettingsController
                 const locale : string = req['locale'];
                 message = R.text(session.message_id, locale);
                 session.message_id = null;
-                yield SessionModel.update(session);
+                await SessionModel.update(session);
             }
 
             res.render('settings', {message});
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -57,15 +56,15 @@ export default class SettingsController
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static account(req : express.Request, res : express.Response) : void
+    static async account(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'account');
-        co(function* ()
+        try
         {
             res.render('settings-account');
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -75,15 +74,15 @@ export default class SettingsController
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static email(req : express.Request, res : express.Response) : void
+    static async email(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'email');
-        co(function* ()
+        try
         {
             res.render('settings-account-email');
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -93,24 +92,24 @@ export default class SettingsController
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static changeEmail(req : express.Request, res : express.Response) : void
+    static async changeEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'changeEmail');
-        co(function* ()
+        try
         {
             const param = req.query;
             const changeId = param.id;
             let account : Account = null;
 
             if (changeId)
-                account = yield AccountModel.findByChangeId(changeId);
+                account = await AccountModel.findByChangeId(changeId);
 
             if (account) res.render('settings-account-email-change', {changeId});
             else         res.status(404).render('404');
 
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -120,14 +119,14 @@ export default class SettingsController
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static password(req : express.Request, res : express.Response) : void
+    static async password(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'password');
-        co(function* ()
+        try
         {
             res.render('settings-account-password');
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 }

@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Config       from '../config';
 import R            from '../libs/r';
@@ -9,7 +9,6 @@ import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
 import slog =    require('../slog');
-const co =       require('co');
 
 /**
  * リセットAPI
@@ -30,10 +29,10 @@ export default class ResetApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static index(req : express.Request, res : express.Response) : void
+    static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(ResetApi.CLS_NAME, 'index');
-        co(function* ()
+        try
         {
             do
             {
@@ -51,7 +50,7 @@ export default class ResetApi
                     break;
                 }
 
-                const account : Account = yield AccountModel.findByProviderId('email', param.email);
+                const account = await AccountModel.findByProviderId('email', param.email);
                 if (account === null || account.signup_id)
                 {
                     const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL, locale));
@@ -60,19 +59,19 @@ export default class ResetApi
                 }
 
                 account.reset_id = Utils.createRundomText(32);
-                yield AccountModel.update(account);
+                await AccountModel.update(account);
 
                 const url = Utils.generateUrl('reset', account.reset_id);
                 const template = R.mail(R.NOTICE_RESET_PASSWORD, locale);
                 const contents = Utils.formatString(template.contents, {url});
-                const result = yield Utils.sendMail(template.subject, account.email, contents);
+                const result = await Utils.sendMail(template.subject, account.email, contents);
                 const data = ResponseData.ok(1, R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL, locale));
                 res.json(data);
             }
             while (false);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
@@ -93,10 +92,10 @@ export default class ResetApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static change(req : express.Request, res : express.Response) : void
+    static async change(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(ResetApi.CLS_NAME, 'change');
-        co(function* ()
+        try
         {
             do
             {
@@ -131,13 +130,13 @@ export default class ResetApi
                 }
 
                 const resetId = param.resetId;
-                const account : Account = yield AccountModel.findByResetId(resetId);
+                const account = await AccountModel.findByResetId(resetId);
 
                 if (account)
                 {
                     account.password = Utils.getHashPassword(account.email, param.password, Config.PASSWORD_SALT);
                     account.reset_id = null;
-                    yield AccountModel.update(account);
+                    await AccountModel.update(account);
 
                     const data = ResponseData.ok(1, R.text(R.PASSWORD_RESET, locale));
                     res.json(data);
@@ -153,7 +152,7 @@ export default class ResetApi
             }
             while (false);
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 }

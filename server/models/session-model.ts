@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import SeqModel from './seq-model';
 import Utils    from '../libs/utils';
@@ -9,7 +9,6 @@ import __ =     require('lodash');
 import uuid =   require('node-uuid');
 import moment = require('moment');
 import slog =   require('../slog');
-const co =      require('co');
 
 /**
  * セッション
@@ -76,10 +75,10 @@ export default class SessionModel
      *
      * @return  なし
      */
-    static add(session : Session) : Promise<any>
+    static add(session : Session)
     {
         const log = slog.stepIn(SessionModel.CLS_NAME, 'add');
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             const m = moment();
 
@@ -101,10 +100,10 @@ export default class SessionModel
      *
      * @return  なし
      */
-    static update(session : Session) : Promise<any>
+    static update(session : Session)
     {
         const log = slog.stepIn(SessionModel.CLS_NAME, 'update');
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             for (let i in SessionModel.list)
             {
@@ -129,12 +128,12 @@ export default class SessionModel
      *
      * @return  なし
      */
-    static logout(cond : SessionFindCondition) : Promise<any>
+    static logout(cond : SessionFindCondition)
     {
         const log = slog.stepIn(SessionModel.CLS_NAME, 'logout');
         log.d(JSON.stringify(cond, null, 2));
 
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : () => void, reject) =>
         {
             for (const session of SessionModel.list)
             {
@@ -159,39 +158,36 @@ export default class SessionModel
      *
      * @return  Session。該当するセッションを返す
      */
-    static find(sessionId : string) : Promise<any>
+    static find(sessionId : string) : Promise<Session>
     {
         const log = slog.stepIn(SessionModel.CLS_NAME, 'find');
         log.d(`sessionId:${sessionId}`);
 
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve : SessionResolve, reject) =>
         {
-            co(function* ()
+            if (SessionModel.isUninitialize())
             {
-                if (SessionModel.isUninitialize())
+                log.stepOut();
+                reject(new Error(SessionModel.MESSAGE_UNINITIALIZE));
+                return;
+            }
+
+            for (const session of SessionModel.list)
+            {
+                if (session.id === sessionId)
                 {
+                    log.d('見つかりました。');
+                    const findSession : Session = __.clone(session);
+
                     log.stepOut();
-                    reject(new Error(SessionModel.MESSAGE_UNINITIALIZE));
+                    resolve(findSession);
                     return;
                 }
+            }
 
-                for (const session of SessionModel.list)
-                {
-                    if (session.id === sessionId)
-                    {
-                        log.d('見つかりました。');
-                        const findSession : Session = __.clone(session);
-
-                        log.stepOut();
-                        resolve(findSession);
-                        return;
-                    }
-                }
-
-                log.d('見つかりませんでした。');
-                log.stepOut();
-                resolve(null);
-            });
+            log.d('見つかりませんでした。');
+            log.stepOut();
+            resolve(null);
         });
     }
 
@@ -214,3 +210,5 @@ export interface SessionFindCondition
     sessionId? : string;
     accountId? : number;
 }
+
+interface SessionResolve {(session : Session) : void}

@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
@@ -9,7 +9,6 @@ import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
 import slog =    require('../slog');
-const co =       require('co');
 
 /**
  * サインアップコントローラ
@@ -24,10 +23,10 @@ export default class SignupController
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static index(req : express.Request, res : express.Response) : void
+    static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SignupController.CLS_NAME, 'index');
-        co(function* ()
+        try
         {
             const param = req.query;
             const signupId = param.id;
@@ -42,7 +41,7 @@ export default class SignupController
                     const locale : string = req['locale'];
                     message = R.text(session.message_id, locale);
                     session.message_id = null;
-                    yield SessionModel.update(session);
+                    await SessionModel.update(session);
                 }
 
                 log.d('サインアップ画面を表示');
@@ -50,14 +49,14 @@ export default class SignupController
             }
             else
             {
-                const account : Account = yield AccountModel.findBySignupId(signupId);
+                const account = await AccountModel.findBySignupId(signupId);
 
                 if (account) res.render('signup-confirm', {signupId});
                 else         res.status(404).render('404');
             }
 
             log.stepOut();
-        })
-        .catch ((err) => Utils.internalServerError(err, res, log));
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
     }
 }
