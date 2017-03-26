@@ -3,17 +3,17 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
-import {Store}       from './components/views/signup-view/store';
-import SignupView    from './components/views/signup-view/signup-view';
+import {Store}       from '../components/views/login-view/store';
+import LoginView     from '../components/views/login-view/login-view';
 
 const slog =  window['slog'];
 
 /**
  * View
  */
-class SignupApp
+class LoginApp
 {
-    private static CLS_NAME = 'SignupApp';
+    private static CLS_NAME = 'LoginApp';
     private store : Store;
 
     /**
@@ -24,14 +24,15 @@ class SignupApp
         this.store = {
             email:    '',
             password: '',
-            message:  window['message'],
+            message:  '',
             onTwitter:        this.onTwitter.       bind(this),
             onFacebook:       this.onFacebook.      bind(this),
             onGoogle:         this.onGoogle.        bind(this),
             onEmailChange:    this.onEmailChange.   bind(this),
             onPasswordChange: this.onPasswordChange.bind(this),
+            onLogin:          this.onLogin.         bind(this),
             onSignup:         this.onSignup.        bind(this),
-            onTop:            this.onTop.           bind(this)
+            onForget:         this.onForget.        bind(this)
         };
     }
 
@@ -41,7 +42,7 @@ class SignupApp
     render() : void
     {
         ReactDOM.render(
-            <SignupView store={this.store} />,
+            <LoginView store={this.store} />,
             document.getElementById('root'));
     }
 
@@ -50,8 +51,8 @@ class SignupApp
      */
     private onTwitter() : void
     {
-        const log = slog.stepIn(SignupApp.CLS_NAME, 'onTwitter');
-        location.href = '/signup/twitter';
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onTwitter');
+        location.href = '/login/twitter';
         log.stepOut();
     }
 
@@ -60,8 +61,8 @@ class SignupApp
      */
     private onFacebook() : void
     {
-        const log = slog.stepIn(SignupApp.CLS_NAME, 'onFacebook');
-        location.href = '/signup/facebook';
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onFacebook');
+        location.href = '/login/facebook';
         log.stepOut();
     }
 
@@ -70,8 +71,8 @@ class SignupApp
      */
     private onGoogle() : void
     {
-        const log = slog.stepIn(SignupApp.CLS_NAME, 'onGoogle');
-        location.href = '/signup/google';
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onGoogle');
+        location.href = '/login/google';
         log.stepOut();
     }
 
@@ -94,12 +95,12 @@ class SignupApp
     }
 
     /**
-     * onSignup
+     * onLogin
      */
-    private onSignup() : void
+    private onLogin() : void
     {
-        const log = slog.stepIn(SignupApp.CLS_NAME, 'onSignup');
-        this.signup('email',
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onLogin');
+        this.login('email',
         {
             email:    this.store.email,
             password: this.store.password
@@ -108,43 +109,49 @@ class SignupApp
     }
 
     /**
-     * onTop
+     * onSignup
      */
-    private onTop() : void
+    private onSignup() : void
     {
-        const log = slog.stepIn(SignupApp.CLS_NAME, 'onTop');
-        location.href = '/';
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onSignup');
+        location.href = '/signup';
         log.stepOut();
     }
 
     /**
-     * signup
+     * onForget
      */
-    private signup(sns : string, data?) : void
+    private onForget() : void
     {
-        const log = slog.stepIn(SignupApp.CLS_NAME, 'signup');
-        const {store} = this;
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onForget');
+        location.href = '/forget';
+        log.stepOut();
+    }
 
-        store.message = '';
-        this.render();
+    /**
+     * login
+     */
+    private login(sns : string, data?) : void
+    {
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'login');
 
         $.ajax({
             type: 'POST',
-            url: `/api/signup/${sns}`,
+            url: `/api/login/${sns}`,
             data: data
         })
 
         .done((data, status, jqXHR) =>
         {
-            const log = slog.stepIn(SignupApp.CLS_NAME, 'signup.done');
+            const log = slog.stepIn(LoginApp.CLS_NAME, 'login.done');
 
             if (data.status === 0)
             {
-                location.href = '/';
+                location.href = (data.smsId === undefined ? '/' : `?id=${data.smsId}`);
             }
             else
             {
-                store.message = data.message;
+                this.store.message = data.message;
                 this.render();
             }
 
@@ -153,7 +160,7 @@ class SignupApp
 
         .fail((jqXHR, status, error) =>
         {
-            const log = slog.stepIn(SignupApp.CLS_NAME, 'signup.fail');
+            const log = slog.stepIn(LoginApp.CLS_NAME, 'login.fail');
             log.stepOut();
         });
 
@@ -161,10 +168,18 @@ class SignupApp
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    const app = new SignupApp();
+/**
+ * onLoad
+ */
+window.addEventListener('DOMContentLoaded', () =>
+{
+    document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    const app = new LoginApp();
     app.render();
 });
 
 if (window.location.hash === '#_=_')
+{
+    // Facebookのコールバックでなぜかゴミが付いてくるので取り除く。
     window.history.pushState('', document.title, window.location.pathname);
+}

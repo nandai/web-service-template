@@ -3,8 +3,8 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
-import {Store}       from './components/views/top-view/store';
-import TopView       from './components/views/top-view/top-view';
+import {Store}       from '../components/views/top-view/store';
+import TopView       from '../components/views/top-view/top-view';
 
 const slog =  window['slog'];
 

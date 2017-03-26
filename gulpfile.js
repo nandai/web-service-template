@@ -78,7 +78,7 @@ gulp.task('client-browserify', function ()
 
 function buildClient(fileName)
 {
-    browserify({entries: ['./build-client/' + fileName]})
+    browserify({entries: ['./build-client/app/' + fileName]})
         .bundle()
         .pipe(source('./www/static/js/' + fileName))
         .pipe(gulp.dest('.'));
