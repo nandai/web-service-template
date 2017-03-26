@@ -433,7 +433,7 @@ export default class SettingsApi
                     break;
                 }
 
-                account.password = Utils.getHashPassword(account.email, param.new_password, Config.PASSWORD_SALT);
+                account.password = Utils.getHashPassword(account.email, param.newPassword, Config.PASSWORD_SALT);
                 await AccountModel.update(account);
 
                 const data = ResponseData.ok(1, R.text(R.PASSWORD_CHANGED, locale));
