@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import View from './view';
+import Api  from '../utils/api';
 import R    from '../utils/r';
 
 const sulas = window['sulas'];
@@ -39,34 +40,20 @@ class ResetView extends View
     /**
      * @method  onClickChangeButton
      */
-    private onClickChangeButton() : void
+    private async onClickChangeButton()
     {
         const log = slog.stepIn(ResetView.CLS_NAME, 'onClickChangeButton');
-
-        const resetId = $('#reset-id').val();
-        const password = this.passwordTextBox.getValue();
-        const confirm =  this.confirmTextBox. getValue();
-
-        $.ajax({
-            type: 'PUT',
-            url: '/api/reset/change',
-            data: {resetId, password, confirm}
-        })
-
-        .done((data, status, jqXHR) =>
+        try
         {
-            const log = slog.stepIn(ResetView.CLS_NAME, 'change.done');
-            $('#message').text(data.message);
-            log.stepOut();
-        })
+            const resetId = $('#reset-id').val();
+            const password = this.passwordTextBox.getValue();
+            const confirm =  this.confirmTextBox. getValue();
 
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(ResetView.CLS_NAME, 'change.fail');
+            const message = await Api.resetPassword(resetId, password, confirm);
+            $('#message').text(message);
             log.stepOut();
-        });
-
-        log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 }
 

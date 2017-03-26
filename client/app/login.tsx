@@ -5,6 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/login-view/store';
 import LoginView     from '../components/views/login-view/login-view';
+import Api           from '../utils/api';
 
 const slog =  window['slog'];
 
@@ -97,15 +98,19 @@ class LoginApp
     /**
      * onLogin
      */
-    private onLogin() : void
+    private async onLogin()
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onLogin');
-        this.login('email',
+        try
         {
-            email:    this.store.email,
-            password: this.store.password
-        });
-        log.stepOut();
+            await this.login('email',
+            {
+                email:    this.store.email,
+                password: this.store.password
+            });
+            log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 
     /**
@@ -131,40 +136,34 @@ class LoginApp
     /**
      * login
      */
-    private login(sns : string, data?) : void
+    private login(sns : string, data?)
     {
-        const log = slog.stepIn(LoginApp.CLS_NAME, 'login');
-
-        $.ajax({
-            type: 'POST',
-            url: `/api/login/${sns}`,
-            data: data
-        })
-
-        .done((data, status, jqXHR) =>
+        return new Promise(async (resolve : () => void, reject) =>
         {
-            const log = slog.stepIn(LoginApp.CLS_NAME, 'login.done');
-
-            if (data.status === 0)
+            const log = slog.stepIn(LoginApp.CLS_NAME, 'login');
+            try
             {
-                location.href = (data.smsId === undefined ? '/' : `?id=${data.smsId}`);
+                const res = await Api.login(sns, data);
+
+                if (res.message)
+                {
+                    this.store.message = res.message;
+                    this.render();
+                }
+                else
+                {
+                    location.href = (res.smsId === undefined ? '/' : `?id=${res.smsId}`);
+                }
+
+                log.stepOut();
+                resolve();
             }
-            else
+            catch (err)
             {
-                this.store.message = data.message;
-                this.render();
+                log.stepOut();
+                reject(err);
             }
-
-            log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(LoginApp.CLS_NAME, 'login.fail');
-            log.stepOut();
         });
-
-        log.stepOut();
     }
 }
 

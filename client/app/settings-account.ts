@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import View from './view';
+import Api  from '../utils/api';
 import R    from '../utils/r';
 
 const sulas = window['sulas'];
@@ -21,7 +22,7 @@ class SettingsAccountView extends View
     /**
      * 初期化
      */
-    protected init(isResize : boolean) : void
+    protected async init(isResize : boolean)
     {
         const log = slog.stepIn(SettingsAccountView.CLS_NAME, 'init');
 
@@ -34,55 +35,32 @@ class SettingsAccountView extends View
 
         this.changeButton.on('click', this.onClickChangeButton.bind(this));
 
-        $.ajax({
-            type: 'GET',
-            url: `/api/settings/account`
-        })
-
-        .done((data, status, jqXHR) =>
+        try
         {
-            const account = data;
+            const account = await Api.getAccount();
             this.nameTextBox.   setValue(account.name);
             this.phoneNoTextBox.setValue(account.phoneNo);
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-        });
-
-        log.stepOut();
+            log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 
     /**
      * @method  onClickChangeButton
      */
-    private onClickChangeButton() : void
+    private async onClickChangeButton()
     {
         const log = slog.stepIn(SettingsAccountView.CLS_NAME, 'onClickChangeButton');
-
-        const name =    this.nameTextBox.   getValue();
-        const phoneNo = this.phoneNoTextBox.getValue();
-
-        $.ajax({
-            type: 'PUT',
-            url: '/api/settings/account',
-            data: {name, phoneNo}
-        })
-
-        .done((data, status, jqXHR) =>
+        try
         {
-            const log = slog.stepIn(SettingsAccountView.CLS_NAME, 'settings-account.done');
-            $('#message').text(data.message);
-            log.stepOut();
-        })
+            const name =    this.nameTextBox.   getValue();
+            const phoneNo = this.phoneNoTextBox.getValue();
 
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(SettingsAccountView.CLS_NAME, 'settings-account.fail');
+            const message = await Api.setAccount(name, phoneNo);
+            $('#message').text(message);
             log.stepOut();
-        });
-
-        log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 }
 

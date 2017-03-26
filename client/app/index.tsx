@@ -5,6 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/top-view/store';
 import TopView       from '../components/views/top-view/top-view';
+import Api           from '../utils/api';
 
 const slog =  window['slog'];
 
@@ -39,7 +40,7 @@ class TopApp
      */
     private onSettings() : void
     {
-        const log = slog.stepIn(TopApp.CLS_NAME, 'onClickSettingsButton');
+        const log = slog.stepIn(TopApp.CLS_NAME, 'onSettings');
         window.location.href = '/settings';
         log.stepOut();
     }
@@ -47,29 +48,16 @@ class TopApp
     /**
      * onLogout
      */
-    private onLogout() : void
+    private async onLogout()
     {
-        const log = slog.stepIn(TopApp.CLS_NAME, 'onClickLogoutButton');
-
-        $.ajax({
-            type: 'POST',
-            url: `/api/logout`
-        })
-
-        .done((data, status, jqXHR) =>
+        const log = slog.stepIn(TopApp.CLS_NAME, 'onLogout');
+        try
         {
-            const log = slog.stepIn(TopApp.CLS_NAME, 'logout.done');
+            await Api.logout();
             location.href = '/';
             log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(TopApp.CLS_NAME, 'logout.fail');
-            log.stepOut();
-        });
-
-        log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 }
 

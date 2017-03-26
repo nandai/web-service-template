@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import View from './view';
+import Api  from '../utils/api';
 import R    from '../utils/r';
 
 const sulas = window['sulas'];
@@ -42,7 +43,7 @@ class SettingsAccountPasswordView extends View
     /**
      * @method  onClickChangeButton
      */
-    private onClickChangeButton() : void
+    private async onClickChangeButton()
     {
         const log = slog.stepIn(SettingsAccountPasswordView.CLS_NAME, 'onClickChangeButton');
 
@@ -50,26 +51,13 @@ class SettingsAccountPasswordView extends View
         const newPassword = this.newPasswordTextBox.getValue();
         const confirm =     this.confirmTextBox.    getValue();
 
-        $.ajax({
-            type: 'PUT',
-            url: '/api/settings/account/password',
-            data: {oldPassword, newPassword, confirm}
-        })
-
-        .done((data, status, jqXHR) =>
+        try
         {
-            const log = slog.stepIn(SettingsAccountPasswordView.CLS_NAME, 'change.done');
-            $('#message').text(data.message);
+            const message = await Api.changePassword(oldPassword, newPassword, confirm);
+            $('#message').text(message);
             log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(SettingsAccountPasswordView.CLS_NAME, 'change.fail');
-            log.stepOut();
-        });
-
-        log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 }
 

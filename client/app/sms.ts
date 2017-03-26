@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import View from './view';
+import Api  from '../utils/api';
 import R    from '../utils/r';
 
 const sulas = window['sulas'];
@@ -36,42 +37,29 @@ class SmsView extends View
     /**
      * @method  onClickSendButton
      */
-    private onClickSendButton() : void
+    private async onClickSendButton()
     {
         const log = slog.stepIn(SmsView.CLS_NAME, 'onClickSendButton');
 
         const smsId = $('#sms-id').val();
         const smsCode = this.smsCodeTextBox.getValue();
 
-        $.ajax({
-            type: 'POST',
-            url: '/api/login/sms',
-            data: {smsId, smsCode}
-        })
-
-        .done((data, status, jqXHR) =>
+        try
         {
-            const log = slog.stepIn(SmsView.CLS_NAME, 'change.done');
+            const message = await Api.smsLogin(smsId, smsCode);
 
-            if (data.status === 0)
+            if (message === null)
             {
                 location.href = '/';
             }
             else
             {
-                $('#message').text(data.message);
+                $('#message').text(message);
             }
 
             log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(SmsView.CLS_NAME, 'change.fail');
-            log.stepOut();
-        });
-
-        log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 }
 

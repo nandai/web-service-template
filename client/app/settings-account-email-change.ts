@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import View from './view';
+import Api  from '../utils/api';
 import R    from '../utils/r';
 
 const sulas = window['sulas'];
@@ -37,35 +38,19 @@ class SettingsAccountEmailChangeView extends View
     /**
      * @method  onClickChangeButton
      */
-    private onClickChangeButton() : void
+    private async onClickChangeButton()
     {
         const log = slog.stepIn(SettingsAccountEmailChangeView.CLS_NAME, 'onClickChangeButton');
-        const data =
+        try
         {
-            changeId: $('#change-id').val(),
-            password: this.passwordTextBox.getValue()
-        };
+            const changeId = $('#change-id').val();
+            const password = this.passwordTextBox.getValue();
 
-        $.ajax({
-            type: 'PUT',
-            url: `/api/settings/account/email/change`,
-            data: data
-        })
-
-        .done((data, status, jqXHR) =>
-        {
-            const log = slog.stepIn(SettingsAccountEmailChangeView.CLS_NAME, 'settings-account-email-change.done');
-            $('#message').text(data.message);
+            const message = await Api.confirmChangeEmail(changeId, password);
+            $('#message').text(message);
             log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(SettingsAccountEmailChangeView.CLS_NAME, 'settings-account-email-change.fail');
-            log.stepOut();
-        });
-
-        log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 }
 

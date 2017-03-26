@@ -5,6 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/signup-view/store';
 import SignupView    from '../components/views/signup-view/signup-view';
+import Api           from '../utils/api';
 
 const slog =  window['slog'];
 
@@ -96,15 +97,19 @@ class SignupApp
     /**
      * onSignup
      */
-    private onSignup() : void
+    private async onSignup()
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onSignup');
-        this.signup('email',
+        try
         {
-            email:    this.store.email,
-            password: this.store.password
-        });
-        log.stepOut();
+            await this.signup('email',
+            {
+                email:    this.store.email,
+                password: this.store.password
+            });
+            log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 
     /**
@@ -120,44 +125,39 @@ class SignupApp
     /**
      * signup
      */
-    private signup(sns : string, data?) : void
+    private signup(sns : string, data?)
     {
-        const log = slog.stepIn(SignupApp.CLS_NAME, 'signup');
-        const {store} = this;
-
-        store.message = '';
-        this.render();
-
-        $.ajax({
-            type: 'POST',
-            url: `/api/signup/${sns}`,
-            data: data
-        })
-
-        .done((data, status, jqXHR) =>
+        return new Promise(async (resolve : () => void, reject) =>
         {
-            const log = slog.stepIn(SignupApp.CLS_NAME, 'signup.done');
+            const log = slog.stepIn(SignupApp.CLS_NAME, 'signup');
+            const {store} = this;
 
-            if (data.status === 0)
+            store.message = '';
+            this.render();
+
+            try
             {
-                location.href = '/';
+                const message = await Api.signup(sns, data);
+
+                if (message === null)
+                {
+                    location.href = '/';
+                }
+                else
+                {
+                    store.message = message;
+                    this.render();
+                }
+
+                log.stepOut();
+                resolve();
             }
-            else
+            catch (err)
             {
-                store.message = data.message;
-                this.render();
+                log.stepOut();
+                reject(err);
             }
-
-            log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(SignupApp.CLS_NAME, 'signup.fail');
-            log.stepOut();
         });
-
-        log.stepOut();
     }
 }
 

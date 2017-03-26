@@ -24,7 +24,8 @@ export function view(title : string, js : string, message? : string) : string
     <!-- デバッグログ -->
     <script src="/components/slog.js"></script>
     <script>
-        var serviceAddr = (('https:' === document.location.protocol) ? 'wss://localhost:8443' : 'ws://localhost:8080');
+//      var serviceAddr = (('https:' === document.location.protocol) ? 'wss://localhost:8443' : 'ws://localhost:8080');
+        var serviceAddr = 'ws://localhost:8080';
         slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL');
         ${optionMessage}
     </script>

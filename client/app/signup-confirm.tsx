@@ -5,6 +5,7 @@ import * as React        from 'react';
 import * as ReactDOM     from 'react-dom';
 import {Store}           from '../components/views/signup-confirm-view/store';
 import SignupConfirmView from '../components/views/signup-confirm-view/signup-confirm-view';
+import Api               from '../utils/api';
 
 const slog =     window['slog'];
 const signupId = window['message'];
@@ -52,46 +53,28 @@ class SignupConfirmApp
     /**
      * onConfirm
      */
-    private onConfirm() : void
+    private async onConfirm()
     {
         const log = slog.stepIn(SignupConfirmApp.CLS_NAME, 'onConfirm');
         const {store} = this;
-        const data =
+
+        try
         {
-            signupId: signupId,
-            password: this.store.password
-        };
+            const res = await Api.confirmSignup(signupId, store.password);
 
-        $.ajax({
-            type: 'POST',
-            url: `/api/signup/email/confirm`,
-            data: data
-        })
-
-        .done((data, status, jqXHR) =>
-        {
-            const log = slog.stepIn(SignupConfirmApp.CLS_NAME, 'signup-confirm.done');
-
-            if (data.status === 0)
+            if (res.message)
             {
-                location.href = data.redirect;
+                store.message = res.message;
+                this.render();
             }
             else
             {
-                store.message = data.message;
-                this.render();
+                location.href = res.redirect;
             }
 
             log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(SignupConfirmApp.CLS_NAME, 'signup-confirm.fail');
-            log.stepOut();
-        });
-
-        log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 }
 

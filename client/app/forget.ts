@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import View from './view';
+import Api  from '../utils/api';
 import R    from '../utils/r';
 
 const sulas = window['sulas'];
@@ -37,30 +38,17 @@ class ForgetView extends View
     /**
      * @method  onClickSendMailButton
      */
-    private onClickSendMailButton() : void
+    private async onClickSendMailButton()
     {
         const log = slog.stepIn(ForgetView.CLS_NAME, 'onClickSendMailButton');
-
-        $.ajax({
-            type: 'POST',
-            url: '/api/reset',
-            data: {email:this.emailTextBox.getValue()}
-        })
-
-        .done((data, status, jqXHR) =>
+        try
         {
-            const log = slog.stepIn(ForgetView.CLS_NAME, 'reset.done');
-            $('#message').text(data.message);
+            const email = this.emailTextBox.getValue();
+            const message = await Api.requestResetPassword(email);
+            $('#message').text(message);
             log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(ForgetView.CLS_NAME, 'reset.fail');
-            log.stepOut();
-        });
-
-        log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 }
 

@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import View  from './view';
+import Api   from '../utils/api';
 import R     from '../utils/r';
 import Utils from '../utils/utils';
 
@@ -29,7 +30,7 @@ class SettingsView extends View
     /**
      * 初期化
      */
-    protected init(isResize : boolean) : void
+    protected async init(isResize : boolean)
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'init');
 
@@ -42,26 +43,6 @@ class SettingsView extends View
         this.leaveButton =    new sulas.Button('#leave',    0, 50, R.text(R.DELETE_ACCOUNT));
         this.backButton =     new sulas.Button('#back',     0, 50, R.text(R.BACK));
 
-        $.ajax({
-            type: 'GET',
-            url: `/api/settings/account`
-        })
-
-        .done((data, status, jqXHR) =>
-        {
-            this.account = data;
-            $('#name').text(this.account.name);
-
-            this.updateSnsButtons();
-
-            if (this.account.email === null)
-                this.passwordButton.setEnabled(false);
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-        });
-
         this.twitterButton. on('click', this.onClickTwitterButton. bind(this));
         this.facebookButton.on('click', this.onClickFacebookButton.bind(this));
         this.googleButton.  on('click', this.onClickGoogleButton.  bind(this));
@@ -71,7 +52,21 @@ class SettingsView extends View
         this.leaveButton.   on('click', this.onClickLeaveButton.   bind(this));
         this.backButton.    on('click', this.onClickBackButton.    bind(this));
 
-        log.stepOut();
+        try
+        {
+            const account = await Api.getAccount();
+
+            this.account = account;
+            $('#name').text(this.account.name);
+
+            this.updateSnsButtons();
+
+            if (this.account.email === null)
+                this.passwordButton.setEnabled(false);
+
+            log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 
     private updateSnsButtons()
@@ -92,14 +87,14 @@ class SettingsView extends View
     /**
      * @method  onClickTwitterButton
      */
-    private onClickTwitterButton() : void
+    private async onClickTwitterButton()
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickTwitterButton');
 
         if (this.account.twitter === false)
             location.href = '/settings/account/link/twitter';
         else
-            this.unlink('twitter');
+            await this.unlink('twitter');
 
         log.stepOut();
     }
@@ -107,14 +102,14 @@ class SettingsView extends View
     /**
      * @method  onClickFacebookButton
      */
-    private onClickFacebookButton() : void
+    private async onClickFacebookButton()
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickFacebookButton');
 
         if (this.account.facebook === false)
             location.href = '/settings/account/link/facebook';
         else
-            this.unlink('facebook');
+            await this.unlink('facebook');
 
         log.stepOut();
     }
@@ -122,14 +117,14 @@ class SettingsView extends View
     /**
      * @method  onClickGoogleButton
      */
-    private onClickGoogleButton() : void
+    private async onClickGoogleButton()
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickGoogleButton');
 
         if (this.account.google === false)
             location.href = '/settings/account/link/google';
         else
-            this.unlink('google');
+            await this.unlink('google');
 
         log.stepOut();
     }
@@ -167,38 +162,25 @@ class SettingsView extends View
     /**
      * @method  onClickLeaveButton
      */
-    private onClickLeaveButton() : void
+    private async onClickLeaveButton()
     {
         const log = slog.stepIn(SettingsView.CLS_NAME, 'onClickLeaveButton');
-
-        $.ajax({
-            type: 'DELETE',
-            url: `/api/settings/account/leave`
-        })
-
-        .done((data, status, jqXHR) =>
+        try
         {
-            const log = slog.stepIn(SettingsView.CLS_NAME, 'leave.done');
+            const message = await Api.deleteAccount();
 
-            if (data.status === 0)
+            if (message === null)
             {
                 location.href = '/';
             }
             else
             {
-                $('#message').text(data.message);
+                $('#message').text(message);
             }
 
             log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(SettingsView.CLS_NAME, 'leave.fail');
-            log.stepOut();
-        });
-
-        log.stepOut();
+        }
+        catch (err) {log.stepOut()}
     }
 
     /**
@@ -214,39 +196,34 @@ class SettingsView extends View
     /**
      * @method  unlink
      */
-    private unlink(sns : string) : void
+    private unlink(sns : string)
     {
-        const log = slog.stepIn(SettingsView.CLS_NAME, 'unlink');
-
-        $.ajax({
-            type: 'PUT',
-            url: `/api/settings/account/unlink/${sns}`
-        })
-
-        .done((data, status, jqXHR) =>
+        return new Promise(async (resolve : () => void, reject) =>
         {
-            const log = slog.stepIn(SettingsView.CLS_NAME, 'unlink.done');
-
-            if (data.status === 0)
+            const log = slog.stepIn(SettingsView.CLS_NAME, 'unlink');
+            try
             {
-                this.account[sns] = false;
-                this.updateSnsButtons();
+                const message = await Api.unlink(sns);
+
+                if (message === null)
+                {
+                    this.account[sns] = false;
+                    this.updateSnsButtons();
+                }
+                else
+                {
+                    $('#message').text(message);
+                }
+
+                log.stepOut();
+                resolve();
             }
-            else
+            catch (err)
             {
-                $('#message').text(data.message);
+                log.stepOut();
+                reject();
             }
-
-            log.stepOut();
-        })
-
-        .fail((jqXHR, status, error) =>
-        {
-            const log = slog.stepIn(SettingsView.CLS_NAME, 'unlink.fail');
-            log.stepOut();
         });
-
-        log.stepOut();
     }
 }
 
