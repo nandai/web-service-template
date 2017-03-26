@@ -1,6 +1,8 @@
 /**
  * (C) 2016 printf.jp
  */
+import {view} from './view';
+
 import express = require('express');
 import slog =    require('../slog');
 
@@ -20,7 +22,7 @@ export default class ForgetController
     static index(req : express.Request, res : express.Response) : void
     {
         const log = slog.stepIn(ForgetController.CLS_NAME, 'index');
-        res.render('forget');
+        res.send(view('パスワードを忘れた', 'forget.js'));
         log.stepOut();
     }
 }
