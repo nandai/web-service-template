@@ -52,7 +52,7 @@ export default class SignupController
             {
                 const account = await AccountModel.findBySignupId(signupId);
 
-                if (account) res.render('signup-confirm', {signupId});
+                if (account) res.send(view('サインアップの確認', 'signup-confirm.js', signupId));
                 else         res.status(404).render('404');
             }
 

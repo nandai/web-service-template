@@ -124,7 +124,6 @@ class SignupApp
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'signup');
         const {store} = this;
-        const $message = $('#message');
 
         store.message = '';
         this.render();
