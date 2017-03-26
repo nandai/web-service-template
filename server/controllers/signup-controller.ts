@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {view}                  from './view';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import ResponseData            from '../libs/response-data';
@@ -45,7 +46,7 @@ export default class SignupController
                 }
 
                 log.d('サインアップ画面を表示');
-                res.render('signup', {message});
+                res.send(view('サインアップ', 'signup.js', message));
             }
             else
             {

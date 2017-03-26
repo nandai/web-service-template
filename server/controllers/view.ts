@@ -1,8 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-export function view(title : string, js : string) : string
+export function view(title : string, js : string, message? : string) : string
 {
+    const optionMessage = (message
+        ? `var message = '${message}';`
+        : '');
+
     const view = `
 <!DOCTYPE html>
 <html>
@@ -22,6 +26,7 @@ export function view(title : string, js : string) : string
     <script>
         var serviceAddr = (('https:' === document.location.protocol) ? 'wss://localhost:8443' : 'ws://localhost:8080');
         slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL');
+        ${optionMessage}
     </script>
 
     <!-- SulasSplars -->
