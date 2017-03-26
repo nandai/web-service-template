@@ -2,6 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
+import Button     from 'client/components/common/button';
+import Input      from 'client/components/common/input';
 import R          from 'client/utils/r';
 import {Store}    from './store';
 
@@ -12,8 +14,6 @@ interface LoginViewProps
 
 export default class LoginView extends React.Component<LoginViewProps, {}>
 {
-    private static CLS_NAME = 'LoginView';
-
     /**
      * render
      */
@@ -21,14 +21,14 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
         const {store} = this.props;
         return (
             <div>
-                <button onClick={store.onTwitter} >{R.text(R.LOGIN_WITH_TWITTER)}</button>
-                <button onClick={store.onFacebook}>{R.text(R.LOGIN_WITH_FACEBOOK)}</button>
-                <button onClick={store.onGoogle}  >{R.text(R.LOGIN_WITH_GOOGLE)}</button>
-                <input type="text"     placeholder={R.text(R.EMAIL)}    value={store.email}    onChange={store.onEmailChange} />
-                <input type="password" placeholder={R.text(R.PASSWORD)} value={store.password} onChange={store.onPasswordChange} />
-                <button onClick={store.onLogin}   >{R.text(R.LOGIN)}</button>
-                <button onClick={store.onSignup}  >{R.text(R.GO_SIGNUP)}</button>
-                <button onClick={store.onForget}  >{R.text(R.GO_FORGET)}</button>
+                <Button onClick={store.onTwitter} >{R.text(R.LOGIN_WITH_TWITTER)}</Button>
+                <Button onClick={store.onFacebook}>{R.text(R.LOGIN_WITH_FACEBOOK)}</Button>
+                <Button onClick={store.onGoogle}  >{R.text(R.LOGIN_WITH_GOOGLE)}</Button>
+                <Input type="text"     placeholder={R.text(R.EMAIL)}    value={store.email}    onChange={store.onEmailChange} />
+                <Input type="password" placeholder={R.text(R.PASSWORD)} value={store.password} onChange={store.onPasswordChange} />
+                <Button onClick={store.onLogin}   >{R.text(R.LOGIN)}</Button>
+                <Button onClick={store.onSignup}  >{R.text(R.GO_SIGNUP)}</Button>
+                <Button onClick={store.onForget}  >{R.text(R.GO_FORGET)}</Button>
                 <span>{store.message}</span>
             </div>
         );

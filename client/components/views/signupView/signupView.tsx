@@ -2,6 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
+import Button     from 'client/components/common/button';
+import Input      from 'client/components/common/input';
 import R          from 'client/utils/r';
 import {Store}    from './store';
 
@@ -12,8 +14,6 @@ interface SignupViewProps
 
 export default class SignupView extends React.Component<SignupViewProps, {}>
 {
-    private static CLS_NAME = 'SignupView';
-
     /**
      * render
      */
@@ -21,13 +21,13 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
         const {store} = this.props;
         return (
             <div>
-                <button onClick={store.onTwitter} >{R.text(R.SIGNUP_WITH_TWITTER)}</button>
-                <button onClick={store.onFacebook}>{R.text(R.SIGNUP_WITH_FACEBOOK)}</button>
-                <button onClick={store.onGoogle}  >{R.text(R.SIGNUP_WITH_GOOGLE)}</button>
-                <input type="text"     placeholder={R.text(R.EMAIL)}    value={store.email}    onChange={store.onEmailChange} />
-                <input type="password" placeholder={R.text(R.PASSWORD)} value={store.password} onChange={store.onPasswordChange} />
-                <button onClick={store.onSignup}  >{R.text(R.SIGNUP)}</button>
-                <button onClick={store.onTop}     >{R.text(R.GO_TOP)}</button>
+                <Button onClick={store.onTwitter} >{R.text(R.SIGNUP_WITH_TWITTER)}</Button>
+                <Button onClick={store.onFacebook}>{R.text(R.SIGNUP_WITH_FACEBOOK)}</Button>
+                <Button onClick={store.onGoogle}  >{R.text(R.SIGNUP_WITH_GOOGLE)}</Button>
+                <Input type="text"     placeholder={R.text(R.EMAIL)}    value={store.email}    onChange={store.onEmailChange} />
+                <Input type="password" placeholder={R.text(R.PASSWORD)} value={store.password} onChange={store.onPasswordChange} />
+                <Button onClick={store.onSignup}  >{R.text(R.SIGNUP)}</Button>
+                <Button onClick={store.onTop}     >{R.text(R.GO_TOP)}</Button>
                 <span>{store.message}</span>
             </div>
         );
