@@ -225,24 +225,24 @@ class Initializer
         //
         // これより下は認証が必要なURL
         //
-        this.app.use(Access.auth);
+//      this.app.use(Access.auth);
 
-        this.app.get(   '/settings',                  SettingsController.index);
-        this.app.get(   '/settings/account',          SettingsController.account);
-        this.app.get(   '/settings/account/email',    SettingsController.email);
-        this.app.get(   '/settings/account/password', SettingsController.password);
-        this.app.get(   '/settings/account/link/twitter',  linkCommand, authTwitter);
-        this.app.get(   '/settings/account/link/facebook', linkCommand, authFacebook);
-        this.app.get(   '/settings/account/link/google',   linkCommand, authGoogle);
+        this.app.get(   '/settings',                       Access.auth, SettingsController.index);
+        this.app.get(   '/settings/account',               Access.auth, SettingsController.account);
+        this.app.get(   '/settings/account/email',         Access.auth, SettingsController.email);
+        this.app.get(   '/settings/account/password',      Access.auth, SettingsController.password);
+        this.app.get(   '/settings/account/link/twitter',  Access.auth, linkCommand, authTwitter);
+        this.app.get(   '/settings/account/link/facebook', Access.auth, linkCommand, authFacebook);
+        this.app.get(   '/settings/account/link/google',   Access.auth, linkCommand, authGoogle);
 
         // APIs
-        this.app.get(   '/api/settings/account',                    SettingsApi.account);
-        this.app.put(   '/api/settings/account',                    SettingsApi.account);
-        this.app.put(   `/api/settings/account/unlink/${provider}`, SettingsApi.unlink);
-        this.app.put(   '/api/settings/account/email',              SettingsApi.email);
-        this.app.put(   '/api/settings/account/password',           SettingsApi.password);
-        this.app.delete('/api/settings/account/leave',              SettingsApi.leave);
-        this.app.post(  '/api/logout',                              LogoutApi.  index);
+        this.app.get(   '/api/settings/account',                    Access.auth, SettingsApi.account);
+        this.app.put(   '/api/settings/account',                    Access.auth, SettingsApi.account);
+        this.app.put(   `/api/settings/account/unlink/${provider}`, Access.auth, SettingsApi.unlink);
+        this.app.put(   '/api/settings/account/email',              Access.auth, SettingsApi.email);
+        this.app.put(   '/api/settings/account/password',           Access.auth, SettingsApi.password);
+        this.app.delete('/api/settings/account/leave',              Access.auth, SettingsApi.leave);
+        this.app.post(  '/api/logout',                              Access.auth, LogoutApi.  index);
 
         this.app.use(Access.notFound);
     }
