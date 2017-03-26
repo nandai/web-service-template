@@ -50,7 +50,7 @@ export default class TopController
             {
                 const account = await AccountModel.findBySmsId(smsId);
 
-                if (account) res.render('sms', {smsId});
+                if (account) res.send(view('二段階認証', 'sms.js', smsId));
                 else         res.status(404).render('404');
             }
             else if (session.account_id === null || message)
