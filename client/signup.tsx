@@ -3,8 +3,8 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
-import {Store}       from './components/views/signupView/store';
-import SignupView    from './components/views/signupView/signupView';
+import {Store}       from './components/views/signup-view/store';
+import SignupView    from './components/views/signup-view/signup-view';
 
 const slog =  window['slog'];
 

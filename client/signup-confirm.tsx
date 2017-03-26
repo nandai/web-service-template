@@ -3,8 +3,8 @@
  */
 import * as React        from 'react';
 import * as ReactDOM     from 'react-dom';
-import {Store}           from './components/views/signupConfirmView/store';
-import SignupConfirmView from './components/views/signupConfirmView/signupConfirmView';
+import {Store}           from './components/views/signup-confirm-view/store';
+import SignupConfirmView from './components/views/signup-confirm-view/signup-confirm-view';
 
 const slog =     window['slog'];
 const signupId = window['message'];
