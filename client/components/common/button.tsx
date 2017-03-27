@@ -6,18 +6,25 @@ import R          from 'client/utils/r';
 
 interface ButtonProps
 {
-    onClick : () => void;
+    disabled? : boolean;
+    onClick   : () => void;
 }
 
 export default class Button extends React.Component<ButtonProps, {}>
 {
+    private static defaultProps : ButtonProps = {
+        disabled: false,
+        onClick:  null
+    };
+
     /**
      * render
      */
     render() : JSX.Element {
         const {props} = this;
         return (
-            <button onClick={props.onClick}>
+            <button disabled={props.disabled}
+                    onClick={props.onClick}>
                 {props.children}
             </button>
         );

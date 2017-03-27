@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {view}                  from './view';
 import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
@@ -43,7 +44,7 @@ export default class SettingsController
                 await SessionModel.update(session);
             }
 
-            res.render('settings', {message});
+            res.send(view('設定', 'settings.js', message));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};

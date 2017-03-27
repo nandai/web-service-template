@@ -52,3 +52,11 @@ button:active
 {
     background-color: rgb(81, 214, 194);
 }
+
+button[disabled],
+button[disabled]:hover,
+button[disabled]:active
+{
+    color: lightgray;
+    background-color: rgb(49, 182, 162);
+}
