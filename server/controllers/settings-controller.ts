@@ -62,7 +62,7 @@ export default class SettingsController
         const log = slog.stepIn(SettingsController.CLS_NAME, 'account');
         try
         {
-            res.render('settings-account');
+            res.send(view('アカウントの設定', 'settings-account.js'));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
