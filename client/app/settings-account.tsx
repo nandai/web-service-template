@@ -14,7 +14,7 @@ const slog = window['slog'];
  */
 class SettingsAccountApp
 {
-    private static CLS_NAME = 'SettingsAccountView';
+    private static CLS_NAME = 'SettingsAccountApp';
     private store : Store;
 
     /**
@@ -29,6 +29,30 @@ class SettingsAccountApp
             onPhoneNoChange: this.onPhoneNoChange.bind(this),
             onChange:        this.onChange.       bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init()
+    {
+        return new Promise(async (resolve : () => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsAccountApp.CLS_NAME, 'init');
+            try
+            {
+                const {store} = this;
+                store.account = await Api.getAccount();
+
+                log.stepOut();
+                resolve();
+            }
+            catch (err)
+            {
+                log.stepOut();
+                reject();
+            }
+        });
     }
 
     /**
@@ -49,6 +73,7 @@ class SettingsAccountApp
         this.store.account.name = e.target.value;
         this.render();
     }
+
     /**
      * onPhoneNoChange
      */
@@ -56,32 +81,6 @@ class SettingsAccountApp
     {
         this.store.account.phoneNo = e.target.value;
         this.render();
-    }
-
-    /**
-     * 初期化
-     */
-    init()
-    {
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsAccountApp.CLS_NAME, 'init');
-            try
-            {
-                const account = await Api.getAccount();
-
-                const {store} = this;
-                store.account = account;
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err)
-            {
-                log.stepOut();
-                reject();
-            }
-        });
     }
 
     /**
@@ -94,8 +93,7 @@ class SettingsAccountApp
         {
             const {store} = this;
             const {account} = store;
-            const name =    account.name;
-            const phoneNo = account.phoneNo;
+            const {name, phoneNo} = account;
 
             store.message = await Api.setAccount(name, phoneNo);
             this.render();

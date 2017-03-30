@@ -80,7 +80,7 @@ export default class SettingsController
         const log = slog.stepIn(SettingsController.CLS_NAME, 'email');
         try
         {
-            res.render('settings-account-email');
+            res.send(view('メールアドレスの設定', 'settings-account-email.js'));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
