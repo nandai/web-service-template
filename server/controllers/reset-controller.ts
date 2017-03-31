@@ -1,8 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {view} from './view';
-import Utils  from '../libs/utils';
+import {view, notFound} from './view';
+import Utils            from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
@@ -34,7 +34,7 @@ export default class ResetController
                 account = await AccountModel.findByResetId(resetId);
 
             if (account) res.send(view('パスワードリセット', 'reset.js', resetId));
-            else         res.status(404).render('404');
+            else         notFound(res);
 
             log.stepOut();
         }

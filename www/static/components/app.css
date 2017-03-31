@@ -60,3 +60,11 @@ button[disabled]:active
     color: lightgray;
     background-color: rgb(49, 182, 162);
 }
+
+.wst-center
+{
+    position: absolute;
+    left: 50%;
+    top:  50%;
+    transform: translateX(-50%) translateY(-50);
+}

@@ -1,6 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import express = require('express');
+
 export function view(title : string, js : string, message? : string) : string
 {
     const optionMessage = (message
@@ -45,4 +47,9 @@ export function view(title : string, js : string, message? : string) : string
     `;
 
     return view;
+}
+
+export function notFound(res : express.Response) : void
+{
+    res.status(404).send(view('NOT FOUND', 'not-found.js'));
 }

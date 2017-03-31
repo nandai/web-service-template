@@ -74,6 +74,7 @@ gulp.task('client-browserify', function ()
     buildClient('settings-account-email.js');
     buildClient('settings-account-email-change.js');
     buildClient('settings-account-password.js');
+    buildClient('not-found.js');
 });
 
 function buildClient(fileName)

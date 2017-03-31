@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {view}                  from './view';
+import {view, notFound}        from './view';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import ResponseData            from '../libs/response-data';
@@ -53,7 +53,7 @@ export default class SignupController
                 const account = await AccountModel.findBySignupId(signupId);
 
                 if (account) res.send(view('サインアップの確認', 'signup-confirm.js', signupId));
-                else         res.status(404).render('404');
+                else         notFound(res);
             }
 
             log.stepOut();

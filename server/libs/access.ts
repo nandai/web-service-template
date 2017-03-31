@@ -5,6 +5,7 @@ import Cookie       from './cookie';
 import R            from './r';
 import Utils        from './utils';
 import ResponseData from './response-data';
+import {notFound}              from '../controllers/view';
 import SessionModel, {Session} from '../models/session-model';
 
 import express =    require('express');
@@ -272,7 +273,7 @@ export default class Access
         }
         else
         {
-            res.status(404).render('404');
+            notFound(res);
         }
     }
 }

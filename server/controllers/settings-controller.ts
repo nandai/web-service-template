@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {view}                  from './view';
+import {view, notFound}        from './view';
 import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
@@ -106,7 +106,7 @@ export default class SettingsController
                 account = await AccountModel.findByChangeId(changeId);
 
             if (account) res.send(view('メールアドレス設定の確認', 'settings-account-email-change.js', changeId));
-            else         res.status(404).render('404');
+            else         notFound(res);
 
             log.stepOut();
         }

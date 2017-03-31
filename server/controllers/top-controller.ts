@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {view}                  from './view';
+import {view, notFound}        from './view';
 import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
@@ -51,7 +51,7 @@ export default class TopController
                 const account = await AccountModel.findBySmsId(smsId);
 
                 if (account) res.send(view('二段階認証', 'sms.js', smsId));
-                else         res.status(404).render('404');
+                else         notFound(res);
             }
             else if (session.account_id === null || message)
             {
