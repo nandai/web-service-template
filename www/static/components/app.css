@@ -18,6 +18,7 @@ input
     border: 0;
     border-bottom: 1px solid #ccc;
     transition: all .3s;
+    outline: none;
 }
 
 input:focus
@@ -66,5 +67,5 @@ button[disabled]:active
     position: absolute;
     left: 50%;
     top:  50%;
-    transform: translateX(-50%) translateY(-50);
+    transform: translateX(-50%) translateY(-50%);
 }

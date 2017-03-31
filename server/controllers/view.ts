@@ -20,9 +20,6 @@ export function view(title : string, js : string, message? : string) : string
     <!-- jQuery -->
     <script src="//code.jquery.com/jquery-2.2.0.js"></script>
 
-    <!-- velocity -->
-    <script src="/components/velocity.js"></script>
-
     <!-- デバッグログ -->
     <script src="/components/slog.js"></script>
     <script>
@@ -31,10 +28,6 @@ export function view(title : string, js : string, message? : string) : string
         slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL');
         ${optionMessage}
     </script>
-
-    <!-- SulasSplars -->
-    <link  href="/components/SulasSplars.css" rel="stylesheet" />
-    <script src="/components/SulasSplars.min.js"></script>
 
     <link  href="/components/app.css" rel="stylesheet" />
     <script src="/js/${js}"></script>
