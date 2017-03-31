@@ -36,7 +36,6 @@ import passportGoogle =   require('passport-google-oauth');
 import https =            require('https');
 import fs =               require('fs');
 import slog =             require('./slog');
-const ect =               require('ect');
 
 /**
  * イニシャライザ
@@ -136,23 +135,6 @@ class Initializer
         {
             console.warn('Google認証は未設定です。');
         }
-    }
-
-    /**
-     * rendererを初期化する
-     */
-    renderer() : void
-    {
-        const ectRenderer = ect(
-        {
-            watch: true,
-//          root: Config.VIEWS_DIR,
-            ext : '.ect'
-        });
-
-        this.app.engine('ect', ectRenderer.render);
-        this.app.set('view engine', 'ect');
-        this.app.set('views', Config.VIEWS_DIR);
     }
 
     /**
@@ -263,7 +245,6 @@ function main() : void
     init.twitter();
     init.facebook();
     init.google();
-    init.renderer();
     init.session();
     init.passport();
     init.route();

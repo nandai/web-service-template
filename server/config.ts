@@ -14,7 +14,6 @@ export default class Config
     private static path = __dirname + '/../appconfig.json';
 
     static STATIC_DIR = __dirname + '/../www/static';
-    static VIEWS_DIR =  __dirname + '/../www/views';
     static APP_HOST = '';
     static APP_PORT = 0;
     static SSL_KEY = '';
