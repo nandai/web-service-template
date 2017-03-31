@@ -22,9 +22,9 @@ export default class SettingsAccountPasswordView extends React.Component<Setting
 
         return (
             <div>
-                <Input placeholder={R.text(R.CURRENT_PASSWORD)}   value={store.oldPassword} onChange={store.onOldPasswordChange} />
-                <Input placeholder={R.text(R.NEW_PASSWORD)}       value={store.newPassword} onChange={store.onNewPasswordChange} />
-                <Input placeholder={R.text(R.NEW_PASSWORD_AGAIN)} value={store.confirm}     onChange={store.onConfirmChange} />
+                <Input type="password" placeholder={R.text(R.CURRENT_PASSWORD)}   value={store.oldPassword} onChange={store.onOldPasswordChange} />
+                <Input type="password" placeholder={R.text(R.NEW_PASSWORD)}       value={store.newPassword} onChange={store.onNewPasswordChange} />
+                <Input type="password" placeholder={R.text(R.NEW_PASSWORD_AGAIN)} value={store.confirm}     onChange={store.onConfirmChange} />
                 <Button onClick={store.onChange}>{R.text(R.CHANGE)}</Button>
                 <span>{store.message}</span>
             </div>

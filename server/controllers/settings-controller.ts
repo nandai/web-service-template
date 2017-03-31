@@ -105,7 +105,7 @@ export default class SettingsController
             if (changeId)
                 account = await AccountModel.findByChangeId(changeId);
 
-            if (account) res.render('settings-account-email-change', {changeId});
+            if (account) res.send(view('メールアドレス設定の確認', 'settings-account-email-change.js', changeId));
             else         res.status(404).render('404');
 
             log.stepOut();
