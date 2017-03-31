@@ -125,7 +125,7 @@ export default class SettingsController
         const log = slog.stepIn(SettingsController.CLS_NAME, 'password');
         try
         {
-            res.render('settings-account-password');
+            res.send(view('パスワードの設定', 'settings-account-password.js'));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
