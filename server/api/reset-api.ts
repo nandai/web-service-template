@@ -1,10 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config       from '../config';
-import R            from '../libs/r';
-import Utils        from '../libs/utils';
-import ResponseData from '../libs/response-data';
+import Config                  from '../config';
+import R                       from '../libs/r';
+import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
 
 import express = require('express');
@@ -45,16 +44,14 @@ export default class ResetApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
                 const account = await AccountModel.findByProviderId('email', param.email);
                 if (account === null || account.signup_id)
                 {
-                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.INVALID_EMAIL, locale));
                     break;
                 }
 
@@ -65,8 +62,7 @@ export default class ResetApi
                 const template = R.mail(R.NOTICE_RESET_PASSWORD, locale);
                 const contents = Utils.formatString(template.contents, {url});
                 const result = await Utils.sendMail(template.subject, account.email, contents);
-                const data = ResponseData.ok(1, R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL, locale));
-                res.json(data);
+                res.ext.ok(1, R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL, locale));
             }
             while (false);
             log.stepOut();
@@ -110,22 +106,19 @@ export default class ResetApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
                 if (Utils.validatePassword(param.password) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
                 }
 
                 if (param.password !== param.confirm)
                 {
-                    const data = ResponseData.error(-1, R.text(R.MISMATCH_PASSWORD, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.MISMATCH_PASSWORD, locale));
                     break;
                 }
 
@@ -138,16 +131,14 @@ export default class ResetApi
                     account.reset_id = null;
                     await AccountModel.update(account);
 
-                    const data = ResponseData.ok(1, R.text(R.PASSWORD_RESET, locale));
-                    res.json(data);
+                    res.ext.ok(1, R.text(R.PASSWORD_RESET, locale));
                 }
                 else
                 {
                     // パスワードリセットの画面でパスワードリセットを完了させた後、再度パスワードリセットを完了させようとした場合にここに到達する想定。
                     // リセットIDで該当するアカウントがないということが必ずしもパスワードリセット済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、パスワードリセット済みというメッセージでOK。
-                    const data = ResponseData.error(-1, R.text(R.ALREADY_PASSWORD_RESET, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.ALREADY_PASSWORD_RESET, locale));
                 }
             }
             while (false);

@@ -4,7 +4,6 @@
 import Config                  from '../config';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
-import ResponseData            from '../libs/response-data';
 import AccountModel, {Account} from '../models/account-model';
 import SessionModel, {Session} from '../models/session-model';
 import DeleteAccountModel      from '../models/delete-account-model';
@@ -101,8 +100,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
@@ -111,8 +109,7 @@ export default class SettingsApi
 
                 if (len < 1 || 20 < len)
                 {
-                    const data = ResponseData.error(-1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
                 }
 
@@ -124,8 +121,7 @@ export default class SettingsApi
                 account.phone_no = (param.phoneNo && param.phoneNo.length > 0 ? param.phoneNo : null);
                 await AccountModel.update(account);
 
-                const data = ResponseData.ok(1, R.text(R.SETTINGS_COMPLETED, locale));
-                res.json(data);
+                res.ext.ok(1, R.text(R.SETTINGS_COMPLETED, locale));
             }
             while (false);
             log.stepOut();
@@ -151,22 +147,19 @@ export default class SettingsApi
 
             const session : Session = req['sessionObj'];
             const account = await AccountModel.find(session.account_id);
-            let data = {};
 
             if (account.canUnlink(provider))
             {
                 account[provider] = null;
                 await AccountModel.update(account);
 
-                data = ResponseData.ok(0);
+                res.ext.ok(0);
             }
             else
             {
                 const locale : string = req['locale'];
-                data = ResponseData.error(-1, R.text(R.CANNOT_UNLINK, locale));
+                res.ext.error(1, R.text(R.CANNOT_UNLINK, locale));
             }
-
-            res.json(data);
         }
         catch (err) {Utils.internalServerError(err, res, log)};
     }
@@ -199,8 +192,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
@@ -210,8 +202,7 @@ export default class SettingsApi
 
                 if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                 {
-                    const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.ALREADY_EXISTS_EMAIL, locale));
                     break;
                 }
 
@@ -228,13 +219,11 @@ export default class SettingsApi
                         account.password = null;
                         await AccountModel.update(account);
 
-                        const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED, locale));
-                        res.json(data);
+                        res.ext.ok(1, R.text(R.EMAIL_CHANGED, locale));
                     }
                     else
                     {
-                        const data = ResponseData.error(-1, R.text(R.CANNOT_EMPTY_EMAIL, locale));
-                        res.json(data);
+                        res.ext.error(1, R.text(R.CANNOT_EMPTY_EMAIL, locale));
                     }
                 }
 
@@ -250,8 +239,7 @@ export default class SettingsApi
                         await AccountModel.update(account);
                     }
 
-                    const data = ResponseData.ok(1, R.text(result ? R.EMAIL_CHANGED : R.COULD_NOT_CHANGE_EMAIL, locale));
-                    res.json(data);
+                    res.ext.ok(1, R.text(result ? R.EMAIL_CHANGED : R.COULD_NOT_CHANGE_EMAIL, locale));
                 }
 
                 else
@@ -270,8 +258,7 @@ export default class SettingsApi
                         await AccountModel.update(account);
                     }
 
-                    const data = ResponseData.ok(1, R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL, locale));
-                    res.json(data);
+                    res.ext.ok(1, R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL, locale));
                 }
             }
             while (false);
@@ -312,8 +299,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
@@ -329,8 +315,7 @@ export default class SettingsApi
 
                     if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                     {
-                        const data = ResponseData.error(-1, R.text(R.ALREADY_EXISTS_EMAIL, locale));
-                        res.json(data);
+                        res.ext.error(1, R.text(R.ALREADY_EXISTS_EMAIL, locale));
                         break;
                     }
 
@@ -340,8 +325,7 @@ export default class SettingsApi
 
                     if (hashPassword !== account.password)
                     {
-                        const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD, locale));
-                        res.json(data);
+                        res.ext.error(1, R.text(R.INVALID_PASSWORD, locale));
                         break;
                     }
 
@@ -352,16 +336,14 @@ export default class SettingsApi
                     account.change_email = null;
                     await AccountModel.update(account);
 
-                    const data = ResponseData.ok(1, R.text(R.EMAIL_CHANGED, locale));
-                    res.json(data);
+                    res.ext.ok(1, R.text(R.EMAIL_CHANGED, locale));
                 }
                 else
                 {
                     // メールアドレス設定の確認画面でメールアドレスの設定を完了させた後、再度メールアドレスの設定を完了させようとした場合にここに到達する想定。
                     // 変更IDで該当するアカウントがないということが必ずしもメールアドレスの設定済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので変更済みというメッセージでOK。
-                    const data = ResponseData.error(-1, R.text(R.ALREADY_EMAIL_CHANGED, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.ALREADY_EMAIL_CHANGED, locale));
                 }
             }
             while (false);
@@ -406,8 +388,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
@@ -420,31 +401,27 @@ export default class SettingsApi
 
                     if (hashPassword !== account.password)
                     {
-                        const data = ResponseData.error(-1, R.text(R.INVALID_PASSWORD, locale));
-                        res.json(data);
+                        res.ext.error(1, R.text(R.INVALID_PASSWORD, locale));
                         break;
                     }
                 }
 
                 if (Utils.validatePassword(param.newPassword) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
                 }
 
                 if (param.newPassword !== param.confirm)
                 {
-                    const data = ResponseData.error(-1, R.text(R.MISMATCH_PASSWORD, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.MISMATCH_PASSWORD, locale));
                     break;
                 }
 
                 account.password = Utils.getHashPassword(account.email, param.newPassword, Config.PASSWORD_SALT);
                 await AccountModel.update(account);
 
-                const data = ResponseData.ok(1, R.text(R.PASSWORD_CHANGED, locale));
-                res.json(data);
+                res.ext.ok(1, R.text(R.PASSWORD_CHANGED, locale));
             }
             while (false);
             log.stepOut();

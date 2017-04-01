@@ -3,7 +3,6 @@
  */
 import Config       from '../config';
 import Utils        from '../libs/utils';
-import ResponseData from '../libs/response-data';
 import R            from '../libs/r';
 import Email        from '../provider/email';
 import ProviderApi  from './provider-api';
@@ -69,15 +68,13 @@ export default class SignupApi extends ProviderApi
 
             if (Utils.existsParameters(param, condition) === false)
             {
-                const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                res.status(400).json(data);
+                res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                 break;
             }
 
             if (Utils.validatePassword(param.password) === false)
             {
-                const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL_AUTH, locale));
-                res.json(data);
+                res.ext.error(1, R.text(R.INVALID_EMAIL_AUTH, locale));
                 break;
             }
 
@@ -128,8 +125,7 @@ export default class SignupApi extends ProviderApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
@@ -141,8 +137,7 @@ export default class SignupApi extends ProviderApi
                     // サインアップの確認画面でサインアップを完了させた後、再度サインアップを完了させようとした場合にここに到達する想定。
                     // サインアップIDで該当するアカウントがないということが必ずしもサインアップ済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、登録済みというメッセージでOK。
-                    const data = ResponseData.error(-1, R.text(R.ALREADY_SIGNUP, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.ALREADY_SIGNUP, locale));
                     break;
                 }
 
@@ -151,16 +146,14 @@ export default class SignupApi extends ProviderApi
 
                 if (account.password !== hashPassword)
                 {
-                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL_AUTH, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.INVALID_EMAIL_AUTH, locale));
                     break;
                 }
 
                 account.signup_id = null;
                 await AccountModel.update(account);
 
-                const data = ResponseData.ok(1, R.text(R.SIGNUP_COMPLETED, locale));
-                res.json(data);
+                res.ext.ok(1, R.text(R.SIGNUP_COMPLETED, locale));
             }
             while (false);
             log.stepOut();

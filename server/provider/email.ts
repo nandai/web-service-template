@@ -5,7 +5,6 @@ import Provider       from './provider';
 import {PassportUser} from '../libs/passport';
 import R              from '../libs/r';
 import Utils          from '../libs/utils';
-import ResponseData   from '../libs/response-data';
 import {Account}      from '../models/account-model';
 import {Session}      from '../models/session-model';
 
@@ -52,8 +51,7 @@ export default class Email extends Provider
                     const contents = Utils.formatString(template.contents, {url});
                     const result = await Utils.sendMail(template.subject, account.email, contents);
                     const locale : string = req['locale'];
-                    const data = ResponseData.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL, locale));
-                    res.json(data);
+                    res.ext.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL, locale));
                     resolve(result);
                 });
             });
@@ -109,8 +107,7 @@ export default class Email extends Provider
                     phrase =   R.INVALID_EMAIL_AUTH;
 
                 const locale = req['locale'];
-                const data = ResponseData.error(-1, R.text(phrase, locale));
-                res.json(data);
+                res.ext.error(1, R.text(phrase, locale));
             }
             else
             {

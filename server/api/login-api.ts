@@ -3,7 +3,6 @@
  */
 import Config       from '../config';
 import Utils        from '../libs/utils';
-import ResponseData from '../libs/response-data';
 import R            from '../libs/r';
 import Email        from '../provider/email';
 import ProviderApi  from './provider-api';
@@ -73,8 +72,7 @@ export default class LoginApi extends ProviderApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
@@ -87,8 +85,7 @@ export default class LoginApi extends ProviderApi
 
                 if (account === null || account.password !== hashPassword || account.signup_id)
                 {
-                    const data = ResponseData.error(-1, R.text(R.INVALID_EMAIL_AUTH, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.INVALID_EMAIL_AUTH, locale));
                     break;
                 }
 
@@ -140,8 +137,7 @@ export default class LoginApi extends ProviderApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    res.status(400).json(data);
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
@@ -152,8 +148,7 @@ export default class LoginApi extends ProviderApi
                 {
                     if (account.sms_code !== param.smsCode)
                     {
-                        const data = ResponseData.error(-1, R.text(R.MISMATCH_SMS_CODE, locale));
-                        res.json(data);
+                        res.ext.error(1, R.text(R.MISMATCH_SMS_CODE, locale));
                         break;
                     }
 
@@ -174,8 +169,7 @@ export default class LoginApi extends ProviderApi
                 }
 
                 // トップ画面へ
-                const data = ResponseData.ok(0);
-                res.json(data);
+                res.ext.ok(0);
             }
             while (false);
             log.stepOut();

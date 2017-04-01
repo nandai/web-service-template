@@ -4,7 +4,6 @@
 import {view, notFound}        from './view';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
-import ResponseData            from '../libs/response-data';
 import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
 

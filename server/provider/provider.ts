@@ -5,7 +5,6 @@ import Config                            from '../config';
 import {PassportUser}                    from '../libs/passport';
 import R                                 from '../libs/r';
 import Utils                             from '../libs/utils';
-import ResponseData                      from '../libs/response-data';
 import AccountModel, {Account}           from '../models/account-model';
 import SessionModel, {Session}           from '../models/session-model';
 import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
@@ -347,8 +346,7 @@ export default class Provider
                     if (phrase)
                     {
                         const locale = req['locale'];
-                        const data = ResponseData.error(-1, R.text(phrase, locale));
-                        res.json(data);
+                        res.ext.error(1, R.text(phrase, locale));
                     }
                     else
                     {

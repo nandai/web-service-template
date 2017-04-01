@@ -24,6 +24,7 @@ import Email                   from './provider/email';
 import Access                  from './libs/access';
 import Utils                   from './libs/utils';
 import R                       from './libs/r';
+import {expressExtention}      from './libs/express-extension';
 
 import express =          require('express');
 import session =          require('express-session');
@@ -154,6 +155,14 @@ class Initializer
     }
 
     /**
+     * extentionを初期化する
+     */
+    extension() : void
+    {
+        this.app.use(expressExtention);
+    }
+
+    /**
      * passportを初期化する
      */
     passport() : void
@@ -246,6 +255,7 @@ function main() : void
     init.facebook();
     init.google();
     init.session();
+    init.extension();
     init.passport();
     init.route();
 

@@ -1,10 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Cookie       from './cookie';
-import R            from './r';
-import Utils        from './utils';
-import ResponseData from './response-data';
+import Cookie                  from './cookie';
+import R                       from './r';
+import Utils                   from './utils';
 import {notFound}              from '../controllers/view';
 import SessionModel, {Session} from '../models/session-model';
 
@@ -45,7 +44,11 @@ export default class Access
                 log.d(`${req.method} ${req.path}`);
                 log.w('param: ' + bodyBuffer.toString());
 
-                const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, 'en'));
+                const data =
+                {
+                    status:  -1,
+                    message: R.text(R.BAD_REQUEST, 'en')
+                };
                 res.status(err.status).json(data);
                 log.stepOut();
                 return;
@@ -195,8 +198,7 @@ export default class Access
                 if (session === null)
                 {
                     // const locale : string = req['locale'];
-                    // const data = ResponseData.error(-1, R.text(R.BAD_REQUEST, locale));
-                    // res.status(400).json(data);
+                    // res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     // log.stepOut();
                     // return;
                     session = new Session();
@@ -238,8 +240,7 @@ export default class Access
                 if (req.path.startsWith('/api/'))
                 {
                     const locale : string = req['locale'];
-                    const data = ResponseData.error(-1, R.text(R.NO_LOGIN, locale));
-                    res.json(data);
+                    res.ext.error(1, R.text(R.NO_LOGIN, locale));
                 }
                 else
                 {
@@ -268,7 +269,11 @@ export default class Access
         if (req.path.startsWith('/api/'))
         {
             const locale : string = req['locale'];
-            const data = ResponseData.error(-1, R.text(R.NOT_FOUND, locale));
+            const data =
+            {
+                status:  -1,
+                message: R.text(R.NOT_FOUND, locale)
+            }
             res.status(404).json(data);
         }
         else
