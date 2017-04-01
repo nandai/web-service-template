@@ -8,6 +8,7 @@ import ResponseData            from '../libs/response-data';
 import AccountModel, {Account} from '../models/account-model';
 import SessionModel, {Session} from '../models/session-model';
 import DeleteAccountModel      from '../models/delete-account-model';
+import {Response}              from 'libs/response';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -45,7 +46,7 @@ export default class SettingsApi
         {
             const session : Session = req['sessionObj'];
             const account = await AccountModel.find(session.account_id);
-            const data =
+            const data : Response.Account =
             {
                 status: 0,
                 name:      account.name,

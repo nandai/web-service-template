@@ -38,6 +38,7 @@ gulp.task('server', function ()
 
     gulp.src(src)
         .pipe(sourcemaps.init())
+        .pipe(abspath())
         .pipe(typescript(tsOptions))
         .pipe(sourcemaps.write('./', smOptions))
         .pipe(gulp.dest('./build'));

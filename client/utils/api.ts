@@ -1,7 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import R from './r';
+import R          from './r';
+import {Response} from 'libs/response';
 
 import request = require('superagent');
 const slog = window['slog'];
@@ -131,16 +132,16 @@ export default class Api
     /**
      * アカウント取得
      */
-    static getAccount() : Promise<any>
+    static getAccount() : Promise<Response.Account>
     {
-        return new Promise((resolve : (account) => void, reject) =>
+        return new Promise((resolve : (account : Response.Account) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'getAccount');
             const url = `/api/settings/account`;
 
             Api.sendGetRequest(url, {}, reject, (data) =>
             {
-                const account = data;
+                const account : Response.Account = data;
                 log.stepOut();
                 resolve(account);
             });
