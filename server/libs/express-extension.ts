@@ -4,7 +4,7 @@
 import express = require('express');
 import slog =    require('../slog');
 
-export function expressExtention(req : express.Request, res : express.Response, next : express.NextFunction) : void
+export function expressExtension(req : express.Request, res : express.Response, next : express.NextFunction) : void
 {
     res.ext =
     {

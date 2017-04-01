@@ -5,10 +5,10 @@ declare namespace Express
 {
     export interface Response
     {
-        ext : Extention;
+        ext : Extension;
     }
 
-    interface Extention
+    interface Extension
     {
         ok    : (status : number, message? : string) => void;
         error : (status : number, message  : string) => void;
