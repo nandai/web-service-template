@@ -17,9 +17,6 @@ export function view(title : string, js : string, message? : string) : string
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>${title}</title>
 
-    <!-- jQuery -->
-    <script src="//code.jquery.com/jquery-2.2.0.js"></script>
-
     <!-- デバッグログ -->
     <script src="/components/slog.js"></script>
     <script>
