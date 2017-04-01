@@ -46,9 +46,9 @@ export default class SettingsApi
         {
             const session : Session = req['sessionObj'];
             const account = await AccountModel.find(session.account_id);
-            const data : Response.Account =
+
+            const resAccount : Response.Account =
             {
-                status: 0,
                 name:      account.name,
                 email:     account.email,
                 phoneNo:   account.phone_no,
@@ -56,6 +56,12 @@ export default class SettingsApi
                 facebook: (account.facebook !== null),
                 google:   (account.google   !== null)
             };
+
+            const data =
+            {
+                status:  0,
+                account: resAccount
+            }
 
             res.json(data);
             log.stepOut();

@@ -5,7 +5,6 @@ export namespace Response
 {
     export interface Account
     {
-        status   : number;
         name     : string;
         email    : string;
         phoneNo  : string;

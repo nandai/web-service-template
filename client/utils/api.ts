@@ -141,7 +141,7 @@ export default class Api
 
             Api.sendGetRequest(url, {}, reject, (data) =>
             {
-                const account : Response.Account = data;
+                const account : Response.Account = data.account;
                 log.stepOut();
                 resolve(account);
             });
