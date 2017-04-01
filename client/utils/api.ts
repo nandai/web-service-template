@@ -1,6 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import R from './r';
+
+import request = require('superagent');
 const slog = window['slog'];
 
 export default class Api
@@ -15,14 +18,9 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'signup');
+            const url = `/api/signup/${sns}`;
 
-            $.ajax({
-                type: 'POST',
-                url: `/api/signup/${sns}`,
-                data: data
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPostRequest(url, data, reject, (data) =>
             {
                 let message : string = null;
                 if (data.status !== 0)
@@ -30,12 +28,6 @@ export default class Api
 
                 log.stepOut();
                 resolve(message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -48,15 +40,10 @@ export default class Api
         return new Promise((resolve : (res : {redirect : string, message : string}) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'confirmSignup');
+            const url = `/api/signup/email/confirm`;
             const data = {signupId, password};
 
-            $.ajax({
-                type: 'POST',
-                url: `/api/signup/email/confirm`,
-                data: data
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPostRequest(url, data, reject, (data) =>
             {
                 const res =
                 {
@@ -69,12 +56,6 @@ export default class Api
 
                 log.stepOut();
                 resolve(res);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -87,14 +68,9 @@ export default class Api
         return new Promise((resolve : (res : {smsId : string, message : string}) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'login');
+            const url = `/api/login/${sns}`;
 
-            $.ajax({
-                type: 'POST',
-                url: `/api/login/${sns}`,
-                data: data
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPostRequest(url, data, reject, (data) =>
             {
                 const res =
                 {
@@ -107,12 +83,6 @@ export default class Api
 
                 log.stepOut();
                 resolve(res);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -125,22 +95,12 @@ export default class Api
         return new Promise((resolve : () => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'logout');
+            const url = `/api/logout`;
 
-            $.ajax({
-                type: 'POST',
-                url: `/api/logout`
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPostRequest(url, {}, reject, (data) =>
             {
                 log.stepOut();
                 resolve();
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -153,14 +113,10 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'smsLogin');
+            const url = '/api/login/sms';
+            const data = {smsId, smsCode};
 
-            $.ajax({
-                type: 'POST',
-                url: '/api/login/sms',
-                data: {smsId, smsCode}
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPostRequest(url, data, reject, (data) =>
             {
                 let message : string = null;
                 if (data.status !== 0)
@@ -168,12 +124,6 @@ export default class Api
 
                 log.stepOut();
                 resolve(message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -186,23 +136,13 @@ export default class Api
         return new Promise((resolve : (account) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'getAccount');
+            const url = `/api/settings/account`;
 
-            $.ajax({
-                type: 'GET',
-                url: `/api/settings/account`
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendGetRequest(url, {}, reject, (data) =>
             {
                 const account = data;
                 log.stepOut();
                 resolve(account);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -215,23 +155,13 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'setAccount');
+            const url = '/api/settings/account';
+            const data = {name, phoneNo};
 
-            $.ajax({
-                type: 'PUT',
-                url: '/api/settings/account',
-                data: {name, phoneNo}
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPutRequest(url, data, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -244,13 +174,9 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'deleteAccount');
+            const url = `/api/settings/account/leave`;
 
-            $.ajax({
-                type: 'DELETE',
-                url: `/api/settings/account/leave`
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendDeleteRequest(url, {}, reject, (data) =>
             {
                 let message : string = null;
                 if (data.status !== 0)
@@ -258,12 +184,6 @@ export default class Api
 
                 log.stepOut();
                 resolve(message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -276,23 +196,13 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'changeEmail');
+            const url = '/api/settings/account/email';
+            const data = {email};
 
-            $.ajax({
-                type: 'PUT',
-                url: '/api/settings/account/email',
-                data: {email}
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPutRequest(url, data, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -305,24 +215,13 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'confirmChangeEmail');
+            const url = `/api/settings/account/email/change`;
             const data = {changeId, password};
 
-            $.ajax({
-                type: 'PUT',
-                url: `/api/settings/account/email/change`,
-                data: data
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPutRequest(url, data, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -335,23 +234,13 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'resetPassword');
+            const url = '/api/reset';
+            const data = {email};
 
-            $.ajax({
-                type: 'POST',
-                url: '/api/reset',
-                data: {email}
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPostRequest(url, data, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -364,23 +253,13 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'onClickChangeButton');
+            const url = '/api/reset/change';
+            const data = {resetId, password, confirm};
 
-            $.ajax({
-                type: 'PUT',
-                url: '/api/reset/change',
-                data: {resetId, password, confirm}
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPutRequest(url, data, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -393,23 +272,13 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'changePassword');
+            const url = '/api/settings/account/password';
+            const data = {oldPassword, newPassword, confirm};
 
-            $.ajax({
-                type: 'PUT',
-                url: '/api/settings/account/password',
-                data: {oldPassword, newPassword, confirm}
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPutRequest(url, data, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
     }
@@ -422,13 +291,9 @@ export default class Api
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'unlink');
+            const url = `/api/settings/account/unlink/${sns}`;
 
-            $.ajax({
-                type: 'PUT',
-                url: `/api/settings/account/unlink/${sns}`
-            })
-
-            .done((data, status, jqXHR) =>
+            Api.sendPutRequest(url, {}, reject, (data) =>
             {
                 let message : string = null;
                 if (data.status !== 0)
@@ -436,13 +301,188 @@ export default class Api
 
                 log.stepOut();
                 resolve(message);
-            })
-
-            .fail((jqXHR, status, error) =>
-            {
-                log.stepOut();
-                reject();
             });
         });
+    }
+
+    /**
+     * GETリクエストを送信する
+     *
+     * @param   url         送信先URL
+     * @param   param       パラメータ
+     * @param   reject      レスポンスでエラーがあった場合のコールバック
+     * @param   onSuccess   レスポンスが正常だった場合のコールバック
+     */
+    private static sendGetRequest(
+        url         : string,
+        param       : Object,
+        reject      : (data : {message : string}) => void,
+        onSuccess   : (data) => void) : void
+    {
+        request
+            .get(url)
+            .query(param)
+            .end((err, res : request.Response) =>
+            {
+                if (Api.rejectIfError(err, res, reject, url))
+                    return;
+
+                const data = res.body;
+                onSuccess(data);
+            });
+    }
+
+    /**
+     * POSTリクエストを送信する
+     *
+     * @param   url         送信先URL
+     * @param   param       パラメータ
+     * @param   reject      レスポンスでエラーがあった場合のコールバック
+     * @param   onSuccess   レスポンスが正常だった場合のコールバック
+     * @param   onProgress  送信進捗コールバック
+     */
+    private static sendPostRequest(
+        url         : string,
+        param       : Object,
+        reject      : (data : {message : string}) => void,
+        onSuccess   : (data) => void,
+        onProgress? : (percent : number) => void) : void
+    {
+        request
+            .post(url)
+            .on('progress', (e) =>
+            {
+                if (onProgress)
+                    onProgress(e.percent);
+            })
+            .send(param)
+            .end((err, res : request.Response) =>
+            {
+                if (Api.rejectIfError(err, res, reject, url))
+                    return;
+
+                const data = res.body;
+                onSuccess(data);
+            });
+    }
+
+    /**
+     * PUTリクエストを送信する
+     *
+     * @param   url         送信先URL
+     * @param   param       パラメータ
+     * @param   reject      レスポンスでエラーがあった場合のコールバック
+     * @param   onSuccess   レスポンスが正常だった場合のコールバック
+     * @param   onProgress  送信進捗コールバック
+     */
+    private static sendPutRequest(
+        url         : string,
+        param       : Object,
+        reject      : (data : {message : string}) => void,
+        onSuccess   : (data) => void,
+        onProgress? : (percent : number) => void) : void
+    {
+        request
+            .put(url)
+            .on('progress', (e) =>
+            {
+                if (onProgress)
+                    onProgress(e.percent);
+            })
+            .send(param)
+            .end((err, res : request.Response) =>
+            {
+                if (Api.rejectIfError(err, res, reject, url))
+                    return;
+
+                const data = res.body;
+                onSuccess(data);
+            });
+    }
+
+    /**
+     * DELETEリクエストを送信する
+     *
+     * @param   url         送信先URL
+     * @param   param       パラメータ
+     * @param   reject      レスポンスでエラーがあった場合のコールバック
+     * @param   onSuccess   レスポンスが正常だった場合のコールバック
+     */
+    private static sendDeleteRequest(
+        url         : string,
+        param       : Object,
+        reject      : (data : {message : string}) => void,
+        onSuccess   : (data) => void) : void
+    {
+        request
+            .del(url)
+            .query(param)
+            .end((err, res : request.Response) =>
+            {
+                if (Api.rejectIfError(err, res, reject, url))
+                    return;
+
+                const data = res.body;
+                onSuccess(data);
+            });
+    }
+
+    /**
+     * APIのレスポンスにエラーがあればリジェクト
+     *
+     * @param   err     エラー
+     * @param   res     レスポンス
+     * @param   reject  レスポンスでエラーがあった場合のコールバック
+     * @param   url     送信先URL（デバッグ時の調査用）
+     *
+     * @return  エラーがあればtrueを返す
+     */
+    private static rejectIfError(
+        err,
+        res    : request.Response,
+        reject : (data : {message : string}) => void,
+        url    : string) : boolean
+    {
+        let data = {message:'Unknown error.'};
+        let hasError = true;
+
+        do
+        {
+            if (! res)
+            {
+                if (! err)
+                {
+                    console.error('no response data.');
+                    break;
+                }
+
+                if (! err.crossDomain)
+                {
+                    console.error(`status:${err.status}, message:${err.message}`);
+                    break;
+                }
+
+                // 未接続時は以下のエラーメッセージで、crossDomainはtrueとなっているが別にクロスドメインでエラーになっているわけではない...
+                //
+                // 原文：the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.
+                // 翻訳：ネットワークがオフラインで、OriginがAccess-Control-Allow-Originによって許可されていない、ページがアンロード中など
+                data.message = R.text(R.ERROR_NETWORK);
+                break;
+            }
+
+            if (res.status !== 200)
+            {
+                data = res.body;
+                break;
+            }
+
+            hasError = false;
+        }
+        while (false);
+
+        if (hasError)
+            reject(data);
+
+        return hasError;
     }
 }

@@ -154,8 +154,10 @@ class SignupApp
             }
             catch (err)
             {
+                this.store.message = err.message;
+                this.render();
                 log.stepOut();
-                reject(err);
+                reject();
             }
         });
     }

@@ -43,7 +43,8 @@ export default class R
             'newPasswordAgain':   'New password again',
             'accountName':        'Account name',
             'tel':                'TEL',
-            'loginCode':          'Login code'
+            'loginCode':          'Login code',
+            'error_network':      'Failed to connect to network',
         },
 
         'ja':
@@ -78,7 +79,8 @@ export default class R
             'newPasswordAgain':   'パスワードの確認',
             'accountName':        'アカウント名',
             'tel':                '電話番号',
-            'loginCode':          'ログインコード'
+            'loginCode':          'ログインコード',
+            'error_network':      '通信に失敗しました。インターネットに接続されているか確認してください。'
         }
     };
 
@@ -113,6 +115,7 @@ export default class R
     static ACCOUNT_NAME =         'accountName';
     static TEL =                  'tel';
     static LOGIN_CODE =           'loginCode';
+    static ERROR_NETWORK =        'error_network';
 
     /**
      * 文字列を取得する

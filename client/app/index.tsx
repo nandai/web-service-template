@@ -20,6 +20,7 @@ class TopApp
     constructor()
     {
         this.store = {
+            message:    '',
             onSettings: this.onSettings.bind(this),
             onLogout:   this.onLogout.  bind(this)
         };
@@ -57,7 +58,12 @@ class TopApp
             location.href = '/';
             log.stepOut();
         }
-        catch (err) {log.stepOut()}
+        catch (err)
+        {
+            this.store.message = err.message;
+            this.render();
+            log.stepOut();
+        }
     }
 }
 

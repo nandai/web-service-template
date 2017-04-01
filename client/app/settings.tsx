@@ -170,7 +170,12 @@ class SettingsApp
 
             log.stepOut();
         }
-        catch (err) {log.stepOut()}
+        catch (err)
+        {
+            this.store.message = err.message;
+            this.render();
+            log.stepOut();
+        }
     }
 
     /**
@@ -206,6 +211,8 @@ class SettingsApp
             }
             catch (err)
             {
+                store.message = err.message;
+                this.render();
                 log.stepOut();
                 reject();
             }

@@ -114,7 +114,7 @@ export default class SettingsApi
                 const account = await AccountModel.find(session.account_id);
 
                 account.name =      param.name;
-                account.phone_no = (param.phoneNo.length > 0 ? param.phoneNo : null);
+                account.phone_no = (param.phoneNo && param.phoneNo.length > 0 ? param.phoneNo : null);
                 await AccountModel.update(account);
 
                 const data = ResponseData.ok(1, R.text(R.SETTINGS_COMPLETED, locale));

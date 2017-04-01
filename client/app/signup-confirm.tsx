@@ -74,7 +74,12 @@ class SignupConfirmApp
 
             log.stepOut();
         }
-        catch (err) {log.stepOut()}
+        catch (err)
+        {
+            store.message = err.message;
+            this.render();
+            log.stepOut();
+        }
     }
 }
 

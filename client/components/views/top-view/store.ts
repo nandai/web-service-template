@@ -3,6 +3,7 @@
  */
 export interface Store
 {
+    message    : string;
     onSettings : () => void;
     onLogout   : () => void;
 }

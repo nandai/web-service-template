@@ -22,6 +22,7 @@ export default class TopView extends React.Component<TopViewProps, {}>
             <div>
                 <Button onClick={store.onSettings}>{R.text(R.GO_SETTINGS)}</Button>
                 <Button onClick={store.onLogout}  >{R.text(R.LOGOUT)}</Button>
+                <span>{store.message}</span>
             </div>
         );
     }
