@@ -21,25 +21,13 @@ export default class SettingsApi
     private static CLS_NAME = 'SettingsApi';
 
     /**
-     * アカウント情報を取得、または更新する
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
-     */
-    static account(req : express.Request, res : express.Response) : void
-    {
-             if (req.method === 'GET') SettingsApi.getAccount(   req, res);
-        else if (req.method === 'PUT') SettingsApi.updateAccount(req, res);
-    }
-
-    /**
      * アカウント情報を取得する<br>
      * GET /api/settings/account
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    private static async getAccount(req : express.Request, res : express.Response)
+    static async getAccount(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'getAccount');
         try
@@ -84,7 +72,7 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    private static async updateAccount(req : express.Request, res : express.Response)
+    static async setAccount(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'updateAccount');
         try
@@ -137,7 +125,7 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async unlink(req : express.Request, res : express.Response)
+    static async unlinkProvider(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlink');
         try
@@ -166,7 +154,7 @@ export default class SettingsApi
     }
 
     /**
-     * メールアドレスの設定（変更）を要求する<br>
+     * メールアドレスの変更を要求する<br>
      * PUT /api/settings/account/email
      *
      * <table>
@@ -177,7 +165,7 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async email(req : express.Request, res : express.Response)
+    static async requestChangeEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'email');
         try
@@ -269,7 +257,7 @@ export default class SettingsApi
     }
 
     /**
-     * メールアドレスの設定（変更）を確定する<br>
+     * メールアドレスを変更する<br>
      * PUT /api/settings/account/email/change
      *
      * <table>
@@ -354,7 +342,7 @@ export default class SettingsApi
     }
 
     /**
-     * パスワードの設定（変更）を要求する<br>
+     * パスワードを変更する<br>
      * PUT /api/settings/account/password
      *
      * <table>
@@ -371,7 +359,7 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async password(req : express.Request, res : express.Response)
+    static async changePassword(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'password');
         try

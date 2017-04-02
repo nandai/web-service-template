@@ -36,7 +36,7 @@ export default class LoginApi extends ProviderApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static provider(req : express.Request, res : express.Response) : void
+    static loginProvider(req : express.Request, res : express.Response) : void
     {
         ProviderApi.provider(req, res, 'login');
     }
@@ -56,7 +56,7 @@ export default class LoginApi extends ProviderApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async email(req : express.Request, res : express.Response)
+    static async loginEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(LoginApi.CLS_NAME_2, 'email');
         try
@@ -121,7 +121,7 @@ export default class LoginApi extends ProviderApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async sms(req : express.Request, res : express.Response)
+    static async loginSms(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(LoginApi.CLS_NAME_2, 'sms');
         try

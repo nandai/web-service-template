@@ -29,7 +29,7 @@ export default class ResetApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async index(req : express.Request, res : express.Response)
+    static async requestResetPassword(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(ResetApi.CLS_NAME, 'index');
         try
@@ -89,7 +89,7 @@ export default class ResetApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async change(req : express.Request, res : express.Response)
+    static async resetPassword(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(ResetApi.CLS_NAME, 'change');
         try

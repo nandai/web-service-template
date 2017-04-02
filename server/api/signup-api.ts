@@ -34,7 +34,7 @@ export default class SignupApi extends ProviderApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static provider(req : express.Request, res : express.Response) : void
+    static signupProvider(req : express.Request, res : express.Response) : void
     {
         ProviderApi.provider(req, res, 'signup');
     }
@@ -54,7 +54,7 @@ export default class SignupApi extends ProviderApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static email(req : express.Request, res : express.Response) : void
+    static signupEmail(req : express.Request, res : express.Response) : void
     {
         const log = slog.stepIn(SignupApi.CLS_NAME_2, 'email');
         do
@@ -109,7 +109,7 @@ export default class SignupApi extends ProviderApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async confirmEmail(req : express.Request, res : express.Response)
+    static async confirmSignupEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SignupApi.CLS_NAME_2, 'confirmEmail');
         try
