@@ -261,6 +261,8 @@ export default class Access
      */
     static notFound(req : express.Request, res : express.Response) : void
     {
+        const log = slog.stepIn(Access.CLS_NAME, 'notFound');
+
         if (req.path.startsWith('/api/'))
         {
             const locale = req.ext.locale;
@@ -275,5 +277,7 @@ export default class Access
         {
             notFound(res);
         }
+
+        log.stepOut();
     }
 }

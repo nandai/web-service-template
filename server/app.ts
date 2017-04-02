@@ -28,6 +28,7 @@ import {expressExtension}      from './libs/express-extension';
 
 import express =          require('express');
 import session =          require('express-session');
+import helmet =           require('helmet');
 import cookieParser =     require('cookie-parser');
 import bodyParser =       require('body-parser');
 import passport =         require('passport');
@@ -61,10 +62,12 @@ class Initializer
         R.                 load();
 
         this.app = app;
+        this.app.use(helmet.hidePoweredBy());
+        this.app.use(helmet.noSniff());
         this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
+        this.app.use(expressExtension);
         this.app.use(cookieParser());
         this.app.use(bodyParser.urlencoded({extended:true}));
-        this.app.use(expressExtension);
         this.app.use(Access.jsonBodyParser);
         this.app.use(Access.logger);
     }
