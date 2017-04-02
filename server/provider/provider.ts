@@ -44,7 +44,7 @@ export default class Provider
         {
             if (!user)
             {
-                switch (req['command'])
+                switch (req.ext.command)
                 {
                     case 'signup': res.redirect('/signup');   break;
                     case 'login':  res.redirect('/');         break;
@@ -113,8 +113,8 @@ export default class Provider
                 }
 
                 const findAccount = await AccountModel.findByProviderId(user.provider, self.id);
-                const session : Session = req['sessionObj'];
-                const command : string =  req['command'];
+                const session : Session = req.ext.session;
+                const command =           req.ext.command;
 
                 if (session === undefined)
                     log.e('sessionObjがありません。');
@@ -345,7 +345,7 @@ export default class Provider
                 {
                     if (phrase)
                     {
-                        const locale = req['locale'];
+                        const locale = req.ext.locale;
                         res.ext.error(1, R.text(phrase, locale));
                     }
                     else

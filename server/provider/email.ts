@@ -47,10 +47,10 @@ export default class Email extends Provider
                 return new Promise(async (resolve : BooleanResolve) =>
                 {
                     const url = Utils.generateUrl('signup', account.signup_id);
-                    const template = R.mail(R.NOTICE_SIGNUP, req['locale']);
+                    const locale = req.ext.locale;
+                    const template = R.mail(R.NOTICE_SIGNUP, locale);
                     const contents = Utils.formatString(template.contents, {url});
                     const result = await Utils.sendMail(template.subject, account.email, contents);
-                    const locale : string = req['locale'];
                     res.ext.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL, locale));
                     resolve(result);
                 });
@@ -106,7 +106,7 @@ export default class Email extends Provider
                 if (phrase === R.INCORRECT_ACCOUNT)
                     phrase =   R.INVALID_EMAIL_AUTH;
 
-                const locale = req['locale'];
+                const locale = req.ext.locale;
                 res.ext.error(1, R.text(phrase, locale));
             }
             else

@@ -64,6 +64,7 @@ class Initializer
         this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
         this.app.use(cookieParser());
         this.app.use(bodyParser.urlencoded({extended:true}));
+        this.app.use(expressExtension);
         this.app.use(Access.jsonBodyParser);
         this.app.use(Access.logger);
     }
@@ -152,14 +153,6 @@ class Initializer
 
         this.app.use(session(options));
         this.app.use(Access.session);
-    }
-
-    /**
-     * extensionを初期化する
-     */
-    extension() : void
-    {
-        this.app.use(expressExtension);
     }
 
     /**
@@ -255,7 +248,6 @@ function main() : void
     init.facebook();
     init.google();
     init.session();
-    init.extension();
     init.passport();
     init.route();
 
@@ -278,7 +270,7 @@ function command(command : string) : express.Handler
 
         try
         {
-            const session : Session = req['sessionObj'];
+            const session : Session = req.ext.session;
             session.command_id = command;
             await SessionModel.update(session);
 

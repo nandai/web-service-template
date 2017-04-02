@@ -79,8 +79,8 @@ export default class ProviderApi
         const log = slog.stepIn(ProviderApi.CLS_NAME, 'twitter');
         do
         {
-            const locale : string = req['locale'];
-            const param = req.body;
+            const locale = req.ext.locale;
+            const param =  req.body;
             const condition =
             {
                 accessToken:       ['string', null, true],
@@ -99,7 +99,7 @@ export default class ProviderApi
             {
                 Twitter.verify(accessToken, accessTokenSecret, undefined, (err, user) =>
                 {
-                    req['command'] = command;
+                    req.ext.command = command;
                     req.user = user;
                     Twitter.callback(req, res);
                 });
@@ -127,8 +127,8 @@ export default class ProviderApi
         const log = slog.stepIn(ProviderApi.CLS_NAME, 'facebook');
         do
         {
-            const locale : string = req['locale'];
-            const param = req.body;
+            const locale = req.ext.locale;
+            const param =  req.body;
             const condition =
             {
                 accessToken: ['string', null, true]
@@ -145,7 +145,7 @@ export default class ProviderApi
             {
                 Facebook.verify(accessToken, undefined, undefined, (err, user) =>
                 {
-                    req['command'] = command;
+                    req.ext.command = command;
                     req.user = user;
                     Facebook.callback(req, res);
                 });
@@ -173,8 +173,8 @@ export default class ProviderApi
         const log = slog.stepIn(ProviderApi.CLS_NAME, 'google');
         do
         {
-            const locale : string = req['locale'];
-            const param = req.body;
+            const locale = req.ext.locale;
+            const param =  req.body;
             const condition =
             {
                 accessToken: ['string', null, true]
@@ -191,7 +191,7 @@ export default class ProviderApi
             {
                 Google.verify(accessToken, undefined, undefined, (err, user) =>
                 {
-                    req['command'] = command;
+                    req.ext.command = command;
                     req.user = user;
                     Google.callback(req, res);
                 });

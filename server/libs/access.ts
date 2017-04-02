@@ -44,12 +44,7 @@ export default class Access
                 log.d(`${req.method} ${req.path}`);
                 log.w('param: ' + bodyBuffer.toString());
 
-                const data =
-                {
-                    status:  -1,
-                    message: R.text(R.BAD_REQUEST, 'en')
-                };
-                res.status(err.status).json(data);
+                res.ext.error(-1, R.text(R.BAD_REQUEST, 'en'));
                 log.stepOut();
                 return;
             }
@@ -116,7 +111,7 @@ export default class Access
             locale = 'en';
         }
 
-        req['locale'] = locale;
+        req.ext.locale = locale;
 
         // アクセス元IP
         const ip = Access.getIp(req);
@@ -197,7 +192,7 @@ export default class Access
                 session = await SessionModel.find(sessionId);
                 if (session === null)
                 {
-                    // const locale : string = req['locale'];
+                    // const locale = req.ext.locale;
                     // res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     // log.stepOut();
                     // return;
@@ -207,14 +202,14 @@ export default class Access
                 }
                 else
                 {
-                    req['command'] = session.command_id;
+                    req.ext.command = session.command_id;
                     session.command_id = null;
                     await SessionModel.update(session);
                 }
             }
 
-            cookie.sessionId =  session.id;
-            req['sessionObj'] = session;
+            cookie.sessionId = session.id;
+            req.ext.session =  session;
 
             log.stepOut();
             next();
@@ -233,13 +228,13 @@ export default class Access
         const log = slog.stepIn(Access.CLS_NAME, 'auth');
         try
         {
-            const session : Session = req['sessionObj'];
+            const session : Session = req.ext.session;
             if (session.account_id === null)
             {
                 // 未認証
                 if (req.path.startsWith('/api/'))
                 {
-                    const locale : string = req['locale'];
+                    const locale = req.ext.locale;
                     res.ext.error(1, R.text(R.NO_LOGIN, locale));
                 }
                 else
@@ -268,7 +263,7 @@ export default class Access
     {
         if (req.path.startsWith('/api/'))
         {
-            const locale : string = req['locale'];
+            const locale = req.ext.locale;
             const data =
             {
                 status:  -1,

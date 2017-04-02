@@ -3,14 +3,22 @@
  */
 declare namespace Express
 {
-    export interface Response
+    export interface Request
     {
-        ext : Extension;
+        ext :
+        {
+            locale  : string;
+            command : string;
+            session : any;
+        }
     }
 
-    interface Extension
+    export interface Response
     {
-        ok    : (status : number, message? : string) => void;
-        error : (status : number, message  : string) => void;
+        ext :
+        {
+            ok    : (status : number, message? : string) => void;
+            error : (status : number, message  : string) => void;
+        }
     }
 }

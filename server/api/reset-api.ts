@@ -35,8 +35,8 @@ export default class ResetApi
         {
             do
             {
-                const locale : string = req['locale'];
-                const param = req.body;
+                const locale = req.ext.locale;
+                const param =  req.body;
                 const condition =
                 {
                     email: ['string', null, true]
@@ -95,8 +95,8 @@ export default class ResetApi
         {
             do
             {
-                const locale : string = req['locale'];
-                const param = req.body;
+                const locale = req.ext.locale;
+                const param =  req.body;
                 const condition =
                 {
                     resetId:  ['string', null, true],

@@ -62,8 +62,8 @@ export default class LoginApi extends ProviderApi
         {
             do
             {
-                const locale : string = req['locale'];
-                const param = req.body;
+                const locale = req.ext.locale;
+                const param =  req.body;
                 const condition =
                 {
                     email:    ['string', null, true],
@@ -93,7 +93,7 @@ export default class LoginApi extends ProviderApi
                 {
                     Email.verify(email, hashPassword, (err, user) =>
                     {
-                        req['command'] = 'login';
+                        req.ext.command = 'login';
                         req.user = user;
                         Email.callback(req, res);
                     });
@@ -127,8 +127,8 @@ export default class LoginApi extends ProviderApi
         {
             do
             {
-                const locale : string = req['locale'];
-                const param = req.body;
+                const locale = req.ext.locale;
+                const param =  req.body;
                 const condition =
                 {
                     smsId:   ['string', null, true],
@@ -157,7 +157,7 @@ export default class LoginApi extends ProviderApi
                     await AccountModel.update(account);
 
                     // セッション更新
-                    const session : Session = req['sessionObj'];
+                    const session : Session = req.ext.session;
                     session.account_id = account.id;
                     await SessionModel.update(session);
 

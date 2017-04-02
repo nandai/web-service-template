@@ -33,12 +33,12 @@ export default class SignupController
 
             if (signupId === undefined)
             {
-                const session : Session = req['sessionObj'];
+                const session : Session = req.ext.session;
                 let message;
 
                 if (session.message_id)
                 {
-                    const locale : string = req['locale'];
+                    const locale = req.ext.locale;
                     message = R.text(session.message_id, locale);
                     session.message_id = null;
                     await SessionModel.update(session);

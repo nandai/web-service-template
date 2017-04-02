@@ -43,7 +43,7 @@ export default class SettingsApi
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'getAccount');
         try
         {
-            const session : Session = req['sessionObj'];
+            const session : Session = req.ext.session;
             const account = await AccountModel.find(session.account_id);
 
             const resAccount : Response.Account =
@@ -90,8 +90,8 @@ export default class SettingsApi
         {
             do
             {
-                const locale : string = req['locale'];
-                const param = req.body;
+                const locale = req.ext.locale;
+                const param =  req.body;
                 const condition =
                 {
                     name:    ['string', null, true],
@@ -114,7 +114,7 @@ export default class SettingsApi
                 }
 
                 // アカウント情報更新
-                const session : Session = req['sessionObj'];
+                const session : Session = req.ext.session;
                 const account = await AccountModel.find(session.account_id);
 
                 account.name =      param.name;
@@ -145,7 +145,7 @@ export default class SettingsApi
             const provider : string = req.params.provider;
             log.d(`${provider}`);
 
-            const session : Session = req['sessionObj'];
+            const session : Session = req.ext.session;
             const account = await AccountModel.find(session.account_id);
 
             if (account.canUnlink(provider))
@@ -157,7 +157,7 @@ export default class SettingsApi
             }
             else
             {
-                const locale : string = req['locale'];
+                const locale = req.ext.locale;
                 res.ext.error(1, R.text(R.CANNOT_UNLINK, locale));
             }
         }
@@ -183,8 +183,8 @@ export default class SettingsApi
         {
             do
             {
-                const locale : string = req['locale'];
-                const param = req.body;
+                const locale = req.ext.locale;
+                const param =  req.body;
                 const condition =
                 {
                     email: ['string', null, true]
@@ -207,7 +207,7 @@ export default class SettingsApi
                 }
 
                 // パスワードがなければメールアドレスを設定し、あれば変更メールを送信する
-                const session : Session = req['sessionObj'];
+                const session : Session = req.ext.session;
                 const account = await AccountModel.find(session.account_id);
 
                 if (changeEmail === '')
@@ -289,8 +289,8 @@ export default class SettingsApi
         {
             do
             {
-                const locale : string = req['locale'];
-                const param = req.body;
+                const locale = req.ext.locale;
+                const param =  req.body;
                 const condition =
                 {
                     changeId: ['string', null, true],
@@ -377,8 +377,8 @@ export default class SettingsApi
         {
             do
             {
-                const locale : string = req['locale'];
-                const param = req.body;
+                const locale = req.ext.locale;
+                const param =  req.body;
                 const condition =
                 {
                     oldPassword: ['string', null, true],
@@ -392,7 +392,7 @@ export default class SettingsApi
                     break;
                 }
 
-                const session : Session = req['sessionObj'];
+                const session : Session = req.ext.session;
                 const account = await AccountModel.find(session.account_id);
 
                 if (account.password !== null || param.oldPassword !== '')
@@ -441,7 +441,7 @@ export default class SettingsApi
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'leave');
         try
         {
-            const session : Session = req['sessionObj'];
+            const session : Session = req.ext.session;
             const accountId = session.account_id;
             const account = await AccountModel.find(accountId);
 

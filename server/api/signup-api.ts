@@ -58,8 +58,8 @@ export default class SignupApi extends ProviderApi
         const log = slog.stepIn(SignupApi.CLS_NAME_2, 'email');
         do
         {
-            const locale : string = req['locale'];
-            const param = req.body;
+            const locale = req.ext.locale;
+            const param =  req.body;
             const condition =
             {
                 email:    ['string', null, true],
@@ -83,7 +83,7 @@ export default class SignupApi extends ProviderApi
             {
                 Email.verify(param.email, hashPassword, (err, user) =>
                 {
-                    req['command'] = 'signup';
+                    req.ext.command = 'signup';
                     req.user = user;
                     Email.callback(req, res);
                 });
@@ -115,8 +115,8 @@ export default class SignupApi extends ProviderApi
         {
             do
             {
-                const locale : string = req['locale'];
-                const param = req.body;
+                const locale = req.ext.locale;
+                const param =  req.body;
                 const condition =
                 {
                     signupId: ['string', null, true],

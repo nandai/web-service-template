@@ -6,10 +6,17 @@ import slog =    require('../slog');
 
 export function expressExtension(req : express.Request, res : express.Response, next : express.NextFunction) : void
 {
+    req.ext =
+    {
+        locale:  null,
+        command: null,
+        session: null
+    };
+
     res.ext =
     {
-        ok:    ok.   bind(res),
-        error: error.bind(res)
+        ok:     ok.   bind(res),
+        error:  error.bind(res)
     };
 
     next();

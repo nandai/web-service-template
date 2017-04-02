@@ -26,7 +26,7 @@ export default class LogoutApi
         const log = slog.stepIn(LogoutApi.CLS_NAME, 'index');
         try
         {
-            const session : Session = req['sessionObj'];
+            const session : Session = req.ext.session;
             await SessionModel.logout({sessionId:session.id});
 
             const data = {status:0};
