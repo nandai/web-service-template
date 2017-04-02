@@ -5,7 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/settings-view/store';
 import SettingsView  from '../components/views/settings-view/settings-view';
-import Api           from '../api/api';
+import SettingsApi   from '../api/settings-api';
 
 const slog =         window['slog'];
 const errorMessage = window['message'];
@@ -47,7 +47,7 @@ class SettingsApp
             const log = slog.stepIn(SettingsApp.CLS_NAME, 'init');
             try
             {
-                const account = await Api.getAccount();
+                const account = await SettingsApi.getAccount();
 
                 const {store} = this;
                 store.account = account;
@@ -156,7 +156,7 @@ class SettingsApp
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onLeave');
         try
         {
-            const message = await Api.deleteAccount();
+            const message = await SettingsApi.deleteAccount();
 
             if (message === null)
             {
@@ -200,7 +200,7 @@ class SettingsApp
 
             try
             {
-                const message = await Api.unlink(sns);
+                const message = await SettingsApi.unlinkProvider(sns);
 
                 if (message === null) store.account[sns] = false;
                 else                  store.message = message;

@@ -1,11 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
- import * as React    from 'react';
- import * as ReactDOM from 'react-dom';
- import {Store}       from '../components/views/forget-view/store';
- import ForgetView    from '../components/views/forget-view/forget-view';
- import Api           from '../api/api';
+import * as React    from 'react';
+import * as ReactDOM from 'react-dom';
+import {Store}       from '../components/views/forget-view/store';
+import ForgetView    from '../components/views/forget-view/forget-view';
+import ResetApi      from '../api/reset-api';
 
 const slog =  window['slog'];
 
@@ -57,7 +57,7 @@ class ForgetApp
         const log = slog.stepIn(ForgetApp.CLS_NAME, 'onSend');
         try
         {
-            this.store.message = await Api.requestResetPassword({email:this.store.email});
+            this.store.message = await ResetApi.requestResetPassword({email:this.store.email});
             this.render();
             log.stepOut();
         }

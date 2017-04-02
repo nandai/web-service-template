@@ -5,7 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/sms-view/store';
 import SmsView       from '../components/views/sms-view/sms-view';
-import Api           from '../api/api';
+import LoginApi      from '../api/login-api';
 
 const slog =  window['slog'];
 const smsId = window['message'];
@@ -59,7 +59,7 @@ class SmsApp
         try
         {
             const smsCode = this.store.smsCode;
-            const message = await Api.loginSms({smsId, smsCode});
+            const message = await LoginApi.loginSms({smsId, smsCode});
 
             if (message === null)
             {

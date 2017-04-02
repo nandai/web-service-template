@@ -5,7 +5,7 @@ import * as React                     from 'react';
 import * as ReactDOM                  from 'react-dom';
 import {Store}                        from '../components/views/settings-account-email-change-view/store';
 import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view/settings-account-email-change-view';
-import Api                            from '../api/api';
+import SettingsApi                    from '../api/settings-api';
 
 const slog =     window['slog'];
 const changeId = window['message'];
@@ -61,7 +61,7 @@ class SettingsAccountEmailChangeApp
             const {store} = this;
             const {password} = store;
 
-            store.message = await Api.confirmChangeEmail({changeId, password});
+            store.message = await SettingsApi.changeEmail({changeId, password});
             this.render();
             log.stepOut();
         }

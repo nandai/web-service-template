@@ -6,7 +6,7 @@ import * as ReactDOM from 'react-dom';
 import {Request}     from 'libs/request';
 import {Store}       from '../components/views/login-view/store';
 import LoginView     from '../components/views/login-view/login-view';
-import Api           from '../api/api';
+import LoginApi      from '../api/login-api';
 
 const slog =    window['slog'];
 const message = window['message'];
@@ -145,7 +145,7 @@ class LoginApp
             const log = slog.stepIn(LoginApp.CLS_NAME, 'login');
             try
             {
-                const res = await Api.loginEmail(param);
+                const res = await LoginApi.loginEmail(param);
 
                 if (res.message)
                 {

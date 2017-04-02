@@ -6,7 +6,7 @@ import * as ReactDOM from 'react-dom';
 import {Request}     from 'libs/request';
 import {Store}       from '../components/views/signup-view/store';
 import SignupView    from '../components/views/signup-view/signup-view';
-import Api           from '../api/api';
+import SignupApi     from '../api/signup-api';
 
 const slog =  window['slog'];
 
@@ -138,7 +138,7 @@ class SignupApp
 
             try
             {
-                const message = await Api.signupEmail(param);
+                const message = await SignupApi.signupEmail(param);
 
                 if (message === null)
                 {

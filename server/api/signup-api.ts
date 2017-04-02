@@ -56,7 +56,7 @@ export default class SignupApi extends ProviderApi
      */
     static signupEmail(req : express.Request, res : express.Response) : void
     {
-        const log = slog.stepIn(SignupApi.CLS_NAME_2, 'email');
+        const log = slog.stepIn(SignupApi.CLS_NAME_2, 'signupEmail');
         do
         {
             const locale = req.ext.locale;
@@ -111,7 +111,7 @@ export default class SignupApi extends ProviderApi
      */
     static async confirmSignupEmail(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(SignupApi.CLS_NAME_2, 'confirmEmail');
+        const log = slog.stepIn(SignupApi.CLS_NAME_2, 'confirmSignupEmail');
         try
         {
             do

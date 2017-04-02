@@ -5,7 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/top-view/store';
 import TopView       from '../components/views/top-view/top-view';
-import Api           from '../api/api';
+import LogoutApi     from '../api/logout-api';
 
 const slog =  window['slog'];
 
@@ -54,7 +54,7 @@ class TopApp
         const log = slog.stepIn(TopApp.CLS_NAME, 'onLogout');
         try
         {
-            await Api.logout();
+            await LogoutApi.logout();
             location.href = '/';
             log.stepOut();
         }

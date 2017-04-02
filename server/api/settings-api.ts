@@ -21,7 +21,7 @@ export default class SettingsApi
     private static CLS_NAME = 'SettingsApi';
 
     /**
-     * アカウント情報を取得する<br>
+     * アカウント取得<br>
      * GET /api/settings/account
      *
      * @param   req httpリクエスト
@@ -58,7 +58,7 @@ export default class SettingsApi
     }
 
     /**
-     * アカウント情報を更新する<br>
+     * アカウント設定<br>
      * PUT /api/settings/account
      *
      * <table>
@@ -419,15 +419,15 @@ export default class SettingsApi
     }
 
     /**
-     * 退会する<br>
-     * DELETE /api/settings/account/leave
+     * アカウント削除<br>
+     * DELETE /api/settings/account
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async leave(req : express.Request, res : express.Response)
+    static async deleteAccount(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'leave');
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'deleteAccount');
         try
         {
             const session : Session = req.ext.session;

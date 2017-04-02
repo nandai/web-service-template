@@ -1,11 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
- import * as React          from 'react';
- import * as ReactDOM       from 'react-dom';
- import {Store}             from '../components/views/settings-account-view/store';
- import SettingsAccountView from '../components/views/settings-account-view/settings-account-view';
- import Api                 from '../api/api';
+import * as React          from 'react';
+import * as ReactDOM       from 'react-dom';
+import {Store}             from '../components/views/settings-account-view/store';
+import SettingsAccountView from '../components/views/settings-account-view/settings-account-view';
+import SettingsApi         from '../api/settings-api';
 
 const slog = window['slog'];
 
@@ -42,7 +42,7 @@ class SettingsAccountApp
             try
             {
                 const {store} = this;
-                store.account = await Api.getAccount();
+                store.account = await SettingsApi.getAccount();
 
                 log.stepOut();
                 resolve();
@@ -95,7 +95,7 @@ class SettingsAccountApp
             const {account} = store;
             const {name, phoneNo} = account;
 
-            store.message = await Api.setAccount({name, phoneNo});
+            store.message = await SettingsApi.setAccount({name, phoneNo});
             this.render();
             log.stepOut();
         }

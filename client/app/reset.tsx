@@ -5,7 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/reset-view/store';
 import ResetView     from '../components/views/reset-view/reset-view';
-import Api           from '../api/api';
+import ResetApi      from '../api/reset-api';
 
 const slog =    window['slog'];
 const resetId = window['message'];
@@ -71,7 +71,7 @@ class ResetApp
         {
             const {store} = this;
             const {password, confirm} = store;
-            store.message = await Api.resetPassword({resetId, password, confirm});
+            store.message = await ResetApi.resetPassword({resetId, password, confirm});
             this.render();
             log.stepOut();
         }

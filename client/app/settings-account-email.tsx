@@ -5,7 +5,7 @@ import * as React               from 'react';
 import * as ReactDOM            from 'react-dom';
 import {Store}                  from '../components/views/settings-account-email-view/store';
 import SettingsAccountEmailView from '../components/views/settings-account-email-view/settings-account-email-view';
-import Api                      from '../api/api';
+import SettingsApi              from '../api/settings-api';
 
 const slog =  window['slog'];
 
@@ -41,7 +41,7 @@ class SettingsAccountEmailApp
             try
             {
                 const {store} = this;
-                store.account = await Api.getAccount();
+                store.account = await SettingsApi.getAccount();
 
                 log.stepOut();
                 resolve();
@@ -85,7 +85,7 @@ class SettingsAccountEmailApp
             const {account} = store;
             const {email} = account;
 
-            store.message = await Api.changeEmail({email});
+            store.message = await SettingsApi.requestChangeEmail({email});
             this.render();
             log.stepOut();
         }

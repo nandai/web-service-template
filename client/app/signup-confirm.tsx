@@ -6,7 +6,7 @@ import * as ReactDOM     from 'react-dom';
 import {Request}         from 'libs/request';
 import {Store}           from '../components/views/signup-confirm-view/store';
 import SignupConfirmView from '../components/views/signup-confirm-view/signup-confirm-view';
-import Api               from '../api/api';
+import SignupApi         from '../api/signup-api';
 
 const slog =     window['slog'];
 const signupId = window['message'];
@@ -62,7 +62,7 @@ class SignupConfirmApp
         try
         {
             const password = store.password;
-            const res = await Api.confirmSignupEmail({signupId, password});
+            const res = await SignupApi.confirmSignupEmail({signupId, password});
 
             if (res.message)
             {

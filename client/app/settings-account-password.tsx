@@ -5,7 +5,7 @@ import * as React                  from 'react';
 import * as ReactDOM               from 'react-dom';
 import {Store}                     from '../components/views/settings-account-password-view/store';
 import SettingsAccountPasswordView from '../components/views/settings-account-password-view/settings-account-password-view';
-import Api                         from '../api/api';
+import SettingsApi                 from '../api/settings-api';
 
 const slog =  window['slog'];
 
@@ -82,7 +82,7 @@ class SettingsAccountPasswordApp
             const {store} = this;
             const {oldPassword, newPassword, confirm} = store;
 
-            store.message = await Api.changePassword({oldPassword, newPassword, confirm});
+            store.message = await SettingsApi.changePassword({oldPassword, newPassword, confirm});
             this.render();
             log.stepOut();
         }
