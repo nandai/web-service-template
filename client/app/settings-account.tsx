@@ -95,7 +95,7 @@ class SettingsAccountApp
             const {account} = store;
             const {name, phoneNo} = account;
 
-            store.message = await Api.setAccount(name, phoneNo);
+            store.message = await Api.setAccount({name, phoneNo});
             this.render();
             log.stepOut();
         }

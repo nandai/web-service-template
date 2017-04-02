@@ -57,7 +57,7 @@ class ForgetApp
         const log = slog.stepIn(ForgetApp.CLS_NAME, 'onSend');
         try
         {
-            this.store.message = await Api.requestResetPassword(this.store.email);
+            this.store.message = await Api.requestResetPassword({email:this.store.email});
             this.render();
             log.stepOut();
         }

@@ -85,7 +85,7 @@ class SettingsAccountEmailApp
             const {account} = store;
             const {email} = account;
 
-            store.message = await Api.changeEmail(email);
+            store.message = await Api.changeEmail({email});
             this.render();
             log.stepOut();
         }

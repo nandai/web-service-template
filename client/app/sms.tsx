@@ -58,7 +58,8 @@ class SmsApp
         const log = slog.stepIn(SmsApp.CLS_NAME, 'onSend');
         try
         {
-            const message = await Api.smsLogin(smsId, this.store.smsCode);
+            const smsCode = this.store.smsCode;
+            const message = await Api.loginSms({smsId, smsCode});
 
             if (message === null)
             {

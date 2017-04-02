@@ -82,7 +82,7 @@ class SettingsAccountPasswordApp
             const {store} = this;
             const {oldPassword, newPassword, confirm} = store;
 
-            store.message = await Api.changePassword(oldPassword, newPassword, confirm);
+            store.message = await Api.changePassword({oldPassword, newPassword, confirm});
             this.render();
             log.stepOut();
         }

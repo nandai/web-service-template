@@ -1,11 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import R        from '../libs/r';
-import Utils    from '../libs/utils';
-import Twitter  from '../provider/twitter';
-import Facebook from '../provider/facebook';
-import Google   from '../provider/google';
+import R         from '../libs/r';
+import Utils     from '../libs/utils';
+import Twitter   from '../provider/twitter';
+import Facebook  from '../provider/facebook';
+import Google    from '../provider/google';
+import {Request} from 'libs/request';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -80,8 +81,8 @@ export default class ProviderApi
         do
         {
             const locale = req.ext.locale;
-            const param =  req.body;
-            const condition =
+            const param     : Request.Twitter = req.body;
+            const condition : Request.Twitter =
             {
                 accessToken:       ['string', null, true],
                 accessTokenSecret: ['string', null, true]
@@ -128,8 +129,8 @@ export default class ProviderApi
         do
         {
             const locale = req.ext.locale;
-            const param =  req.body;
-            const condition =
+            const param     : Request.Facebook = req.body;
+            const condition : Request.Facebook =
             {
                 accessToken: ['string', null, true]
             }
@@ -174,8 +175,8 @@ export default class ProviderApi
         do
         {
             const locale = req.ext.locale;
-            const param =  req.body;
-            const condition =
+            const param     : Request.Google = req.body;
+            const condition : Request.Google =
             {
                 accessToken: ['string', null, true]
             }

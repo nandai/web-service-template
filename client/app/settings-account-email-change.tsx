@@ -61,7 +61,7 @@ class SettingsAccountEmailChangeApp
             const {store} = this;
             const {password} = store;
 
-            store.message = await Api.confirmChangeEmail(changeId, password);
+            store.message = await Api.confirmChangeEmail({changeId, password});
             this.render();
             log.stepOut();
         }

@@ -5,6 +5,7 @@ import Config                  from '../config';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
+import {Request}               from 'libs/request';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -36,8 +37,8 @@ export default class ResetApi
             do
             {
                 const locale = req.ext.locale;
-                const param =  req.body;
-                const condition =
+                const param     : Request.RequestResetPassword = req.body;
+                const condition : Request.RequestResetPassword =
                 {
                     email: ['string', null, true]
                 }
@@ -96,8 +97,8 @@ export default class ResetApi
             do
             {
                 const locale = req.ext.locale;
-                const param =  req.body;
-                const condition =
+                const param     : Request.ResetPassword = req.body;
+                const condition : Request.ResetPassword =
                 {
                     resetId:  ['string', null, true],
                     password: ['string', null, true],

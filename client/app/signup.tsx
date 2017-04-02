@@ -3,6 +3,7 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
+import {Request}     from 'libs/request';
 import {Store}       from '../components/views/signup-view/store';
 import SignupView    from '../components/views/signup-view/signup-view';
 import Api           from '../utils/api';
@@ -102,7 +103,7 @@ class SignupApp
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onSignup');
         try
         {
-            await this.signup('email',
+            await this.signup(
             {
                 email:    this.store.email,
                 password: this.store.password
@@ -125,7 +126,7 @@ class SignupApp
     /**
      * signup
      */
-    private signup(sns : string, data?)
+    private signup(param : Request.SignupEmail)
     {
         return new Promise(async (resolve : () => void, reject) =>
         {
@@ -137,7 +138,7 @@ class SignupApp
 
             try
             {
-                const message = await Api.signup(sns, data);
+                const message = await Api.signupEmail(param);
 
                 if (message === null)
                 {

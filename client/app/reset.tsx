@@ -70,7 +70,8 @@ class ResetApp
         try
         {
             const {store} = this;
-            store.message = await Api.resetPassword(resetId, store.password, store.confirm);
+            const {password, confirm} = store;
+            store.message = await Api.resetPassword({resetId, password, confirm});
             this.render();
             log.stepOut();
         }

@@ -1,12 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config       from '../config';
-import Utils        from '../libs/utils';
-import R            from '../libs/r';
-import Email        from '../provider/email';
-import ProviderApi  from './provider-api';
+import Config                  from '../config';
+import Utils                   from '../libs/utils';
+import R                       from '../libs/r';
+import Email                   from '../provider/email';
+import ProviderApi             from './provider-api';
 import AccountModel, {Account} from '../models/account-model';
+import {Request}               from 'libs/request';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -59,8 +60,8 @@ export default class SignupApi extends ProviderApi
         do
         {
             const locale = req.ext.locale;
-            const param =  req.body;
-            const condition =
+            const param     : Request.SignupEmail = req.body;
+            const condition : Request.SignupEmail =
             {
                 email:    ['string', null, true],
                 password: ['string', null, true]
@@ -116,8 +117,8 @@ export default class SignupApi extends ProviderApi
             do
             {
                 const locale = req.ext.locale;
-                const param =  req.body;
-                const condition =
+                const param     : Request.ConfirmSignupEmail = req.body;
+                const condition : Request.ConfirmSignupEmail =
                 {
                     signupId: ['string', null, true],
                     password: ['string', null, true]

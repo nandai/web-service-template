@@ -1,14 +1,15 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config       from '../config';
-import Utils        from '../libs/utils';
-import R            from '../libs/r';
-import Email        from '../provider/email';
-import ProviderApi  from './provider-api';
-import AccountModel, {Account} from '../models/account-model';
-import SessionModel, {Session} from '../models/session-model';
+import Config                            from '../config';
+import Utils                             from '../libs/utils';
+import R                                 from '../libs/r';
+import Email                             from '../provider/email';
+import ProviderApi                       from './provider-api';
+import AccountModel, {Account}           from '../models/account-model';
+import SessionModel, {Session}           from '../models/session-model';
 import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
+import {Request}                         from 'libs/request';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -63,8 +64,8 @@ export default class LoginApi extends ProviderApi
             do
             {
                 const locale = req.ext.locale;
-                const param =  req.body;
-                const condition =
+                const param     : Request.LoginEmail = req.body;
+                const condition : Request.LoginEmail =
                 {
                     email:    ['string', null, true],
                     password: ['string', null, true]
@@ -128,8 +129,8 @@ export default class LoginApi extends ProviderApi
             do
             {
                 const locale = req.ext.locale;
-                const param =  req.body;
-                const condition =
+                const param     : Request.LoginSms= req.body;
+                const condition : Request.LoginSms =
                 {
                     smsId:   ['string', null, true],
                     smsCode: ['string', null, true]
@@ -141,7 +142,7 @@ export default class LoginApi extends ProviderApi
                     break;
                 }
 
-                const smsId = param.smsId;
+                const smsId : string = param.smsId;
                 const account = await AccountModel.findBySmsId(smsId);
 
                 if (account)

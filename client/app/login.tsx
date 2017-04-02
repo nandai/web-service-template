@@ -3,11 +3,13 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
+import {Request}     from 'libs/request';
 import {Store}       from '../components/views/login-view/store';
 import LoginView     from '../components/views/login-view/login-view';
 import Api           from '../utils/api';
 
-const slog =  window['slog'];
+const slog =    window['slog'];
+const message = window['message'];
 
 /**
  * View
@@ -25,7 +27,7 @@ class LoginApp
         this.store = {
             email:    '',
             password: '',
-            message:  '',
+            message:  message,
             onTwitter:        this.onTwitter.       bind(this),
             onFacebook:       this.onFacebook.      bind(this),
             onGoogle:         this.onGoogle.        bind(this),
@@ -136,14 +138,14 @@ class LoginApp
     /**
      * login
      */
-    private login(sns : string, data?)
+    private login(sns : string, param : Request.LoginEmail)
     {
         return new Promise(async (resolve : () => void, reject) =>
         {
             const log = slog.stepIn(LoginApp.CLS_NAME, 'login');
             try
             {
-                const res = await Api.login(sns, data);
+                const res = await Api.loginEmail(param);
 
                 if (res.message)
                 {

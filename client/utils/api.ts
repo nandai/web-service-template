@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import R          from './r';
+import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 
 import request = require('superagent');
@@ -12,16 +13,16 @@ export default class Api
     private static CLS_NAME = 'Api';
 
     /**
-     * サインアップ
+     * メールアドレスでサインアップ
      */
-    static signup(sns : string, data?) : Promise<string>
+    static signupEmail(param : Request.SignupEmail) : Promise<string>
     {
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'signup');
-            const url = `/api/signup/${sns}`;
+            const url = `/api/signup/email`;
 
-            Api.sendPostRequest(url, data, reject, (data) =>
+            Api.sendPostRequest(url, param, reject, (data) =>
             {
                 let message : string = null;
                 if (data.status !== 0)
@@ -34,17 +35,16 @@ export default class Api
     }
 
     /**
-     * サインアップ確認
+     * メールアドレスのサインアップ確認
      */
-    static confirmSignup(signupId : string, password : string) : Promise<{redirect : string, message : string}>
+    static confirmSignupEmail(param : Request.ConfirmSignupEmail) : Promise<{redirect : string, message : string}>
     {
         return new Promise((resolve : (res : {redirect : string, message : string}) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'confirmSignup');
             const url = `/api/signup/email/confirm`;
-            const data = {signupId, password};
 
-            Api.sendPostRequest(url, data, reject, (data) =>
+            Api.sendPostRequest(url, param, reject, (data) =>
             {
                 const res =
                 {
@@ -62,16 +62,16 @@ export default class Api
     }
 
     /**
-     * login
+     * メールアドレスでログイン
      */
-    static login(sns : string, data?) : Promise<{smsId : string, message : string}>
+    static loginEmail(param : Request.LoginEmail) : Promise<{smsId : string, message : string}>
     {
         return new Promise((resolve : (res : {smsId : string, message : string}) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'login');
-            const url = `/api/login/${sns}`;
+            const url = `/api/login/email`;
 
-            Api.sendPostRequest(url, data, reject, (data) =>
+            Api.sendPostRequest(url, param, reject, (data) =>
             {
                 const res =
                 {
@@ -109,15 +109,14 @@ export default class Api
     /**
      * SMSログイン
      */
-    static smsLogin(smsId : string, smsCode : string) : Promise<string>
+    static loginSms(param : Request.LoginSms) : Promise<string>
     {
         return new Promise((resolve : (message : string) => void, reject) =>
         {
-            const log = slog.stepIn(Api.CLS_NAME, 'smsLogin');
+            const log = slog.stepIn(Api.CLS_NAME, 'loginSms');
             const url = '/api/login/sms';
-            const data = {smsId, smsCode};
 
-            Api.sendPostRequest(url, data, reject, (data) =>
+            Api.sendPostRequest(url, param, reject, (data) =>
             {
                 let message : string = null;
                 if (data.status !== 0)
@@ -151,15 +150,14 @@ export default class Api
     /**
      * アカウント設定
      */
-    static setAccount(name : string, phoneNo : string) : Promise<string>
+    static setAccount(param : Request.SetAccount) : Promise<string>
     {
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'setAccount');
             const url = '/api/settings/account';
-            const data = {name, phoneNo};
 
-            Api.sendPutRequest(url, data, reject, (data) =>
+            Api.sendPutRequest(url, param, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
@@ -192,15 +190,14 @@ export default class Api
     /**
      * メールアドレス変更
      */
-    static changeEmail(email : string) : Promise<string>
+    static changeEmail(param : Request.RequestChangeEmail) : Promise<string>
     {
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'changeEmail');
             const url = '/api/settings/account/email';
-            const data = {email};
 
-            Api.sendPutRequest(url, data, reject, (data) =>
+            Api.sendPutRequest(url, param, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
@@ -211,15 +208,14 @@ export default class Api
     /**
      * メールアドレス変更確認
      */
-    static confirmChangeEmail(changeId : string, password : string) : Promise<string>
+    static confirmChangeEmail(param : Request.ChangeEmail) : Promise<string>
     {
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'confirmChangeEmail');
             const url = `/api/settings/account/email/change`;
-            const data = {changeId, password};
 
-            Api.sendPutRequest(url, data, reject, (data) =>
+            Api.sendPutRequest(url, param, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
@@ -230,15 +226,14 @@ export default class Api
     /**
      * パスワードリセットの要求
      */
-    static requestResetPassword(email : string) : Promise<string>
+    static requestResetPassword(param : Request.RequestResetPassword) : Promise<string>
     {
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'resetPassword');
             const url = '/api/reset';
-            const data = {email};
 
-            Api.sendPostRequest(url, data, reject, (data) =>
+            Api.sendPostRequest(url, param, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
@@ -249,15 +244,14 @@ export default class Api
     /**
      * パスワードリセット
      */
-    static resetPassword(resetId : string, password : string, confirm : string) : Promise<string>
+    static resetPassword(param : Request.ResetPassword) : Promise<string>
     {
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'onClickChangeButton');
             const url = '/api/reset/change';
-            const data = {resetId, password, confirm};
 
-            Api.sendPutRequest(url, data, reject, (data) =>
+            Api.sendPutRequest(url, param, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);
@@ -268,15 +262,14 @@ export default class Api
     /**
      * パスワード変更
      */
-    static changePassword(oldPassword : string, newPassword : string, confirm : string) : Promise<string>
+    static changePassword(param : Request.ChangePassword) : Promise<string>
     {
         return new Promise((resolve : (message : string) => void, reject) =>
         {
             const log = slog.stepIn(Api.CLS_NAME, 'changePassword');
             const url = '/api/settings/account/password';
-            const data = {oldPassword, newPassword, confirm};
 
-            Api.sendPutRequest(url, data, reject, (data) =>
+            Api.sendPutRequest(url, param, reject, (data) =>
             {
                 log.stepOut();
                 resolve(data.message);

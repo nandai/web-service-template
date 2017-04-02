@@ -15,8 +15,8 @@ export function expressExtension(req : express.Request, res : express.Response, 
 
     res.ext =
     {
-        ok:     ok.   bind(res),
-        error:  error.bind(res)
+        ok:    ok.   bind(res),
+        error: error.bind(res)
     };
 
     next();

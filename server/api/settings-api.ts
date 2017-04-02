@@ -7,6 +7,7 @@ import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
 import SessionModel, {Session} from '../models/session-model';
 import DeleteAccountModel      from '../models/delete-account-model';
+import {Request}               from 'libs/request';
 import {Response}              from 'libs/response';
 
 import express = require('express');
@@ -91,8 +92,8 @@ export default class SettingsApi
             do
             {
                 const locale = req.ext.locale;
-                const param =  req.body;
-                const condition =
+                const param     : Request.SetAccount = req.body;
+                const condition : Request.SetAccount =
                 {
                     name:    ['string', null, true],
                     phoneNo: ['string', null, true]
@@ -184,8 +185,8 @@ export default class SettingsApi
             do
             {
                 const locale = req.ext.locale;
-                const param =  req.body;
-                const condition =
+                const param     : Request.RequestChangeEmail = req.body;
+                const condition : Request.RequestChangeEmail =
                 {
                     email: ['string', null, true]
                 }
@@ -290,8 +291,8 @@ export default class SettingsApi
             do
             {
                 const locale = req.ext.locale;
-                const param =  req.body;
-                const condition =
+                const param     : Request.ChangeEmail = req.body;
+                const condition : Request.ChangeEmail =
                 {
                     changeId: ['string', null, true],
                     password: ['string', null, true]
@@ -378,8 +379,8 @@ export default class SettingsApi
             do
             {
                 const locale = req.ext.locale;
-                const param =  req.body;
-                const condition =
+                const param     : Request.ChangePassword = req.body;
+                const condition : Request.ChangePassword =
                 {
                     oldPassword: ['string', null, true],
                     newPassword: ['string', null, true],
