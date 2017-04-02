@@ -5,7 +5,7 @@ import * as React                     from 'react';
 import * as ReactDOM                  from 'react-dom';
 import {Store}                        from '../components/views/settings-account-email-change-view/store';
 import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view/settings-account-email-change-view';
-import Api                            from '../utils/api';
+import Api                            from '../api/api';
 
 const slog =     window['slog'];
 const changeId = window['message'];

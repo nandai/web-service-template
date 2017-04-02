@@ -3,7 +3,7 @@
  */
 import * as React from 'react';
 import Button     from 'client/components/common/button';
-import R          from 'client/utils/r';
+import R          from 'client/libs/r';
 import {Store}    from './store';
 
 interface TopViewProps

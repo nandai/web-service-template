@@ -5,7 +5,7 @@ import * as React               from 'react';
 import * as ReactDOM            from 'react-dom';
 import {Store}                  from '../components/views/settings-account-email-view/store';
 import SettingsAccountEmailView from '../components/views/settings-account-email-view/settings-account-email-view';
-import Api                      from '../utils/api';
+import Api                      from '../api/api';
 
 const slog =  window['slog'];
 

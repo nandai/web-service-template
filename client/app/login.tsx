@@ -6,7 +6,7 @@ import * as ReactDOM from 'react-dom';
 import {Request}     from 'libs/request';
 import {Store}       from '../components/views/login-view/store';
 import LoginView     from '../components/views/login-view/login-view';
-import Api           from '../utils/api';
+import Api           from '../api/api';
 
 const slog =    window['slog'];
 const message = window['message'];

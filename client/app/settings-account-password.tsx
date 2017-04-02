@@ -5,7 +5,7 @@ import * as React                  from 'react';
 import * as ReactDOM               from 'react-dom';
 import {Store}                     from '../components/views/settings-account-password-view/store';
 import SettingsAccountPasswordView from '../components/views/settings-account-password-view/settings-account-password-view';
-import Api                         from '../utils/api';
+import Api                         from '../api/api';
 
 const slog =  window['slog'];
 

@@ -5,7 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/settings-view/store';
 import SettingsView  from '../components/views/settings-view/settings-view';
-import Api           from '../utils/api';
+import Api           from '../api/api';
 
 const slog =         window['slog'];
 const errorMessage = window['message'];

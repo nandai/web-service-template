@@ -5,7 +5,7 @@
  import * as ReactDOM from 'react-dom';
  import {Store}       from '../components/views/forget-view/store';
  import ForgetView    from '../components/views/forget-view/forget-view';
- import Api           from '../utils/api';
+ import Api           from '../api/api';
 
 const slog =  window['slog'];
 

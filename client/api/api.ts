@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import R          from './r';
+import R          from '../libs/r';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 

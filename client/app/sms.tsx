@@ -5,7 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/sms-view/store';
 import SmsView       from '../components/views/sms-view/sms-view';
-import Api           from '../utils/api';
+import Api           from '../api/api';
 
 const slog =  window['slog'];
 const smsId = window['message'];

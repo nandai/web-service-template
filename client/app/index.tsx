@@ -5,7 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/top-view/store';
 import TopView       from '../components/views/top-view/top-view';
-import Api           from '../utils/api';
+import Api           from '../api/api';
 
 const slog =  window['slog'];
 

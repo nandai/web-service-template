@@ -3,8 +3,8 @@
  */
 import * as React from 'react';
 import Button     from 'client/components/common/button';
-import R          from 'client/utils/r';
-import Utils      from 'client/utils/utils';
+import R          from 'client/libs/r';
+import Utils      from 'client/libs/utils';
 import {Store}    from './store';
 
 interface SettingsViewProps

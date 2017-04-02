@@ -5,7 +5,7 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/reset-view/store';
 import ResetView     from '../components/views/reset-view/reset-view';
-import Api           from '../utils/api';
+import Api           from '../api/api';
 
 const slog =    window['slog'];
 const resetId = window['message'];

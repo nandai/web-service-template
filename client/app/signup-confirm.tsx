@@ -6,7 +6,7 @@ import * as ReactDOM     from 'react-dom';
 import {Request}         from 'libs/request';
 import {Store}           from '../components/views/signup-confirm-view/store';
 import SignupConfirmView from '../components/views/signup-confirm-view/signup-confirm-view';
-import Api               from '../utils/api';
+import Api               from '../api/api';
 
 const slog =     window['slog'];
 const signupId = window['message'];

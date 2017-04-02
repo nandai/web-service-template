@@ -2,7 +2,6 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
-import R          from 'client/utils/r';
 
 interface InputProps
 {
