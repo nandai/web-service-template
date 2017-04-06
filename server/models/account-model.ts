@@ -312,27 +312,30 @@ export default class AccountModel
                 return;
             }
 
-            if (provider !== 'twitter'
-            &&  provider !== 'facebook'
-            &&  provider !== 'google'
-            &&  provider !== 'email')
+            if (id)
             {
-                log.e('provider not supported.');
-                log.stepOut();
-                resolve(null);
-                return;
-            }
-
-            for (const account of AccountModel.list)
-            {
-                if (account[provider] === id)
+                if (provider !== 'twitter'
+                &&  provider !== 'facebook'
+                &&  provider !== 'google'
+                &&  provider !== 'email')
                 {
-                    log.d('見つかりました。');
-                    const findAccount : Account = __.clone(account);
-
+                    log.e('provider not supported.');
                     log.stepOut();
-                    resolve(findAccount);
+                    resolve(null);
                     return;
+                }
+
+                for (const account of AccountModel.list)
+                {
+                    if (account[provider] === id)
+                    {
+                        log.d('見つかりました。');
+                        const findAccount : Account = __.clone(account);
+
+                        log.stepOut();
+                        resolve(findAccount);
+                        return;
+                    }
                 }
             }
 

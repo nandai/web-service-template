@@ -77,18 +77,20 @@ class SettingsAccountPasswordApp
     private async onChange()
     {
         const log = slog.stepIn(SettingsAccountPasswordApp.CLS_NAME, 'onChange');
+        const {store} = this;
+
         try
         {
-            const {store} = this;
             const {oldPassword, newPassword, confirm} = store;
 
-            store.message = await SettingsApi.changePassword({oldPassword, newPassword, confirm});
+            const res = await SettingsApi.changePassword({oldPassword, newPassword, confirm});
+            store.message = res.message;
             this.render();
             log.stepOut();
         }
         catch (err)
         {
-            this.store.message = err.message;
+            store.message = err.message;
             this.render();
             log.stepOut();
         }

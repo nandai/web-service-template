@@ -35,7 +35,7 @@ export default class SettingsApi
             const session : Session = req.ext.session;
             const account = await AccountModel.find(session.account_id);
 
-            const resAccount : Response.Account =
+            const accountRes : Response.Account =
             {
                 name:      account.name,
                 email:     account.email,
@@ -45,10 +45,10 @@ export default class SettingsApi
                 google:   (account.google   !== null)
             };
 
-            const data =
+            const data : Response.GetAccount =
             {
                 status:  0,
-                account: resAccount
+                account: accountRes
             }
 
             res.json(data);
@@ -110,7 +110,12 @@ export default class SettingsApi
                 account.phone_no = (param.phoneNo && param.phoneNo.length > 0 ? param.phoneNo : null);
                 await AccountModel.update(account);
 
-                res.ext.ok(1, R.text(R.SETTINGS_COMPLETED, locale));
+                const data : Response.SetAccount =
+                {
+                    status:  1,
+                    message: R.text(R.SETTINGS_COMPLETED, locale)
+                };
+                res.json(data);
             }
             while (false);
             log.stepOut();
@@ -142,7 +147,8 @@ export default class SettingsApi
                 account[provider] = null;
                 await AccountModel.update(account);
 
-                res.ext.ok(0);
+                const data : Response.UnlinkProvider = {status:0};
+                res.json(data);
             }
             else
             {
@@ -186,7 +192,7 @@ export default class SettingsApi
                 }
 
                 // メールアドレスの重複チェック
-                const changeEmail = param.email;
+                const changeEmail : string = param.email;
                 const alreadyExistsAccount = await AccountModel.findByProviderId('email', changeEmail);
 
                 if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
@@ -199,7 +205,7 @@ export default class SettingsApi
                 const session : Session = req.ext.session;
                 const account = await AccountModel.find(session.account_id);
 
-                if (changeEmail === '')
+                if (changeEmail === null || changeEmail === '')
                 {
                     // メールアドレスを削除する場合
                     if (account.canUnlink('email'))
@@ -208,7 +214,12 @@ export default class SettingsApi
                         account.password = null;
                         await AccountModel.update(account);
 
-                        res.ext.ok(1, R.text(R.EMAIL_CHANGED, locale));
+                        const data : Response.RequestChangeEmail =
+                        {
+                            status:  1,
+                            message: R.text(R.EMAIL_CHANGED, locale)
+                        };
+                        res.json(data);
                     }
                     else
                     {
@@ -228,7 +239,12 @@ export default class SettingsApi
                         await AccountModel.update(account);
                     }
 
-                    res.ext.ok(1, R.text(result ? R.EMAIL_CHANGED : R.COULD_NOT_CHANGE_EMAIL, locale));
+                    const data : Response.RequestChangeEmail =
+                    {
+                        status:  1,
+                        message: R.text(result ? R.EMAIL_CHANGED : R.COULD_NOT_CHANGE_EMAIL, locale)
+                    };
+                    res.json(data);
                 }
 
                 else
@@ -247,7 +263,12 @@ export default class SettingsApi
                         await AccountModel.update(account);
                     }
 
-                    res.ext.ok(1, R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL, locale));
+                    const data : Response.RequestChangeEmail =
+                    {
+                        status:  1,
+                        message: R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL, locale)
+                    };
+                    res.json(data);
                 }
             }
             while (false);
@@ -325,7 +346,12 @@ export default class SettingsApi
                     account.change_email = null;
                     await AccountModel.update(account);
 
-                    res.ext.ok(1, R.text(R.EMAIL_CHANGED, locale));
+                    const data : Response.ChangeEmail =
+                    {
+                        status:  1,
+                        message: R.text(R.EMAIL_CHANGED, locale)
+                    };
+                    res.json(data);
                 }
                 else
                 {
@@ -410,7 +436,12 @@ export default class SettingsApi
                 account.password = Utils.getHashPassword(account.email, param.newPassword, Config.PASSWORD_SALT);
                 await AccountModel.update(account);
 
-                res.ext.ok(1, R.text(R.PASSWORD_CHANGED, locale));
+                const data : Response.ChangePassword =
+                {
+                    status:  1,
+                    message: R.text(R.PASSWORD_CHANGED, locale)
+                };
+                res.json(data);
             }
             while (false);
             log.stepOut();
@@ -440,7 +471,7 @@ export default class SettingsApi
 
 //          req.logout();
 
-            const data = {status:0};
+            const data : Response.DeleteAccount = {status:0};
             res.json(data);
             log.stepOut();
         }

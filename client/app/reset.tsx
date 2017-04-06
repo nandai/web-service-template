@@ -67,17 +67,19 @@ class ResetApp
     private async onChange()
     {
         const log = slog.stepIn(ResetApp.CLS_NAME, 'onChange');
+        const {store} = this;
+
         try
         {
-            const {store} = this;
             const {password, confirm} = store;
-            store.message = await ResetApi.resetPassword({resetId, password, confirm});
+            const res = await ResetApi.resetPassword({resetId, password, confirm});
+            store.message = res.message;
             this.render();
             log.stepOut();
         }
         catch (err)
         {
-            this.store.message = err.message;
+            store.message = err.message;
             this.render();
             log.stepOut();
         }

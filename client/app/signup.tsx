@@ -138,15 +138,15 @@ class SignupApp
 
             try
             {
-                const message = await SignupApi.signupEmail(param);
+                const res = await SignupApi.signupEmail(param);
 
-                if (message === null)
+                if (res.status === 0)
                 {
                     location.href = '/';
                 }
                 else
                 {
-                    store.message = message;
+                    store.message = res.message;
                     this.render();
                 }
 
@@ -155,7 +155,7 @@ class SignupApp
             }
             catch (err)
             {
-                this.store.message = err.message;
+                store.message = err.message;
                 this.render();
                 log.stepOut();
                 reject();

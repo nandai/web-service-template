@@ -63,17 +63,8 @@ class SignupConfirmApp
         {
             const password = store.password;
             const res = await SignupApi.confirmSignupEmail({signupId, password});
-
-            if (res.message)
-            {
-                store.message = res.message;
-                this.render();
-            }
-            else
-            {
-                location.href = res.redirect;
-            }
-
+            store.message = res.message;
+            this.render();
             log.stepOut();
         }
         catch (err)

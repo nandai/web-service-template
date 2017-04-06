@@ -10,6 +10,7 @@ import AccountModel, {Account}           from '../models/account-model';
 import SessionModel, {Session}           from '../models/session-model';
 import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
 import {Request}                         from 'libs/request';
+import {Response}                        from 'libs/response';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -170,7 +171,8 @@ export default class LoginApi extends ProviderApi
                 }
 
                 // トップ画面へ
-                res.ext.ok(0);
+                const data : Response.LoginSms = {status:0};
+                res.json(data);
             }
             while (false);
             log.stepOut();

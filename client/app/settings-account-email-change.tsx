@@ -56,18 +56,20 @@ class SettingsAccountEmailChangeApp
     private async onChange()
     {
         const log = slog.stepIn(SettingsAccountEmailChangeApp.CLS_NAME, 'onChange');
+        const {store} = this;
+
         try
         {
-            const {store} = this;
             const {password} = store;
 
-            store.message = await SettingsApi.changeEmail({changeId, password});
+            const res = await SettingsApi.changeEmail({changeId, password});
+            store.message = res.message;
             this.render();
             log.stepOut();
         }
         catch (err)
         {
-            this.store.message = err.message;
+            store.message = err.message;
             this.render();
             log.stepOut();
         }

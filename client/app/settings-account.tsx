@@ -42,7 +42,8 @@ class SettingsAccountApp
             try
             {
                 const {store} = this;
-                store.account = await SettingsApi.getAccount();
+                const res = await SettingsApi.getAccount();
+                store.account = res.account;
 
                 log.stepOut();
                 resolve();
@@ -89,19 +90,21 @@ class SettingsAccountApp
     private async onChange()
     {
         const log = slog.stepIn(SettingsAccountApp.CLS_NAME, 'onChange');
+        const {store} = this;
+
         try
         {
-            const {store} = this;
             const {account} = store;
             const {name, phoneNo} = account;
 
-            store.message = await SettingsApi.setAccount({name, phoneNo});
+            const res = await SettingsApi.setAccount({name, phoneNo});
+            store.message = res.message;
             this.render();
             log.stepOut();
         }
         catch (err)
         {
-            this.store.message = err.message;
+            store.message = err.message;
             this.render();
             log.stepOut();
         }

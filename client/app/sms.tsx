@@ -56,18 +56,20 @@ class SmsApp
     private async onSend()
     {
         const log = slog.stepIn(SmsApp.CLS_NAME, 'onSend');
+        const {store} = this;
+
         try
         {
-            const smsCode = this.store.smsCode;
-            const message = await LoginApi.loginSms({smsId, smsCode});
+            const smsCode = store.smsCode;
+            const res = await LoginApi.loginSms({smsId, smsCode});
 
-            if (message === null)
+            if (res.status === 0)
             {
                 location.href = '/';
             }
             else
             {
-                this.store.message = message;
+                store.message = res.message;
                 this.render();
             }
 
@@ -75,7 +77,7 @@ class SmsApp
         }
         catch (err)
         {
-            this.store.message = err.message;
+            store.message = err.message;
             this.render();
             log.stepOut();
         }

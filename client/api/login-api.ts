@@ -1,8 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Api       from './api';
-import {Request} from 'libs/request';
+import Api        from './api';
+import {Request}  from 'libs/request';
+import {Response} from 'libs/response';
 
 const slog = window['slog'];
 
@@ -13,26 +14,17 @@ export default class LoginApi extends Api
     /**
      * メールアドレスでログイン
      */
-    static loginEmail(param : Request.LoginEmail) : Promise<{smsId : string, message : string}>
+    static loginEmail(param : Request.LoginEmail)
     {
-        return new Promise((resolve : (res : {smsId : string, message : string}) => void, reject) =>
+        return new Promise((resolve : (res : Response.LoginEmail) => void, reject) =>
         {
             const log = slog.stepIn(LoginApi.CLS_NAME_2, 'loginEmail');
             const url = `/api/login/email`;
 
             Api.sendPostRequest(url, param, reject, (data) =>
             {
-                const res =
-                {
-                    smsId:   null,
-                    message: null
-                };
-
-                if (data.status === 0) res.smsId =   data.smsId;
-                else                   res.message = data.message;
-
                 log.stepOut();
-                resolve(res);
+                resolve(data);
             });
         });
     }
@@ -40,21 +32,17 @@ export default class LoginApi extends Api
     /**
      * SMSログイン
      */
-    static loginSms(param : Request.LoginSms) : Promise<string>
+    static loginSms(param : Request.LoginSms)
     {
-        return new Promise((resolve : (message : string) => void, reject) =>
+        return new Promise((resolve : (res : Response.LoginSms) => void, reject) =>
         {
             const log = slog.stepIn(LoginApi.CLS_NAME_2, 'loginSms');
             const url = '/api/login/sms';
 
             Api.sendPostRequest(url, param, reject, (data) =>
             {
-                let message : string = null;
-                if (data.status !== 0)
-                    message = data.message;
-
                 log.stepOut();
-                resolve(message);
+                resolve(data);
             });
         });
     }

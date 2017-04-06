@@ -41,7 +41,8 @@ class SettingsAccountEmailApp
             try
             {
                 const {store} = this;
-                store.account = await SettingsApi.getAccount();
+                const res = await SettingsApi.getAccount();
+                store.account = res.account;
 
                 log.stepOut();
                 resolve();
@@ -79,19 +80,21 @@ class SettingsAccountEmailApp
     private async onChange()
     {
         const log = slog.stepIn(SettingsAccountEmailApp.CLS_NAME, 'onChange');
+        const {store} = this;
+
         try
         {
-            const {store} = this;
             const {account} = store;
             const {email} = account;
 
-            store.message = await SettingsApi.requestChangeEmail({email});
+            const res = await SettingsApi.requestChangeEmail({email});
+            store.message = res.message;
             this.render();
             log.stepOut();
         }
         catch (err)
         {
-            this.store.message = err.message;
+            store.message = err.message;
             this.render();
             log.stepOut();
         }

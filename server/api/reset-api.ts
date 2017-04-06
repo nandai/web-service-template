@@ -6,6 +6,7 @@ import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
 import {Request}               from 'libs/request';
+import {Response}              from 'libs/response';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -63,7 +64,13 @@ export default class ResetApi
                 const template = R.mail(R.NOTICE_RESET_PASSWORD, locale);
                 const contents = Utils.formatString(template.contents, {url});
                 const result = await Utils.sendMail(template.subject, account.email, contents);
-                res.ext.ok(1, R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL, locale));
+
+                const data : Response.RequestResetPassword =
+                {
+                    status:  1,
+                    message: R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL, locale)
+                };
+                res.json(data);
             }
             while (false);
             log.stepOut();
@@ -132,7 +139,12 @@ export default class ResetApi
                     account.reset_id = null;
                     await AccountModel.update(account);
 
-                    res.ext.ok(1, R.text(R.PASSWORD_RESET, locale));
+                    const data : Response.ResetPassword =
+                    {
+                        status:  1,
+                        message: R.text(R.PASSWORD_RESET, locale)
+                    };
+                    res.json(data);
                 }
                 else
                 {

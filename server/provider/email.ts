@@ -7,6 +7,7 @@ import R              from '../libs/r';
 import Utils          from '../libs/utils';
 import {Account}      from '../models/account-model';
 import {Session}      from '../models/session-model';
+import {Response}     from 'libs/response';
 
 import express =  require('express');
 import passport = require('passport');
@@ -51,7 +52,13 @@ export default class Email extends Provider
                     const template = R.mail(R.NOTICE_SIGNUP, locale);
                     const contents = Utils.formatString(template.contents, {url});
                     const result = await Utils.sendMail(template.subject, account.email, contents);
-                    res.ext.ok(1, R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL, locale));
+
+                    const data : Response.SignupEmail =
+                    {
+                        status:  1,
+                        message: R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL, locale)
+                    };
+                    res.json(data);
                     resolve(result);
                 });
             });
@@ -111,7 +118,7 @@ export default class Email extends Provider
             }
             else
             {
-                const data = {status:0, smsId:smsId, sessionId:session.id};
+                const data : Response.LoginEmail = {status:0, smsId};
                 res.json(data);
             }
 

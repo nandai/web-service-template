@@ -1,8 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Api       from './api';
-import {Request} from 'libs/request';
+import Api        from './api';
+import {Request}  from 'libs/request';
+import {Response} from 'libs/response';
 
 const slog = window['slog'];
 
@@ -13,9 +14,9 @@ export default class ResetApi extends Api
     /**
      * パスワードリセットの要求
      */
-    static requestResetPassword(param : Request.RequestResetPassword) : Promise<string>
+    static requestResetPassword(param : Request.RequestResetPassword)
     {
-        return new Promise((resolve : (message : string) => void, reject) =>
+        return new Promise((resolve : (res : Response.RequestResetPassword) => void, reject) =>
         {
             const log = slog.stepIn(ResetApi.CLS_NAME_2, 'requestResetPassword');
             const url = '/api/reset';
@@ -23,7 +24,7 @@ export default class ResetApi extends Api
             Api.sendPostRequest(url, param, reject, (data) =>
             {
                 log.stepOut();
-                resolve(data.message);
+                resolve(data);
             });
         });
     }
@@ -31,9 +32,9 @@ export default class ResetApi extends Api
     /**
      * パスワードリセット
      */
-    static resetPassword(param : Request.ResetPassword) : Promise<string>
+    static resetPassword(param : Request.ResetPassword)
     {
-        return new Promise((resolve : (message : string) => void, reject) =>
+        return new Promise((resolve : (res : Response.ResetPassword) => void, reject) =>
         {
             const log = slog.stepIn(ResetApi.CLS_NAME_2, 'resetPassword');
             const url = '/api/reset/change';
@@ -41,7 +42,7 @@ export default class ResetApi extends Api
             Api.sendPutRequest(url, param, reject, (data) =>
             {
                 log.stepOut();
-                resolve(data.message);
+                resolve(data);
             });
         });
     }

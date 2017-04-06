@@ -8,6 +8,7 @@ import Email                   from '../provider/email';
 import ProviderApi             from './provider-api';
 import AccountModel, {Account} from '../models/account-model';
 import {Request}               from 'libs/request';
+import {Response}              from 'libs/response';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -154,7 +155,12 @@ export default class SignupApi extends ProviderApi
                 account.signup_id = null;
                 await AccountModel.update(account);
 
-                res.ext.ok(1, R.text(R.SIGNUP_COMPLETED, locale));
+                const data : Response.ResetPassword =
+                {
+                    status:  1,
+                    message: R.text(R.SIGNUP_COMPLETED, locale)
+                };
+                res.json(data);
             }
             while (false);
             log.stepOut();

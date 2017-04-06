@@ -117,7 +117,7 @@ export default class Provider
                 const command =           req.ext.command;
 
                 if (session === undefined)
-                    log.e('sessionObjがありません。');
+                    log.e('sessionがありません。');
 
                 switch (command)
                 {
@@ -343,16 +343,20 @@ export default class Provider
             {
                 if (req.path.startsWith('/api/'))
                 {
-                    if (phrase)
-                    {
-                        const locale = req.ext.locale;
-                        res.ext.error(1, R.text(phrase, locale));
-                    }
-                    else
-                    {
-                        const data = {status:0, smsId:smsId, sessionId:session.id};
-                        res.json(data);
-                    }
+                    const message = '不要と思われた処理に侵入！';
+                    log.e(message);
+                    res.ext.error(-1, message);
+
+                //     if (phrase)
+                //     {
+                //         const locale = req.ext.locale;
+                //         res.ext.error(1, R.text(phrase, locale));
+                //     }
+                //     else
+                //     {
+                //         const data = {status:0, smsId:smsId, sessionId:session.id};
+                //         res.json(data);
+                //     }
                 }
                 else
                 {

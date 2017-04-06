@@ -47,10 +47,9 @@ class SettingsApp
             const log = slog.stepIn(SettingsApp.CLS_NAME, 'init');
             try
             {
-                const account = await SettingsApi.getAccount();
-
                 const {store} = this;
-                store.account = account;
+                const res = await SettingsApi.getAccount();
+                store.account = res.account;
 
                 log.stepOut();
                 resolve();
@@ -154,17 +153,19 @@ class SettingsApp
     private async onLeave()
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onLeave');
+        const {store} = this;
+
         try
         {
-            const message = await SettingsApi.deleteAccount();
+            const res = await SettingsApi.deleteAccount();
 
-            if (message === null)
+            if (res.status === 0)
             {
                 location.href = '/';
             }
             else
             {
-                this.store.message = message;
+                store.message = res.message;
                 this.render();
             }
 
@@ -172,7 +173,7 @@ class SettingsApp
         }
         catch (err)
         {
-            this.store.message = err.message;
+            store.message = err.message;
             this.render();
             log.stepOut();
         }
@@ -191,7 +192,7 @@ class SettingsApp
     /**
      * unlink
      */
-    private unlink(sns : string)
+    private unlink(sns : 'twitter' | 'facebook' | 'google')
     {
         return new Promise(async (resolve : () => void, reject) =>
         {
@@ -200,10 +201,10 @@ class SettingsApp
 
             try
             {
-                const message = await SettingsApi.unlinkProvider(sns);
+                const res = await SettingsApi.unlinkProvider(sns);
 
-                if (message === null) store.account[sns] = false;
-                else                  store.message = message;
+                if (res.status === 0) store.account[sns] = false;
+                else                  store.message = res.message;
 
                 this.render();
                 log.stepOut();
