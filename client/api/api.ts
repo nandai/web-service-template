@@ -15,28 +15,24 @@ export default class Api
     /**
      * GETリクエストを送信する
      *
-     * @param   url         送信先URL
-     * @param   param       パラメータ
-     * @param   reject      レスポンスでエラーがあった場合のコールバック
-     * @param   onSuccess   レスポンスが正常だった場合のコールバック
+     * @param   url     送信先URL
+     * @param   param   パラメータ
      */
     protected static sendGetRequest(
-        url         : string,
-        param       : Object,
-        reject      : (data : {message : string}) => void,
-        onSuccess   : (data) => void) : void
+        url   : string,
+        param : Object)
     {
-        request
-            .get(url)
-            .query(param)
-            .end((err, res : request.Response) =>
-            {
-                if (Api.rejectIfError(err, res, reject, url))
-                    return;
-
-                const data = res.body;
-                onSuccess(data);
-            });
+        return new Promise((resolve : (res : {ok:boolean, data}) => void) =>
+        {
+            request
+                .get(url)
+                .query(param)
+                .end((err, res : request.Response) =>
+                {
+                    const result = Api.hasError(err, res);
+                    resolve(result);
+                });
+        });
     }
 
     /**
@@ -44,33 +40,29 @@ export default class Api
      *
      * @param   url         送信先URL
      * @param   param       パラメータ
-     * @param   reject      レスポンスでエラーがあった場合のコールバック
-     * @param   onSuccess   レスポンスが正常だった場合のコールバック
      * @param   onProgress  送信進捗コールバック
      */
     protected static sendPostRequest(
         url         : string,
         param       : Object,
-        reject      : (data : {message : string}) => void,
-        onSuccess   : (data) => void,
-        onProgress? : (percent : number) => void) : void
+        onProgress? : (percent : number) => void)
     {
-        request
-            .post(url)
-            .on('progress', (e) =>
-            {
-                if (onProgress)
-                    onProgress(e.percent);
-            })
-            .send(param)
-            .end((err, res : request.Response) =>
-            {
-                if (Api.rejectIfError(err, res, reject, url))
-                    return;
-
-                const data = res.body;
-                onSuccess(data);
-            });
+        return new Promise((resolve : (res : {ok:boolean, data}) => void) =>
+        {
+            request
+                .post(url)
+                .on('progress', (e) =>
+                {
+                    if (onProgress)
+                        onProgress(e.percent);
+                })
+                .send(param)
+                .end((err, res : request.Response) =>
+                {
+                    const result = Api.hasError(err, res);
+                    resolve(result);
+                });
+        });
     }
 
     /**
@@ -78,60 +70,61 @@ export default class Api
      *
      * @param   url         送信先URL
      * @param   param       パラメータ
-     * @param   reject      レスポンスでエラーがあった場合のコールバック
-     * @param   onSuccess   レスポンスが正常だった場合のコールバック
      * @param   onProgress  送信進捗コールバック
      */
     protected static sendPutRequest(
         url         : string,
         param       : Object,
-        reject      : (data : {message : string}) => void,
-        onSuccess   : (data) => void,
-        onProgress? : (percent : number) => void) : void
+        onProgress? : (percent : number) => void)
     {
-        request
-            .put(url)
-            .on('progress', (e) =>
-            {
-                if (onProgress)
-                    onProgress(e.percent);
-            })
-            .send(param)
-            .end((err, res : request.Response) =>
-            {
-                if (Api.rejectIfError(err, res, reject, url))
-                    return;
-
-                const data = res.body;
-                onSuccess(data);
-            });
+        return new Promise(async (resolve : (res : {ok:boolean, data}) => void) =>
+        {
+            request
+                .put(url)
+                .on('progress', (e) =>
+                {
+                    if (onProgress)
+                        onProgress(e.percent);
+                })
+                .send(param)
+                .end((err, res : request.Response) =>
+                {
+                    const result = Api.hasError(err, res);
+                    resolve(result);
+                });
+        });
     }
 
     /**
      * DELETEリクエストを送信する
      *
-     * @param   url         送信先URL
-     * @param   param       パラメータ
-     * @param   reject      レスポンスでエラーがあった場合のコールバック
-     * @param   onSuccess   レスポンスが正常だった場合のコールバック
+     * @param   url     送信先URL
+     * @param   param   パラメータ
      */
     protected static sendDeleteRequest(
-        url         : string,
-        param       : Object,
-        reject      : (data : {message : string}) => void,
-        onSuccess   : (data) => void) : void
+        url   : string,
+        param : Object)
     {
-        request
-            .del(url)
-            .query(param)
-            .end((err, res : request.Response) =>
-            {
-                if (Api.rejectIfError(err, res, reject, url))
-                    return;
+        return new Promise(async (resolve : (res : {ok:boolean, data}) => void) =>
+        {
+            request
+                .del(url)
+                .query(param)
+                .end((err, res : request.Response) =>
+                {
+                    const result = Api.hasError(err, res);
+                    resolve(result);
+                });
+        });
+    }
 
-                const data = res.body;
-                onSuccess(data);
-            });
+    /**
+     * resolve、またはrejectする
+     */
+    protected static result(ok : boolean, data, resolve, reject)
+    {
+        if (ok) resolve(data);
+        else    reject( data);
     }
 
     /**
@@ -191,5 +184,47 @@ export default class Api
             reject(data);
 
         return hasError;
+    }
+
+    /**
+     * APIのレスポンスにエラーがあるかどうか
+     *
+     * @param   err エラー
+     * @param   res レスポンス
+     */
+    private static hasError(err, res : request.Response) : {ok:boolean, data}
+    {
+        let ok = false;
+        let data = {message:'Unknown error.'};
+
+        do
+        {
+            if (! res)
+            {
+                if (! err)
+                {
+                    console.error('no response data.');
+                    break;
+                }
+
+                if (! err.crossDomain)
+                {
+                    console.error(`status:${err.status}, message:${err.message}`);
+                    break;
+                }
+
+                // 未接続時は以下のエラーメッセージで、crossDomainはtrueとなっているが別にクロスドメインでエラーになっているわけではない...
+                //
+                // 原文：the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.
+                // 翻訳：ネットワークがオフラインで、OriginがAccess-Control-Allow-Originによって許可されていない、ページがアンロード中など
+                data.message = R.text(R.ERROR_NETWORK);
+                break;
+            }
+
+            ok = (res.status === 200);
+            data = res.body;
+        }
+        while (false);
+        return {ok, data};
     }
 }

@@ -17,7 +17,7 @@ declare namespace Express
     {
         ext :
         {
-            ok    : (status : number, message? : string) => void;
+//          ok    : (status : number, message? : string) => void;
             error : (status : number, message  : string) => void;
         }
     }

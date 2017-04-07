@@ -16,16 +16,14 @@ export default class ResetApi extends Api
      */
     static requestResetPassword(param : Request.RequestResetPassword)
     {
-        return new Promise((resolve : (res : Response.RequestResetPassword) => void, reject) =>
+        return new Promise(async (resolve : (res : Response.RequestResetPassword) => void, reject) =>
         {
             const log = slog.stepIn(ResetApi.CLS_NAME_2, 'requestResetPassword');
             const url = '/api/reset';
 
-            Api.sendPostRequest(url, param, reject, (data) =>
-            {
-                log.stepOut();
-                resolve(data);
-            });
+            const {ok, data} = await Api.sendPostRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
         });
     }
 
@@ -34,16 +32,14 @@ export default class ResetApi extends Api
      */
     static resetPassword(param : Request.ResetPassword)
     {
-        return new Promise((resolve : (res : Response.ResetPassword) => void, reject) =>
+        return new Promise(async (resolve : (res : Response.ResetPassword) => void, reject) =>
         {
             const log = slog.stepIn(ResetApi.CLS_NAME_2, 'resetPassword');
             const url = '/api/reset/change';
 
-            Api.sendPutRequest(url, param, reject, (data) =>
-            {
-                log.stepOut();
-                resolve(data);
-            });
+            const {ok, data} = await Api.sendPutRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
         });
     }
 }

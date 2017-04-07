@@ -15,16 +15,14 @@ export default class LogoutApi extends Api
      */
     static logout()
     {
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise(async (resolve : () => void, reject) =>
         {
             const log = slog.stepIn(LogoutApi.CLS_NAME_2, 'logout');
             const url = `/api/logout`;
 
-            Api.sendPostRequest(url, {}, reject, (data) =>
-            {
-                log.stepOut();
-                resolve();
-            });
+            const {ok, data} = await Api.sendPostRequest(url, {});
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
         });
     }
 }

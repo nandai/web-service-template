@@ -15,7 +15,7 @@ export function expressExtension(req : express.Request, res : express.Response, 
 
     res.ext =
     {
-        ok:    ok.   bind(res),
+//      ok:    ok.   bind(res),
         error: error.bind(res)
     };
 
@@ -28,17 +28,17 @@ export function expressExtension(req : express.Request, res : express.Response, 
  * @param   status  ステータス
  * @param   message メッセージ
  */
-function ok(status : number, message? : string) : void
-{
-    const log = slog.stepIn('express-extension', 'ok');
-    const self : express.Response = this;
-    const data = {status, message};
-
-    self.json(data);
-
-    log.d(JSON.stringify(data, null, 2));
-    log.stepOut();
-}
+// function ok(status : number, message? : string) : void
+// {
+//     const log = slog.stepIn('express-extension', 'ok');
+//     const self : express.Response = this;
+//     const data = {status, message};
+//
+//     self.json(data);
+//
+//     log.d(JSON.stringify(data, null, 2));
+//     log.stepOut();
+// }
 
 /**
  * エラーレスポンス

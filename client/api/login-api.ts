@@ -16,16 +16,14 @@ export default class LoginApi extends Api
      */
     static loginEmail(param : Request.LoginEmail)
     {
-        return new Promise((resolve : (res : Response.LoginEmail) => void, reject) =>
+        return new Promise(async (resolve : (res : Response.LoginEmail) => void, reject) =>
         {
             const log = slog.stepIn(LoginApi.CLS_NAME_2, 'loginEmail');
             const url = `/api/login/email`;
 
-            Api.sendPostRequest(url, param, reject, (data) =>
-            {
-                log.stepOut();
-                resolve(data);
-            });
+            const {ok, data} = await Api.sendPostRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
         });
     }
 
@@ -34,16 +32,14 @@ export default class LoginApi extends Api
      */
     static loginSms(param : Request.LoginSms)
     {
-        return new Promise((resolve : (res : Response.LoginSms) => void, reject) =>
+        return new Promise(async (resolve : (res : Response.LoginSms) => void, reject) =>
         {
             const log = slog.stepIn(LoginApi.CLS_NAME_2, 'loginSms');
             const url = '/api/login/sms';
 
-            Api.sendPostRequest(url, param, reject, (data) =>
-            {
-                log.stepOut();
-                resolve(data);
-            });
+            const {ok, data} = await Api.sendPostRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
         });
     }
 }

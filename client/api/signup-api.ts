@@ -16,16 +16,14 @@ export default class SignupApi extends Api
      */
     static signupEmail(param : Request.SignupEmail)
     {
-        return new Promise((resolve : (res : Response.SignupEmail) => void, reject) =>
+        return new Promise(async (resolve : (res : Response.SignupEmail) => void, reject) =>
         {
             const log = slog.stepIn(SignupApi.CLS_NAME_2, 'signupEmail');
             const url = `/api/signup/email`;
 
-            Api.sendPostRequest(url, param, reject, (data) =>
-            {
-                log.stepOut();
-                resolve(data);
-            });
+            const {ok, data} = await Api.sendPostRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
         });
     }
 
@@ -34,16 +32,14 @@ export default class SignupApi extends Api
      */
     static confirmSignupEmail(param : Request.ConfirmSignupEmail)
     {
-        return new Promise((resolve : (res : Response.ConfirmSignupEmail) => void, reject) =>
+        return new Promise(async (resolve : (res : Response.ConfirmSignupEmail) => void, reject) =>
         {
             const log = slog.stepIn(SignupApi.CLS_NAME_2, 'confirmSignupEmail');
             const url = `/api/signup/email/confirm`;
 
-            Api.sendPostRequest(url, param, reject, (data) =>
-            {
-                log.stepOut();
-                resolve(data);
-            });
+            const {ok, data} = await Api.sendPostRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
         });
     }
 }

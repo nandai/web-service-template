@@ -28,7 +28,7 @@ export default class Input extends React.Component<InputProps, {}>
         return (
             <input type =        {props.type}
                    placeholder = {props.placeholder}
-                   value =       {props.value}
+                   value =       {props.value ? props.value : ''}
                    onChange =    {props.onChange} />
         );
     }
