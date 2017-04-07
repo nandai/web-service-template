@@ -192,7 +192,7 @@ class SettingsApp
     /**
      * unlink
      */
-    private unlink(sns : 'twitter' | 'facebook' | 'google')
+    private unlink(provider : 'twitter' | 'facebook' | 'google')
     {
         return new Promise(async (resolve : () => void, reject) =>
         {
@@ -201,9 +201,9 @@ class SettingsApp
 
             try
             {
-                const res = await SettingsApi.unlinkProvider(sns);
+                const res = await SettingsApi.unlinkProvider({provider});
 
-                if (res.status === 0) store.account[sns] = false;
+                if (res.status === 0) store.account[provider] = false;
                 else                  store.message = res.message;
 
                 this.render();

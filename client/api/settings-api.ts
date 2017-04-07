@@ -62,14 +62,14 @@ export default class SettingsApi extends Api
     /**
      * 紐付け解除
      */
-    static unlinkProvider(sns : string)
+    static unlinkProvider(param : Request.UnlinkProvider)
     {
         return new Promise(async (resolve : (res : Response.UnlinkProvider) => void, reject) =>
         {
             const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'unlinkProvider');
-            const url = `/api/settings/account/unlink/${sns}`;
+            const url = `/api/settings/account/unlink`;
 
-            const {ok, data} = await Api.sendPutRequest(url, {});
+            const {ok, data} = await Api.sendPutRequest(url, param);
             log.stepOut();
             Api.result(ok, data, resolve, reject);
         });

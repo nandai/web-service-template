@@ -5,77 +5,82 @@ export namespace Request
 {
     export interface SignupEmail
     {
-        email:    any;
-        password: any;
+        email    : any;
+        password : any;
     }
 
     export interface ConfirmSignupEmail
     {
-        signupId: any;
-        password: any;
+        signupId : any;
+        password : any;
     }
 
     export interface LoginEmail
     {
-        email:    any;
-        password: any;
+        email    : any;
+        password : any;
     }
 
     export interface LoginSms
     {
-        smsId:   any;
-        smsCode: any;
+        smsId   : any;
+        smsCode : any;
+    }
+
+    export interface UnlinkProvider
+    {
+        provider : any;
     }
 
     export interface Twitter
     {
-        accessToken:       any;
-        accessTokenSecret: any;
+        accessToken       : any;
+        accessTokenSecret : any;
     }
 
     export interface Facebook
     {
-        accessToken: any;
+        accessToken : any;
     }
 
     export interface Google
     {
-        accessToken: any;
+        accessToken : any;
     }
 
     export interface RequestResetPassword
     {
-        email: any;
+        email : any;
     }
 
     export interface ResetPassword
     {
-        resetId:  any;
-        password: any;
-        confirm:  any;
+        resetId  : any;
+        password : any;
+        confirm  : any;
     }
 
     export interface SetAccount
     {
-        name:    any;
-        phoneNo: any;
+        name    : any;
+        phoneNo : any;
     }
 
     export interface RequestChangeEmail
     {
-        email: any;
+        email : any;
     }
 
     export interface ChangeEmail
     {
-        changeId: any;
-        password: any;
+        changeId : any;
+        password : any;
     }
 
     export interface ChangePassword
     {
-        oldPassword: any;
-        newPassword: any;
-        confirm:     any;
+        oldPassword : any;
+        newPassword : any;
+        confirm     : any;
     }
 }

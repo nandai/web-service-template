@@ -215,7 +215,7 @@ class Initializer
         this.app.get(   '/api/settings/account',                    Access.auth, SettingsApi.getAccount);
         this.app.put(   '/api/settings/account',                    Access.auth, SettingsApi.setAccount);
         this.app.delete('/api/settings/account',                    Access.auth, SettingsApi.deleteAccount);
-        this.app.put(   `/api/settings/account/unlink/${provider}`, Access.auth, SettingsApi.unlinkProvider);
+        this.app.put(   `/api/settings/account/unlink`,             Access.auth, SettingsApi.unlinkProvider);
         this.app.put(   '/api/settings/account/email',              Access.auth, SettingsApi.requestChangeEmail);
         this.app.put(   '/api/settings/account/email/change',                    SettingsApi.changeEmail);
         this.app.put(   '/api/settings/account/password',           Access.auth, SettingsApi.changePassword);

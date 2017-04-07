@@ -125,7 +125,7 @@ export default class SettingsApi
 
     /**
      * 紐づけを解除する<br>
-     * PUT /api/settings/account/unlink/:provider
+     * PUT /api/settings/account/unlink
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -135,26 +135,53 @@ export default class SettingsApi
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlink');
         try
         {
-            // アカウント更新
-            const provider : string = req.params.provider;
-            log.d(`${provider}`);
-
-            const session : Session = req.ext.session;
-            const account = await AccountModel.find(session.account_id);
-
-            if (account.canUnlink(provider))
-            {
-                account[provider] = null;
-                await AccountModel.update(account);
-
-                const data : Response.UnlinkProvider = {status:0};
-                res.json(data);
-            }
-            else
+            do
             {
                 const locale = req.ext.locale;
-                res.ext.error(1, R.text(R.CANNOT_UNLINK, locale));
+                const param     : Request.UnlinkProvider = req.body;
+                const condition : Request.UnlinkProvider =
+                {
+                    provider: ['string', null, true]
+                }
+
+                if (Utils.existsParameters(param, condition) === false)
+                {
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    break;
+                }
+
+                // プロバイダ名チェック
+                const provider : string = param.provider;
+                log.d(`${provider}`);
+
+                if (provider !== 'twitter'
+                &&  provider !== 'facebook'
+                &&  provider !== 'google')
+                {
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    break;
+                }
+
+                // アカウント更新
+                const session : Session = req.ext.session;
+                const account = await AccountModel.find(session.account_id);
+
+                if (account.canUnlink(provider))
+                {
+                    account[provider] = null;
+                    await AccountModel.update(account);
+
+                    const data : Response.UnlinkProvider = {status:0};
+                    res.json(data);
+                }
+                else
+                {
+                    const locale = req.ext.locale;
+                    res.ext.error(1, R.text(R.CANNOT_UNLINK, locale));
+                }
             }
+            while (false);
+            log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
     }
