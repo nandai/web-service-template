@@ -56,7 +56,7 @@ export default class TopController
             else if (session.account_id === null || message)
             {
                 log.d('ログイン画面を表示');
-                res.send(view('ログイン', 'login.js', message));
+                res.send(view('ログイン', 'wst.js', message));
             }
             else
             {

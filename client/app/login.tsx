@@ -7,6 +7,7 @@ import {Request}     from 'libs/request';
 import {Store}       from '../components/views/login-view/store';
 import LoginView     from '../components/views/login-view/login-view';
 import LoginApi      from '../api/login-api';
+import History       from '../libs/History';
 
 const slog =    window['slog'];
 const message = window['message'];
@@ -14,7 +15,7 @@ const message = window['message'];
 /**
  * View
  */
-class LoginApp
+export default class LoginApp
 {
     private static CLS_NAME = 'LoginApp';
     private store : Store;
@@ -37,6 +38,14 @@ class LoginApp
             onSignup:         this.onSignup.        bind(this),
             onForget:         this.onForget.        bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init() : void
+    {
+        document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     }
 
     /**
@@ -121,7 +130,7 @@ class LoginApp
     private onSignup() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onSignup');
-        location.href = '/signup';
+        History.pushState('/signup');
         log.stepOut();
     }
 
@@ -131,7 +140,7 @@ class LoginApp
     private onForget() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onForget');
-        location.href = '/forget';
+        History.pushState('/forget');
         log.stepOut();
     }
 
@@ -169,20 +178,4 @@ class LoginApp
             }
         });
     }
-}
-
-/**
- * onLoad
- */
-window.addEventListener('DOMContentLoaded', () =>
-{
-    document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    const app = new LoginApp();
-    app.render();
-});
-
-if (window.location.hash === '#_=_')
-{
-    // Facebookのコールバックでなぜかゴミが付いてくるので取り除く。
-    window.history.pushState('', document.title, window.location.pathname);
 }

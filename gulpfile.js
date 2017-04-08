@@ -1,19 +1,25 @@
 /**
  * (C) 2016 printf.jp
  */
-var gulp =        require('gulp');
-var abspath =     require('gulp-absolute-path');
-var typescript =  require('gulp-typescript');
-var sourcemaps =  require('gulp-sourcemaps');
-var browserify =  require('browserify');
-var source =      require('vinyl-source-stream');
-var runSequence = require('run-sequence');
+const gulp =        require('gulp');
+const abspath =     require('gulp-absolute-path');
+const typescript =  require('gulp-typescript');
+const babel =       require('gulp-babel');
+const sourcemaps =  require('gulp-sourcemaps');
+const browserify =  require('browserify');
+const source =      require('vinyl-source-stream');
+const runSequence = require('run-sequence');
 
-var tsOptions =
+const tsOptions =
 {
     target: 'es6',
     module: 'commonjs',
     jsx:    'react'
+};
+
+const babelOptions =
+{
+  presets: ['latest']
 };
 
 /**
@@ -21,13 +27,13 @@ var tsOptions =
  */
 gulp.task('server', function ()
 {
-    var src =
+    const src =
     [
 //      '!./node_modules/**',
         './server/**/*.ts'
     ];
 
-    var smOptions =
+    const smOptions =
     {
         includeContent: false,
         sourceRoot: function (file)
@@ -49,7 +55,7 @@ gulp.task('server', function ()
  */
 gulp.task('client-typeScript', function ()
 {
-    var src =
+    const src =
     [
         './client/**/*.ts',
         './client/**/*.tsx'
@@ -58,17 +64,16 @@ gulp.task('client-typeScript', function ()
     return gulp.src(src)
         .pipe(abspath())
         .pipe(typescript(tsOptions))
+//      .pipe(babel(babelOptions))
         .pipe(gulp.dest('./build-client'));
 });
 
 gulp.task('client-browserify', function ()
 {
+    buildClient('wst.js');
     buildClient('index.js');
-    buildClient('signup.js');
     buildClient('signup-confirm.js');
-    buildClient('login.js');
     buildClient('sms.js');
-    buildClient('forget.js');
     buildClient('reset.js');
     buildClient('settings.js');
     buildClient('settings-account.js');

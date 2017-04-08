@@ -45,7 +45,7 @@ export default class SignupController
                 }
 
                 log.d('サインアップ画面を表示');
-                res.send(view('サインアップ', 'signup.js', message));
+                res.send(view('サインアップ', 'wst.js', message));
             }
             else
             {

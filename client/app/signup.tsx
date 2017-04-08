@@ -7,13 +7,14 @@ import {Request}     from 'libs/request';
 import {Store}       from '../components/views/signup-view/store';
 import SignupView    from '../components/views/signup-view/signup-view';
 import SignupApi     from '../api/signup-api';
+import History       from '../libs/history';
 
-const slog =  window['slog'];
+const slog = window['slog'];
 
 /**
  * View
  */
-class SignupApp
+export default class SignupApp
 {
     private static CLS_NAME = 'SignupApp';
     private store : Store;
@@ -119,7 +120,7 @@ class SignupApp
     private onTop() : void
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onTop');
-        location.href = '/';
+        History.pushState('/');
         log.stepOut();
     }
 
@@ -163,11 +164,3 @@ class SignupApp
         });
     }
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-    const app = new SignupApp();
-    app.render();
-});
-
-if (window.location.hash === '#_=_')
-    window.history.pushState('', document.title, window.location.pathname);
