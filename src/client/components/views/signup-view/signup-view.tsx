@@ -1,10 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import Button        from 'client/components/common/button';
-import Input         from 'client/components/common/input';
-import R             from 'client/libs/r';
+import * as React from 'react';
+import Button     from 'client/components/common/button';
+import Input      from 'client/components/common/input';
+import R          from 'client/libs/r';
 import {Store}    from './store';
 
 interface SignupViewProps

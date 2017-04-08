@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import {Account} from './account-model';
+import Config    from '../config';
 import Utils     from '../libs/utils';
 
 import fs =     require('fs');
@@ -16,7 +17,7 @@ export default class DeleteAccountModel
     private static CLS_NAME = 'DeleteAccountModel';
     private static list : Account[] = null;
     private static backupList : Account[] = null;
-    private static path = __dirname + '/../../storage/delete-account.json';
+    private static path = Config.ROOT_DIR + '/storage/delete-account.json';
     private static MESSAGE_UNINITIALIZE = 'DeleteAccountModelが初期化されていません。';
 
     /**

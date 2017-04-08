@@ -6,14 +6,17 @@ import Utils from './libs/utils';
 import fs =   require('fs');
 import path = require('path');
 
+const rootDir = __dirname + '/../..';
+
 /**
  * コンフィグ
  */
 export default class Config
 {
-    private static path = __dirname + '/../appconfig.json';
+    private static path = rootDir + '/appconfig.json';
 
-    static STATIC_DIR = __dirname + '/../www/static';
+    static ROOT_DIR =   rootDir;
+    static STATIC_DIR = rootDir + '/www/static';
     static APP_HOST = '';
     static APP_PORT = 0;
     static SSL_KEY = '';

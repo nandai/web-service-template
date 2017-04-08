@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import SeqModel from './seq-model';
+import Config   from '../config';
 import Utils    from '../libs/utils';
 
 import fs =     require('fs');
@@ -30,7 +31,7 @@ export default class SessionModel
 {
     private static CLS_NAME = 'SessionModel';
     private static list: Session[] = null;
-    private static path = __dirname + '/../../storage/session.json';
+    private static path = Config.ROOT_DIR + '/storage/session.json';
     private static MESSAGE_UNINITIALIZE = 'SessionModelが初期化されていません。';
 
     /**

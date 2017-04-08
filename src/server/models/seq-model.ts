@@ -1,6 +1,8 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
+import Config from '../config';
+
 import fs = require('fs');
 
 /**
@@ -18,7 +20,7 @@ export class Seq
 export default class SeqModel
 {
     private static list : Seq[] = [];
-    private static path = __dirname + '/../../storage/seq.json';
+    private static path = Config.ROOT_DIR + '/storage/seq.json';
 
     /**
      * アカウントをJSONファイルからロードする

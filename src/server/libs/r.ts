@@ -1,6 +1,8 @@
 /**
  * (C) 2016 printf.jp
  */
+import Config from '../config';
+
 import fs = require('fs');
 
 /**
@@ -8,7 +10,7 @@ import fs = require('fs');
  */
 export default class R
 {
-    private static path = __dirname + '/../../resources';
+    private static path = Config.ROOT_DIR + '/resources';
 
     private static texts =
     {

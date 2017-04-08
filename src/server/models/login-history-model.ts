@@ -1,6 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import Config from '../config';
+
 import fs =     require('fs');
 import moment = require('moment');
 import slog =   require('../slog');
@@ -22,7 +24,7 @@ export default class LoginHistoryModel
 {
     private static CLS_NAME = 'LoginHistoryModel';
     private static list: LoginHistory[] = null;
-    private static path = __dirname + '/../../storage/loginHistory.json';
+    private static path = Config.ROOT_DIR + '/storage/loginHistory.json';
     private static MESSAGE_UNINITIALIZE = 'LoginHistoryModelが初期化されていません。';
 
     /**

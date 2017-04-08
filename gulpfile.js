@@ -30,7 +30,7 @@ gulp.task('server', function ()
     const src =
     [
 //      '!./node_modules/**',
-        './server/**/*.ts'
+        './src/server/**/*.ts'
     ];
 
     const smOptions =
@@ -44,10 +44,10 @@ gulp.task('server', function ()
 
     gulp.src(src)
         .pipe(sourcemaps.init())
-        .pipe(abspath())
+        .pipe(abspath({rootDir:'./src'}))
         .pipe(typescript(tsOptions))
         .pipe(sourcemaps.write('./', smOptions))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./build/server'));
 });
 
 /**
@@ -57,15 +57,15 @@ gulp.task('client-typeScript', function ()
 {
     const src =
     [
-        './client/**/*.ts',
-        './client/**/*.tsx'
+        './src/client/**/*.ts',
+        './src/client/**/*.tsx'
     ];
 
     return gulp.src(src)
-        .pipe(abspath())
+        .pipe(abspath({rootDir:'./src'}))
         .pipe(typescript(tsOptions))
 //      .pipe(babel(babelOptions))
-        .pipe(gulp.dest('./build-client'));
+        .pipe(gulp.dest('./build/client'));
 });
 
 gulp.task('client-browserify', function ()
@@ -85,7 +85,7 @@ gulp.task('client-browserify', function ()
 
 function buildClient(fileName)
 {
-    browserify({entries: ['./build-client/app/' + fileName]})
+    browserify({entries: ['./build/client/app/' + fileName]})
         .bundle()
         .pipe(source('./www/static/js/' + fileName))
         .pipe(gulp.dest('.'));

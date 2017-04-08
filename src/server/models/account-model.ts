@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import SeqModel from './seq-model';
+import Config   from '../config';
 import Utils    from '../libs/utils';
 
 import fs =     require('fs');
@@ -68,7 +69,7 @@ export default class AccountModel
     private static CLS_NAME = 'AccountModel';
     private static list : Account[] = null;
     private static backupList : Account[] = null;
-    private static path = __dirname + '/../../storage/account.json';
+    private static path = Config.ROOT_DIR + '/storage/account.json';
     private static MESSAGE_UNINITIALIZE = 'AccountModelが初期化されていません。';
 
     /**
