@@ -22,7 +22,7 @@ export default class ForgetController
     static index(req : express.Request, res : express.Response) : void
     {
         const log = slog.stepIn(ForgetController.CLS_NAME, 'index');
-        res.send(view('パスワードを忘れた', 'forget.js'));
+        res.send(view('パスワードを忘れた', 'wst.js'));
         log.stepOut();
     }
 }

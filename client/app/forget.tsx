@@ -12,7 +12,7 @@ const slog =  window['slog'];
 /**
  * View
  */
-class ForgetApp
+export default class ForgetApp
 {
     private static CLS_NAME = 'ForgetApp';
     private store : Store;
@@ -72,9 +72,3 @@ class ForgetApp
         }
     }
 }
-
-window.addEventListener('DOMContentLoaded', () =>
-{
-    const app = new ForgetApp();
-    app.render();
-});
