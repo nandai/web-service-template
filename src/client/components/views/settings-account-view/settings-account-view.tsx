@@ -19,13 +19,13 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
      */
     render() : JSX.Element {
         const {store} = this.props;
-        const {account} = store;
+        const {locale, account} = store;
 
         return (
             <div>
-                <Input placeholder={R.text(R.ACCOUNT_NAME)} value={account.name}    onChange={store.onNameChange} />
-                <Input placeholder={R.text(R.TEL)}          value={account.phoneNo} onChange={store.onPhoneNoChange} />
-                <Button onClick={store.onChange}>{R.text(R.CHANGE)}</Button>
+                <Input placeholder={R.text(R.ACCOUNT_NAME, locale)} value={account.name}    onChange={store.onNameChange} />
+                <Input placeholder={R.text(R.TEL,          locale)} value={account.phoneNo} onChange={store.onPhoneNoChange} />
+                <Button onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
                 <span>{store.message}</span>
             </div>
         );

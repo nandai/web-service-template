@@ -7,7 +7,8 @@ import {Request}     from 'libs/request';
 import {Store}       from '../components/views/login-view/store';
 import LoginView     from '../components/views/login-view/login-view';
 import LoginApi      from '../api/login-api';
-import History       from '../libs/History';
+import History       from '../libs/history';
+import Utils         from '../libs/utils';
 
 const slog =    window['slog'];
 const message = window['message'];
@@ -26,6 +27,7 @@ export default class LoginApp
     constructor()
     {
         this.store = {
+            locale:   Utils.getLocale(),
             email:    '',
             password: '',
             message:  message,

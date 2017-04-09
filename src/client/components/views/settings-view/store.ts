@@ -5,6 +5,7 @@ import {Response} from 'libs/response';
 
 export interface Store
 {
+    locale     : string;
     account    : Response.Account;
     message    : string;
     onTwitter  : () => void;

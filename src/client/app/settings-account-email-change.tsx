@@ -6,6 +6,7 @@ import * as ReactDOM                  from 'react-dom';
 import {Store}                        from '../components/views/settings-account-email-change-view/store';
 import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view/settings-account-email-change-view';
 import SettingsApi                    from '../api/settings-api';
+import Utils                          from '../libs/utils';
 
 const slog =     window['slog'];
 const changeId = window['message'];
@@ -24,6 +25,7 @@ class SettingsAccountEmailChangeApp
     constructor()
     {
         this.store = {
+            locale:   Utils.getLocale(),
             password: '',
             message:  '',
             onPasswordChange: this.onPasswordChange.bind(this),

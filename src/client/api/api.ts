@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import R          from '../libs/r';
+import Utils      from '../libs/utils';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 
@@ -158,7 +159,8 @@ export default class Api
                 //
                 // 原文：the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.
                 // 翻訳：ネットワークがオフラインで、OriginがAccess-Control-Allow-Originによって許可されていない、ページがアンロード中など
-                data.message = R.text(R.ERROR_NETWORK);
+                const locale = Utils.getLocale();
+                data.message = R.text(R.ERROR_NETWORK, locale);
                 break;
             }
 

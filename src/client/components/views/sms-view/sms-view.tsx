@@ -19,10 +19,12 @@ export default class SmsView extends React.Component<SmsViewProps, {}>
      */
     render() : JSX.Element {
         const {store} = this.props;
+        const {locale} = store;
+
         return (
             <div>
-                <Input type="text" placeholder={R.text(R.LOGIN_CODE)} value={store.smsCode} onChange={store.onSmsCodeChange} />
-                <Button onClick={store.onSend}>{R.text(R.SEND)}</Button>
+                <Input type="text" placeholder={R.text(R.LOGIN_CODE, locale)} value={store.smsCode} onChange={store.onSmsCodeChange} />
+                <Button onClick={store.onSend}>{R.text(R.SEND,       locale)}</Button>
                 <span>{store.message}</span>
             </div>
         );

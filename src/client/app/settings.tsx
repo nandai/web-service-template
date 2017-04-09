@@ -6,6 +6,7 @@ import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/settings-view/store';
 import SettingsView  from '../components/views/settings-view/settings-view';
 import SettingsApi   from '../api/settings-api';
+import Utils         from '../libs/utils';
 
 const slog =         window['slog'];
 const errorMessage = window['message'];
@@ -24,6 +25,7 @@ class SettingsApp
     constructor()
     {
         this.store = {
+            locale:     Utils.getLocale(),
             account:    null,
             message:    errorMessage,
             onTwitter:  this.onTwitter. bind(this),

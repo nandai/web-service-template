@@ -6,6 +6,7 @@ import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/reset-view/store';
 import ResetView     from '../components/views/reset-view/reset-view';
 import ResetApi      from '../api/reset-api';
+import Utils         from '../libs/utils';
 
 const slog =    window['slog'];
 const resetId = window['message'];
@@ -24,6 +25,7 @@ class ResetApp
     constructor()
     {
         this.store = {
+            locale:   Utils.getLocale(),
             password: '',
             confirm:  '',
             message:  '',

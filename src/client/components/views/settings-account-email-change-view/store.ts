@@ -3,6 +3,7 @@
  */
 export interface Store
 {
+    locale           : string;
     password         : string;
     message          : string;
     onPasswordChange : (e : React.ChangeEvent<HTMLInputElement>) => void;

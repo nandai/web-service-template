@@ -6,6 +6,7 @@ import * as ReactDOM               from 'react-dom';
 import {Store}                     from '../components/views/settings-account-password-view/store';
 import SettingsAccountPasswordView from '../components/views/settings-account-password-view/settings-account-password-view';
 import SettingsApi                 from '../api/settings-api';
+import Utils                       from '../libs/utils';
 
 const slog =  window['slog'];
 
@@ -23,6 +24,7 @@ class SettingsAccountPasswordApp
     constructor()
     {
         this.store = {
+            locale:       Utils.getLocale(),
             oldPassword:  '',
             newPassword:  '',
             confirm:      '',

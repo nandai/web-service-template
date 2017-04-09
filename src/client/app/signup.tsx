@@ -8,6 +8,7 @@ import {Store}       from '../components/views/signup-view/store';
 import SignupView    from '../components/views/signup-view/signup-view';
 import SignupApi     from '../api/signup-api';
 import History       from '../libs/history';
+import Utils         from '../libs/utils';
 
 const slog = window['slog'];
 
@@ -25,6 +26,7 @@ export default class SignupApp
     constructor()
     {
         this.store = {
+            locale:   Utils.getLocale(),
             email:    '',
             password: '',
             message:  window['message'],

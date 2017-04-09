@@ -6,6 +6,7 @@ import * as ReactDOM       from 'react-dom';
 import {Store}             from '../components/views/settings-account-view/store';
 import SettingsAccountView from '../components/views/settings-account-view/settings-account-view';
 import SettingsApi         from '../api/settings-api';
+import Utils               from '../libs/utils';
 
 const slog = window['slog'];
 
@@ -23,6 +24,7 @@ class SettingsAccountApp
     constructor()
     {
         this.store = {
+            locale:   Utils.getLocale(),
             account:  null,
             message:  '',
             onNameChange:    this.onNameChange.   bind(this),

@@ -3,6 +3,7 @@
  */
 export interface Store
 {
+    locale           : string;
     email            : string;
     password         : string;
     message          : string;

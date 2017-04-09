@@ -19,7 +19,7 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
      */
     render() : JSX.Element {
         const {store} = this.props;
-        const {account} = store;
+        const {locale, account} = store;
 
         const twitterLabel =  this.getLinkLabel('Twitter',  'twitter');
         const facebookLabel = this.getLinkLabel('Facebook', 'facebook');
@@ -32,11 +32,11 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
                 <Button onClick={store.onTwitter} >{twitterLabel}</Button>
                 <Button onClick={store.onFacebook}>{facebookLabel}</Button>
                 <Button onClick={store.onGoogle}  >{googleLabel}</Button>
-                <Button onClick={store.onEmail}   >{R.text(R.GO_EMAIL_SETTINGS)}</Button>
-                <Button onClick={store.onPassword} disabled={passwordDisabled}>{R.text(R.GO_PASSWORD_SETTINGS)}</Button>
-                <Button onClick={store.onAccount} >{R.text(R.GO_ACCOUNT_SETTINGS)}</Button>
-                <Button onClick={store.onLeave}   >{R.text(R.DELETE_ACCOUNT)}</Button>
-                <Button onClick={store.onBack}    >{R.text(R.BACK)}</Button>
+                <Button onClick={store.onEmail}   >{R.text(R.GO_EMAIL_SETTINGS, locale)}</Button>
+                <Button onClick={store.onPassword} disabled={passwordDisabled}>{R.text(R.GO_PASSWORD_SETTINGS, locale)}</Button>
+                <Button onClick={store.onAccount} >{R.text(R.GO_ACCOUNT_SETTINGS, locale)}</Button>
+                <Button onClick={store.onLeave}   >{R.text(R.DELETE_ACCOUNT, locale)}</Button>
+                <Button onClick={store.onBack}    >{R.text(R.BACK, locale)}</Button>
                 <p>{account.name}</p>
                 <p>{store.message}</p>
             </div>
@@ -45,9 +45,10 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
 
     private getLinkLabel(provider : string, key : string) : string
     {
-        const format = R.text(this.props.store.account[key]
+        const {store} = this.props;
+        const format = R.text(store.account[key]
             ? R.UNLINK_PROVIDER
-            : R.LINK_PROVIDER);
+            : R.LINK_PROVIDER, store.locale);
         return Utils.formatString(format, {provider});
     }
 }

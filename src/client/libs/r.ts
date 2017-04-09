@@ -124,16 +124,8 @@ export default class R
      *
      * @return  文字列
      */
-    static text(phrase : string) : string
+    static text(phrase : string, locale : string) : string
     {
-        const languages = window.navigator['languages'];
-        let locale : string = (languages && languages[0]) ||
-            window.navigator.language;
-//          window.navigator.language ||
-//          window.navigator.userLanguage ||
-//          window.navigator.browserLanguage;
-
-        locale = locale.substr(0, 2);
         const texts = R.texts[locale];
 
         if (phrase in texts)

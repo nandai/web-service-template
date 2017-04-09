@@ -6,6 +6,7 @@ import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/forget-view/store';
 import ForgetView    from '../components/views/forget-view/forget-view';
 import ResetApi      from '../api/reset-api';
+import Utils         from '../libs/utils';
 
 const slog =  window['slog'];
 
@@ -23,6 +24,7 @@ export default class ForgetApp
     constructor()
     {
         this.store = {
+            locale:   Utils.getLocale(),
             email:    '',
             message:  '',
             onEmailChange: this.onEmailChange.bind(this),

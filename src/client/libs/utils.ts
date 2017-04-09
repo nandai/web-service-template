@@ -8,6 +8,21 @@
 export default class Utils
 {
     /**
+     * ブラウザの設定からロケールを取得する
+     *
+     * @return  言語
+     */
+    static getLocale() : string
+    {
+        let locale = window.navigator.language.substr(0, 2);
+
+        if (locale !== 'ja')
+            locale = 'en';
+
+        return locale;
+    }
+
+    /**
      * 文字列フォーマット<br>
      * 使用方法: formatString('Hello ${name} !', {name:'Taro'});
      *

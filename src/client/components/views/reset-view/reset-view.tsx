@@ -19,11 +19,13 @@ export default class ResetView extends React.Component<ResetViewProps, {}>
      */
     render() : JSX.Element {
         const {store} = this.props;
+        const {locale} = store;
+
         return (
             <div>
-                <Input type="password" placeholder={R.text(R.PASSWORD)}           value={store.password} onChange={store.onPasswordChange} />
-                <Input type="password" placeholder={R.text(R.NEW_PASSWORD_AGAIN)} value={store.confirm}  onChange={store.onConfirmChange} />
-                <Button onClick={store.onChange}>{R.text(R.CHANGE)}</Button>
+                <Input type="password" placeholder={R.text(R.PASSWORD, locale)}           value={store.password} onChange={store.onPasswordChange} />
+                <Input type="password" placeholder={R.text(R.NEW_PASSWORD_AGAIN, locale)} value={store.confirm}  onChange={store.onConfirmChange} />
+                <Button onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
                 <span>{store.message}</span>
             </div>
         );

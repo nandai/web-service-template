@@ -3,6 +3,7 @@
  */
 export interface Store
 {
+    locale              : string;
     oldPassword         : string;
     newPassword         : string;
     confirm             : string;

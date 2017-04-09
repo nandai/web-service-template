@@ -7,6 +7,7 @@ import {Request}         from 'libs/request';
 import {Store}           from '../components/views/signup-confirm-view/store';
 import SignupConfirmView from '../components/views/signup-confirm-view/signup-confirm-view';
 import SignupApi         from '../api/signup-api';
+import Utils             from '../libs/utils';
 
 const slog =     window['slog'];
 const signupId = window['message'];
@@ -25,6 +26,7 @@ class SignupConfirmApp
     constructor()
     {
         this.store = {
+            locale:   Utils.getLocale(),
             password: '',
             message:  '',
             onPasswordChange: this.onPasswordChange.bind(this),

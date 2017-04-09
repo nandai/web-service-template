@@ -20,11 +20,12 @@ export default class SettingsAccountEmailView extends React.Component<SettingsAc
     render() : JSX.Element {
         const {store} = this.props;
         const {account} = store;
+        const {locale} = store;
 
         return (
             <div>
-                <Input placeholder={R.text(R.EMAIL)} value={account.email} onChange={store.onEmailChange} />
-                <Button onClick={store.onChange}>{R.text(R.CHANGE)}</Button>
+                <Input placeholder={R.text(R.EMAIL, locale)} value={account.email} onChange={store.onEmailChange} />
+                <Button onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
                 <span>{store.message}</span>
             </div>
         );

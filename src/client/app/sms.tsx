@@ -6,6 +6,7 @@ import * as ReactDOM from 'react-dom';
 import {Store}       from '../components/views/sms-view/store';
 import SmsView       from '../components/views/sms-view/sms-view';
 import LoginApi      from '../api/login-api';
+import Utils         from '../libs/utils';
 
 const slog =  window['slog'];
 const smsId = window['message'];
@@ -24,6 +25,7 @@ class SmsApp
     constructor()
     {
         this.store = {
+            locale:  Utils.getLocale(),
             smsCode: '',
             message: '',
             onSmsCodeChange: this.onSmsCodeChange.bind(this),
