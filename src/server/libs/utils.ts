@@ -271,5 +271,24 @@ export default class Utils
         {
             return (key in args ? args[key] : match);
         });
-    };
+    }
+
+    /**
+     * accept-languageからからロケールを取得する
+     *
+     * @return  言語
+     */
+    static getLocale(req : express.Request) : string
+    {
+        const {headers} = req;
+        let locale = 'en';
+
+        if ('accept-language' in headers)
+            locale = headers['accept-language'].substr(0, 2);
+
+        if (locale !== 'ja')
+            locale = 'en';
+
+        return locale;
+    }
 }

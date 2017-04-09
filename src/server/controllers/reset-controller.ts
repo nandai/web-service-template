@@ -1,9 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {view, notFound} from './view';
-import Utils            from '../libs/utils';
+import {view, notFound}        from './view';
+import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
+import ClientR                 from 'client/libs/r';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -24,6 +25,8 @@ export default class ResetController
     static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(ResetController.CLS_NAME, 'index');
+        const locale = req.ext.locale;
+
         try
         {
             const param = req.query;
@@ -33,8 +36,15 @@ export default class ResetController
             if (resetId)
                 account = await AccountModel.findByResetId(resetId);
 
-            if (account) res.send(view('パスワードリセット', 'reset.js', resetId));
-            else         notFound(res);
+            if (account)
+            {
+                const title = ClientR.text(ClientR.RESET_PASSWORD, locale);
+                res.send(view(title, 'reset.js', resetId));
+            }
+            else
+            {
+                notFound(res);
+            }
 
             log.stepOut();
         }

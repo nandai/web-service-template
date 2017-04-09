@@ -1,7 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {view} from './view';
+import {view}  from './view';
+import ClientR from 'client/libs/r';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -22,7 +23,10 @@ export default class ForgetController
     static index(req : express.Request, res : express.Response) : void
     {
         const log = slog.stepIn(ForgetController.CLS_NAME, 'index');
-        res.send(view('パスワードを忘れた', 'wst.js'));
+        const locale = req.ext.locale;
+        const title = ClientR.text(ClientR.GO_FORGET, locale);
+
+        res.send(view(title, 'wst.js'));
         log.stepOut();
     }
 }

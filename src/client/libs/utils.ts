@@ -14,7 +14,10 @@ export default class Utils
      */
     static getLocale() : string
     {
-        let locale = window.navigator.language.substr(0, 2);
+        const languages : string[] = window.navigator['languages'];
+        const language  : string = (languages && languages[0]) || window.navigator['language'];
+
+        let locale = language.substr(0, 2);
 
         if (locale !== 'ja')
             locale = 'en';

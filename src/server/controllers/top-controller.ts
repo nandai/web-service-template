@@ -7,6 +7,7 @@ import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
+import ClientR                 from 'client/libs/r';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -27,6 +28,8 @@ export default class TopController
     static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(TopController.CLS_NAME, 'index');
+        const locale = req.ext.locale;
+
         try
         {
             const cookie = new Cookie(req, res);
@@ -37,7 +40,6 @@ export default class TopController
 
             if (session.message_id)
             {
-                const locale = req.ext.locale;
                 message = R.text(session.message_id, locale);
                 session.message_id = null;
                 await SessionModel.update(session);
@@ -50,18 +52,27 @@ export default class TopController
             {
                 const account = await AccountModel.findBySmsId(smsId);
 
-                if (account) res.send(view('二段階認証', 'sms.js', smsId));
-                else         notFound(res);
+                if (account)
+                {
+                    const title = ClientR.text(ClientR.AUTH_SMS, locale);
+                    res.send(view(title, 'sms.js', smsId));
+                }
+                else
+                {
+                    notFound(res);
+                }
             }
             else if (session.account_id === null || message)
             {
                 log.d('ログイン画面を表示');
-                res.send(view('ログイン', 'wst.js', message));
+                const title = ClientR.text(ClientR.LOGIN, locale);
+                res.send(view(title, 'wst.js', message));
             }
             else
             {
                 log.d('トップ画面を表示');
-                res.send(view('トップ', 'index.js'));
+                const title = ClientR.text(ClientR.TOP, locale);
+                res.send(view(title, 'index.js'));
             }
 
             log.stepOut();

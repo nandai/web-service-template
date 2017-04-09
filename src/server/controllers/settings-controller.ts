@@ -7,6 +7,7 @@ import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
+import ClientR                 from 'client/libs/r';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -28,6 +29,8 @@ export default class SettingsController
     static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'index');
+        const locale = req.ext.locale;
+
         try
         {
             const cookie = new Cookie(req, res);
@@ -38,13 +41,13 @@ export default class SettingsController
 
             if (session.message_id)
             {
-                const locale = req.ext.locale;
                 message = R.text(session.message_id, locale);
                 session.message_id = null;
                 await SessionModel.update(session);
             }
 
-            res.send(view('設定', 'settings.js', message));
+            const title = ClientR.text(ClientR.SETTINGS, locale);
+            res.send(view(title, 'settings.js', message));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
@@ -60,9 +63,12 @@ export default class SettingsController
     static async account(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'account');
+        const locale = req.ext.locale;
+
         try
         {
-            res.send(view('アカウントの設定', 'settings-account.js'));
+            const title = ClientR.text(ClientR.SETTINGS_ACCOUNT, locale);
+            res.send(view(title, 'settings-account.js'));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
@@ -78,9 +84,12 @@ export default class SettingsController
     static async email(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'email');
+        const locale = req.ext.locale;
+
         try
         {
-            res.send(view('メールアドレスの設定', 'settings-account-email.js'));
+            const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL, locale);
+            res.send(view(title, 'settings-account-email.js'));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
@@ -96,6 +105,8 @@ export default class SettingsController
     static async changeEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'changeEmail');
+        const locale = req.ext.locale;
+
         try
         {
             const param = req.query;
@@ -105,8 +116,15 @@ export default class SettingsController
             if (changeId)
                 account = await AccountModel.findByChangeId(changeId);
 
-            if (account) res.send(view('メールアドレス設定の確認', 'settings-account-email-change.js', changeId));
-            else         notFound(res);
+            if (account)
+            {
+                const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL_CHANGE, locale);
+                res.send(view(title, 'settings-account-email-change.js', changeId));
+            }
+            else
+            {
+                notFound(res);
+            }
 
             log.stepOut();
         }
@@ -123,9 +141,12 @@ export default class SettingsController
     static async password(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsController.CLS_NAME, 'password');
+        const locale = req.ext.locale;
+
         try
         {
-            res.send(view('パスワードの設定', 'settings-account-password.js'));
+            const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_PASSWORD, locale);
+            res.send(view(title, 'settings-account-password.js'));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};

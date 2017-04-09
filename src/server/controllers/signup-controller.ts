@@ -6,6 +6,7 @@ import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
+import ClientR                 from 'client/libs/r';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -26,6 +27,8 @@ export default class SignupController
     static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SignupController.CLS_NAME, 'index');
+        const locale = req.ext.locale;
+
         try
         {
             const param = req.query;
@@ -38,21 +41,28 @@ export default class SignupController
 
                 if (session.message_id)
                 {
-                    const locale = req.ext.locale;
                     message = R.text(session.message_id, locale);
                     session.message_id = null;
                     await SessionModel.update(session);
                 }
 
                 log.d('サインアップ画面を表示');
-                res.send(view('サインアップ', 'wst.js', message));
+                const title = ClientR.text(ClientR.SIGNUP, locale);
+                res.send(view(title, 'wst.js', message));
             }
             else
             {
                 const account = await AccountModel.findBySignupId(signupId);
 
-                if (account) res.send(view('サインアップの確認', 'signup-confirm.js', signupId));
-                else         notFound(res);
+                if (account)
+                {
+                    const title = ClientR.text(ClientR.SIGNUP_CONFIRM, locale);
+                    res.send(view(title, 'signup-confirm.js', signupId));
+                }
+                else
+                {
+                    notFound(res);
+                }
             }
 
             log.stepOut();

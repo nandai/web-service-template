@@ -85,7 +85,7 @@ export default class Access
         }
 
         // リクエストヘッダー
-        const headers = req.headers;
+        const {headers} = req;
         log.d('headers:' + JSON.stringify(headers, null, 2));
 
 //      for (const key in headers)
@@ -95,23 +95,7 @@ export default class Access
 //      }
 
         // 言語
-        let locale = 'en';
-
-        if ('accept-language' in headers)
-            locale = headers['accept-language'].substr(0, 2);
-
-        if ('x-locale' in headers)
-            locale = headers['x-locale'];
-
-        locale = locale.toLowerCase();
-
-        if (locale !== 'en'
-        &&  locale !== 'ja')
-        {
-            locale = 'en';
-        }
-
-        req.ext.locale = locale;
+        req.ext.locale = Utils.getLocale(req);
 
         // アクセス元IP
         const ip = Access.getIp(req);

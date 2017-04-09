@@ -5,6 +5,8 @@ import LoginApp  from './login';
 import SignupApp from './signup';
 import ForgetApp from './forget';
 import History   from '../libs/history';
+import R         from '../libs/r';
+import Utils     from '../libs/utils';
 
 /**
  * wst app
@@ -30,11 +32,12 @@ class WstApp
      */
     render() : void
     {
+        const locale = Utils.getLocale();
         const routes =
         {
-            '/':       {app:this.loginApp,  title:'ログイン'},
-            '/signup': {app:this.signupApp, title:'サインアップ'},
-            '/forget': {app:this.forgetApp, title:'パスワードを忘れた'}
+            '/':       {app:this.loginApp,  title:R.text(R.LOGIN,     locale)},
+            '/signup': {app:this.signupApp, title:R.text(R.SIGNUP,    locale)},
+            '/forget': {app:this.forgetApp, title:R.text(R.GO_FORGET, locale)}
         };
 
         const route = routes[location.pathname];
