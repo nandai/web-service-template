@@ -13,27 +13,32 @@ export default class R
     {
         'en':
         {
+            'accountName':                'Account name',
             'authSms':                    '2 step verification',
-            'signupWithTwitter':          'Sign up with Twitter',
-            'signupWithFacebook':         'Sign up with Facebook',
-            'signupWithGoogle':           'Sign up with Google',
-            'loginWithTwitter':           'Log in with Twitter',
+            'back':                       'Back',
+            'change':                     'Change',
+            'currentPassword':            'Current password',
+            'deleteAccount':              'Delete account',
+            'email':                      'Email',
+            'errorNetwork':               'Failed to connect to network',
+            'goAccountSettings':          'Go account settings',
+            'goEmailSettings':            'Go email settings',
+            'goForget':                   'Forget password',
+            'goPasswordSettings':         'Go password settings',
+            'goSettings':                 'Go settings',
+            'goSignup':                   'Go sign up',
+            'goTop':                      'Go top',
+            'linkProvider':               'Link ${provider}',
+            'login':                      'Log in',
+            'loginCode':                  'Login code',
             'loginWithFacebook':          'Log in with Facebook',
             'loginWithGoogle':            'Log in with Google',
-            'email':                      'Email',
-            'password':                   'Password',
-            'signup':                     'Sign up',
-            'signupConfirm':              'Confirm sign up',
-            'login':                      'Log in',
+            'loginWithTwitter':           'Log in with Twitter',
             'logout':                     'Log out',
-            'goTop':                      'Go top',
-            'goSignup':                   'Go sign up',
-            'goForget':                   'Forget password',
-            'goSettings':                 'Go settings',
-            'goEmailSettings':            'Go email settings',
-            'goPasswordSettings':         'Go password settings',
-            'goAccountSettings':          'Go account settings',
-            'back':                       'Back',
+            'newPassword':                'New password',
+            'newPasswordAgain':           'New password again',
+            'password':                   'Password',
+            'resetPassword':              'Reset password',
             'send':                       'Send',
             'sendMail':                   'Send mail',
             'settings':                   'Settings',
@@ -41,44 +46,44 @@ export default class R
             'settingsAccountEmail':       'email settings',
             'settingsAccountEmailChange': 'Confirm email',
             'settingsAccountPassword':    'Password settings',
-            'deleteAccount':              'Delete account',
-            'linkProvider':               'Link ${provider}',
-            'unlinkProvider':             'Unlink ${provider}',
-            'change':                     'Change',
-            'currentPassword':            'Current password',
-            'newPassword':                'New password',
-            'newPasswordAgain':           'New password again',
-            'accountName':                'Account name',
+            'signup':                     'Sign up',
+            'signupConfirm':              'Confirm sign up',
+            'signupWithFacebook':         'Sign up with Facebook',
+            'signupWithGoogle':           'Sign up with Google',
+            'signupWithTwitter':          'Sign up with Twitter',
             'tel':                        'TEL',
             'top':                        'Top',
-            'loginCode':                  'Login code',
-            'resetPassword':              'Reset password',
-            'errorNetwork':               'Failed to connect to network',
+            'unlinkProvider':             'Unlink ${provider}',
         },
 
         'ja':
         {
+            'accountName':                'アカウント名',
             'authSms':                    '二段階認証',
-            'signupWithTwitter':          'Twitterでサインアップする',
-            'signupWithFacebook':         'Facebookでサインアップする',
-            'signupWithGoogle':           'Googleでサインアップする',
-            'loginWithTwitter':           'Twitterでログインする',
+            'back':                       '戻る',
+            'change':                     '変更する',
+            'currentPassword':            '現在のパスワード',
+            'deleteAccount':              'アカウントを削除する',
+            'email':                      'メールアドレス',
+            'errorNetwork':               '通信に失敗しました。インターネットに接続されているか確認してください。',
+            'goAccountSettings':          'アカウント設定',
+            'goEmailSettings':            'メールアドレスを設定する',
+            'goForget':                   'パスワードを忘れた',
+            'goPasswordSettings':         'パスワードを設定する',
+            'goSettings':                 '設定画面へ',
+            'goSignup':                   'サインアップ画面へ',
+            'goTop':                      'トップ画面へ',
+            'linkProvider':               '${provider}を紐づける',
+            'login':                      'ログイン',
+            'loginCode':                  'ログインコード',
             'loginWithFacebook':          'Facebookでログインする',
             'loginWithGoogle':            'Googleでログインする',
-            'email':                      'メールアドレス',
-            'password':                   'パスワード',
-            'signup':                     'サインアップ',
-            'signupConfirm':              'サインアップの確認',
-            'login':                      'ログイン',
+            'loginWithTwitter':           'Twitterでログインする',
             'logout':                     'ログアウト',
-            'goTop':                      'トップ画面へ',
-            'goSignup':                   'サインアップ画面へ',
-            'goForget':                   'パスワードを忘れた',
-            'goSettings':                 '設定画面へ',
-            'goEmailSettings':            'メールアドレスを設定する',
-            'goPasswordSettings':         'パスワードを設定する',
-            'goAccountSettings':          'アカウント設定',
-            'back':                       '戻る',
+            'newPassword':                '新しいパスワード',
+            'newPasswordAgain':           'パスワードの確認',
+            'password':                   'パスワード',
+            'resetPassword':              'パスワードリセット',
             'send':                       '送信する',
             'sendMail':                   'メールを送信する',
             'settings':                   '設定',
@@ -86,43 +91,43 @@ export default class R
             'settingsAccountEmail':       'メールアドレスの設定',
             'settingsAccountEmailChange': 'メールアドレス設定の確認',
             'settingsAccountPassword':    'パスワードの設定',
-            'deleteAccount':              'アカウントを削除する',
-            'linkProvider':               '${provider}を紐づける',
-            'unlinkProvider':             '${provider}との紐づけを解除する',
-            'change':                     '変更する',
-            'currentPassword':            '現在のパスワード',
-            'newPassword':                '新しいパスワード',
-            'newPasswordAgain':           'パスワードの確認',
-            'accountName':                'アカウント名',
+            'signup':                     'サインアップ',
+            'signupConfirm':              'サインアップの確認',
+            'signupWithFacebook':         'Facebookでサインアップする',
+            'signupWithGoogle':           'Googleでサインアップする',
+            'signupWithTwitter':          'Twitterでサインアップする',
             'tel':                        '電話番号',
             'top':                        'トップ',
-            'loginCode':                  'ログインコード',
-            'resetPassword':              'パスワードリセット',
-            'errorNetwork':               '通信に失敗しました。インターネットに接続されているか確認してください。'
+            'unlinkProvider':             '${provider}との紐づけを解除する',
         }
     };
 
+    static ACCOUNT_NAME =                  'accountName';
     static AUTH_SMS =                      'authSms';
-    static SIGNUP_WITH_TWITTER =           'signupWithTwitter';
-    static SIGNUP_WITH_FACEBOOK =          'signupWithFacebook';
-    static SIGNUP_WITH_GOOGLE =            'signupWithGoogle';
-    static LOGIN_WITH_TWITTER =            'loginWithTwitter';
+    static BACK =                          'back';
+    static CHANGE =                        'change';
+    static CURRENT_PASSWORD =              'currentPassword';
+    static DELETE_ACCOUNT =                'deleteAccount';
+    static EMAIL =                         'email';
+    static ERROR_NETWORK =                 'errorNetwork';
+    static GO_ACCOUNT_SETTINGS =           'goAccountSettings';
+    static GO_EMAIL_SETTINGS =             'goEmailSettings';
+    static GO_FORGET =                     'goForget';
+    static GO_PASSWORD_SETTINGS =          'goPasswordSettings';
+    static GO_SETTINGS =                   'goSettings';
+    static GO_SIGNUP =                     'goSignup';
+    static GO_TOP =                        'goTop';
+    static LINK_PROVIDER =                 'linkProvider';
+    static LOGIN =                         'login';
+    static LOGIN_CODE =                    'loginCode';
     static LOGIN_WITH_FACEBOOK =           'loginWithFacebook';
     static LOGIN_WITH_GOOGLE =             'loginWithGoogle';
-    static EMAIL =                         'email';
-    static PASSWORD =                      'password';
-    static SIGNUP =                        'signup';
-    static SIGNUP_CONFIRM =                'signupConfirm';
-    static LOGIN =                         'login';
+    static LOGIN_WITH_TWITTER =            'loginWithTwitter';
     static LOGOUT =                        'logout';
-    static GO_TOP =                        'goTop';
-    static GO_SIGNUP =                     'goSignup';
-    static GO_FORGET =                     'goForget';
-    static GO_SETTINGS =                   'goSettings';
-    static GO_EMAIL_SETTINGS =             'goEmailSettings';
-    static GO_PASSWORD_SETTINGS =          'goPasswordSettings';
-    static GO_ACCOUNT_SETTINGS =           'goAccountSettings';
-    static BACK =                          'back';
+    static NEW_PASSWORD =                  'newPassword';
+    static NEW_PASSWORD_AGAIN =            'newPasswordAgain';
+    static PASSWORD =                      'password';
+    static RESET_PASSWORD =                'resetPassword';
     static SEND =                          'send';
     static SEND_MAIL =                     'sendMail';
     static SETTINGS =                      'settings';
@@ -130,19 +135,14 @@ export default class R
     static SETTINGS_ACCOUNT_EMAIL =        'settingsAccountEmail';
     static SETTINGS_ACCOUNT_EMAIL_CHANGE = 'settingsAccountEmailChange';
     static SETTINGS_ACCOUNT_PASSWORD =     'settingsAccountPassword';
-    static DELETE_ACCOUNT =                'deleteAccount';
-    static LINK_PROVIDER =                 'linkProvider';
-    static UNLINK_PROVIDER =               'unlinkProvider';
-    static CHANGE =                        'change';
-    static CURRENT_PASSWORD =              'currentPassword';
-    static NEW_PASSWORD =                  'newPassword';
-    static NEW_PASSWORD_AGAIN =            'newPasswordAgain';
-    static ACCOUNT_NAME =                  'accountName';
+    static SIGNUP =                        'signup';
+    static SIGNUP_CONFIRM =                'signupConfirm';
+    static SIGNUP_WITH_FACEBOOK =          'signupWithFacebook';
+    static SIGNUP_WITH_GOOGLE =            'signupWithGoogle';
+    static SIGNUP_WITH_TWITTER =           'signupWithTwitter';
     static TEL =                           'tel';
     static TOP =                           'top';
-    static LOGIN_CODE =                    'loginCode';
-    static RESET_PASSWORD =                'resetPassword';
-    static ERROR_NETWORK =                 'errorNetwork';
+    static UNLINK_PROVIDER =               'unlinkProvider';
 
     /**
      * 文字列を取得する
