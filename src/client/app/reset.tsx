@@ -24,7 +24,8 @@ class ResetApp
      */
     constructor()
     {
-        this.store = {
+        this.store =
+        {
             locale:   Utils.getLocale(),
             password: '',
             confirm:  '',

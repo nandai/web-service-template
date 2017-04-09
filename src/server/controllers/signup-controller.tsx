@@ -1,11 +1,15 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import * as React              from 'react';
+import * as ReactDOM           from 'react-dom/server';
 import {view, notFound}        from './view';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
+import SignupView              from 'client/components/views/signup-view/signup-view';
+import {Store}                 from 'client/components/views/signup-view/store';
 import ClientR                 from 'client/libs/r';
 
 import express = require('express');
@@ -47,8 +51,18 @@ export default class SignupController
                 }
 
                 log.d('サインアップ画面を表示');
+
+                const store : Store =
+                {
+                    locale:   locale,
+                    email:    '',
+                    password: '',
+                    message:  message
+                };
+
                 const title = ClientR.text(ClientR.SIGNUP, locale);
-                res.send(view(title, 'wst.js', message));
+                const contents = ReactDOM.renderToString(<SignupView store={store} />);
+                res.send(view(title, 'wst.js', message, contents));
             }
             else
             {

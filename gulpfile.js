@@ -5,7 +5,6 @@ const gulp =        require('gulp');
 const abspath =     require('gulp-absolute-path');
 const typescript =  require('gulp-typescript');
 const babel =       require('gulp-babel');
-const sourcemaps =  require('gulp-sourcemaps');
 const browserify =  require('browserify');
 const source =      require('vinyl-source-stream');
 const runSequence = require('run-sequence');
@@ -17,58 +16,31 @@ const tsOptions =
     jsx:    'react'
 };
 
-const babelOptions =
-{
-  presets: ['latest']
-};
+// const babelOptions =
+// {
+//   presets: ['latest']
+// };
 
 /**
- * サーバービルド
+ * TypeScript
  */
-gulp.task('server', function ()
+gulp.task('typescript', function ()
 {
     const src =
     [
 //      '!./node_modules/**',
-        './src/server/**/*.ts'
-    ];
-
-    const smOptions =
-    {
-        includeContent: false,
-        sourceRoot: function (file)
-        {
-            return file.base;
-        }
-    };
-
-    gulp.src(src)
-        .pipe(sourcemaps.init())
-        .pipe(abspath({rootDir:'./src'}))
-        .pipe(typescript(tsOptions))
-        .pipe(sourcemaps.write('./', smOptions))
-        .pipe(gulp.dest('./build/server'));
-});
-
-/**
- * クライアントビルド
- */
-gulp.task('client-typeScript', function ()
-{
-    const src =
-    [
-        './src/client/**/*.ts',
-        './src/client/**/*.tsx'
+        './src/**/*.ts',
+        './src/**/*.tsx'
     ];
 
     return gulp.src(src)
         .pipe(abspath({rootDir:'./src'}))
         .pipe(typescript(tsOptions))
 //      .pipe(babel(babelOptions))
-        .pipe(gulp.dest('./build/client'));
+        .pipe(gulp.dest('./build'));
 });
 
-gulp.task('client-browserify', function ()
+gulp.task('browserify', function ()
 {
     buildClient('wst.js');
     buildClient('index.js');
@@ -91,13 +63,11 @@ function buildClient(fileName)
         .pipe(gulp.dest('.'));
 }
 
-gulp.task('client', function (callback)
+gulp.task('default', function (callback)
 {
     return runSequence(
-        'client-typeScript',
-        'client-browserify',
+        'typescript',
+        'browserify',
         callback
     )
 });
-
-gulp.task('default', ['server', 'client']);

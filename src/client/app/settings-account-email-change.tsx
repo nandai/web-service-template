@@ -24,7 +24,8 @@ class SettingsAccountEmailChangeApp
      */
     constructor()
     {
-        this.store = {
+        this.store =
+        {
             locale:   Utils.getLocale(),
             password: '',
             message:  '',

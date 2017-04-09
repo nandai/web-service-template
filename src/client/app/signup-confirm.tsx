@@ -25,7 +25,8 @@ class SignupConfirmApp
      */
     constructor()
     {
-        this.store = {
+        this.store =
+        {
             locale:   Utils.getLocale(),
             password: '',
             message:  '',

@@ -4,8 +4,8 @@
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Request}     from 'libs/request';
-import {Store}       from '../components/views/login-view/store';
 import LoginView     from '../components/views/login-view/login-view';
+import {Store}       from '../components/views/login-view/store';
 import LoginApi      from '../api/login-api';
 import History       from '../libs/history';
 import Utils         from '../libs/utils';
@@ -26,7 +26,8 @@ export default class LoginApp
      */
     constructor()
     {
-        this.store = {
+        this.store =
+        {
             locale:   Utils.getLocale(),
             email:    '',
             password: '',

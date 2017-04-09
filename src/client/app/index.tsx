@@ -20,7 +20,8 @@ class TopApp
      */
     constructor()
     {
-        this.store = {
+        this.store =
+        {
             locale:     Utils.getLocale(),
             message:    '',
             onSettings: this.onSettings.bind(this),

@@ -24,7 +24,8 @@ class SettingsApp
      */
     constructor()
     {
-        this.store = {
+        this.store =
+        {
             locale:     Utils.getLocale(),
             account:    null,
             message:    errorMessage,

@@ -1,12 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import * as React              from 'react';
+import * as ReactDOM           from 'react-dom/server';
 import {view, notFound}        from './view';
 import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
+import LoginView               from 'client/components/views/login-view/login-view';
+import {Store}                 from 'client/components/views/login-view/store';
 import ClientR                 from 'client/libs/r';
 
 import express = require('express');
@@ -65,8 +69,18 @@ export default class TopController
             else if (session.account_id === null || message)
             {
                 log.d('ログイン画面を表示');
+
+                const store : Store =
+                {
+                    locale:   locale,
+                    email:    '',
+                    password: '',
+                    message:  message
+                };
+
                 const title = ClientR.text(ClientR.LOGIN, locale);
-                res.send(view(title, 'wst.js', message));
+                const contents = ReactDOM.renderToString(<LoginView store={store} />);
+                res.send(view(title, 'wst.js', message, contents));
             }
             else
             {

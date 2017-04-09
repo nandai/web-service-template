@@ -23,7 +23,8 @@ class SettingsAccountPasswordApp
      */
     constructor()
     {
-        this.store = {
+        this.store =
+        {
             locale:       Utils.getLocale(),
             oldPassword:  '',
             newPassword:  '',

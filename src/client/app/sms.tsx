@@ -24,7 +24,8 @@ class SmsApp
      */
     constructor()
     {
-        this.store = {
+        this.store =
+        {
             locale:  Utils.getLocale(),
             smsCode: '',
             message: '',

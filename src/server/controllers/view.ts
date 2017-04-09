@@ -3,7 +3,7 @@
  */
 import express = require('express');
 
-export function view(title : string, js : string, message? : string) : string
+export function view(title : string, js : string, message? : string, contents? : string) : string
 {
     const optionMessage = (message
         ? `var message = '${message}';`
@@ -31,7 +31,7 @@ export function view(title : string, js : string, message? : string) : string
 </head>
 
 <body>
-    <div id="root"></div>
+    <div id="root">${contents}</div>
 </body>
 </html>
     `;

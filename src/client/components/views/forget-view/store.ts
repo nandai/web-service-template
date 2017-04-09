@@ -3,9 +3,9 @@
  */
 export interface Store
 {
-    locale        : string;
-    email         : string;
-    message       : string;
-    onEmailChange : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onSend        : () => void;
+    locale         : string;
+    email          : string;
+    message        : string;
+    onEmailChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onSend?        : () => void;
 }
