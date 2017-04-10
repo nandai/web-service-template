@@ -136,6 +136,7 @@ export default class Api
      */
     private static hasError(err, res : request.Response) : {ok:boolean, data}
     {
+        const locale = Utils.getLocale();
         let ok = false;
         let data = {message:'Unknown error.'};
 
@@ -159,8 +160,13 @@ export default class Api
                 //
                 // 原文：the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.
                 // 翻訳：ネットワークがオフラインで、OriginがAccess-Control-Allow-Originによって許可されていない、ページがアンロード中など
-                const locale = Utils.getLocale();
                 data.message = R.text(R.ERROR_NETWORK, locale);
+                break;
+            }
+
+            if (res.body === null)
+            {
+                data.message = R.text(R.PROBLEM, locale);
                 break;
             }
 

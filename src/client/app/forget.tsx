@@ -3,9 +3,9 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
+import ResetApi      from '../api/reset-api';
 import ForgetView    from '../components/views/forget-view/forget-view';
 import {Store}       from '../components/views/forget-view/store';
-import ResetApi      from '../api/reset-api';
 import Utils         from '../libs/utils';
 
 const slog =  window['slog'];

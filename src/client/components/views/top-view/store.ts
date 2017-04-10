@@ -3,8 +3,8 @@
  */
 export interface Store
 {
-    locale     : string;
-    message    : string;
-    onSettings : () => void;
-    onLogout   : () => void;
+    locale      : string;
+    message     : string;
+    onSettings? : () => void;
+    onLogout?   : () => void;
 }

@@ -3,7 +3,7 @@
  */
 import express = require('express');
 
-export function view(title : string, js : string, message? : string, contents? : string) : string
+export function view(title : string, js : string, message? : string, contents : string = '') : string
 {
     const optionMessage = (message
         ? `var message = '${message}';`

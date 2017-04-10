@@ -3,9 +3,9 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
-import {Store}       from '../components/views/settings-view/store';
-import SettingsView  from '../components/views/settings-view/settings-view';
 import SettingsApi   from '../api/settings-api';
+import SettingsView  from '../components/views/settings-view/settings-view';
+import {Store}       from '../components/views/settings-view/store';
 import Utils         from '../libs/utils';
 
 const slog =         window['slog'];

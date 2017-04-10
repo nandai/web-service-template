@@ -212,7 +212,7 @@ class Initializer
         this.app.post(  '/api/reset',                ResetApi. requestResetPassword);
         this.app.put(   '/api/reset/change',         ResetApi. resetPassword);
 
-        this.app.get(   '/api/settings/account',                    Access.auth, SettingsApi.getAccount);
+        this.app.get(   '/api/settings/account',                    Access.auth, SettingsApi.onGetAccount);
         this.app.put(   '/api/settings/account',                    Access.auth, SettingsApi.setAccount);
         this.app.delete('/api/settings/account',                    Access.auth, SettingsApi.deleteAccount);
         this.app.put(   `/api/settings/account/unlink`,             Access.auth, SettingsApi.unlinkProvider);

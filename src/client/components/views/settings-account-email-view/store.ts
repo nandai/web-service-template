@@ -5,9 +5,9 @@ import {Response} from 'libs/response';
 
 export interface Store
 {
-    locale        : string;
-    account       : Response.Account;
-    message       : string;
-    onEmailChange : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onChange      : () => void;
+    locale         : string;
+    account        : Response.Account;
+    message        : string;
+    onEmailChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?      : () => void;
 }

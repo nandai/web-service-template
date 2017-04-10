@@ -10,7 +10,11 @@ import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
 import LoginView               from 'client/components/views/login-view/login-view';
-import {Store}                 from 'client/components/views/login-view/store';
+import {Store as LoginStore}   from 'client/components/views/login-view/store';
+import TopView                 from 'client/components/views/top-view/top-view';
+import {Store as TopStore}     from 'client/components/views/top-view/store';
+import SmsView                 from 'client/components/views/sms-view/sms-view';
+import {Store as SmsStore}     from 'client/components/views/sms-view/store';
 import ClientR                 from 'client/libs/r';
 
 import express = require('express');
@@ -58,8 +62,16 @@ export default class TopController
 
                 if (account)
                 {
+                    const store : SmsStore =
+                    {
+                        locale:  locale,
+                        smsCode: '',
+                        message: ''
+                    };
+
                     const title = ClientR.text(ClientR.AUTH_SMS, locale);
-                    res.send(view(title, 'sms.js', smsId));
+                    const contents = ReactDOM.renderToString(<SmsView store={store} />);
+                    res.send(view(title, 'sms.js', smsId, contents));
                 }
                 else
                 {
@@ -70,7 +82,7 @@ export default class TopController
             {
                 log.d('ログイン画面を表示');
 
-                const store : Store =
+                const store : LoginStore =
                 {
                     locale:   locale,
                     email:    '',
@@ -85,8 +97,16 @@ export default class TopController
             else
             {
                 log.d('トップ画面を表示');
+
+                const store : TopStore =
+                {
+                    locale:  locale,
+                    message: ''
+                };
+
                 const title = ClientR.text(ClientR.TOP, locale);
-                res.send(view(title, 'index.js'));
+                const contents = ReactDOM.renderToString(<TopView store={store} />);
+                res.send(view(title, 'index.js', '', contents));
             }
 
             log.stepOut();

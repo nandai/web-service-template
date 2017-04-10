@@ -1,9 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import * as React              from 'react';
+import * as ReactDOM           from 'react-dom/server';
 import {view, notFound}        from './view';
 import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
+import ResetView               from 'client/components/views/reset-view/reset-view';
+import {Store}                 from 'client/components/views/reset-view/store';
 import ClientR                 from 'client/libs/r';
 
 import express = require('express');
@@ -38,8 +42,17 @@ export default class ResetController
 
             if (account)
             {
+                const store : Store =
+                {
+                    locale:   locale,
+                    password: '',
+                    confirm:  '',
+                    message:  ''
+                };
+
                 const title = ClientR.text(ClientR.RESET_PASSWORD, locale);
-                res.send(view(title, 'reset.js', resetId));
+                const contents = ReactDOM.renderToString(<ResetView store={store} />);
+                res.send(view(title, 'reset.js', resetId, contents));
             }
             else
             {

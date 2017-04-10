@@ -3,9 +3,9 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
-import {Store}       from '../components/views/sms-view/store';
-import SmsView       from '../components/views/sms-view/sms-view';
 import LoginApi      from '../api/login-api';
+import SmsView       from '../components/views/sms-view/sms-view';
+import {Store}       from '../components/views/sms-view/store';
 import Utils         from '../libs/utils';
 
 const slog =  window['slog'];

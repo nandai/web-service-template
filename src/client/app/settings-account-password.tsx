@@ -3,9 +3,9 @@
  */
 import * as React                  from 'react';
 import * as ReactDOM               from 'react-dom';
-import {Store}                     from '../components/views/settings-account-password-view/store';
-import SettingsAccountPasswordView from '../components/views/settings-account-password-view/settings-account-password-view';
 import SettingsApi                 from '../api/settings-api';
+import SettingsAccountPasswordView from '../components/views/settings-account-password-view/settings-account-password-view';
+import {Store}                     from '../components/views/settings-account-password-view/store';
 import Utils                       from '../libs/utils';
 
 const slog =  window['slog'];
@@ -25,11 +25,11 @@ class SettingsAccountPasswordApp
     {
         this.store =
         {
-            locale:       Utils.getLocale(),
-            oldPassword:  '',
-            newPassword:  '',
-            confirm:      '',
-            message:      '',
+            locale:      Utils.getLocale(),
+            oldPassword: '',
+            newPassword: '',
+            confirm:     '',
+            message:     '',
             onOldPasswordChange: this.onOldPasswordChange.bind(this),
             onNewPasswordChange: this.onNewPasswordChange.bind(this),
             onConfirmChange:     this.onConfirmChange.    bind(this),

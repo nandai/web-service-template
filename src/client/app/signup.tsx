@@ -4,9 +4,9 @@
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Request}     from 'libs/request';
+import SignupApi     from '../api/signup-api';
 import SignupView    from '../components/views/signup-view/signup-view';
 import {Store}       from '../components/views/signup-view/store';
-import SignupApi     from '../api/signup-api';
 import History       from '../libs/history';
 import Utils         from '../libs/utils';
 

@@ -8,7 +8,7 @@ export interface Store
     locale           : string;
     account          : Response.Account;
     message          : string;
-    onNameChange     : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onPhoneNoChange  : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onChange         : () => void;
+    onNameChange?    : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onPhoneNoChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?        : () => void;
 }

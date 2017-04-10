@@ -27,34 +27,51 @@ export default class SettingsApi
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async getAccount(req : express.Request, res : express.Response)
+    static async onGetAccount(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'getAccount');
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'onGetAccount');
         try
         {
             const session : Session = req.ext.session;
-            const account = await AccountModel.find(session.account_id);
-
-            const accountRes : Response.Account =
-            {
-                name:      account.name,
-                email:     account.email,
-                phoneNo:   account.phone_no,
-                twitter:  (account.twitter  !== null),
-                facebook: (account.facebook !== null),
-                google:   (account.google   !== null)
-            };
-
-            const data : Response.GetAccount =
-            {
-                status:  0,
-                account: accountRes
-            }
-
+            const data = await SettingsApi.getAccount(session.account_id);
             res.json(data);
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
+    }
+
+    /**
+     * アカウント取得
+     */
+    static getAccount(accountId : number)
+    {
+        return new Promise(async (resolve : (data : Response.GetAccount) => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME, 'getAccount');
+            try
+            {
+                const account = await AccountModel.find(accountId);
+                const accountRes : Response.Account =
+                {
+                    name:      account.name,
+                    email:     account.email,
+                    phoneNo:   account.phone_no,
+                    twitter:  (account.twitter  !== null),
+                    facebook: (account.facebook !== null),
+                    google:   (account.google   !== null)
+                };
+
+                const data : Response.GetAccount =
+                {
+                    status:  0,
+                    account: accountRes
+                }
+
+                log.stepOut();
+                resolve(data);
+            }
+            catch (err) {log.stepOut(); reject(err)};
+        });
     }
 
     /**

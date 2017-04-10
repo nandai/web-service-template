@@ -1,16 +1,18 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React              from 'react';
-import * as ReactDOM           from 'react-dom/server';
-import {view, notFound}        from './view';
-import R                       from '../libs/r';
-import Utils                   from '../libs/utils';
-import SessionModel, {Session} from '../models/session-model';
-import AccountModel, {Account} from '../models/account-model';
-import SignupView              from 'client/components/views/signup-view/signup-view';
-import {Store}                 from 'client/components/views/signup-view/store';
-import ClientR                 from 'client/libs/r';
+import * as React                    from 'react';
+import * as ReactDOM                 from 'react-dom/server';
+import {view, notFound}              from './view';
+import R                             from '../libs/r';
+import Utils                         from '../libs/utils';
+import SessionModel, {Session}       from '../models/session-model';
+import AccountModel, {Account}       from '../models/account-model';
+import SignupView                    from 'client/components/views/signup-view/signup-view';
+import {Store as SignupStore}        from 'client/components/views/signup-view/store';
+import SignupConfirmView             from 'client/components/views/signup-confirm-view/signup-confirm-view';
+import {Store as SignupConfirmStore} from 'client/components/views/signup-confirm-view/store';
+import ClientR                       from 'client/libs/r';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -52,7 +54,7 @@ export default class SignupController
 
                 log.d('サインアップ画面を表示');
 
-                const store : Store =
+                const store : SignupStore =
                 {
                     locale:   locale,
                     email:    '',
@@ -70,8 +72,16 @@ export default class SignupController
 
                 if (account)
                 {
+                    const store : SignupConfirmStore =
+                    {
+                        locale:   locale,
+                        password: '',
+                        message:  ''
+                    };
+
                     const title = ClientR.text(ClientR.SIGNUP_CONFIRM, locale);
-                    res.send(view(title, 'signup-confirm.js', signupId));
+                    const contents = ReactDOM.renderToString(<SignupConfirmView store={store} />);
+                    res.send(view(title, 'signup-confirm.js', signupId, contents));
                 }
                 else
                 {

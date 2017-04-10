@@ -4,9 +4,9 @@
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Request}     from 'libs/request';
+import LoginApi      from '../api/login-api';
 import LoginView     from '../components/views/login-view/login-view';
 import {Store}       from '../components/views/login-view/store';
-import LoginApi      from '../api/login-api';
 import History       from '../libs/history';
 import Utils         from '../libs/utils';
 

@@ -7,8 +7,6 @@
  */
 export default class R
 {
-    private static path = __dirname + '/../../resources';
-
     private static texts =
     {
         'en':
@@ -38,6 +36,7 @@ export default class R
             'newPassword':                'New password',
             'newPasswordAgain':           'New password again',
             'password':                   'Password',
+            'problem':                    'There was a problem. Please contact the administrator.',
             'resetPassword':              'Reset password',
             'send':                       'Send',
             'sendMail':                   'Send mail',
@@ -83,6 +82,7 @@ export default class R
             'newPassword':                '新しいパスワード',
             'newPasswordAgain':           'パスワードの確認',
             'password':                   'パスワード',
+            'problem':                    '問題が発生しました。管理者にお問い合わせください。',
             'resetPassword':              'パスワードリセット',
             'send':                       '送信する',
             'sendMail':                   'メールを送信する',
@@ -127,6 +127,7 @@ export default class R
     static NEW_PASSWORD =                  'newPassword';
     static NEW_PASSWORD_AGAIN =            'newPasswordAgain';
     static PASSWORD =                      'password';
+    static PROBLEM =                       'problem';
     static RESET_PASSWORD =                'resetPassword';
     static SEND =                          'send';
     static SEND_MAIL =                     'sendMail';

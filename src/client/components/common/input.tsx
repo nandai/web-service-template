@@ -25,11 +25,28 @@ export default class Input extends React.Component<InputProps, {}>
      */
     render() : JSX.Element {
         const {props} = this;
+        let {onChange} = props;
+
+        if (onChange === null)
+        {
+            /**
+             * SSR時（onChange未設定時）の下記警告を回避
+             *
+             * Warning: Failed form propType:
+             *   You provided a `value` prop to a form field without an `onChange` handler.
+             *   This will render a read-only field.
+             *   If the field should be mutable use `defaultValue`.
+             *   Otherwise, set either `onChange` or `readOnly`.
+             *   Check the render method of `Input`.
+             */
+            onChange = () => {};
+        }
+
         return (
             <input type =        {props.type}
                    placeholder = {props.placeholder}
                    value =       {props.value ? props.value : ''}
-                   onChange =    {props.onChange} />
+                   onChange =    {onChange} />
         );
     }
 }

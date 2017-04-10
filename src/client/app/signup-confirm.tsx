@@ -4,9 +4,9 @@
 import * as React        from 'react';
 import * as ReactDOM     from 'react-dom';
 import {Request}         from 'libs/request';
-import {Store}           from '../components/views/signup-confirm-view/store';
-import SignupConfirmView from '../components/views/signup-confirm-view/signup-confirm-view';
 import SignupApi         from '../api/signup-api';
+import SignupConfirmView from '../components/views/signup-confirm-view/signup-confirm-view';
+import {Store}           from '../components/views/signup-confirm-view/store';
 import Utils             from '../libs/utils';
 
 const slog =     window['slog'];

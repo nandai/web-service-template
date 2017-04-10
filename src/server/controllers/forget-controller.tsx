@@ -1,12 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React     from 'react';
-import * as ReactDOM  from 'react-dom/server';
-import {view}         from './view';
-import ForgetView     from 'client/components/views/forget-view/forget-view';
-import {Store}        from 'client/components/views/forget-view/store';
-import ClientR        from 'client/libs/r';
+import * as React    from 'react';
+import * as ReactDOM from 'react-dom/server';
+import {view}        from './view';
+import ForgetView    from 'client/components/views/forget-view/forget-view';
+import {Store}       from 'client/components/views/forget-view/store';
+import ClientR       from 'client/libs/r';
 
 import express = require('express');
 import slog =    require('../slog');

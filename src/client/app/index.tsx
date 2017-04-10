@@ -3,9 +3,9 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
+import LogoutApi     from '../api/logout-api';
 import {Store}       from '../components/views/top-view/store';
 import TopView       from '../components/views/top-view/top-view';
-import LogoutApi     from '../api/logout-api';
 import Utils         from '../libs/utils';
 
 const slog =  window['slog'];

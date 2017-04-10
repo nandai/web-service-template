@@ -3,9 +3,9 @@
  */
 import * as React                     from 'react';
 import * as ReactDOM                  from 'react-dom';
-import {Store}                        from '../components/views/settings-account-email-change-view/store';
-import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view/settings-account-email-change-view';
 import SettingsApi                    from '../api/settings-api';
+import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view/settings-account-email-change-view';
+import {Store}                        from '../components/views/settings-account-email-change-view/store';
 import Utils                          from '../libs/utils';
 
 const slog =     window['slog'];

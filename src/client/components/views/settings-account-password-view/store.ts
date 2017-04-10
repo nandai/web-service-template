@@ -3,13 +3,13 @@
  */
 export interface Store
 {
-    locale              : string;
-    oldPassword         : string;
-    newPassword         : string;
-    confirm             : string;
-    message             : string;
-    onOldPasswordChange : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onNewPasswordChange : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onConfirmChange     : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onChange            : () => void;
+    locale               : string;
+    oldPassword          : string;
+    newPassword          : string;
+    confirm              : string;
+    message              : string;
+    onOldPasswordChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onNewPasswordChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onConfirmChange?     : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?            : () => void;
 }
