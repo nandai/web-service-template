@@ -210,7 +210,7 @@ export default class Provider
                                         const accountSid = Config.TWILIO_ACCOUNT_SID;
                                         const authToken =  Config.TWILIO_AUTH_TOKEN;
 
-                                        var client = new twilio.RestClient(accountSid, authToken);
+                                        const client = new twilio.RestClient(accountSid, authToken);
 
                                         client.messages.create(
                                         {
@@ -220,7 +220,7 @@ export default class Provider
                                         }, (err, message) =>
                                         {
                                             if (err)
-                                                log.d(err.message);
+                                                log.w(err.message);
                                         });
                                     }
                                 }

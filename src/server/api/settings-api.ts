@@ -96,22 +96,22 @@ export default class SettingsApi
                     break;
                 }
 
-                    // アカウント名チェック
-                    const len = param.name.length;
+                // アカウント名チェック
+                const len = param.name.length;
 
-                    if (len < 1 || 20 < len)
-                    {
-                    res.ext.error(1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
-                        break;
-                    }
+                if (len < 1 || 20 < len)
+                {
+                res.ext.error(1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
+                    break;
+                }
 
-                    // アカウント情報更新
-                    const session : Session = req.ext.session;
-                    const account = await AccountModel.find(session.account_id);
+                // アカウント情報更新
+                const session : Session = req.ext.session;
+                const account = await AccountModel.find(session.account_id);
 
-                    account.name =      param.name;
-                    account.phone_no = (param.phoneNo && param.phoneNo.length > 0 ? param.phoneNo : null);
-                    await AccountModel.update(account);
+                account.name =      param.name;
+                account.phone_no = (param.phoneNo && param.phoneNo.length > 0 ? param.phoneNo : null);
+                await AccountModel.update(account);
 
                 const data : Response.SetAccount =
                     {
