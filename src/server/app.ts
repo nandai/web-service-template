@@ -203,23 +203,23 @@ class Initializer
         this.app.get('/settings/account/link/google',   Access.auth, linkCommand, authGoogle);
 
         // APIs
-        this.app.post(  `/api/signup/${provider}`,   SignupApi.signupProvider);
-        this.app.post(  '/api/signup/email',         SignupApi.signupEmail);
-        this.app.post(  '/api/signup/email/confirm', SignupApi.confirmSignupEmail);
-        this.app.post(  `/api/login/${provider}`,    LoginApi. loginProvider);
-        this.app.post(  '/api/login/email',          LoginApi. loginEmail);
-        this.app.post(  '/api/login/sms',            LoginApi. loginSms);
-        this.app.post(  '/api/reset',                ResetApi. requestResetPassword);
-        this.app.put(   '/api/reset/change',         ResetApi. resetPassword);
+        this.app.post(  `/api/signup/${provider}`,   SignupApi.onSignupProvider);
+        this.app.post(  '/api/signup/email',         SignupApi.onSignupEmail);
+        this.app.post(  '/api/signup/email/confirm', SignupApi.onConfirmSignupEmail);
+        this.app.post(  `/api/login/${provider}`,    LoginApi. onLoginProvider);
+        this.app.post(  '/api/login/email',          LoginApi. onLoginEmail);
+        this.app.post(  '/api/login/sms',            LoginApi. onLoginSms);
+        this.app.post(  '/api/reset',                ResetApi. onRequestResetPassword);
+        this.app.put(   '/api/reset/change',         ResetApi. onResetPassword);
 
         this.app.get(   '/api/settings/account',                    Access.auth, SettingsApi.onGetAccount);
-        this.app.put(   '/api/settings/account',                    Access.auth, SettingsApi.setAccount);
-        this.app.delete('/api/settings/account',                    Access.auth, SettingsApi.deleteAccount);
-        this.app.put(   `/api/settings/account/unlink`,             Access.auth, SettingsApi.unlinkProvider);
-        this.app.put(   '/api/settings/account/email',              Access.auth, SettingsApi.requestChangeEmail);
-        this.app.put(   '/api/settings/account/email/change',                    SettingsApi.changeEmail);
-        this.app.put(   '/api/settings/account/password',           Access.auth, SettingsApi.changePassword);
-        this.app.post(  '/api/logout',                              Access.auth, LogoutApi.  logout);
+        this.app.put(   '/api/settings/account',                    Access.auth, SettingsApi.onSetAccount);
+        this.app.delete('/api/settings/account',                    Access.auth, SettingsApi.onDeleteAccount);
+        this.app.put(   `/api/settings/account/unlink`,             Access.auth, SettingsApi.onUnlinkProvider);
+        this.app.put(   '/api/settings/account/email',              Access.auth, SettingsApi.onRequestChangeEmail);
+        this.app.put(   '/api/settings/account/email/change',                    SettingsApi.onChangeEmail);
+        this.app.put(   '/api/settings/account/password',           Access.auth, SettingsApi.onChangePassword);
+        this.app.post(  '/api/logout',                              Access.auth, LogoutApi.  onLogout);
 
         this.app.get( '/auth/twitter/callback',  Twitter. customCallback, Twitter. callback);
         this.app.get( '/auth/facebook/callback', Facebook.customCallback, Facebook.callback);

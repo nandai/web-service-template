@@ -24,40 +24,18 @@ export default class LoginApi extends ProviderApi
 
     /**
      * ログインする<br>
-     * POST /api/login/:provider<br>
-     *
-     * <table>
-     * <tr><td>accessToken</td>
-     *     <td>アクセストークン</td></tr>
-     *
-     * <tr><td>accessTokenSecret</td>
-     *     <td>アクセストークンシークレット。Twitterのみ</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
+     * POST /api/login/:provider
      */
-    static loginProvider(req : express.Request, res : express.Response) : void
+    static onLoginProvider(req : express.Request, res : express.Response) : void
     {
         ProviderApi.provider(req, res, 'login');
     }
 
     /**
      * メールアドレスでログインする<br>
-     * POST /api/login/email<br>
-     *
-     * <table>
-     * <tr><td>email</td>
-     *     <td>メールアドレス</td></tr>
-     *
-     * <tr><td>password</td>
-     *     <td>パスワード</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
+     * POST /api/login/email
      */
-    static async loginEmail(req : express.Request, res : express.Response)
+    static async onLoginEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(LoginApi.CLS_NAME_2, 'email');
         try
@@ -110,19 +88,8 @@ export default class LoginApi extends ProviderApi
     /**
      * SMSに送信したログインコードでログインする<br>
      * POST /api/login/sms
-     *
-     * <table>
-     * <tr><td>sms_id</td>
-     *     <td>SMS ID。二段階認証画面に遷移する前に発行されるID</td></tr>
-     *
-     * <tr><td>sms_code</td>
-     *     <td>SMSコード（ログインコード）。二段階認証画面に遷移する前に発行されるコード</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async loginSms(req : express.Request, res : express.Response)
+    static async onLoginSms(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(LoginApi.CLS_NAME_2, 'sms');
         try

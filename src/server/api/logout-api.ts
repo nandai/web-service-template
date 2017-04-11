@@ -17,11 +17,8 @@ export default class LogoutApi
     /**
      * ログアウト<br>
      * POST /api/logout
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async logout(req : express.Request, res : express.Response)
+    static async onLogout(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(LogoutApi.CLS_NAME, 'index');
         try

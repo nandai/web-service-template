@@ -20,15 +20,7 @@ export default class ProviderApi
 
     /**
      * サインアップ、またはログインする<br>
-     * POST /api/{command}/:provider<br>
-     *
-     * <table>
-     * <tr><td>accessToken</td>
-     *     <td>アクセストークン</td></tr>
-     *
-     * <tr><td>accessTokenSecret</td>
-     *     <td>アクセストークンシークレット。Twitterのみ</td></tr>
-     * </table>
+     * POST /api/{command}/:provider
      *
      * @param   req     httpリクエスト
      * @param   res     httpレスポンス
@@ -61,15 +53,7 @@ export default class ProviderApi
 
     /**
      * Twitterでサインアップ、ログイン、または紐づけをする<br>
-     * POST /api/login/twitter<br>
-     *
-     * <table>
-     * <tr><td>accessToken</td>
-     *     <td>アクセストークン</td></tr>
-     *
-     * <tr><td>accessTokenSecret</td>
-     *     <td>アクセストークンシークレット</td></tr>
-     * </table>
+     * POST /api/login/twitter
      *
      * @param   req     httpリクエスト
      * @param   res     httpレスポンス
@@ -112,12 +96,7 @@ export default class ProviderApi
 
     /**
      * Facebookでサインアップ、ログイン、または紐づけをする<br>
-     * POST /api/login/facebook<br>
-     *
-     * <table>
-     * <tr><td>accessToken</td>
-     *     <td>アクセストークン</td></tr>
-     * </table>
+     * POST /api/login/facebook
      *
      * @param   req     httpリクエスト
      * @param   res     httpレスポンス
@@ -158,12 +137,7 @@ export default class ProviderApi
 
     /**
      * Googleでサインアップ、ログイン、または紐づけをする<br>
-     * POST /api/login/google<br>
-     *
-     * <table>
-     * <tr><td>accessToken</td>
-     *     <td>アクセストークン</td></tr>
-     * </table>
+     * POST /api/login/google
      *
      * @param   req     httpリクエスト
      * @param   res     httpレスポンス

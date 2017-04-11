@@ -21,16 +21,8 @@ export default class ResetApi
     /**
      * パスワードのリセットを要求する<br>
      * POST /api/reset
-     *
-     * <table>
-     * <tr><td>email</td>
-     *     <td>メールアドレス</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async requestResetPassword(req : express.Request, res : express.Response)
+    static async onRequestResetPassword(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(ResetApi.CLS_NAME, 'index');
         try
@@ -81,22 +73,8 @@ export default class ResetApi
     /**
      * パスワードをリセットする<br>
      * PUT /api/reset/change
-     *
-     * <table>
-     * <tr><td>reset_id</td>
-     *     <td>リセットID</td></tr>
-     *
-     * <tr><td>password</td>
-     *     <td>パスワード</td></tr>
-     *
-     * <tr><td>confirm</td>
-     *     <td>確認のパスワード</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async resetPassword(req : express.Request, res : express.Response)
+    static async onResetPassword(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(ResetApi.CLS_NAME, 'change');
         try

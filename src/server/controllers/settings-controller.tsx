@@ -60,7 +60,7 @@ export default class SettingsController
                 await SessionModel.update(session);
             }
 
-            const data = await SettingsApi.getAccount(session.account_id);
+            const data = await SettingsApi.getAccount(req);
             const store : SettingsStore =
             {
                 locale:  locale,
@@ -90,8 +90,7 @@ export default class SettingsController
 
         try
         {
-            const session : Session = req.ext.session;
-            const data = await SettingsApi.getAccount(session.account_id);
+            const data = await SettingsApi.getAccount(req);
             const store : SettingsAccountStore =
             {
                 locale:   locale,
@@ -121,8 +120,7 @@ export default class SettingsController
 
         try
         {
-            const session : Session = req.ext.session;
-            const data = await SettingsApi.getAccount(session.account_id);
+            const data = await SettingsApi.getAccount(req);
             const store : SettingsAccountEmailStore =
             {
                 locale:  locale,

@@ -23,17 +23,13 @@ export default class SettingsApi
     /**
      * アカウント取得<br>
      * GET /api/settings/account
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
     static async onGetAccount(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'onGetAccount');
         try
         {
-            const session : Session = req.ext.session;
-            const data = await SettingsApi.getAccount(session.account_id);
+            const data = await SettingsApi.getAccount(req);
             res.json(data);
             log.stepOut();
         }
@@ -43,14 +39,15 @@ export default class SettingsApi
     /**
      * アカウント取得
      */
-    static getAccount(accountId : number)
+    static getAccount(req : express.Request)
     {
         return new Promise(async (resolve : (data : Response.GetAccount) => void, reject) =>
         {
             const log = slog.stepIn(SettingsApi.CLS_NAME, 'getAccount');
             try
             {
-                const account = await AccountModel.find(accountId);
+                const session : Session = req.ext.session;
+                const account = await AccountModel.find(session.account_id);
                 const accountRes : Response.Account =
                 {
                     name:      account.name,
@@ -77,21 +74,10 @@ export default class SettingsApi
     /**
      * アカウント設定<br>
      * PUT /api/settings/account
-     *
-     * <table>
-     * <tr><td>name</td>
-     *     <td>アカウント名</td></tr>
-     *
-     * <tr><td>phone_no</td>
-     *     <td>電話番号。+81xxxxxxxxxxx</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async setAccount(req : express.Request, res : express.Response)
+    static async onSetAccount(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'updateAccount');
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'onSetAccount');
         try
         {
             do
@@ -110,44 +96,41 @@ export default class SettingsApi
                     break;
                 }
 
-                // アカウント名チェック
-                const len = param.name.length;
+                    // アカウント名チェック
+                    const len = param.name.length;
 
-                if (len < 1 || 20 < len)
-                {
+                    if (len < 1 || 20 < len)
+                    {
                     res.ext.error(1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
-                    break;
-                }
+                        break;
+                    }
 
-                // アカウント情報更新
-                const session : Session = req.ext.session;
-                const account = await AccountModel.find(session.account_id);
+                    // アカウント情報更新
+                    const session : Session = req.ext.session;
+                    const account = await AccountModel.find(session.account_id);
 
-                account.name =      param.name;
-                account.phone_no = (param.phoneNo && param.phoneNo.length > 0 ? param.phoneNo : null);
-                await AccountModel.update(account);
+                    account.name =      param.name;
+                    account.phone_no = (param.phoneNo && param.phoneNo.length > 0 ? param.phoneNo : null);
+                    await AccountModel.update(account);
 
                 const data : Response.SetAccount =
-                {
-                    status:  1,
-                    message: R.text(R.SETTINGS_COMPLETED, locale)
-                };
+                    {
+                        status:  1,
+                        message: R.text(R.SETTINGS_COMPLETED, locale)
+                    };
                 res.json(data);
+                }
+                while (false);
+                log.stepOut();
             }
-            while (false);
-            log.stepOut();
-        }
         catch (err) {Utils.internalServerError(err, res, log)};
     }
 
     /**
      * 紐づけを解除する<br>
      * PUT /api/settings/account/unlink
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async unlinkProvider(req : express.Request, res : express.Response)
+    static async onUnlinkProvider(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlink');
         try
@@ -206,16 +189,8 @@ export default class SettingsApi
     /**
      * メールアドレスの変更を要求する<br>
      * PUT /api/settings/account/email
-     *
-     * <table>
-     * <tr><td>email</td>
-     *     <td>メールアドレス</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async requestChangeEmail(req : express.Request, res : express.Response)
+    static async onRequestChangeEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'email');
         try
@@ -324,19 +299,8 @@ export default class SettingsApi
     /**
      * メールアドレスを変更する<br>
      * PUT /api/settings/account/email/change
-     *
-     * <table>
-     * <tr><td>change_id</td>
-     *     <td>変更ID</td></tr>
-     *
-     * <tr><td>password</td>
-     *     <td>パスワード</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async changeEmail(req : express.Request, res : express.Response)
+    static async onChangeEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'changeEmail');
         try
@@ -414,22 +378,8 @@ export default class SettingsApi
     /**
      * パスワードを変更する<br>
      * PUT /api/settings/account/password
-     *
-     * <table>
-     * <tr><td>old_password</td>
-     *     <td>現在のパスワード</td></tr>
-     *
-     * <tr><td>new_password</td>
-     *     <td>新しいパスワード</td></tr>
-     *
-     * <tr><td>confirm</td>
-     *     <td>確認のパスワード</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async changePassword(req : express.Request, res : express.Response)
+    static async onChangePassword(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'password');
         try
@@ -496,11 +446,8 @@ export default class SettingsApi
     /**
      * アカウント削除<br>
      * DELETE /api/settings/account
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async deleteAccount(req : express.Request, res : express.Response)
+    static async onDeleteAccount(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsApi.CLS_NAME, 'deleteAccount');
         try

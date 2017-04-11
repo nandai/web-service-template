@@ -23,19 +23,8 @@ export default class SignupApi extends ProviderApi
     /**
      * サインアップする<br>
      * POST /api/signup/:provider<br>
-     *
-     * <table>
-     * <tr><td>accessToken</td>
-     *     <td>アクセストークン</td></tr>
-     *
-     * <tr><td>accessTokenSecret</td>
-     *     <td>アクセストークンシークレット。Twitterのみ</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static signupProvider(req : express.Request, res : express.Response) : void
+    static onSignupProvider(req : express.Request, res : express.Response) : void
     {
         ProviderApi.provider(req, res, 'signup');
     }
@@ -43,19 +32,8 @@ export default class SignupApi extends ProviderApi
     /**
      * メールアドレスでサインアップする<br>
      * POST /api/signup/email
-     *
-     * <table>
-     * <tr><td>email</td>
-     *     <td>メールアドレス</td></tr>
-     *
-     * <tr><td>password</td>
-     *     <td>パスワード</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static signupEmail(req : express.Request, res : express.Response) : void
+    static onSignupEmail(req : express.Request, res : express.Response) : void
     {
         const log = slog.stepIn(SignupApi.CLS_NAME_2, 'signupEmail');
         do
@@ -98,19 +76,8 @@ export default class SignupApi extends ProviderApi
     /**
      * メールアドレスでのサインアップを確定する<br>
      * POST /api/signup/email/confirm
-     *
-     * <table>
-     * <tr><td>signup_id</td>
-     *     <td>サインアップID</td></tr>
-     *
-     * <tr><td>password</td>
-     *     <td>パスワード</td></tr>
-     * </table>
-     *
-     * @param   req httpリクエスト
-     * @param   res httpレスポンス
      */
-    static async confirmSignupEmail(req : express.Request, res : express.Response)
+    static async onConfirmSignupEmail(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SignupApi.CLS_NAME_2, 'confirmSignupEmail');
         try
