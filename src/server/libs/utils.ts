@@ -20,26 +20,6 @@ export default class Utils
     private static CLS_NAME = 'Utils';
 
     /**
-     * @param   query       クエリ文字列
-     * @param   separator   セパレータ
-     *
-     * @return  オブジェクト
-     */
-    static parseRawQueryString(query : string, separator : string = '&') : any
-    {
-        const obj = {};
-        const pairs = query.split(separator);
-
-        for (const pair of pairs)
-        {
-            const [key, value] = pair.split('=');
-            obj[key.trim()] = value;
-        }
-
-        return obj;
-    }
-
-    /**
      * サーバーエラーを送信する
      */
     static internalServerError(err : Error, res : express.Response, log)

@@ -6,6 +6,7 @@ import R                       from './r';
 import Utils                   from './utils';
 import {notFound}              from '../controllers/view';
 import SessionModel, {Session} from '../models/session-model';
+import CommonUtils             from 'libs/utils';
 
 import express =    require('express');
 import bodyParser = require('body-parser');
@@ -80,7 +81,7 @@ export default class Access
 
         if (cookies)
         {
-            const obj = Utils.parseRawQueryString(cookies, ';');
+            const obj = CommonUtils.parseRawQueryString(cookies, ';');
             log.d('cookies:' + JSON.stringify(obj, null, 2));
         }
 

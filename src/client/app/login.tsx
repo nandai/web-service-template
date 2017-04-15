@@ -172,7 +172,6 @@ export default class LoginApp
                     }
                     else
                     {
-                        ssrStore.smsId = res.smsId;
                         History.pushState(`/?id=${res.smsId}`);
                     }
                 }

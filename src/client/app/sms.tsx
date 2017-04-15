@@ -7,9 +7,9 @@ import LoginApi      from '../api/login-api';
 import SmsView       from '../components/views/sms-view/sms-view';
 import {Store}       from '../components/views/sms-view/store';
 import Utils         from '../libs/utils';
+import CommonUtils   from 'libs/utils';
 
-const slog =     window['slog'];
-const ssrStore = window['ssrStore'];
+const slog = window['slog'];
 
 /**
  * View
@@ -63,8 +63,10 @@ export default class SmsApp
 
         try
         {
+            const params = CommonUtils.parseRawQueryString(location.search.substring(1));
+            const smsId : string = params.id;
             const smsCode = store.smsCode;
-            const res = await LoginApi.loginSms({smsId:ssrStore.smsId, smsCode});
+            const res = await LoginApi.loginSms({smsId, smsCode});
 
             if (res.status === 0)
             {
