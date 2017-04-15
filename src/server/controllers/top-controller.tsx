@@ -71,7 +71,7 @@ export default class TopController
 
                     const title = ClientR.text(ClientR.AUTH_SMS, locale);
                     const contents = ReactDOM.renderToString(<SmsView store={store} />);
-                    res.send(view(title, 'sms.js', contents, {smsId}));
+                    res.send(view(title, 'wst.js', contents, {smsId}));
                 }
                 else
                 {

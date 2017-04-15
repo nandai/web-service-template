@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import LoginApp  from './login';
+import SmsApp    from './sms';
 import SignupApp from './signup';
 import ForgetApp from './forget';
 import History   from '../libs/history';
@@ -15,6 +16,7 @@ class WstApp
 {
     private currentApp = null;
     private loginApp =  new LoginApp();
+    private smsApp =    new SmsApp();
     private signupApp = new SignupApp();
     private forgetApp = new ForgetApp();
 
@@ -34,13 +36,25 @@ class WstApp
     {
         const locale = Utils.getLocale();
         const routes =
-        {
-            '/':       {app:this.loginApp,  title:R.text(R.LOGIN,     locale)},
-            '/signup': {app:this.signupApp, title:R.text(R.SIGNUP,    locale)},
-            '/forget': {app:this.forgetApp, title:R.text(R.GO_FORGET, locale)}
-        };
+        [
+            {url:'/',       app:this.loginApp,  title:R.text(R.LOGIN,     locale)},
+            {url:'/',       app:this.smsApp,    title:R.text(R.AUTH_SMS,  locale), query:true},
+            {url:'/signup', app:this.signupApp, title:R.text(R.SIGNUP,    locale)},
+            {url:'/forget', app:this.forgetApp, title:R.text(R.GO_FORGET, locale)}
+        ];
 
-        const route = routes[location.pathname];
+        let route;
+        for (route of routes)
+        {
+            if (route.url === location.pathname)
+            {
+                if (route.query !== true && location.search === '')
+                    break;
+
+                if (route.query === true && location.search !== '')
+                    break;
+            }
+        }
 
         if (this.currentApp !== route.app)
         {

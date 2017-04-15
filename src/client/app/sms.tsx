@@ -14,7 +14,7 @@ const ssrStore = window['ssrStore'];
 /**
  * View
  */
-class SmsApp
+export default class SmsApp
 {
     private static CLS_NAME = 'SmsView';
     private store : Store;
@@ -86,9 +86,3 @@ class SmsApp
         }
     }
 }
-
-window.addEventListener('DOMContentLoaded', () =>
-{
-    const app = new SmsApp();
-    app.render();
-});

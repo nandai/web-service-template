@@ -45,7 +45,6 @@ gulp.task('browserify', function ()
     buildClient('wst.js');
     buildClient('index.js');
     buildClient('signup-confirm.js');
-    buildClient('sms.js');
     buildClient('reset.js');
     buildClient('settings.js');
     buildClient('settings-account.js');

@@ -166,7 +166,15 @@ export default class LoginApp
                 }
                 else
                 {
-                    location.href = (res.smsId === undefined ? '/' : `?id=${res.smsId}`);
+                    if (res.smsId === undefined)
+                    {
+                        location.href = '/';
+                    }
+                    else
+                    {
+                        ssrStore.smsId = res.smsId;
+                        History.pushState(`/?id=${res.smsId}`);
+                    }
                 }
 
                 log.stepOut();
