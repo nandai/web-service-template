@@ -8,8 +8,8 @@ import SettingsView  from '../components/views/settings-view/settings-view';
 import {Store}       from '../components/views/settings-view/store';
 import Utils         from '../libs/utils';
 
-const slog =         window['slog'];
-const errorMessage = window['message'];
+const slog = window['slog'];
+const ssrStore : Store = window['ssrStore'];
 
 /**
  * View
@@ -27,8 +27,8 @@ class SettingsApp
         this.store =
         {
             locale:     Utils.getLocale(),
-            account:    null,
-            message:    errorMessage,
+            account:    ssrStore.account,
+            message:    ssrStore.message,
             onTwitter:  this.onTwitter. bind(this),
             onFacebook: this.onFacebook.bind(this),
             onGoogle:   this.onGoogle.  bind(this),
@@ -38,31 +38,6 @@ class SettingsApp
             onLeave:    this.onLeave.   bind(this),
             onBack:     this.onBack.    bind(this)
         };
-    }
-
-    /**
-     * 初期化
-     */
-    init()
-    {
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsApp.CLS_NAME, 'init');
-            try
-            {
-                const {store} = this;
-                const res = await SettingsApi.getAccount();
-                store.account = res.account;
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err)
-            {
-                log.stepOut();
-                reject();
-            }
-        });
     }
 
     /**
@@ -227,7 +202,6 @@ class SettingsApp
 window.addEventListener('DOMContentLoaded', async () =>
 {
     const app = new SettingsApp();
-    await app.init();
     app.render();
 });
 

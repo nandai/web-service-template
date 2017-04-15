@@ -8,8 +8,8 @@ import SmsView       from '../components/views/sms-view/sms-view';
 import {Store}       from '../components/views/sms-view/store';
 import Utils         from '../libs/utils';
 
-const slog =  window['slog'];
-const smsId = window['message'];
+const slog =     window['slog'];
+const ssrStore = window['ssrStore'];
 
 /**
  * View
@@ -64,7 +64,7 @@ class SmsApp
         try
         {
             const smsCode = store.smsCode;
-            const res = await LoginApi.loginSms({smsId, smsCode});
+            const res = await LoginApi.loginSms({smsId:ssrStore.smsId, smsCode});
 
             if (res.status === 0)
             {

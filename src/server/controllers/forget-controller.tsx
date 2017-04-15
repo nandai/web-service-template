@@ -38,7 +38,7 @@ export default class ForgetController
 
         const title = ClientR.text(ClientR.GO_FORGET, locale);
         const contents = ReactDOM.renderToString(<ForgetView store={store} />);
-        res.send(view(title, 'wst.js', '', contents));
+        res.send(view(title, 'wst.js', contents));
         log.stepOut();
     }
 }

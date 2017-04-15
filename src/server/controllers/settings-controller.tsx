@@ -51,7 +51,7 @@ export default class SettingsController
             cookie.clearPassport();
 
             const session : Session = req.ext.session;
-            let message;
+            let message : string;
 
             if (session.message_id)
             {
@@ -70,7 +70,7 @@ export default class SettingsController
 
             const title = ClientR.text(ClientR.SETTINGS, locale);
             const contents = ReactDOM.renderToString(<SettingsView store={store} />);
-            res.send(view(title, 'settings.js', message, contents));
+            res.send(view(title, 'settings.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
@@ -100,7 +100,7 @@ export default class SettingsController
 
             const title = ClientR.text(ClientR.SETTINGS_ACCOUNT, locale);
             const contents = ReactDOM.renderToString(<SettingsAccountView store={store} />);
-            res.send(view(title, 'settings-account.js', '', contents));
+            res.send(view(title, 'settings-account.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
@@ -130,7 +130,7 @@ export default class SettingsController
 
             const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL, locale);
             const contents = ReactDOM.renderToString(<SettingsAccountEmailView store={store} />);
-            res.send(view(title, 'settings-account-email.js', '', contents));
+            res.send(view(title, 'settings-account-email.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
@@ -168,7 +168,7 @@ export default class SettingsController
 
                 const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL_CHANGE, locale);
                 const contents = ReactDOM.renderToString(<SettingsAccountEmailChangeView store={store} />);
-                res.send(view(title, 'settings-account-email-change.js', changeId, contents));
+                res.send(view(title, 'settings-account-email-change.js', contents, {changeId}));
             }
             else
             {
@@ -205,7 +205,7 @@ export default class SettingsController
 
             const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_PASSWORD, locale);
             const contents = ReactDOM.renderToString(<SettingsAccountPasswordView store={store} />);
-            res.send(view(title, 'settings-account-password.js', '', contents));
+            res.send(view(title, 'settings-account-password.js', contents));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};

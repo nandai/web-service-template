@@ -44,7 +44,7 @@ export default class TopController
             cookie.clearPassport();
 
             const session : Session = req.ext.session;
-            let message;
+            let message : string;
 
             if (session.message_id)
             {
@@ -54,7 +54,7 @@ export default class TopController
             }
 
             const param = req.query;
-            const smsId = param.id;
+            const smsId : string = param.id;
 
             if (smsId)
             {
@@ -71,7 +71,7 @@ export default class TopController
 
                     const title = ClientR.text(ClientR.AUTH_SMS, locale);
                     const contents = ReactDOM.renderToString(<SmsView store={store} />);
-                    res.send(view(title, 'sms.js', smsId, contents));
+                    res.send(view(title, 'sms.js', contents, {smsId}));
                 }
                 else
                 {
@@ -92,7 +92,7 @@ export default class TopController
 
                 const title = ClientR.text(ClientR.LOGIN, locale);
                 const contents = ReactDOM.renderToString(<LoginView store={store} />);
-                res.send(view(title, 'wst.js', message, contents));
+                res.send(view(title, 'wst.js', contents, {message}));
             }
             else
             {
@@ -106,7 +106,7 @@ export default class TopController
 
                 const title = ClientR.text(ClientR.TOP, locale);
                 const contents = ReactDOM.renderToString(<TopView store={store} />);
-                res.send(view(title, 'index.js', '', contents));
+                res.send(view(title, 'index.js', contents));
             }
 
             log.stepOut();

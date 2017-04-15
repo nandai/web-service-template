@@ -8,8 +8,8 @@ import ResetView     from '../components/views/reset-view/reset-view';
 import {Store}       from '../components/views/reset-view/store';
 import Utils         from '../libs/utils';
 
-const slog =    window['slog'];
-const resetId = window['message'];
+const slog =     window['slog'];
+const ssrStore = window['ssrStore'];
 
 /**
  * View
@@ -75,7 +75,7 @@ class ResetApp
         try
         {
             const {password, confirm} = store;
-            const res = await ResetApi.resetPassword({resetId, password, confirm});
+            const res = await ResetApi.resetPassword({resetId:ssrStore.resetId, password, confirm});
             store.message = res.message;
             this.render();
             log.stepOut();

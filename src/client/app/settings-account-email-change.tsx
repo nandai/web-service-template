@@ -9,7 +9,7 @@ import {Store}                        from '../components/views/settings-account
 import Utils                          from '../libs/utils';
 
 const slog =     window['slog'];
-const changeId = window['message'];
+const ssrStore = window['ssrStore'];
 
 /**
  * View
@@ -65,7 +65,7 @@ class SettingsAccountEmailChangeApp
         {
             const {password} = store;
 
-            const res = await SettingsApi.changeEmail({changeId, password});
+            const res = await SettingsApi.changeEmail({changeId:ssrStore.changeId, password});
             store.message = res.message;
             this.render();
             log.stepOut();

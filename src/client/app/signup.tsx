@@ -11,6 +11,7 @@ import History       from '../libs/history';
 import Utils         from '../libs/utils';
 
 const slog = window['slog'];
+const ssrStore : Store = window['ssrStore'];
 
 /**
  * View
@@ -30,7 +31,7 @@ export default class SignupApp
             locale:   Utils.getLocale(),
             email:    '',
             password: '',
-            message:  window['message'],
+            message:  ssrStore.message,
             onTwitter:        this.onTwitter.       bind(this),
             onFacebook:       this.onFacebook.      bind(this),
             onGoogle:         this.onGoogle.        bind(this),

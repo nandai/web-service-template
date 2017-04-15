@@ -9,6 +9,7 @@ import {Store}             from '../components/views/settings-account-view/store
 import Utils               from '../libs/utils';
 
 const slog = window['slog'];
+const ssrStore : Store = window['ssrStore'];
 
 /**
  * View
@@ -26,37 +27,12 @@ class SettingsAccountApp
         this.store =
         {
             locale:   Utils.getLocale(),
-            account:  null,
+            account:  ssrStore.account,
             message:  '',
             onNameChange:    this.onNameChange.   bind(this),
             onPhoneNoChange: this.onPhoneNoChange.bind(this),
             onChange:        this.onChange.       bind(this)
         };
-    }
-
-    /**
-     * 初期化
-     */
-    init()
-    {
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsAccountApp.CLS_NAME, 'init');
-            try
-            {
-                const {store} = this;
-                const res = await SettingsApi.getAccount();
-                store.account = res.account;
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err)
-            {
-                log.stepOut();
-                reject();
-            }
-        });
     }
 
     /**
@@ -117,6 +93,5 @@ class SettingsAccountApp
 window.addEventListener('DOMContentLoaded', async () =>
 {
     const app = new SettingsAccountApp();
-    await app.init();
     app.render();
 });

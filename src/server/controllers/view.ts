@@ -3,12 +3,8 @@
  */
 import express = require('express');
 
-export function view(title : string, js : string, message? : string, contents : string = '') : string
+export function view(title : string, js : string, contents = '', store = {}) : string
 {
-    const optionMessage = (message
-        ? `var message = '${message}';`
-        : '');
-
     const view = `
 <!DOCTYPE html>
 <html>
@@ -23,7 +19,7 @@ export function view(title : string, js : string, message? : string, contents : 
 //      var serviceAddr = (('https:' === document.location.protocol) ? 'wss://localhost:8443' : 'ws://localhost:8080');
         var serviceAddr = 'ws://localhost:8080';
         slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL');
-        ${optionMessage}
+        var ssrStore = ${JSON.stringify(store)};
     </script>
 
     <link  href="/components/app.css" rel="stylesheet" />

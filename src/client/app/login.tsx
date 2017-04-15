@@ -10,8 +10,8 @@ import {Store}       from '../components/views/login-view/store';
 import History       from '../libs/history';
 import Utils         from '../libs/utils';
 
-const slog =    window['slog'];
-const message = window['message'];
+const slog =     window['slog'];
+const ssrStore = window['ssrStore'];
 
 /**
  * View
@@ -31,7 +31,7 @@ export default class LoginApp
             locale:   Utils.getLocale(),
             email:    '',
             password: '',
-            message:  message,
+            message:  ssrStore.message,
             onTwitter:        this.onTwitter.       bind(this),
             onFacebook:       this.onFacebook.      bind(this),
             onGoogle:         this.onGoogle.        bind(this),

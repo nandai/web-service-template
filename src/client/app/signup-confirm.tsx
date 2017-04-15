@@ -10,7 +10,7 @@ import {Store}           from '../components/views/signup-confirm-view/store';
 import Utils             from '../libs/utils';
 
 const slog =     window['slog'];
-const signupId = window['message'];
+const ssrStore = window['ssrStore'];
 
 /**
  * View
@@ -65,7 +65,7 @@ class SignupConfirmApp
         try
         {
             const password = store.password;
-            const res = await SignupApi.confirmSignupEmail({signupId, password});
+            const res = await SignupApi.confirmSignupEmail({signupId:ssrStore.signupId, password});
             store.message = res.message;
             this.render();
             log.stepOut();

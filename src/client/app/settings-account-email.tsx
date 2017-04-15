@@ -8,7 +8,8 @@ import SettingsAccountEmailView from '../components/views/settings-account-email
 import {Store}                  from '../components/views/settings-account-email-view/store';
 import Utils                    from '../libs/utils';
 
-const slog =  window['slog'];
+const slog = window['slog'];
+const ssrStore : Store = window['ssrStore'];
 
 /**
  * View
@@ -26,36 +27,11 @@ class SettingsAccountEmailApp
         this.store =
         {
             locale:   Utils.getLocale(),
-            account:  null,
+            account:  ssrStore.account,
             message:  '',
             onEmailChange:   this.onEmailChange.bind(this),
             onChange:        this.onChange.     bind(this)
         };
-    }
-
-    /**
-     * 初期化
-     */
-    init()
-    {
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsAccountEmailApp.CLS_NAME, 'init');
-            try
-            {
-                const {store} = this;
-                const res = await SettingsApi.getAccount();
-                store.account = res.account;
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err)
-            {
-                log.stepOut();
-                reject();
-            }
-        });
     }
 
     /**
@@ -107,6 +83,5 @@ class SettingsAccountEmailApp
 window.addEventListener('DOMContentLoaded', async () =>
 {
     const app = new SettingsAccountEmailApp();
-    await app.init();
     app.render();
 });

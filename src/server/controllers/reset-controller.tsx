@@ -34,7 +34,7 @@ export default class ResetController
         try
         {
             const param = req.query;
-            const resetId = param.id;
+            const resetId : string = param.id;
             let account : Account = null;
 
             if (resetId)
@@ -52,7 +52,7 @@ export default class ResetController
 
                 const title = ClientR.text(ClientR.RESET_PASSWORD, locale);
                 const contents = ReactDOM.renderToString(<ResetView store={store} />);
-                res.send(view(title, 'reset.js', resetId, contents));
+                res.send(view(title, 'reset.js', contents, {resetId}));
             }
             else
             {

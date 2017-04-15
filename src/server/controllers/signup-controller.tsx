@@ -43,7 +43,7 @@ export default class SignupController
             if (signupId === undefined)
             {
                 const session : Session = req.ext.session;
-                let message;
+                let message : string;
 
                 if (session.message_id)
                 {
@@ -64,7 +64,7 @@ export default class SignupController
 
                 const title = ClientR.text(ClientR.SIGNUP, locale);
                 const contents = ReactDOM.renderToString(<SignupView store={store} />);
-                res.send(view(title, 'wst.js', message, contents));
+                res.send(view(title, 'wst.js', contents, {message}));
             }
             else
             {
@@ -81,7 +81,7 @@ export default class SignupController
 
                     const title = ClientR.text(ClientR.SIGNUP_CONFIRM, locale);
                     const contents = ReactDOM.renderToString(<SignupConfirmView store={store} />);
-                    res.send(view(title, 'signup-confirm.js', signupId, contents));
+                    res.send(view(title, 'signup-confirm.js', contents, {signupId}));
                 }
                 else
                 {
