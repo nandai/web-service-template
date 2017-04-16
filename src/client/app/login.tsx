@@ -4,7 +4,9 @@
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Request}     from 'libs/request';
+import {App}         from './app';
 import LoginApi      from '../api/login-api';
+import SettingsApi   from '../api/settings-api';
 import LoginView     from '../components/views/login-view/login-view';
 import {Store}       from '../components/views/login-view/store';
 import History       from '../libs/history';
@@ -16,7 +18,7 @@ const ssrStore = window['ssrStore'];
 /**
  * View
  */
-export default class LoginApp
+export default class LoginApp extends App
 {
     private static CLS_NAME = 'LoginApp';
     private store : Store;
@@ -26,6 +28,7 @@ export default class LoginApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:   Utils.getLocale(),
@@ -168,7 +171,9 @@ export default class LoginApp
                 {
                     if (res.smsId === undefined)
                     {
-                        location.href = '/';
+                        const res = await SettingsApi.getAccount();
+                        this.setAccount(res.account);
+                        History.pushState('/');
                     }
                     else
                     {

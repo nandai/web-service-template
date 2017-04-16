@@ -3,6 +3,7 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
+import {App}         from './app';
 import LoginApi      from '../api/login-api';
 import SmsView       from '../components/views/sms-view/sms-view';
 import {Store}       from '../components/views/sms-view/store';
@@ -14,7 +15,7 @@ const slog = window['slog'];
 /**
  * View
  */
-export default class SmsApp
+export default class SmsApp extends App
 {
     private static CLS_NAME = 'SmsView';
     private store : Store;
@@ -24,6 +25,7 @@ export default class SmsApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:  Utils.getLocale(),

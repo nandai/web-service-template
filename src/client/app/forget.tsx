@@ -3,6 +3,7 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
+import {App}         from './app';
 import ResetApi      from '../api/reset-api';
 import ForgetView    from '../components/views/forget-view/forget-view';
 import {Store}       from '../components/views/forget-view/store';
@@ -13,7 +14,7 @@ const slog =  window['slog'];
 /**
  * View
  */
-export default class ForgetApp
+export default class ForgetApp extends App
 {
     private static CLS_NAME = 'ForgetApp';
     private store : Store;
@@ -23,6 +24,7 @@ export default class ForgetApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:   Utils.getLocale(),

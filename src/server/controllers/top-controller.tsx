@@ -4,6 +4,7 @@
 import * as React              from 'react';
 import * as ReactDOM           from 'react-dom/server';
 import {view, notFound}        from './view';
+import SettingsApi             from '../api/settings-api';
 import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
@@ -98,15 +99,17 @@ export default class TopController
             {
                 log.d('トップ画面を表示');
 
+                const data = await SettingsApi.getAccount(req);
                 const store : TopStore =
                 {
                     locale:  locale,
+                    account: data.account,
                     message: ''
                 };
 
                 const title = ClientR.text(ClientR.TOP, locale);
                 const contents = ReactDOM.renderToString(<TopView store={store} />);
-                res.send(view(title, 'index.js', contents));
+                res.send(view(title, 'wst.js', contents, store));
             }
 
             log.stepOut();

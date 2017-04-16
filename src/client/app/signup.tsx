@@ -4,6 +4,7 @@
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 import {Request}     from 'libs/request';
+import {App}         from './app';
 import SignupApi     from '../api/signup-api';
 import SignupView    from '../components/views/signup-view/signup-view';
 import {Store}       from '../components/views/signup-view/store';
@@ -16,7 +17,7 @@ const ssrStore : Store = window['ssrStore'];
 /**
  * View
  */
-export default class SignupApp
+export default class SignupApp extends App
 {
     private static CLS_NAME = 'SignupApp';
     private store : Store;
@@ -26,6 +27,7 @@ export default class SignupApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:   Utils.getLocale(),

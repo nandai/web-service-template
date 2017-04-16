@@ -3,14 +3,17 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
+import {App}         from './app';
 import LogoutApi     from '../api/logout-api';
 import {Store}       from '../components/views/top-view/store';
 import TopView       from '../components/views/top-view/top-view';
+import History       from '../libs/history';
 import Utils         from '../libs/utils';
 
-const slog =  window['slog'];
+const slog = window['slog'];
+const ssrStore : Store = window['ssrStore'];
 
-class TopApp
+export default class TopApp extends App
 {
     private static CLS_NAME = 'TopApp';
     private store : Store;
@@ -20,9 +23,11 @@ class TopApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:     Utils.getLocale(),
+            account:    ssrStore.account,
             message:    '',
             onSettings: this.onSettings.bind(this),
             onLogout:   this.onLogout.  bind(this)
@@ -58,7 +63,8 @@ class TopApp
         try
         {
             await LogoutApi.logout();
-            location.href = '/';
+            this.setAccount(null);
+            History.pushState('/');
             log.stepOut();
         }
         catch (err)
@@ -69,10 +75,3 @@ class TopApp
         }
     }
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-    const app = new TopApp();
-    app.render();
-});
-
-window.history.pushState('', document.title, window.location.pathname);
