@@ -50,7 +50,7 @@ export default class TopApp extends App
     private onSettings() : void
     {
         const log = slog.stepIn(TopApp.CLS_NAME, 'onSettings');
-        window.location.href = '/settings';
+        History.pushState('/settings');
         log.stepOut();
     }
 
@@ -63,7 +63,6 @@ export default class TopApp extends App
         try
         {
             await LogoutApi.logout();
-            this.setAccount(null);
             History.pushState('/');
             log.stepOut();
         }

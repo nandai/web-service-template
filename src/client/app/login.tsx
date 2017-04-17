@@ -6,7 +6,6 @@ import * as ReactDOM from 'react-dom';
 import {Request}     from 'libs/request';
 import {App}         from './app';
 import LoginApi      from '../api/login-api';
-import SettingsApi   from '../api/settings-api';
 import LoginView     from '../components/views/login-view/login-view';
 import {Store}       from '../components/views/login-view/store';
 import History       from '../libs/history';
@@ -171,8 +170,6 @@ export default class LoginApp extends App
                 {
                     if (res.smsId === undefined)
                     {
-                        const res = await SettingsApi.getAccount();
-                        this.setAccount(res.account);
                         History.pushState('/');
                     }
                     else

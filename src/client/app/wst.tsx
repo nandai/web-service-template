@@ -1,16 +1,18 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {App}      from './app';
-import TopApp     from './index';
-import LoginApp   from './login';
-import SmsApp     from './sms';
-import SignupApp  from './signup';
-import ForgetApp  from './forget';
-import History    from '../libs/history';
-import R          from '../libs/r';
-import Utils      from '../libs/utils';
-import {Response} from 'libs/response';
+import {App}       from './app';
+import TopApp      from './index';
+import LoginApp    from './login';
+import SmsApp      from './sms';
+import SignupApp   from './signup';
+import ForgetApp   from './forget';
+import SettingsApp from './settings';
+import SettingsApi from '../api/settings-api';
+import History     from '../libs/history';
+import R           from '../libs/r';
+import Utils       from '../libs/utils';
+import {Response}  from 'libs/response';
 
 const ssrStore = window['ssrStore'];
 
@@ -31,20 +33,18 @@ class WstApp
         const locale = Utils.getLocale();
         this.routes =
         [
-            {url:'/',       app:new TopApp(),    title:R.text(R.TOP,       locale), auth:true},
-            {url:'/',       app:new LoginApp(),  title:R.text(R.LOGIN,     locale)},
-            {url:'/',       app:new SmsApp(),    title:R.text(R.AUTH_SMS,  locale), query:true},
-            {url:'/signup', app:new SignupApp(), title:R.text(R.SIGNUP,    locale)},
-            {url:'/forget', app:new ForgetApp(), title:R.text(R.GO_FORGET, locale)}
+            {url:'/',         app:new TopApp(),      title:R.text(R.TOP,       locale), auth:true},
+            {url:'/',         app:new LoginApp(),    title:R.text(R.LOGIN,     locale)},
+            {url:'/',         app:new SmsApp(),      title:R.text(R.AUTH_SMS,  locale), query:true},
+            {url:'/signup',   app:new SignupApp(),   title:R.text(R.SIGNUP,    locale)},
+            {url:'/forget',   app:new ForgetApp(),   title:R.text(R.GO_FORGET, locale)},
+            {url:'/settings', app:new SettingsApp(), title:R.text(R.SETTINGS,  locale), auth:true},
+
+            // 該当なし
+            {url:'',          app:null,              title:null},
         ];
 
         this.setAccount(ssrStore.account);
-
-        const setAccount = this.setAccount.bind(this);
-        this.routes.forEach((route) =>
-        {
-            route.app.setAccount = setAccount;
-        });
 
         History.on('pushstate', this.onHistory.bind(this));
         History.on('popstate',  this.onHistory.bind(this));
@@ -71,23 +71,32 @@ class WstApp
                 break;
         }
 
-        if (this.currentApp !== route.app)
+        if (route.app === null)
         {
-            this.currentApp = route.app;
-            document.title = route.title;
-
-            if (this.currentApp.init)
-                this.currentApp.init();
+            History.pushState('/');
         }
+        else
+        {
+            if (this.currentApp !== route.app)
+            {
+                this.currentApp = route.app;
+                document.title =  route.title;
 
-        this.currentApp.render();
+                this.currentApp.init();
+            }
+
+            this.currentApp.render();
+        }
     }
 
     /**
      * pushstate, popstate event
      */
-    private onHistory() : void {
-      this.render();
+    private async onHistory()
+    {
+        const res = await SettingsApi.getAccount();
+        this.setAccount(res.account);
+        this.render();
     }
 
     /**
@@ -100,6 +109,9 @@ class WstApp
 
         this.routes.forEach((route) =>
         {
+            if (route.app === null)
+                return;
+
             const store = route.app['store'];
             if ('account' in store)
             {

@@ -5,8 +5,6 @@ import {Response} from 'libs/response';
 
 export abstract class App
 {
-    setAccount : (account : Response.Account) => void;
-
     init() : void
     {
     }

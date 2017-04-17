@@ -70,7 +70,7 @@ export default class SettingsController
 
             const title = ClientR.text(ClientR.SETTINGS, locale);
             const contents = ReactDOM.renderToString(<SettingsView store={store} />);
-            res.send(view(title, 'settings.js', contents, store));
+            res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
