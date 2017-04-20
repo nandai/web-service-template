@@ -3,18 +3,19 @@
  */
 import * as React                     from 'react';
 import * as ReactDOM                  from 'react-dom';
+import {App}                          from './app';
 import SettingsApi                    from '../api/settings-api';
 import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view/settings-account-email-change-view';
 import {Store}                        from '../components/views/settings-account-email-change-view/store';
 import Utils                          from '../libs/utils';
+import CommonUtils                    from 'libs/utils';
 
-const slog =     window['slog'];
-const ssrStore = window['ssrStore'];
+const slog = window['slog'];
 
 /**
  * View
  */
-class SettingsAccountEmailChangeApp
+export default class SettingsAccountEmailChangeApp extends App
 {
     private static CLS_NAME = 'SettingsAccountEmailChangeApp';
     private store : Store;
@@ -24,6 +25,7 @@ class SettingsAccountEmailChangeApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:   Utils.getLocale(),
@@ -63,9 +65,11 @@ class SettingsAccountEmailChangeApp
 
         try
         {
+            const params = CommonUtils.parseRawQueryString(location.search.substring(1));
+            const changeId : string = params.id;
             const {password} = store;
 
-            const res = await SettingsApi.changeEmail({changeId:ssrStore.changeId, password});
+            const res = await SettingsApi.changeEmail({changeId, password});
             store.message = res.message;
             this.render();
             log.stepOut();
@@ -78,10 +82,3 @@ class SettingsAccountEmailChangeApp
         }
     }
 }
-
-window.addEventListener('load', () => new SettingsAccountEmailChangeView(), false);
-window.addEventListener('DOMContentLoaded', async () =>
-{
-    const app = new SettingsAccountEmailChangeApp();
-    app.render();
-});

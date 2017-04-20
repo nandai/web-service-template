@@ -100,7 +100,7 @@ export default class SettingsController
 
             const title = ClientR.text(ClientR.SETTINGS_ACCOUNT, locale);
             const contents = ReactDOM.renderToString(<SettingsAccountView store={store} />);
-            res.send(view(title, 'settings-account.js', contents, store));
+            res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
@@ -130,7 +130,7 @@ export default class SettingsController
 
             const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL, locale);
             const contents = ReactDOM.renderToString(<SettingsAccountEmailView store={store} />);
-            res.send(view(title, 'settings-account-email.js', contents, store));
+            res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
@@ -168,7 +168,7 @@ export default class SettingsController
 
                 const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL_CHANGE, locale);
                 const contents = ReactDOM.renderToString(<SettingsAccountEmailChangeView store={store} />);
-                res.send(view(title, 'settings-account-email-change.js', contents, {changeId}));
+                res.send(view(title, 'wst.js', contents));
             }
             else
             {

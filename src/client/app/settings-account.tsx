@@ -3,6 +3,7 @@
  */
 import * as React          from 'react';
 import * as ReactDOM       from 'react-dom';
+import {App}               from './app';
 import SettingsApi         from '../api/settings-api';
 import SettingsAccountView from '../components/views/settings-account-view/settings-account-view';
 import {Store}             from '../components/views/settings-account-view/store';
@@ -14,7 +15,7 @@ const ssrStore : Store = window['ssrStore'];
 /**
  * View
  */
-class SettingsAccountApp
+export default class SettingsAccountApp extends App
 {
     private static CLS_NAME = 'SettingsAccountApp';
     private store : Store;
@@ -24,6 +25,7 @@ class SettingsAccountApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:   Utils.getLocale(),
@@ -89,9 +91,3 @@ class SettingsAccountApp
         }
     }
 }
-
-window.addEventListener('DOMContentLoaded', async () =>
-{
-    const app = new SettingsAccountApp();
-    app.render();
-});

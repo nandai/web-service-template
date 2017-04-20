@@ -7,6 +7,7 @@ import {App}         from './app';
 import SettingsApi   from '../api/settings-api';
 import SettingsView  from '../components/views/settings-view/settings-view';
 import {Store}       from '../components/views/settings-view/store';
+import History       from '../libs/history';
 import Utils         from '../libs/utils';
 
 const slog = window['slog'];
@@ -103,7 +104,7 @@ export default class SettingsApp extends App
     private onEmail() : void
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onEmail');
-        window.location.href = '/settings/account/email';
+        History.pushState('/settings/account/email');
         log.stepOut();
     }
 
@@ -123,7 +124,7 @@ export default class SettingsApp extends App
     private onAccount() : void
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onAccount');
-        window.location.href = '/settings/account';
+        History.pushState('/settings/account');
         log.stepOut();
     }
 

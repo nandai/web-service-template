@@ -3,6 +3,7 @@
  */
 import * as React               from 'react';
 import * as ReactDOM            from 'react-dom';
+import {App}                    from './app';
 import SettingsApi              from '../api/settings-api';
 import SettingsAccountEmailView from '../components/views/settings-account-email-view/settings-account-email-view';
 import {Store}                  from '../components/views/settings-account-email-view/store';
@@ -14,7 +15,7 @@ const ssrStore : Store = window['ssrStore'];
 /**
  * View
  */
-class SettingsAccountEmailApp
+export default class SettingsAccountEmailApp extends App
 {
     private static CLS_NAME = 'SettingsAccountEmailApp';
     private store : Store;
@@ -24,6 +25,7 @@ class SettingsAccountEmailApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:   Utils.getLocale(),
@@ -79,9 +81,3 @@ class SettingsAccountEmailApp
         }
     }
 }
-
-window.addEventListener('DOMContentLoaded', async () =>
-{
-    const app = new SettingsAccountEmailApp();
-    app.render();
-});
