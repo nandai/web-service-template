@@ -4,6 +4,7 @@
 import * as React from 'react';
 import Button     from 'client/components/common/button';
 import Input      from 'client/components/common/input';
+import Main       from 'client/components/designated/main';
 import R          from 'client/libs/r';
 import {Store}    from './store';
 
@@ -17,12 +18,13 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
     /**
      * render
      */
-    render() : JSX.Element {
+    render() : JSX.Element
+    {
         const {store} = this.props;
         const {locale} = store;
 
         return (
-            <div>
+            <Main>
                 <Button onClick={store.onTwitter} >{R.text(R.SIGNUP_WITH_TWITTER,  locale)}</Button>
                 <Button onClick={store.onFacebook}>{R.text(R.SIGNUP_WITH_FACEBOOK, locale)}</Button>
                 <Button onClick={store.onGoogle}  >{R.text(R.SIGNUP_WITH_GOOGLE,   locale)}</Button>
@@ -31,7 +33,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
                 <Button onClick={store.onSignup}  >{R.text(R.SIGNUP,   locale)}</Button>
                 <Button onClick={store.onTop}     >{R.text(R.GO_TOP,   locale)}</Button>
                 <span>{store.message}</span>
-            </div>
+            </Main>
         );
     }
 }

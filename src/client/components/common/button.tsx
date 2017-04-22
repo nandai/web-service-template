@@ -19,7 +19,8 @@ export default class Button extends React.Component<ButtonProps, {}>
     /**
      * render
      */
-    render() : JSX.Element {
+    render() : JSX.Element
+    {
         const {props} = this;
         return (
             <button disabled={props.disabled}

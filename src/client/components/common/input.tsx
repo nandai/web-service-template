@@ -23,7 +23,8 @@ export default class Input extends React.Component<InputProps, {}>
     /**
      * render
      */
-    render() : JSX.Element {
+    render() : JSX.Element
+    {
         const {props} = this;
         let {onChange} = props;
 
