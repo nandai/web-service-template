@@ -194,9 +194,11 @@ export default class SettingsController
 
         try
         {
+            const data = await SettingsApi.getAccount(req);
             const store : SettingsAccountPasswordStore =
             {
                 locale:      locale,
+                account:     data.account,
                 oldPassword: '',
                 newPassword: '',
                 confirm:     '',
@@ -205,7 +207,7 @@ export default class SettingsController
 
             const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_PASSWORD, locale);
             const contents = ReactDOM.renderToString(<SettingsAccountPasswordView store={store} />);
-            res.send(view(title, 'settings-account-password.js', contents));
+            res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};

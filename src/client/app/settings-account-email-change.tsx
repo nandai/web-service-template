@@ -3,12 +3,12 @@
  */
 import * as React                     from 'react';
 import * as ReactDOM                  from 'react-dom';
+import CommonUtils                    from 'libs/utils';
 import {App}                          from './app';
 import SettingsApi                    from '../api/settings-api';
 import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view/settings-account-email-change-view';
 import {Store}                        from '../components/views/settings-account-email-change-view/store';
 import Utils                          from '../libs/utils';
-import CommonUtils                    from 'libs/utils';
 
 const slog = window['slog'];
 

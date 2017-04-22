@@ -6,11 +6,13 @@ import TopApp                        from './index';
 import LoginApp                      from './login';
 import SmsApp                        from './sms';
 import SignupApp                     from './signup';
+import SignupConfirmApp              from './signup-confirm';
 import ForgetApp                     from './forget';
 import SettingsApp                   from './settings';
 import SettingsAccountApp            from './settings-account';
 import SettingsAccountEmailApp       from './settings-account-email';
 import SettingsAccountEmailChangeApp from './settings-account-email-change';
+import SettingsAccountPasswordApp    from './settings-account-password';
 import SettingsApi                   from '../api/settings-api';
 import History                       from '../libs/history';
 import R                             from '../libs/r';
@@ -40,11 +42,13 @@ class WstApp
             {url:'/',                              app:new LoginApp(),                      title:R.text(R.LOGIN,                          locale)},
             {url:'/',                              app:new SmsApp(),                        title:R.text(R.AUTH_SMS,                       locale), query:true},
             {url:'/signup',                        app:new SignupApp(),                     title:R.text(R.SIGNUP,                         locale)},
+            {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                 locale), query:true},
             {url:'/forget',                        app:new ForgetApp(),                     title:R.text(R.GO_FORGET,                      locale)},
             {url:'/settings',                      app:new SettingsApp(),                   title:R.text(R.SETTINGS,                       locale), auth:true},
             {url:'/settings/account',              app:new SettingsAccountApp(),            title:R.text(R.SETTINGS_ACCOUNT,               locale), auth:true},
             {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), auth:true},
             {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), query:true},
+            {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), auth:true},
 
             // 該当なし
             {url:'',          app:null,              title:null},

@@ -114,7 +114,7 @@ export default class SettingsApp extends App
     private onPassword() : void
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onPassword');
-        window.location.href = '/settings/account/password';
+        History.pushState('/settings/account/password');
         log.stepOut();
     }
 
@@ -142,7 +142,7 @@ export default class SettingsApp extends App
 
             if (res.status === 0)
             {
-                location.href = '/';
+                History.pushState('/');
             }
             else
             {
@@ -166,7 +166,7 @@ export default class SettingsApp extends App
     private onBack() : void
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onBack');
-        window.location.href = '/';
+        History.pushState('/');
         log.stepOut();
     }
 

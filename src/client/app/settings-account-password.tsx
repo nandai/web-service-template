@@ -3,17 +3,19 @@
  */
 import * as React                  from 'react';
 import * as ReactDOM               from 'react-dom';
+import {App}                       from './app';
 import SettingsApi                 from '../api/settings-api';
 import SettingsAccountPasswordView from '../components/views/settings-account-password-view/settings-account-password-view';
 import {Store}                     from '../components/views/settings-account-password-view/store';
 import Utils                       from '../libs/utils';
 
 const slog =  window['slog'];
+const ssrStore : Store = window['ssrStore'];
 
 /**
  * View
  */
-class SettingsAccountPasswordApp
+export default class SettingsAccountPasswordApp extends App
 {
     private static CLS_NAME = 'SettingsAccountPasswordApp';
     private store : Store;
@@ -23,9 +25,11 @@ class SettingsAccountPasswordApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:      Utils.getLocale(),
+            account:     ssrStore.account,
             oldPassword: '',
             newPassword: '',
             confirm:     '',
@@ -99,9 +103,3 @@ class SettingsAccountPasswordApp
         }
     }
 }
-
-window.addEventListener('DOMContentLoaded', async () =>
-{
-    const app = new SettingsAccountPasswordApp();
-    app.render();
-});

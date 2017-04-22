@@ -4,6 +4,8 @@
 import * as React        from 'react';
 import * as ReactDOM     from 'react-dom';
 import {Request}         from 'libs/request';
+import CommonUtils       from 'libs/utils';
+import {App}             from './app';
 import SignupApi         from '../api/signup-api';
 import SignupConfirmView from '../components/views/signup-confirm-view/signup-confirm-view';
 import {Store}           from '../components/views/signup-confirm-view/store';
@@ -15,7 +17,7 @@ const ssrStore = window['ssrStore'];
 /**
  * View
  */
-class SignupConfirmApp
+export default class SignupConfirmApp extends App
 {
     private static CLS_NAME = 'SignupConfirmApp';
     private store : Store;
@@ -25,6 +27,7 @@ class SignupConfirmApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:   Utils.getLocale(),
@@ -64,8 +67,10 @@ class SignupConfirmApp
 
         try
         {
+            const params = CommonUtils.parseRawQueryString(location.search.substring(1));
+            const signupId : string = params.id;
             const password = store.password;
-            const res = await SignupApi.confirmSignupEmail({signupId:ssrStore.signupId, password});
+            const res = await SignupApi.confirmSignupEmail({signupId, password});
             store.message = res.message;
             this.render();
             log.stepOut();
@@ -78,8 +83,3 @@ class SignupConfirmApp
         }
     }
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-    const app = new SignupConfirmApp();
-    app.render();
-});

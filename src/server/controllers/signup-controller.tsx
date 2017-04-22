@@ -81,7 +81,7 @@ export default class SignupController
 
                     const title = ClientR.text(ClientR.SIGNUP_CONFIRM, locale);
                     const contents = ReactDOM.renderToString(<SignupConfirmView store={store} />);
-                    res.send(view(title, 'signup-confirm.js', contents, {signupId}));
+                    res.send(view(title, 'wst.js', contents));
                 }
                 else
                 {
