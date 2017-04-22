@@ -149,7 +149,7 @@ export default class SignupApp extends App
 
                 if (res.status === 0)
                 {
-                    location.href = '/';
+                    History.pushState('/');
                 }
                 else
                 {

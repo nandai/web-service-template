@@ -172,7 +172,7 @@ export default class SettingsController
             }
             else
             {
-                notFound(res);
+                notFound(req, res);
             }
 
             log.stepOut();

@@ -76,7 +76,7 @@ export default class TopController
                 }
                 else
                 {
-                    notFound(res);
+                    notFound(req, res);
                 }
             }
             else if (session.account_id === null || message)

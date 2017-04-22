@@ -260,7 +260,7 @@ export default class Access
         }
         else
         {
-            notFound(res);
+            notFound(req, res);
         }
 
         log.stepOut();

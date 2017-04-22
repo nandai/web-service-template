@@ -85,7 +85,7 @@ export default class SignupController
                 }
                 else
                 {
-                    notFound(res);
+                    notFound(req, res);
                 }
             }
 

@@ -35,6 +35,7 @@ export default class R
             'logout':                     'Log out',
             'newPassword':                'New password',
             'newPasswordAgain':           'New password again',
+            'notFound':                   'NOT FOUND',
             'password':                   'Password',
             'problem':                    'There was a problem. Please contact the administrator.',
             'resetPassword':              'Reset password',
@@ -81,6 +82,7 @@ export default class R
             'logout':                     'ログアウト',
             'newPassword':                '新しいパスワード',
             'newPasswordAgain':           'パスワードの確認',
+            'notFound':                   'NOT FOUND',
             'password':                   'パスワード',
             'problem':                    '問題が発生しました。管理者にお問い合わせください。',
             'resetPassword':              'パスワードリセット',
@@ -126,6 +128,7 @@ export default class R
     static LOGOUT =                        'logout';
     static NEW_PASSWORD =                  'newPassword';
     static NEW_PASSWORD_AGAIN =            'newPasswordAgain';
+    static NOT_FOUND =                     'notFound';
     static PASSWORD =                      'password';
     static PROBLEM =                       'problem';
     static RESET_PASSWORD =                'resetPassword';

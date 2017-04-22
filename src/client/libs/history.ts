@@ -22,10 +22,10 @@ export default class History
 
     static pushState(url : string) : void
     {
-        if (location.pathname !== url)
+        if (location.pathname + location.search !== url)
             history.pushState(null, null, url);
 
-        // location.pathname === url であってもonPushStateはコールする
+        // location.pathname + location.search === url であってもonPushStateはコールする
 //      const onPushState = History.onPushState;
         const onPushState = window['onPushState'];
 

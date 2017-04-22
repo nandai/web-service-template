@@ -1,6 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import ClientR from 'client/libs/r';
+
 import express = require('express');
 
 export function view(title : string, js : string, contents = '', store = {}) : string
@@ -35,7 +37,9 @@ export function view(title : string, js : string, contents = '', store = {}) : s
     return view;
 }
 
-export function notFound(res : express.Response) : void
+export function notFound(req : express.Request, res : express.Response) : void
 {
-    res.status(404).send(view('NOT FOUND', 'wst.js'));
+    const locale = req.ext.locale;
+    const title = ClientR.text(ClientR.NOT_FOUND, locale);
+    res.status(404).send(view(title, 'wst.js'));
 }

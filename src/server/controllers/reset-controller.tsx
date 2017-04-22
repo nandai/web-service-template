@@ -56,7 +56,7 @@ export default class ResetController
             }
             else
             {
-                notFound(res);
+                notFound(req, res);
             }
 
             log.stepOut();

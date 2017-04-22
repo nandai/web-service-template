@@ -52,7 +52,7 @@ class WstApp
             {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), auth:true},
             {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), query:true},
             {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), auth:true},
-            {url:'',                               app:new NotFoundApp(),                   title:'NOT FOUND'},
+            {url:'',                               app:new NotFoundApp(),                   title:R.text(R.NOT_FOUND,                      locale)},
         ];
 
         this.setAccount(ssrStore.account);
@@ -72,12 +72,12 @@ class WstApp
     /**
      * カレントApp更新
      */
-    updateCurrentApp() : void
+    updateCurrentApp(url : string) : void
     {
         let route : Route;
         for (route of this.routes)
         {
-            if (route.url !== location.pathname)
+            if (route.url !== url)
                 continue;
 
             if (route.auth && this.account === null)
@@ -107,7 +107,7 @@ class WstApp
     {
         const res = await SettingsApi.getAccount();
         this.setAccount(res.account);
-        this.updateCurrentApp();
+        this.updateCurrentApp(location.pathname);
     }
 
     /**
@@ -146,9 +146,13 @@ interface Route
  */
 window.addEventListener('DOMContentLoaded', () =>
 {
+    const locale = Utils.getLocale();
+    const notFoundTitle = R.text(R.NOT_FOUND, locale);
+    const url = (document.title !== notFoundTitle ? location.pathname : '');
+
     const app = new WstApp();
     app.init();
-    app.updateCurrentApp();
+    app.updateCurrentApp(url);
 });
 
 if (window.location.hash === '#_=_')

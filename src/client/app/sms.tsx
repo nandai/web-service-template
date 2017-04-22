@@ -8,6 +8,7 @@ import {App}         from './app';
 import LoginApi      from '../api/login-api';
 import SmsView       from '../components/views/sms-view/sms-view';
 import {Store}       from '../components/views/sms-view/store';
+import History       from '../libs/history';
 import Utils         from '../libs/utils';
 
 const slog = window['slog'];
@@ -72,7 +73,7 @@ export default class SmsApp extends App
 
             if (res.status === 0)
             {
-                location.href = '/';
+                History.pushState('/');
             }
             else
             {
