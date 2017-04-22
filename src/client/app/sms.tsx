@@ -73,7 +73,7 @@ export default class SmsApp extends App
 
             if (res.status === 0)
             {
-                History.pushState('/');
+                History.replaceState('/');
             }
             else
             {

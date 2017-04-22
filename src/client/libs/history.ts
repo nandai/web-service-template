@@ -36,5 +36,10 @@ export default class History
     static replaceState(url : string) : void
     {
         history.replaceState(null, null, url);
+
+        const onPushState = window['onPushState'];
+
+        if (onPushState)
+            onPushState();
     }
 }
