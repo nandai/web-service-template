@@ -3,12 +3,14 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
+import {App}         from './app';
 import NotFoundView  from '../components/views/not-found-view/not-found-view';
 
-class NotFoundApp
+/**
+ * not found app
+ */
+export default class NotFoundApp extends App
 {
-    private static CLS_NAME = 'NotFoundApp';
-
     /**
      * render
      */
@@ -19,8 +21,3 @@ class NotFoundApp
             document.getElementById('root'));
     }
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-    const app = new NotFoundApp();
-    app.render();
-});

@@ -43,9 +43,6 @@ gulp.task('typescript', function ()
 gulp.task('browserify', function ()
 {
     buildClient('wst.js');
-    buildClient('signup-confirm.js');
-    buildClient('reset.js');
-    buildClient('not-found.js');
 });
 
 function buildClient(fileName)

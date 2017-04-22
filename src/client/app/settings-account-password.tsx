@@ -9,7 +9,7 @@ import SettingsAccountPasswordView from '../components/views/settings-account-pa
 import {Store}                     from '../components/views/settings-account-password-view/store';
 import Utils                       from '../libs/utils';
 
-const slog =  window['slog'];
+const slog = window['slog'];
 const ssrStore : Store = window['ssrStore'];
 
 /**

@@ -212,14 +212,14 @@ class Initializer
         this.app.post(  '/api/reset',                ResetApi. onRequestResetPassword);
         this.app.put(   '/api/reset/change',         ResetApi. onResetPassword);
 
-        this.app.get(   '/api/settings/account',                    Access.auth, SettingsApi.onGetAccount);
-        this.app.put(   '/api/settings/account',                    Access.auth, SettingsApi.onSetAccount);
-        this.app.delete('/api/settings/account',                    Access.auth, SettingsApi.onDeleteAccount);
-        this.app.put(   `/api/settings/account/unlink`,             Access.auth, SettingsApi.onUnlinkProvider);
-        this.app.put(   '/api/settings/account/email',              Access.auth, SettingsApi.onRequestChangeEmail);
-        this.app.put(   '/api/settings/account/email/change',                    SettingsApi.onChangeEmail);
-        this.app.put(   '/api/settings/account/password',           Access.auth, SettingsApi.onChangePassword);
-        this.app.post(  '/api/logout',                              Access.auth, LogoutApi.  onLogout);
+        this.app.get(   '/api/settings/account',              Access.auth, SettingsApi.onGetAccount);
+        this.app.put(   '/api/settings/account',              Access.auth, SettingsApi.onSetAccount);
+        this.app.delete('/api/settings/account',              Access.auth, SettingsApi.onDeleteAccount);
+        this.app.put(   `/api/settings/account/unlink`,       Access.auth, SettingsApi.onUnlinkProvider);
+        this.app.put(   '/api/settings/account/email',        Access.auth, SettingsApi.onRequestChangeEmail);
+        this.app.put(   '/api/settings/account/email/change',              SettingsApi.onChangeEmail);
+        this.app.put(   '/api/settings/account/password',     Access.auth, SettingsApi.onChangePassword);
+        this.app.post(  '/api/logout',                        Access.auth, LogoutApi.  onLogout);
 
         this.app.get( '/auth/twitter/callback',  Twitter. customCallback, Twitter. callback);
         this.app.get( '/auth/facebook/callback', Facebook.customCallback, Facebook.callback);

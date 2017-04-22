@@ -8,6 +8,8 @@ import SmsApp                        from './sms';
 import SignupApp                     from './signup';
 import SignupConfirmApp              from './signup-confirm';
 import ForgetApp                     from './forget';
+import ResetApp                      from './reset';
+import NotFoundApp                   from './not-found';
 import SettingsApp                   from './settings';
 import SettingsAccountApp            from './settings-account';
 import SettingsAccountEmailApp       from './settings-account-email';
@@ -44,14 +46,13 @@ class WstApp
             {url:'/signup',                        app:new SignupApp(),                     title:R.text(R.SIGNUP,                         locale)},
             {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                 locale), query:true},
             {url:'/forget',                        app:new ForgetApp(),                     title:R.text(R.GO_FORGET,                      locale)},
+            {url:'/reset',                         app:new ResetApp(),                      title:R.text(R.RESET_PASSWORD,                 locale), query:true},
             {url:'/settings',                      app:new SettingsApp(),                   title:R.text(R.SETTINGS,                       locale), auth:true},
             {url:'/settings/account',              app:new SettingsAccountApp(),            title:R.text(R.SETTINGS_ACCOUNT,               locale), auth:true},
             {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), auth:true},
             {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), query:true},
             {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), auth:true},
-
-            // 該当なし
-            {url:'',          app:null,              title:null},
+            {url:'',                               app:new NotFoundApp(),                   title:'NOT FOUND'},
         ];
 
         this.setAccount(ssrStore.account);
@@ -89,20 +90,13 @@ class WstApp
                 break;
         }
 
-        if (route.app === null)
+        if (this.currentApp !== route.app)
         {
-            History.pushState('/');
-        }
-        else
-        {
-            if (this.currentApp !== route.app)
-            {
-                this.currentApp = route.app;
-                document.title =  route.title;
+            this.currentApp = route.app;
+            document.title =  route.title;
 
-                this.currentApp.init();
-                this.currentApp.render();
-            }
+            this.currentApp.init();
+            this.currentApp.render();
         }
     }
 
@@ -126,11 +120,8 @@ class WstApp
 
         this.routes.forEach((route) =>
         {
-            if (route.app === null)
-                return;
-
             const store = route.app['store'];
-            if ('account' in store)
+            if (store && 'account' in store)
             {
                 store.account = account;
             }

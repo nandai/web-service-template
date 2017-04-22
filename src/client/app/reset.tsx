@@ -3,6 +3,8 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
+import CommonUtils   from 'libs/utils';
+import {App}         from './app';
 import ResetApi      from '../api/reset-api';
 import ResetView     from '../components/views/reset-view/reset-view';
 import {Store}       from '../components/views/reset-view/store';
@@ -14,7 +16,7 @@ const ssrStore = window['ssrStore'];
 /**
  * View
  */
-class ResetApp
+export default class ResetApp extends App
 {
     private static CLS_NAME = 'ResetApp';
     private store : Store;
@@ -24,6 +26,7 @@ class ResetApp
      */
     constructor()
     {
+        super();
         this.store =
         {
             locale:   Utils.getLocale(),
@@ -74,8 +77,10 @@ class ResetApp
 
         try
         {
+            const params = CommonUtils.parseRawQueryString(location.search.substring(1));
+            const resetId : string = params.id;
             const {password, confirm} = store;
-            const res = await ResetApi.resetPassword({resetId:ssrStore.resetId, password, confirm});
+            const res = await ResetApi.resetPassword({resetId, password, confirm});
             store.message = res.message;
             this.render();
             log.stepOut();
@@ -88,9 +93,3 @@ class ResetApp
         }
     }
 }
-
-window.addEventListener('DOMContentLoaded', () =>
-{
-    const app = new ResetApp();
-    app.render();
-});

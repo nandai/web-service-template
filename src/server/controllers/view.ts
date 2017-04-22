@@ -37,5 +37,5 @@ export function view(title : string, js : string, contents = '', store = {}) : s
 
 export function notFound(res : express.Response) : void
 {
-    res.status(404).send(view('NOT FOUND', 'not-found.js'));
+    res.status(404).send(view('NOT FOUND', 'wst.js'));
 }
