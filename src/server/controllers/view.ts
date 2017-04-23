@@ -25,7 +25,7 @@ export function view(title : string, js : string, contents = '', store = {}) : s
         var ssrStore = ${JSON.stringify(store)};
     </script>
 
-    <link  href="/components/app.css" rel="stylesheet" />
+    <link  href="/components/wst.css" rel="stylesheet" />
     <script src="/js/${js}"></script>
 </head>
 

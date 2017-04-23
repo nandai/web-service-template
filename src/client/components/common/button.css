@@ -1,0 +1,40 @@
+/**
+ * (C) 2016-2017 printf.jp
+ */
+button
+{
+    display: block;
+    width: 100%;
+    height: 48px;
+    color: white;
+    background-color: rgb(49, 182, 162);
+    font-family: var(--font-family);
+    font-size: 15px;
+    font-weight: bold;
+    margin: 8px 0 8px 0;
+    padding: 0;
+    border:  0;
+    border-radius: 3px;
+    cursor: pointer;
+    outline: none;
+    transition: all .3s;
+    -webkit-user-select: none;
+}
+
+button:hover
+{
+    background-color: rgb(59, 192, 172);
+}
+
+button:active
+{
+    background-color: rgb(81, 214, 194);
+}
+
+button[disabled],
+button[disabled]:hover,
+button[disabled]:active
+{
+    color: lightgray;
+    background-color: rgb(49, 182, 162);
+}

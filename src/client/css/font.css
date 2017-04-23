@@ -1,0 +1,13 @@
+/**
+ * (C) 2016-2017 printf.jp
+ */
+@font-face
+{
+  font-family: 'y-gothic';
+  src: url("../07やさしさゴシック.ttf");
+}
+
+:root
+{
+    --font-family: y-gothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}

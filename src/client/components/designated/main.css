@@ -1,0 +1,17 @@
+/**
+ * (C) 2016-2017 printf.jp
+ */
+.wst-main
+{
+    padding:  8px;
+    width:    100%;
+    overflow: auto;
+    outline:  none;
+}
+
+.wst-contents
+{
+    margin: auto;
+    width:  calc(100% - 16px * 2);
+    max-width: 480px;
+}

@@ -1,0 +1,32 @@
+/**
+ * (C) 2016-2017 printf.jp
+ */
+input
+{
+    display: block;
+    width: 100%;
+    margin: 16px 0 16px 0;
+    padding: 1px 0  1px 0;
+    font-family: var(--font-family);
+    font-size: 15px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+    transition: all .3s;
+    outline: none;
+}
+
+input:focus
+{
+    border-bottom: 1px solid blue;
+}
+
+input[type="number"]::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+}
+
+input[type="number"]
+{
+    -moz-appearance: textfield;
+}

@@ -1,0 +1,29 @@
+/**
+ * (C) 2016-2017 printf.jp
+ */
+*
+{
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #root
+{
+    height: 100%;
+}
+
+body
+{
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+#root
+{
+    display:  flex;
+    overflow: hidden;
+}
+
+body
+{
+  font-family: var(--font-family);
+}
