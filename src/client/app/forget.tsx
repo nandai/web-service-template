@@ -12,7 +12,7 @@ import Utils         from '../libs/utils';
 const slog =  window['slog'];
 
 /**
- * View
+ * forget app
  */
 export default class ForgetApp extends App
 {
@@ -27,12 +27,20 @@ export default class ForgetApp extends App
         super();
         this.store =
         {
-            locale:   Utils.getLocale(),
-            email:    '',
-            message:  '',
+            locale:        Utils.getLocale(),
             onEmailChange: this.onEmailChange.bind(this),
             onSend:        this.onSend.       bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init() : void
+    {
+        const {store} = this;
+        store.email =   '';
+        store.message = '';
     }
 
     /**

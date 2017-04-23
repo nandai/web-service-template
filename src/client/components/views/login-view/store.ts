@@ -6,7 +6,7 @@ export interface Store
     locale            : string;
     email             : string;
     password          : string;
-    message           : string;
+    message?          : string;
     onTwitter?        : () => void;
     onFacebook?       : () => void;
     onGoogle?         : () => void;

@@ -15,7 +15,7 @@ const slog =     window['slog'];
 const ssrStore = window['ssrStore'];
 
 /**
- * View
+ * signup confirm app
  */
 export default class SignupConfirmApp extends App
 {

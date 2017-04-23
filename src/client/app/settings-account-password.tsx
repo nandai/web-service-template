@@ -28,17 +28,25 @@ export default class SettingsAccountPasswordApp extends App
         super();
         this.store =
         {
-            locale:      Utils.getLocale(),
-            account:     ssrStore.account,
-            oldPassword: '',
-            newPassword: '',
-            confirm:     '',
-            message:     '',
+            locale:              Utils.getLocale(),
+            account:             ssrStore.account,
             onOldPasswordChange: this.onOldPasswordChange.bind(this),
             onNewPasswordChange: this.onNewPasswordChange.bind(this),
             onConfirmChange:     this.onConfirmChange.    bind(this),
             onChange:            this.onChange.           bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init() : void
+    {
+        const {store} = this;
+        store.oldPassword = '',
+        store.newPassword = '',
+        store.confirm =     '',
+        store.message =     '';
     }
 
     /**

@@ -13,7 +13,7 @@ const slog = window['slog'];
 const ssrStore : Store = window['ssrStore'];
 
 /**
- * View
+ * settings account app
  */
 export default class SettingsAccountApp extends App
 {

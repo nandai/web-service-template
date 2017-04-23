@@ -14,7 +14,7 @@ import Utils         from '../libs/utils';
 const slog = window['slog'];
 
 /**
- * View
+ * sms app
  */
 export default class SmsApp extends App
 {
@@ -29,12 +29,20 @@ export default class SmsApp extends App
         super();
         this.store =
         {
-            locale:  Utils.getLocale(),
-            smsCode: '',
-            message: '',
+            locale:          Utils.getLocale(),
             onSmsCodeChange: this.onSmsCodeChange.bind(this),
             onSend:          this.onSend.         bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init() : void
+    {
+        const {store} = this;
+        store.smsCode =   '';
+        store.message = '';
     }
 
     /**

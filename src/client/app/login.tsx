@@ -15,7 +15,7 @@ const slog =     window['slog'];
 const ssrStore = window['ssrStore'];
 
 /**
- * View
+ * login app
  */
 export default class LoginApp extends App
 {
@@ -30,10 +30,9 @@ export default class LoginApp extends App
         super();
         this.store =
         {
-            locale:   Utils.getLocale(),
-            email:    '',
-            password: '',
-            message:  ssrStore.message,
+            locale:           Utils.getLocale(),
+            email:            '',
+            password:         '',
             onTwitter:        this.onTwitter.       bind(this),
             onFacebook:       this.onFacebook.      bind(this),
             onGoogle:         this.onGoogle.        bind(this),
@@ -51,6 +50,11 @@ export default class LoginApp extends App
     init() : void
     {
         document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+
+        const {store} = this;
+        store.message =  ssrStore.message;
+
+        ssrStore.message = '';
     }
 
     /**

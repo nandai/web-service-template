@@ -12,7 +12,9 @@ export default class Main extends React.Component<{}, {}>
     {
         return (
             <div className="wst-main" tabIndex={0}>
-                {this.props.children}
+                <div className="wst-contents">
+                    {this.props.children}
+                </div>
             </div>
         );
     }

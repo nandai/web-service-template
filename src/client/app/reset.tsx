@@ -14,7 +14,7 @@ const slog =     window['slog'];
 const ssrStore = window['ssrStore'];
 
 /**
- * View
+ * reset app
  */
 export default class ResetApp extends App
 {

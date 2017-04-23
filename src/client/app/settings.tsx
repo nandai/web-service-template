@@ -14,7 +14,7 @@ const slog = window['slog'];
 const ssrStore : Store = window['ssrStore'];
 
 /**
- * View
+ * settings app
  */
 export default class SettingsApp extends App
 {
@@ -31,7 +31,6 @@ export default class SettingsApp extends App
         {
             locale:     Utils.getLocale(),
             account:    ssrStore.account,
-            message:    ssrStore.message,
             onTwitter:  this.onTwitter. bind(this),
             onFacebook: this.onFacebook.bind(this),
             onGoogle:   this.onGoogle.  bind(this),
@@ -41,6 +40,17 @@ export default class SettingsApp extends App
             onLeave:    this.onLeave.   bind(this),
             onBack:     this.onBack.    bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init() : void
+    {
+        const {store} = this;
+        store.message = ssrStore.message;
+
+        ssrStore.message = '';
     }
 
     /**

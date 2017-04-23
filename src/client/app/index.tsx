@@ -13,6 +13,9 @@ import Utils         from '../libs/utils';
 const slog = window['slog'];
 const ssrStore : Store = window['ssrStore'];
 
+/**
+ * top App
+ */
 export default class TopApp extends App
 {
     private static CLS_NAME = 'TopApp';

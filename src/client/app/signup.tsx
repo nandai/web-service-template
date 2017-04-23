@@ -15,7 +15,7 @@ const slog = window['slog'];
 const ssrStore : Store = window['ssrStore'];
 
 /**
- * View
+ * signup app
  */
 export default class SignupApp extends App
 {
@@ -30,10 +30,7 @@ export default class SignupApp extends App
         super();
         this.store =
         {
-            locale:   Utils.getLocale(),
-            email:    '',
-            password: '',
-            message:  ssrStore.message,
+            locale:           Utils.getLocale(),
             onTwitter:        this.onTwitter.       bind(this),
             onFacebook:       this.onFacebook.      bind(this),
             onGoogle:         this.onGoogle.        bind(this),
@@ -42,6 +39,19 @@ export default class SignupApp extends App
             onSignup:         this.onSignup.        bind(this),
             onTop:            this.onTop.           bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init() : void
+    {
+        const {store} = this;
+        store.email =    '',
+        store.password = '',
+        store.message =  ssrStore.message;
+
+        ssrStore.message = '';
     }
 
     /**

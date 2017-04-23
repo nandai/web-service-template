@@ -13,7 +13,7 @@ const slog = window['slog'];
 const ssrStore : Store = window['ssrStore'];
 
 /**
- * View
+ * settings account email app
  */
 export default class SettingsAccountEmailApp extends App
 {
@@ -28,12 +28,20 @@ export default class SettingsAccountEmailApp extends App
         super();
         this.store =
         {
-            locale:   Utils.getLocale(),
-            account:  ssrStore.account,
-            message:  '',
+            locale:          Utils.getLocale(),
+            account:         ssrStore.account,
             onEmailChange:   this.onEmailChange.bind(this),
             onChange:        this.onChange.     bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init() : void
+    {
+        const {store} = this;
+        store.message = '';
     }
 
     /**

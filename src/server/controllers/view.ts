@@ -7,6 +7,7 @@ import express = require('express');
 
 export function view(title : string, js : string, contents = '', store = {}) : string
 {
+    // NOTE:<body ontouchstart="">はスマホでタッチした時に:activeを効かせるための設定
     const view = `
 <!DOCTYPE html>
 <html>
@@ -28,7 +29,7 @@ export function view(title : string, js : string, contents = '', store = {}) : s
     <script src="/js/${js}"></script>
 </head>
 
-<body>
+<body ontouchstart="">
     <div id="root">${contents}</div>
 </body>
 </html>

@@ -7,7 +7,7 @@ export interface Store
 {
     locale      : string;
     account     : Response.Account;
-    message     : string;
+    message?    : string;
     onTwitter?  : () => void;
     onFacebook? : () => void;
     onGoogle?   : () => void;

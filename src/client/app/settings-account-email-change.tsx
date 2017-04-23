@@ -13,7 +13,7 @@ import Utils                          from '../libs/utils';
 const slog = window['slog'];
 
 /**
- * View
+ * settings account email change app
  */
 export default class SettingsAccountEmailChangeApp extends App
 {
