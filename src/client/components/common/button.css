@@ -18,7 +18,7 @@ button
     cursor: pointer;
     outline: none;
     transition: all .3s;
-    -webkit-user-select: none;
+    user-select: none;
 }
 
 button:hover
