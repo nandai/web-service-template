@@ -160,3 +160,6 @@ if (window.location.hash === '#_=_')
     // Facebookのコールバックでなぜかゴミが付いてくるので取り除く。
     window.history.pushState('', document.title, window.location.pathname);
 }
+
+if (location.protocol === 'http:' && location.hostname === 'localhost')
+    console.warn('ブラウザによっては http://localhost ではcookieが保存されません。IPを指定するか、またはhostsにlocalhost.comのようなドメインを定義してください。');
