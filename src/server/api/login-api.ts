@@ -56,12 +56,14 @@ export default class LoginApi extends ProviderApi
                     break;
                 }
 
-                const email : string = param.email;
+                const email =    <string>param.email;
+                const password = <string>param.password;
+
                 const account = await AccountModel.findByProviderId('email', email);
                 let hashPassword : string;
 
                 if (account)
-                    hashPassword = Utils.getHashPassword(email, param.password, Config.PASSWORD_SALT);
+                    hashPassword = Utils.getHashPassword(email, password, Config.PASSWORD_SALT);
 
                 if (account === null || account.password !== hashPassword || account.signup_id)
                 {
@@ -110,12 +112,13 @@ export default class LoginApi extends ProviderApi
                     break;
                 }
 
-                const smsId : string = param.smsId;
-                const account = await AccountModel.findBySmsId(smsId);
+                const smsId =   <string>param.smsId;
+                const smsCode = <string>param.smsCode;
 
+                const account = await AccountModel.findBySmsId(smsId);
                 if (account)
                 {
-                    if (account.sms_code !== param.smsCode)
+                    if (account.sms_code !== smsCode)
                     {
                         res.ext.error(1, R.text(R.MISMATCH_SMS_CODE, locale));
                         break;

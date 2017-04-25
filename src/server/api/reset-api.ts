@@ -42,7 +42,9 @@ export default class ResetApi
                     break;
                 }
 
-                const account = await AccountModel.findByProviderId('email', param.email);
+                const email = <string>param.email;
+
+                const account = await AccountModel.findByProviderId('email', email);
                 if (account === null || account.signup_id)
                 {
                     res.ext.error(1, R.text(R.INVALID_EMAIL, locale));
@@ -90,30 +92,32 @@ export default class ResetApi
                     confirm:  ['string', null, true]
                 }
 
+                const resetId =  <string>param.resetId;
+                const password = <string>param.password;
+                const confirm =  <string>param.confirm;
+
                 if (Utils.existsParameters(param, condition) === false)
                 {
                     res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
                     break;
                 }
 
-                if (Utils.validatePassword(param.password) === false)
+                if (Utils.validatePassword(password) === false)
                 {
                     res.ext.error(1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
                 }
 
-                if (param.password !== param.confirm)
+                if (param.password !== confirm)
                 {
                     res.ext.error(1, R.text(R.MISMATCH_PASSWORD, locale));
                     break;
                 }
 
-                const resetId = param.resetId;
                 const account = await AccountModel.findByResetId(resetId);
-
                 if (account)
                 {
-                    account.password = Utils.getHashPassword(account.email, param.password, Config.PASSWORD_SALT);
+                    account.password = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
                     account.reset_id = null;
                     await AccountModel.update(account);
 

@@ -78,8 +78,9 @@ export default class ProviderApi
                 break;
             }
 
-            const accessToken       : string = param.accessToken;
-            const accessTokenSecret : string = param.accessTokenSecret;
+            const accessToken  =      <string>param.accessToken;
+            const accessTokenSecret = <string>param.accessTokenSecret;
+
             process.nextTick(() =>
             {
                 Twitter.verify(accessToken, accessTokenSecret, undefined, (err, user) =>
@@ -120,7 +121,7 @@ export default class ProviderApi
                 break;
             }
 
-            const accessToken : string = param.accessToken;
+            const accessToken = <string>param.accessToken;
             process.nextTick(() =>
             {
                 Facebook.verify(accessToken, undefined, undefined, (err, user) =>
@@ -161,7 +162,7 @@ export default class ProviderApi
                 break;
             }
 
-            const accessToken : string = param.accessToken;
+            const accessToken = <string>param.accessToken;
             process.nextTick(() =>
             {
                 Google.verify(accessToken, undefined, undefined, (err, user) =>

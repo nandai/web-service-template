@@ -5,82 +5,82 @@ export namespace Request
 {
     export interface SignupEmail
     {
-        email    : any;
-        password : any;
+        email    : string | any[];
+        password : string | any[];
     }
 
     export interface ConfirmSignupEmail
     {
-        signupId : any;
-        password : any;
+        signupId : string | any[];
+        password : string | any[];
     }
 
     export interface LoginEmail
     {
-        email    : any;
-        password : any;
+        email    : string | any[];
+        password : string | any[];
     }
 
     export interface LoginSms
     {
-        smsId   : any;
-        smsCode : any;
+        smsId   : string | any[];
+        smsCode : string | any[];
     }
 
     export interface UnlinkProvider
     {
-        provider : any;
+        provider : string | any[];
     }
 
     export interface Twitter
     {
-        accessToken       : any;
-        accessTokenSecret : any;
+        accessToken       : string | any[];
+        accessTokenSecret : string | any[];
     }
 
     export interface Facebook
     {
-        accessToken : any;
+        accessToken : string | any[];
     }
 
     export interface Google
     {
-        accessToken : any;
+        accessToken : string | any[];
     }
 
     export interface RequestResetPassword
     {
-        email : any;
+        email : string | any[];
     }
 
     export interface ResetPassword
     {
-        resetId  : any;
-        password : any;
-        confirm  : any;
+        resetId  : string | any[];
+        password : string | any[];
+        confirm  : string | any[];
     }
 
     export interface SetAccount
     {
-        name    : any;
-        phoneNo : any;
+        name    : string | any[];
+        phoneNo : string | any[];
     }
 
     export interface RequestChangeEmail
     {
-        email : any;
+        email : string | any[];
     }
 
     export interface ChangeEmail
     {
-        changeId : any;
-        password : any;
+        changeId : string | any[];
+        password : string | any[];
     }
 
     export interface ChangePassword
     {
-        oldPassword : any;
-        newPassword : any;
-        confirm     : any;
+        oldPassword : string | any[];
+        newPassword : string | any[];
+        confirm     : string | any[];
     }
 }

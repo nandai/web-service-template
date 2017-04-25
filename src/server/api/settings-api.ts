@@ -96,12 +96,15 @@ export default class SettingsApi
                     break;
                 }
 
+                const name =    <string>param.name;
+                const phoneNo = <string>param.phoneNo;
+
                 // アカウント名チェック
-                const len = param.name.length;
+                const len = name.length;
 
                 if (len < 1 || 20 < len)
                 {
-                res.ext.error(1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
+                    res.ext.error(1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
                 }
 
@@ -109,8 +112,8 @@ export default class SettingsApi
                 const session : Session = req.ext.session;
                 const account = await AccountModel.find(session.account_id);
 
-                account.name =      param.name;
-                account.phone_no = (param.phoneNo && param.phoneNo.length > 0 ? param.phoneNo : null);
+                account.name = name;
+                account.phone_no = (phoneNo && phoneNo.length > 0 ? phoneNo : null);
                 await AccountModel.update(account);
 
                 const data : Response.SetAccount =
@@ -151,7 +154,7 @@ export default class SettingsApi
                 }
 
                 // プロバイダ名チェック
-                const provider : string = param.provider;
+                const provider = <string>param.provider;
                 log.d(`${provider}`);
 
                 if (provider !== 'twitter'
@@ -210,8 +213,9 @@ export default class SettingsApi
                     break;
                 }
 
+                const changeEmail = <string>param.email;
+
                 // メールアドレスの重複チェック
-                const changeEmail : string = param.email;
                 const alreadyExistsAccount = await AccountModel.findByProviderId('email', changeEmail);
 
                 if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
@@ -321,9 +325,10 @@ export default class SettingsApi
                     break;
                 }
 
-                const changeId = param.changeId;
-                const account = await AccountModel.findByChangeId(changeId);
+                const changeId = <string>param.changeId;
+                const password = <string>param.password;
 
+                const account = await AccountModel.findByChangeId(changeId);
                 if (account)
                 {
                     // メールアドレス変更メールを送信してから確認までの間に同じメールアドレスが本登録される可能性があるため、
@@ -338,7 +343,6 @@ export default class SettingsApi
                     }
 
                     // パスワードチェック
-                    const password = param.password;
                     const hashPassword = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
 
                     if (hashPassword !== account.password)
@@ -401,12 +405,16 @@ export default class SettingsApi
                     break;
                 }
 
+                const oldPassword = <string>param.oldPassword;
+                const newPassword = <string>param.newPassword;
+                const confirm =     <string>param.confirm;
+
                 const session : Session = req.ext.session;
                 const account = await AccountModel.find(session.account_id);
 
                 if (account.password !== null || param.oldPassword !== '')
                 {
-                    const hashPassword = Utils.getHashPassword(account.email, param.oldPassword, Config.PASSWORD_SALT);
+                    const hashPassword = Utils.getHashPassword(account.email, oldPassword, Config.PASSWORD_SALT);
 
                     if (hashPassword !== account.password)
                     {
@@ -415,13 +423,13 @@ export default class SettingsApi
                     }
                 }
 
-                if (Utils.validatePassword(param.newPassword) === false)
+                if (Utils.validatePassword(newPassword) === false)
                 {
                     res.ext.error(1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
                 }
 
-                if (param.newPassword !== param.confirm)
+                if (param.newPassword !== confirm)
                 {
                     res.ext.error(1, R.text(R.MISMATCH_PASSWORD, locale));
                     break;

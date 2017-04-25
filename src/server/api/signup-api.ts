@@ -52,16 +52,19 @@ export default class SignupApi extends ProviderApi
                 break;
             }
 
-            if (Utils.validatePassword(param.password) === false)
+            const email =    <string>param.email;
+            const password = <string>param.password;
+
+            if (Utils.validatePassword(password) === false)
             {
                 res.ext.error(1, R.text(R.INVALID_EMAIL_AUTH, locale));
                 break;
             }
 
-            const hashPassword = Utils.getHashPassword(param.email, param.password, Config.PASSWORD_SALT);
+            const hashPassword = Utils.getHashPassword(email, password, Config.PASSWORD_SALT);
             process.nextTick(() =>
             {
-                Email.verify(param.email, hashPassword, (err, user) =>
+                Email.verify(email, hashPassword, (err, user) =>
                 {
                     req.ext.command = 'signup';
                     req.user = user;
@@ -98,9 +101,10 @@ export default class SignupApi extends ProviderApi
                     break;
                 }
 
-                const signupId : string = param.signupId;
-                const account = await AccountModel.findBySignupId(signupId);
+                const signupId = <string>param.signupId;
+                const password = <string>param.password;
 
+                const account = await AccountModel.findBySignupId(signupId);
                 if (account === null)
                 {
                     // サインアップの確認画面でサインアップを完了させた後、再度サインアップを完了させようとした場合にここに到達する想定。
@@ -110,7 +114,6 @@ export default class SignupApi extends ProviderApi
                     break;
                 }
 
-                const password : string = param.password;
                 const hashPassword = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
 
                 if (account.password !== hashPassword)
