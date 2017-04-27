@@ -195,19 +195,26 @@ export default class SettingsController
         try
         {
             const data = await SettingsApi.getAccount(req);
-            const store : SettingsAccountPasswordStore =
+            if (data.account.email)
             {
-                locale:      locale,
-                account:     data.account,
-                oldPassword: '',
-                newPassword: '',
-                confirm:     '',
-                message:     ''
-            };
+                const store : SettingsAccountPasswordStore =
+                {
+                    locale:      locale,
+                    account:     data.account,
+                    oldPassword: '',
+                    newPassword: '',
+                    confirm:     '',
+                    message:     ''
+                };
 
-            const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_PASSWORD, locale);
-            const contents = ReactDOM.renderToString(<SettingsAccountPasswordView store={store} />);
-            res.send(view(title, 'wst.js', contents, store));
+                const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_PASSWORD, locale);
+                const contents = ReactDOM.renderToString(<SettingsAccountPasswordView store={store} />);
+                res.send(view(title, 'wst.js', contents, store));
+            }
+            else
+            {
+                notFound(req, res);
+            }
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};

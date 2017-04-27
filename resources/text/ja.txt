@@ -8,6 +8,7 @@
     "badRequest": "リクエストが正しくありません。",
     "cannotEmptyEmail": "メールアドレスを未設定にできません。",
     "cannotLink": "紐づけできません。",
+    "cannotSetPassword": "パスワードを設定できません。",
     "cannotSignup": "ログインしているので登録できません。",
     "cannotUnlink": "紐づけを解除できません。",
     "changeMailSended": "メールアドレス変更手続きのメールを送信しました。",

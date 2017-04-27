@@ -27,6 +27,7 @@ export default class R
     static BAD_REQUEST = 'badRequest';
     static CANNOT_EMPTY_EMAIL = 'cannotEmptyEmail';
     static CANNOT_LINK = 'cannotLink';
+    static CANNOT_SET_PASSWORD = 'cannotSetPassword';
     static CANNOT_SIGNUP = 'cannotSignup';
     static CANNOT_UNLINK = 'cannotUnlink';
     static CHANGE_MAIL_SENDED = 'changeMailSended';

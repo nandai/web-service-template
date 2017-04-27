@@ -412,6 +412,12 @@ export default class SettingsApi
                 const session : Session = req.ext.session;
                 const account = await AccountModel.find(session.account_id);
 
+                if (account.email === null)
+                {
+                    res.ext.error(1, R.text(R.CANNOT_SET_PASSWORD, locale));
+                    break;
+                }
+
                 if (account.password !== null || param.oldPassword !== '')
                 {
                     const hashPassword = Utils.getHashPassword(account.email, oldPassword, Config.PASSWORD_SALT);
