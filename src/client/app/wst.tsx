@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', () =>
 if (window.location.hash === '#_=_')
 {
     // Facebookのコールバックでなぜかゴミが付いてくるので取り除く。
-    window.history.pushState('', document.title, window.location.pathname);
+    History.replaceState(window.location.pathname);
 }
 
 if (location.protocol === 'http:' && location.hostname === 'localhost')

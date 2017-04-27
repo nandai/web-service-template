@@ -117,15 +117,15 @@ export default class SettingsApi
                 await AccountModel.update(account);
 
                 const data : Response.SetAccount =
-                    {
-                        status:  1,
-                        message: R.text(R.SETTINGS_COMPLETED, locale)
-                    };
+                {
+                    status:  1,
+                    message: R.text(R.SETTINGS_COMPLETED, locale)
+                };
                 res.json(data);
-                }
-                while (false);
-                log.stepOut();
             }
+            while (false);
+            log.stepOut();
+        }
         catch (err) {Utils.internalServerError(err, res, log)};
     }
 

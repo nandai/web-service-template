@@ -11,7 +11,7 @@ const runSequence = require('run-sequence');
 const postcss =     require('gulp-postcss');
 const cssImport =   require('postcss-import');
 const cssNext =     require('postcss-cssnext');
-
+const cssMixins =   require('postcss-mixins');
 const tsOptions =
 {
     target: 'es6',
@@ -69,7 +69,7 @@ gulp.task('css', function()
 {
     return gulp
       .src('./src/client/css/wst.css')
-      .pipe(postcss([cssImport, cssNext]))
+      .pipe(postcss([cssImport, cssNext, cssMixins]))
       .pipe(gulp.dest('./www/static/components'));
 });
 

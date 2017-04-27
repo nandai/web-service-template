@@ -11,7 +11,7 @@ export default class NotFoundView extends React.Component<{}, {}>
     render() : JSX.Element
     {
         return (
-            <div className="wst-center">
+            <div className="not-found-view">
                 404 not found.
             </div>
         );

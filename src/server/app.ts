@@ -221,9 +221,9 @@ class Initializer
         this.app.put(   '/api/settings/account/password',     Access.auth, SettingsApi.onChangePassword);
         this.app.post(  '/api/logout',                        Access.auth, LogoutApi.  onLogout);
 
-        this.app.get( '/auth/twitter/callback',  Twitter. customCallback, Twitter. callback);
-        this.app.get( '/auth/facebook/callback', Facebook.customCallback, Facebook.callback);
-        this.app.get( '/auth/google/callback',   Google.  customCallback, Google.  callback);
+        this.app.get('/auth/twitter/callback',  Twitter. customCallback, Twitter. callback);
+        this.app.get('/auth/facebook/callback', Facebook.customCallback, Facebook.callback);
+        this.app.get('/auth/google/callback',   Google.  customCallback, Google.  callback);
 
         this.app.use(Access.notFound);
     }

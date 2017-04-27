@@ -24,8 +24,8 @@ export default class TopView extends React.Component<TopViewProps, {}>
 
         return (
             <Main>
-                <Button onClick={store.onSettings}>{R.text(R.GO_SETTINGS, locale)}</Button>
-                <Button onClick={store.onLogout}  >{R.text(R.LOGOUT,      locale)}</Button>
+                <Button onClick={store.onSettings} url="/settings">{R.text(R.GO_SETTINGS, locale)}</Button>
+                <Button onClick={store.onLogout}                  >{R.text(R.LOGOUT,      locale)}</Button>
                 <span>{store.message}</span>
             </Main>
         );

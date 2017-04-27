@@ -1,14 +1,23 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-button
+:root
 {
+    --wst-button-height:       48px;
+    --wst-button-color:        rgb(49, 182, 162);
+    --wst-button-hover-color:  rgb(59, 192, 172);
+    --wst-button-active-color: rgb(81, 214, 194);
+}
+
+.wst-button
+{
+    position: relative;
     display: block;
     width: 100%;
-    height: 48px;
+    height: var(--wst-button-height);
     color: white;
-    background-color: rgb(49, 182, 162);
-    font-family: var(--font-family);
+    background-color: var(--wst-button-color);
+    font-family:      var(--font-family);
     font-size: 15px;
     font-weight: bold;
     margin: 8px 0 8px 0;
@@ -16,25 +25,39 @@ button
     border:  0;
     border-radius: 3px;
     cursor: pointer;
-    outline: none;
     transition: all .3s;
     user-select: none;
-}
+    outline: none;
 
-button:hover
-{
-    background-color: rgb(59, 192, 172);
-}
+    &:hover
+    {
+        background-color: var(--wst-button-hover-color);
+    }
 
-button:active
-{
-    background-color: rgb(81, 214, 194);
-}
+    &:active
+    {
+        background-color: var(--wst-button-active-color);
+    }
 
-button[disabled],
-button[disabled]:hover,
-button[disabled]:active
-{
-    color: lightgray;
-    background-color: rgb(49, 182, 162);
+    &[disabled],
+    &[disabled]:hover,
+    &[disabled]:active
+    {
+        cursor: not-allowed;
+        color: lightgray;
+        background-color: var(--wst-button-color);
+    }
+
+    & > a
+    {
+        color: white;
+        width: 100%;
+        line-height: 1rem;
+        padding: calc((var(--wst-button-height) - 1rem) / 2) 0;
+        text-align: center;
+        text-decoration: none;
+        position: absolute;
+        left: 0;
+        top:  0;
+    }
 }
