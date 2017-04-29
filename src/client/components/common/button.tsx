@@ -22,6 +22,7 @@ export default class Button extends React.Component<ButtonProps, {}>
     {
         super(props);
         this.onClick = this.onClick.bind(this);
+        this.onKeyUp = this.onKeyUp.bind(this);
     }
 
     /**
@@ -36,7 +37,7 @@ export default class Button extends React.Component<ButtonProps, {}>
         if (disabled === false && url)
         {
             el = (
-                <div className="wst-button" tabIndex={0}>
+                <div className="wst-button" tabIndex={0} onKeyUp={this.onKeyUp}>
                     <a tabIndex = {-1}
                        href =     {url}
                        onClick =  {onClick}>
@@ -49,6 +50,7 @@ export default class Button extends React.Component<ButtonProps, {}>
         {
             el = (
                 <button className = "wst-button"
+                        type =      "button"
                         disabled =  {disabled}
                         onClick  =  {onClick}>
                     {children}
@@ -66,5 +68,14 @@ export default class Button extends React.Component<ButtonProps, {}>
     {
         e.preventDefault();
         this.props.onClick();
+    }
+
+    /**
+     * keyup event
+     */
+    private onKeyUp(e : React.KeyboardEvent<Element>)
+    {
+        if (e.keyCode === 0x20 || e.keyCode === 0x0D)
+            this.props.onClick();
     }
 }
