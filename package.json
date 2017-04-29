@@ -60,7 +60,8 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node build/server/app"
   },
   "author": "",
   "license": "ISC",
