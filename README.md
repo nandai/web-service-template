@@ -37,4 +37,4 @@ SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し
 ```
 
 # 起動方法
-npm run start
+npm start

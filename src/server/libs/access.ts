@@ -4,7 +4,7 @@
 import Cookie                  from './cookie';
 import R                       from './r';
 import Utils                   from './utils';
-import {notFound}              from '../controllers/view';
+import {forbidden, notFound}   from '../controllers/view';
 import SessionModel, {Session} from '../models/session-model';
 import CommonUtils             from 'libs/utils';
 
@@ -224,7 +224,7 @@ export default class Access
                 }
                 else
                 {
-                    res.redirect('/');
+                    forbidden(req, res);
                 }
                 log.stepOut();
             }

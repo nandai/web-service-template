@@ -38,6 +38,13 @@ export function view(title : string, js : string, contents = '', store = {}) : s
     return view;
 }
 
+export function forbidden(req : express.Request, res : express.Response) : void
+{
+    const locale = req.ext.locale;
+    const title = ClientR.text(ClientR.FORBIDDEN, locale);
+    res.status(403).send(view(title, 'wst.js'));
+}
+
 export function notFound(req : express.Request, res : express.Response) : void
 {
     const locale = req.ext.locale;

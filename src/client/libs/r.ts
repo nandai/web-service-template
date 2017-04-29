@@ -19,6 +19,7 @@ export default class R
             'deleteAccount':              'Delete account',
             'email':                      'Email',
             'errorNetwork':               'Failed to connect to network',
+            'forbidden':                  'FORBIDDEN',
             'goAccountSettings':          'Go account settings',
             'goEmailSettings':            'Go email settings',
             'goForget':                   'Forget password',
@@ -66,6 +67,7 @@ export default class R
             'deleteAccount':              'アカウントを削除する',
             'email':                      'メールアドレス',
             'errorNetwork':               '通信に失敗しました。インターネットに接続されているか確認してください。',
+            'forbidden':                  'FORBIDDEN',
             'goAccountSettings':          'アカウント設定',
             'goEmailSettings':            'メールアドレスを設定する',
             'goForget':                   'パスワードを忘れた',
@@ -112,6 +114,7 @@ export default class R
     static DELETE_ACCOUNT =                'deleteAccount';
     static EMAIL =                         'email';
     static ERROR_NETWORK =                 'errorNetwork';
+    static FORBIDDEN =                     'forbidden';
     static GO_ACCOUNT_SETTINGS =           'goAccountSettings';
     static GO_EMAIL_SETTINGS =             'goEmailSettings';
     static GO_FORGET =                     'goForget';

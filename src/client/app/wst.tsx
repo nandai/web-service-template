@@ -12,12 +12,13 @@ import SignupApp                     from './signup';
 import SignupConfirmApp              from './signup-confirm';
 import ForgetApp                     from './forget';
 import ResetApp                      from './reset';
-import NotFoundApp                   from './not-found';
 import SettingsApp                   from './settings';
 import SettingsAccountApp            from './settings-account';
 import SettingsAccountEmailApp       from './settings-account-email';
 import SettingsAccountEmailChangeApp from './settings-account-email-change';
 import SettingsAccountPasswordApp    from './settings-account-password';
+import ForbiddenApp                  from './forbidden';
+import NotFoundApp                   from './not-found';
 import SettingsApi                   from '../api/settings-api';
 import Root                          from '../components/root';
 import History                       from '../libs/history';
@@ -55,7 +56,8 @@ class WstApp
             {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), auth:true},
             {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), query:true},
             {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), auth:true},
-            {url:'',                               app:new NotFoundApp(),                   title:R.text(R.NOT_FOUND,                      locale)},
+            {url:'403',                            app:new ForbiddenApp(),                  title:R.text(R.FORBIDDEN,                      locale)},
+            {url:'404',                            app:new NotFoundApp(),                   title:R.text(R.NOT_FOUND,                      locale)},
         ];
 
         const render = this.render.bind(this);
@@ -159,8 +161,10 @@ interface Route
 window.addEventListener('DOMContentLoaded', () =>
 {
     const locale = Utils.getLocale();
-    const notFoundTitle = R.text(R.NOT_FOUND, locale);
-    const url = (document.title !== notFoundTitle ? location.pathname : '');
+    let url = location.pathname;
+
+    if (document.title === R.text(R.FORBIDDEN, locale)) url = '403';
+    if (document.title === R.text(R.NOT_FOUND, locale)) url = '404';
 
     const app = new WstApp();
     app.init();
