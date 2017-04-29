@@ -36,9 +36,10 @@ export default class Button extends React.Component<ButtonProps, {}>
         if (disabled === false && url)
         {
             el = (
-                <div className="wst-button">
-                    <a href =    {url}
-                       onClick = {onClick}>
+                <div className="wst-button" tabIndex={0}>
+                    <a tabIndex = {-1}
+                       href =     {url}
+                       onClick =  {onClick}>
                         {children}
                     </a>
                 </div>

@@ -29,7 +29,8 @@
     user-select: none;
     outline: none;
 
-    &:hover
+    &:hover,
+    &:focus
     {
         background-color: var(--wst-button-hover-color);
     }
@@ -59,5 +60,6 @@
         position: absolute;
         left: 0;
         top:  0;
+        outline: none;
     }
 }
