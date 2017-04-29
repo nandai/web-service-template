@@ -1,14 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom';
-import {App}         from './app';
-import SettingsApi   from '../api/settings-api';
-import SettingsView  from '../components/views/settings-view/settings-view';
-import {Store}       from '../components/views/settings-view/store';
-import History       from '../libs/history';
-import Utils         from '../libs/utils';
+import * as React   from 'react';
+import {App}        from './app';
+import SettingsApi  from '../api/settings-api';
+import SettingsView from '../components/views/settings-view/settings-view';
+import {Store}      from '../components/views/settings-view/store';
+import History      from '../libs/history';
+import Utils        from '../libs/utils';
 
 const slog = window['slog'];
 const ssrStore : Store = window['ssrStore'];
@@ -54,13 +53,11 @@ export default class SettingsApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <SettingsView store={this.store} />,
-            document.getElementById('root'));
+        return <SettingsView store={this.store} />;
     }
 
     /**

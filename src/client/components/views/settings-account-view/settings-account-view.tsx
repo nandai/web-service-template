@@ -4,7 +4,6 @@
 import * as React from 'react';
 import Button     from 'client/components/common/button';
 import Input      from 'client/components/common/input';
-import Main       from 'client/components/designated/main';
 import R          from 'client/libs/r';
 import {Store}    from './store';
 
@@ -24,12 +23,12 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
         const {locale, account} = store;
 
         return (
-            <Main>
+            <div>
                 <Input type="text"   placeholder={R.text(R.ACCOUNT_NAME, locale)} value={account.name}    onChange={store.onNameChange} />
                 <Input type="text"   placeholder={R.text(R.TEL,          locale)} value={account.phoneNo} onChange={store.onPhoneNoChange} />
                 <Button onClick={store.onChange}>{R.text(R.CHANGE,       locale)}</Button>
                 <span>{store.message}</span>
-            </Main>
+            </div>
         );
     }
 }

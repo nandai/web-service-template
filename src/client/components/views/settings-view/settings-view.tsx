@@ -3,7 +3,6 @@
  */
 import * as React from 'react';
 import Button     from 'client/components/common/button';
-import Main       from 'client/components/designated/main';
 import R          from 'client/libs/r';
 import Utils      from 'client/libs/utils';
 import {Store}    from './store';
@@ -30,7 +29,7 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
         const passwordDisabled = (account.email === null);
 
         return (
-            <Main>
+            <div>
                 <Button onClick={store.onTwitter} >{twitterLabel}</Button>
                 <Button onClick={store.onFacebook}>{facebookLabel}</Button>
                 <Button onClick={store.onGoogle}  >{googleLabel}</Button>
@@ -41,7 +40,7 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
                 <Button onClick={store.onBack}    >{R.text(R.BACK, locale)}</Button>
                 <p>{account.name}</p>
                 <p>{store.message}</p>
-            </Main>
+            </div>
         );
     }
 

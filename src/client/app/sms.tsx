@@ -1,15 +1,14 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom';
-import CommonUtils   from 'libs/utils';
-import {App}         from './app';
-import LoginApi      from '../api/login-api';
-import SmsView       from '../components/views/sms-view/sms-view';
-import {Store}       from '../components/views/sms-view/store';
-import History       from '../libs/history';
-import Utils         from '../libs/utils';
+import * as React  from 'react';
+import CommonUtils from 'libs/utils';
+import {App}       from './app';
+import LoginApi    from '../api/login-api';
+import SmsView     from '../components/views/sms-view/sms-view';
+import {Store}     from '../components/views/sms-view/store';
+import History     from '../libs/history';
+import Utils       from '../libs/utils';
 
 const slog = window['slog'];
 
@@ -46,13 +45,11 @@ export default class SmsApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <SmsView store={this.store} />,
-            document.getElementById('root'));
+        return <SmsView store={this.store} />;
     }
 
     /**

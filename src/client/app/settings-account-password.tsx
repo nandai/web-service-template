@@ -2,7 +2,6 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React                  from 'react';
-import * as ReactDOM               from 'react-dom';
 import {App}                       from './app';
 import SettingsApi                 from '../api/settings-api';
 import SettingsAccountPasswordView from '../components/views/settings-account-password-view/settings-account-password-view';
@@ -50,13 +49,11 @@ export default class SettingsAccountPasswordApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <SettingsAccountPasswordView store={this.store} />,
-            document.getElementById('root'));
+        return <SettingsAccountPasswordView store={this.store} />;
     }
 
     /**

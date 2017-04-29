@@ -2,7 +2,6 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React        from 'react';
-import * as ReactDOM     from 'react-dom';
 import {Request}         from 'libs/request';
 import CommonUtils       from 'libs/utils';
 import {App}             from './app';
@@ -39,13 +38,11 @@ export default class SignupConfirmApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <SignupConfirmView store={this.store} />,
-            document.getElementById('root'));
+        return <SignupConfirmView store={this.store} />;
     }
 
     /**

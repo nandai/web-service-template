@@ -1,6 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import * as React                    from 'react';
+import * as ReactDOM                 from 'react-dom';
+import {Response}                    from 'libs/response';
 import {App}                         from './app';
 import TopApp                        from './index';
 import LoginApp                      from './login';
@@ -16,10 +19,10 @@ import SettingsAccountEmailApp       from './settings-account-email';
 import SettingsAccountEmailChangeApp from './settings-account-email-change';
 import SettingsAccountPasswordApp    from './settings-account-password';
 import SettingsApi                   from '../api/settings-api';
+import Root                          from '../components/root';
 import History                       from '../libs/history';
 import R                             from '../libs/r';
 import Utils                         from '../libs/utils';
-import {Response}                    from 'libs/response';
 
 const ssrStore = window['ssrStore'];
 
@@ -55,6 +58,12 @@ class WstApp
             {url:'',                               app:new NotFoundApp(),                   title:R.text(R.NOT_FOUND,                      locale)},
         ];
 
+        const render = this.render.bind(this);
+        this.routes.forEach((route) =>
+        {
+            const store = route.app.render = render;
+        });
+
         this.setAccount(ssrStore.account);
 
         History.on('pushstate', this.onHistory.bind(this));
@@ -66,7 +75,9 @@ class WstApp
      */
     render() : void
     {
-        this.currentApp.render();
+        ReactDOM.render(
+            <Root>{this.currentApp.view()}</Root>,
+            document.getElementById('root'));
     }
 
     /**
@@ -96,7 +107,7 @@ class WstApp
             document.title =  route.title;
 
             this.currentApp.init();
-            this.currentApp.render();
+            this.render();
         }
     }
 

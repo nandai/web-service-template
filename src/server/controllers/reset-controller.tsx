@@ -6,6 +6,7 @@ import * as ReactDOM           from 'react-dom/server';
 import {view, notFound}        from './view';
 import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
+import Root                    from 'client/components/root';
 import ResetView               from 'client/components/views/reset-view/reset-view';
 import {Store}                 from 'client/components/views/reset-view/store';
 import ClientR                 from 'client/libs/r';
@@ -51,7 +52,7 @@ export default class ResetController
                 };
 
                 const title = ClientR.text(ClientR.RESET_PASSWORD, locale);
-                const contents = ReactDOM.renderToString(<ResetView store={store} />);
+                const contents = ReactDOM.renderToString(<Root><ResetView store={store} /></Root>);
                 res.send(view(title, 'wst.js', contents));
             }
             else

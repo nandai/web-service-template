@@ -8,6 +8,7 @@ import R                             from '../libs/r';
 import Utils                         from '../libs/utils';
 import SessionModel, {Session}       from '../models/session-model';
 import AccountModel, {Account}       from '../models/account-model';
+import Root                          from 'client/components/root';
 import SignupView                    from 'client/components/views/signup-view/signup-view';
 import {Store as SignupStore}        from 'client/components/views/signup-view/store';
 import SignupConfirmView             from 'client/components/views/signup-confirm-view/signup-confirm-view';
@@ -63,7 +64,7 @@ export default class SignupController
                 };
 
                 const title = ClientR.text(ClientR.SIGNUP, locale);
-                const contents = ReactDOM.renderToString(<SignupView store={store} />);
+                const contents = ReactDOM.renderToString(<Root><SignupView store={store} /></Root>);
                 res.send(view(title, 'wst.js', contents, {message}));
             }
             else
@@ -80,7 +81,7 @@ export default class SignupController
                     };
 
                     const title = ClientR.text(ClientR.SIGNUP_CONFIRM, locale);
-                    const contents = ReactDOM.renderToString(<SignupConfirmView store={store} />);
+                    const contents = ReactDOM.renderToString(<Root><SignupConfirmView store={store} /></Root>);
                     res.send(view(title, 'wst.js', contents));
                 }
                 else

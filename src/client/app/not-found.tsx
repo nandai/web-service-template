@@ -1,10 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom';
-import {App}         from './app';
-import NotFoundView  from '../components/views/not-found-view/not-found-view';
+import * as React   from 'react';
+import {App}        from './app';
+import NotFoundView from '../components/views/not-found-view/not-found-view';
 
 /**
  * not found app
@@ -12,12 +11,10 @@ import NotFoundView  from '../components/views/not-found-view/not-found-view';
 export default class NotFoundApp extends App
 {
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <NotFoundView />,
-            document.getElementById('root'));
+        return <NotFoundView />;
     }
 }

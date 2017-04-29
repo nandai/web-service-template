@@ -1,13 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom';
-import {App}         from './app';
-import ResetApi      from '../api/reset-api';
-import ForgetView    from '../components/views/forget-view/forget-view';
-import {Store}       from '../components/views/forget-view/store';
-import Utils         from '../libs/utils';
+import * as React from 'react';
+import {App}      from './app';
+import ResetApi   from '../api/reset-api';
+import ForgetView from '../components/views/forget-view/forget-view';
+import {Store}    from '../components/views/forget-view/store';
+import Utils      from '../libs/utils';
 
 const slog =  window['slog'];
 
@@ -44,13 +43,11 @@ export default class ForgetApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <ForgetView store={this.store} />,
-            document.getElementById('root'));
+        return <ForgetView store={this.store} />;
     }
 
     /**

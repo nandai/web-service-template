@@ -10,6 +10,7 @@ import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
+import Root                    from 'client/components/root';
 import LoginView               from 'client/components/views/login-view/login-view';
 import {Store as LoginStore}   from 'client/components/views/login-view/store';
 import TopView                 from 'client/components/views/top-view/top-view';
@@ -71,7 +72,7 @@ export default class TopController
                     };
 
                     const title = ClientR.text(ClientR.AUTH_SMS, locale);
-                    const contents = ReactDOM.renderToString(<SmsView store={store} />);
+                    const contents = ReactDOM.renderToString(<Root><SmsView store={store} /></Root>);
                     res.send(view(title, 'wst.js', contents));
                 }
                 else
@@ -92,7 +93,7 @@ export default class TopController
                 };
 
                 const title = ClientR.text(ClientR.LOGIN, locale);
-                const contents = ReactDOM.renderToString(<LoginView store={store} />);
+                const contents = ReactDOM.renderToString(<Root><LoginView store={store} /></Root>);
                 res.send(view(title, 'wst.js', contents, {message}));
             }
             else
@@ -108,7 +109,7 @@ export default class TopController
                 };
 
                 const title = ClientR.text(ClientR.TOP, locale);
-                const contents = ReactDOM.renderToString(<TopView store={store} />);
+                const contents = ReactDOM.renderToString(<Root><TopView store={store} /></Root>);
                 res.send(view(title, 'wst.js', contents, store));
             }
 

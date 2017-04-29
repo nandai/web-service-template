@@ -2,7 +2,6 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React          from 'react';
-import * as ReactDOM       from 'react-dom';
 import {App}               from './app';
 import SettingsApi         from '../api/settings-api';
 import SettingsAccountView from '../components/views/settings-account-view/settings-account-view';
@@ -38,13 +37,11 @@ export default class SettingsAccountApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <SettingsAccountView store={this.store} />,
-            document.getElementById('root'));
+        return <SettingsAccountView store={this.store} />;
     }
 
     /**

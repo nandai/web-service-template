@@ -4,6 +4,7 @@
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom/server';
 import {view}        from './view';
+import Root          from 'client/components/root';
 import ForgetView    from 'client/components/views/forget-view/forget-view';
 import {Store}       from 'client/components/views/forget-view/store';
 import ClientR       from 'client/libs/r';
@@ -37,7 +38,7 @@ export default class ForgetController
         };
 
         const title = ClientR.text(ClientR.GO_FORGET, locale);
-        const contents = ReactDOM.renderToString(<ForgetView store={store} />);
+        const contents = ReactDOM.renderToString(<Root><ForgetView store={store} /></Root>);
         res.send(view(title, 'wst.js', contents));
         log.stepOut();
     }

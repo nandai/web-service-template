@@ -4,7 +4,6 @@
 import * as React from 'react';
 import Button     from 'client/components/common/button';
 import Input      from 'client/components/common/input';
-import Main       from 'client/components/designated/main';
 import R          from 'client/libs/r';
 import {Store}    from './store';
 
@@ -25,11 +24,11 @@ export default class SettingsAccountEmailView extends React.Component<SettingsAc
         const {locale} = store;
 
         return (
-            <Main>
+            <div>
                 <Input type="email"  placeholder={R.text(R.EMAIL,  locale)} value={account.email} onChange={store.onEmailChange} />
                 <Button onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
                 <span>{store.message}</span>
-            </Main>
+            </div>
         );
     }
 }

@@ -1,15 +1,14 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom';
-import {Request}     from 'libs/request';
-import {App}         from './app';
-import SignupApi     from '../api/signup-api';
-import SignupView    from '../components/views/signup-view/signup-view';
-import {Store}       from '../components/views/signup-view/store';
-import History       from '../libs/history';
-import Utils         from '../libs/utils';
+import * as React from 'react';
+import {Request}  from 'libs/request';
+import {App}      from './app';
+import SignupApi  from '../api/signup-api';
+import SignupView from '../components/views/signup-view/signup-view';
+import {Store}    from '../components/views/signup-view/store';
+import History    from '../libs/history';
+import Utils      from '../libs/utils';
 
 const slog = window['slog'];
 const ssrStore : Store = window['ssrStore'];
@@ -55,13 +54,11 @@ export default class SignupApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <SignupView store={this.store} />,
-            document.getElementById('root'));
+        return <SignupView store={this.store} />;
     }
 
     /**

@@ -1,14 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom';
-import {App}         from './app';
-import LogoutApi     from '../api/logout-api';
-import {Store}       from '../components/views/top-view/store';
-import TopView       from '../components/views/top-view/top-view';
-import History       from '../libs/history';
-import Utils         from '../libs/utils';
+import * as React from 'react';
+import {App}      from './app';
+import LogoutApi  from '../api/logout-api';
+import {Store}    from '../components/views/top-view/store';
+import TopView    from '../components/views/top-view/top-view';
+import History    from '../libs/history';
+import Utils      from '../libs/utils';
 
 const slog = window['slog'];
 const ssrStore : Store = window['ssrStore'];
@@ -38,13 +37,11 @@ export default class TopApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <TopView store={this.store} />,
-            document.getElementById('root'));
+        return <TopView store={this.store} />;
     }
 
     /**

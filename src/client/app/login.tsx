@@ -1,15 +1,14 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom';
-import {Request}     from 'libs/request';
-import {App}         from './app';
-import LoginApi      from '../api/login-api';
-import LoginView     from '../components/views/login-view/login-view';
-import {Store}       from '../components/views/login-view/store';
-import History       from '../libs/history';
-import Utils         from '../libs/utils';
+import * as React from 'react';
+import {Request}  from 'libs/request';
+import {App}      from './app';
+import LoginApi   from '../api/login-api';
+import LoginView  from '../components/views/login-view/login-view';
+import {Store}    from '../components/views/login-view/store';
+import History    from '../libs/history';
+import Utils      from '../libs/utils';
 
 const slog =     window['slog'];
 const ssrStore = window['ssrStore'];
@@ -58,13 +57,11 @@ export default class LoginApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <LoginView store={this.store} />,
-            document.getElementById('root'));
+        return <LoginView store={this.store} />;
     }
 
     /**

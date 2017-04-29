@@ -1,14 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom';
-import CommonUtils   from 'libs/utils';
-import {App}         from './app';
-import ResetApi      from '../api/reset-api';
-import ResetView     from '../components/views/reset-view/reset-view';
-import {Store}       from '../components/views/reset-view/store';
-import Utils         from '../libs/utils';
+import * as React  from 'react';
+import CommonUtils from 'libs/utils';
+import {App}       from './app';
+import ResetApi    from '../api/reset-api';
+import ResetView   from '../components/views/reset-view/reset-view';
+import {Store}     from '../components/views/reset-view/store';
+import Utils       from '../libs/utils';
 
 const slog =     window['slog'];
 const ssrStore = window['ssrStore'];
@@ -40,13 +39,11 @@ export default class ResetApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <ResetView store={this.store} />,
-            document.getElementById('root'));
+        return <ResetView store={this.store} />;
     }
 
     /**

@@ -2,7 +2,6 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React                     from 'react';
-import * as ReactDOM                  from 'react-dom';
 import CommonUtils                    from 'libs/utils';
 import {App}                          from './app';
 import SettingsApi                    from '../api/settings-api';
@@ -37,13 +36,11 @@ export default class SettingsAccountEmailChangeApp extends App
     }
 
     /**
-     * render
+     * view
      */
-    render() : void
+    view() : JSX.Element
     {
-        ReactDOM.render(
-            <SettingsAccountEmailChangeView store={this.store} />,
-            document.getElementById('root'));
+        return <SettingsAccountEmailChangeView store={this.store} />;
     }
 
     /**

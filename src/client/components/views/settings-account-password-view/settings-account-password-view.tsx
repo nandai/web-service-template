@@ -4,7 +4,6 @@
 import * as React from 'react';
 import Button     from 'client/components/common/button';
 import Input      from 'client/components/common/input';
-import Main       from 'client/components/designated/main';
 import R          from 'client/libs/r';
 import {Store}    from './store';
 
@@ -24,13 +23,13 @@ export default class SettingsAccountPasswordView extends React.Component<Setting
         const {locale} = store;
 
         return (
-            <Main>
+            <div>
                 <Input type="password" placeholder={R.text(R.CURRENT_PASSWORD,   locale)} value={store.oldPassword} onChange={store.onOldPasswordChange} />
                 <Input type="password" placeholder={R.text(R.NEW_PASSWORD,       locale)} value={store.newPassword} onChange={store.onNewPasswordChange} />
                 <Input type="password" placeholder={R.text(R.NEW_PASSWORD_AGAIN, locale)} value={store.confirm}     onChange={store.onConfirmChange} />
                 <Button onClick={store.onChange}  >{R.text(R.CHANGE,             locale)}</Button>
                 <span>{store.message}</span>
-            </Main>
+            </div>
         );
     }
 }
