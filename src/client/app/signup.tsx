@@ -133,7 +133,7 @@ export default class SignupApp extends App
     private onTop() : void
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onTop');
-        History.pushState('/');
+        History.back();
         log.stepOut();
     }
 

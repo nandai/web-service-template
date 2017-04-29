@@ -20,12 +20,8 @@ export default class History
         }
     }
 
-    static pushState(url : string) : void
+    static onPushState() : void
     {
-        if (location.pathname + location.search !== url)
-            history.pushState(null, null, url);
-
-        // location.pathname + location.search === url であってもonPushStateはコールする
 //      const onPushState = History.onPushState;
         const onPushState = window['onPushState'];
 
@@ -33,13 +29,24 @@ export default class History
             onPushState();
     }
 
+    static pushState(url : string) : void
+    {
+        if (location.pathname + location.search !== url)
+            history.pushState(null, null, url);
+
+        // location.pathname + location.search === url であってもonPushStateはコールする
+        History.onPushState();
+    }
+
     static replaceState(url : string) : void
     {
         history.replaceState(null, null, url);
+        History.onPushState();
+    }
 
-        const onPushState = window['onPushState'];
-
-        if (onPushState)
-            onPushState();
+    static back() : void
+    {
+        history.back();
+        History.onPushState();
     }
 }

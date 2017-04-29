@@ -149,7 +149,7 @@ export default class SettingsApp extends App
 
             if (res.status === 0)
             {
-                History.pushState('/');
+                History.back();
             }
             else
             {
@@ -173,7 +173,7 @@ export default class SettingsApp extends App
     private onBack() : void
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onBack');
-        History.pushState('/');
+        History.back();
         log.stepOut();
     }
 
