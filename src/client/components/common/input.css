@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-input
+.wst-input
 {
     display: block;
     width: 100%;
@@ -14,19 +14,19 @@ input
     border-radius: 0;
     transition: all .3s;
     outline: none;
-}
 
-input:focus
-{
-    border-bottom: 1px solid blue;
-}
+    &:focus
+    {
+        border-bottom: 1px solid blue;
+    }
 
-input[type="number"]::-webkit-inner-spin-button
-{
-    -webkit-appearance: none;
-}
+    &[type="number"]::-webkit-inner-spin-button
+    {
+        -webkit-appearance: none;
+    }
 
-input[type="number"]
-{
-    -moz-appearance: textfield;
+    &[type="number"]
+    {
+        -moz-appearance: textfield;
+    }
 }

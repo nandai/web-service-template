@@ -44,7 +44,8 @@ export default class Input extends React.Component<InputProps, {}>
         }
 
         return (
-            <input type =        {props.type}
+            <input className =   "wst-input"
+                   type =        {props.type}
                    placeholder = {props.placeholder}
                    value =       {props.value ? props.value : ''}
                    onChange =    {onChange} />

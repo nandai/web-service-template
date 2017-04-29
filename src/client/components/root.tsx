@@ -61,12 +61,19 @@ export default class Root extends React.Component<RootProps, RootState>
      */
     componentWillReceiveProps(nextProps : RootProps)
     {
-        const state =
+        if (this.state.view.type === nextProps.view.type)
         {
-            nextView: nextProps.view,
-            fade:     true
-        };
-        this.setState(state);
+            this.setState({view:nextProps.view});
+        }
+        else
+        {
+            const state =
+            {
+                nextView: nextProps.view,
+                fade:     true
+            };
+            this.setState(state);
+        }
     }
 
     /**
