@@ -52,7 +52,8 @@ export default class ResetController
                 };
 
                 const title = ClientR.text(ClientR.RESET_PASSWORD, locale);
-                const contents = ReactDOM.renderToString(<Root><ResetView store={store} /></Root>);
+                const el = <ResetView store={store} />;
+                const contents = ReactDOM.renderToString(<Root view={el} />);
                 res.send(view(title, 'wst.js', contents));
             }
             else

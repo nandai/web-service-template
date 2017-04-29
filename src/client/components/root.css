@@ -1,0 +1,10 @@
+.root
+{
+    transition: all .3s;
+    opacity: 1;
+
+    &.fade
+    {
+        opacity: 0;
+    }
+}

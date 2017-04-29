@@ -4,6 +4,7 @@
 @import "./init.css";
 @import "./font.css";
 @import "./common.css";
+@import "../components/root.css";
 @import "../components/common/button.css";
 @import "../components/common/input.css";
 @import "../components/designated/main.css";

@@ -75,8 +75,9 @@ class WstApp
      */
     render() : void
     {
+        const view = this.currentApp.view();
         ReactDOM.render(
-            <Root>{this.currentApp.view()}</Root>,
+            <Root view={view} />,
             document.getElementById('root'));
     }
 

@@ -64,7 +64,8 @@ export default class SignupController
                 };
 
                 const title = ClientR.text(ClientR.SIGNUP, locale);
-                const contents = ReactDOM.renderToString(<Root><SignupView store={store} /></Root>);
+                const el = <SignupView store={store} />;
+                const contents = ReactDOM.renderToString(<Root view={el} />);
                 res.send(view(title, 'wst.js', contents, {message}));
             }
             else
@@ -81,7 +82,8 @@ export default class SignupController
                     };
 
                     const title = ClientR.text(ClientR.SIGNUP_CONFIRM, locale);
-                    const contents = ReactDOM.renderToString(<Root><SignupConfirmView store={store} /></Root>);
+                    const el = <SignupConfirmView store={store} />;
+                    const contents = ReactDOM.renderToString(<Root view={el} />);
                     res.send(view(title, 'wst.js', contents));
                 }
                 else

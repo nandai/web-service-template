@@ -70,7 +70,8 @@ export default class SettingsController
             };
 
             const title = ClientR.text(ClientR.SETTINGS, locale);
-            const contents = ReactDOM.renderToString(<Root><SettingsView store={store} /></Root>);
+            const el = <SettingsView store={store} />;
+            const contents = ReactDOM.renderToString(<Root view={el} />);
             res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
@@ -100,7 +101,8 @@ export default class SettingsController
             };
 
             const title = ClientR.text(ClientR.SETTINGS_ACCOUNT, locale);
-            const contents = ReactDOM.renderToString(<Root><SettingsAccountView store={store} /></Root>);
+            const el = <SettingsAccountView store={store} />;
+            const contents = ReactDOM.renderToString(<Root view={el} />);
             res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
@@ -130,7 +132,8 @@ export default class SettingsController
             };
 
             const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL, locale);
-            const contents = ReactDOM.renderToString(<Root><SettingsAccountEmailView store={store} /></Root>);
+            const el = <SettingsAccountEmailView store={store} />;
+            const contents = ReactDOM.renderToString(<Root view={el} />);
             res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
@@ -168,7 +171,8 @@ export default class SettingsController
                 };
 
                 const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL_CHANGE, locale);
-                const contents = ReactDOM.renderToString(<Root><SettingsAccountEmailChangeView store={store} /></Root>);
+                const el = <SettingsAccountEmailChangeView store={store} />;
+                const contents = ReactDOM.renderToString(<Root view={el} />);
                 res.send(view(title, 'wst.js', contents));
             }
             else
@@ -209,7 +213,8 @@ export default class SettingsController
                 };
 
                 const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_PASSWORD, locale);
-                const contents = ReactDOM.renderToString(<Root><SettingsAccountPasswordView store={store} /></Root>);
+                const el = <SettingsAccountPasswordView store={store} />;
+                const contents = ReactDOM.renderToString(<Root view={el} />);
                 res.send(view(title, 'wst.js', contents, store));
             }
             else
