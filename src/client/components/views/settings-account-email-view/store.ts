@@ -10,4 +10,5 @@ export interface Store
     message?       : string;
     onEmailChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onChange?      : () => void;
+    onBack?        : () => void;
 }

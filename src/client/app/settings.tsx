@@ -168,16 +168,6 @@ export default class SettingsApp extends App
     }
 
     /**
-     * onBack
-     */
-    private onBack() : void
-    {
-        const log = slog.stepIn(SettingsApp.CLS_NAME, 'onBack');
-        History.back();
-        log.stepOut();
-    }
-
-    /**
      * unlink
      */
     private unlink(provider : 'twitter' | 'facebook' | 'google')

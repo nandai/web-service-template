@@ -32,8 +32,18 @@ export default class SettingsAccountApp extends App
             message:  '',
             onNameChange:    this.onNameChange.   bind(this),
             onPhoneNoChange: this.onPhoneNoChange.bind(this),
-            onChange:        this.onChange.       bind(this)
+            onChange:        this.onChange.       bind(this),
+            onBack:          this.onBack.         bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init() : void
+    {
+        const {store} = this;
+        store.message = '';
     }
 
     /**

@@ -11,4 +11,5 @@ export interface Store
     onNameChange?    : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onPhoneNoChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onChange?        : () => void;
+    onBack?          : () => void;
 }

@@ -15,4 +15,5 @@ export interface Store
     onNewPasswordChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onConfirmChange?     : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onChange?            : () => void;
+    onBack?              : () => void;
 }

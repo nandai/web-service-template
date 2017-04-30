@@ -30,7 +30,8 @@ export default class SettingsAccountEmailApp extends App
             locale:          Utils.getLocale(),
             account:         ssrStore.account,
             onEmailChange:   this.onEmailChange.bind(this),
-            onChange:        this.onChange.     bind(this)
+            onChange:        this.onChange.     bind(this),
+            onBack:          this.onBack.       bind(this)
         };
     }
 

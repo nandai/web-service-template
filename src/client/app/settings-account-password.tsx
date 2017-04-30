@@ -32,7 +32,8 @@ export default class SettingsAccountPasswordApp extends App
             onOldPasswordChange: this.onOldPasswordChange.bind(this),
             onNewPasswordChange: this.onNewPasswordChange.bind(this),
             onConfirmChange:     this.onConfirmChange.    bind(this),
-            onChange:            this.onChange.           bind(this)
+            onChange:            this.onChange.           bind(this),
+            onBack:              this.onBack.             bind(this)
         };
     }
 
