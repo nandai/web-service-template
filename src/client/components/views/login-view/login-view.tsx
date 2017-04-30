@@ -23,7 +23,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
         const {locale} = store;
 
         return (
-            <div>
+            <div className="view">
                 <Button onClick={store.onTwitter} >{R.text(R.LOGIN_WITH_TWITTER,  locale)}</Button>
                 <Button onClick={store.onFacebook}>{R.text(R.LOGIN_WITH_FACEBOOK, locale)}</Button>
                 <Button onClick={store.onGoogle}  >{R.text(R.LOGIN_WITH_GOOGLE,   locale)}</Button>

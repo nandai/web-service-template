@@ -8,7 +8,7 @@
 
 html, body
 {
-    height: 100%;
+    height: 100vh;
 }
 
 body
@@ -22,5 +22,5 @@ body
 {
     display:  flex;
     overflow: hidden;
-    height:   100%;
+    height:   100vh;
 }

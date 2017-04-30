@@ -23,7 +23,7 @@ export default class SettingsAccountChangeView extends React.Component<SettingsA
         const {locale} = store;
 
         return (
-            <div>
+            <div className="view">
                 <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} onChange={store.onPasswordChange} />
                 <Button onClick={store.onChange}  >{R.text(R.SEND,     locale)}</Button>
                 <span>{store.message}</span>

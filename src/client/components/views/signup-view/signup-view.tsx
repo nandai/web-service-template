@@ -23,7 +23,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
         const {locale} = store;
 
         return (
-            <div>
+            <div className="view">
                 <Button onClick={store.onTwitter} >{R.text(R.SIGNUP_WITH_TWITTER,  locale)}</Button>
                 <Button onClick={store.onFacebook}>{R.text(R.SIGNUP_WITH_FACEBOOK, locale)}</Button>
                 <Button onClick={store.onGoogle}  >{R.text(R.SIGNUP_WITH_GOOGLE,   locale)}</Button>

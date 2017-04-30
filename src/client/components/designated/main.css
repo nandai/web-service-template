@@ -3,7 +3,8 @@
  */
 .wst-main
 {
-    padding:  8px;
+    display:  flex;
+/*  padding:  8px;*/
     width:    100%;
     overflow: auto;
     outline:  none;
@@ -11,7 +12,7 @@
 
 .wst-contents
 {
-    margin: auto;
+    margin: 0 auto;
     width:  calc(100% - 16px * 2);
     max-width: 480px;
 }

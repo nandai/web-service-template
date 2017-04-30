@@ -4,9 +4,10 @@
 @import "./init.css";
 @import "./font.css";
 @import "./common.css";
-@import "../components/root.css";
 @import "../components/common/button.css";
 @import "../components/common/input.css";
 @import "../components/designated/main.css";
 @import "../components/views/forbidden-view/forbidden-view.css";
 @import "../components/views/not-found-view/not-found-view.css";
+@import "../components/views/view.css";
+@import "../components/root.css";

@@ -23,7 +23,7 @@ export default class ForgetView extends React.Component<ForgetViewProps, {}>
         const {locale} = store;
 
         return (
-            <div>
+            <div className="view">
                 <Input type="text" placeholder={R.text(R.EMAIL,     locale)} value={store.email} onChange={store.onEmailChange} />
                 <Button onClick={store.onSend}>{R.text(R.SEND_MAIL, locale)}</Button>
                 <span>{store.message}</span>

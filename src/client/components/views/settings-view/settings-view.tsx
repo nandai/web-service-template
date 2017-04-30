@@ -29,7 +29,7 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
         const passwordDisabled = (account.email === null);
 
         return (
-            <div>
+            <div className="view">
                 <Button onClick={store.onTwitter} >{twitterLabel}</Button>
                 <Button onClick={store.onFacebook}>{facebookLabel}</Button>
                 <Button onClick={store.onGoogle}  >{googleLabel}</Button>

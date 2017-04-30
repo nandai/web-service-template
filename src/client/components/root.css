@@ -1,7 +1,9 @@
 .root
 {
+    display:    flex;
+    height:     100vh;
     transition: all .3s;
-    opacity: 1;
+    opacity:    1;
 
     &.fade
     {

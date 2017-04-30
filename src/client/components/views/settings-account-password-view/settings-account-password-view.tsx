@@ -23,7 +23,7 @@ export default class SettingsAccountPasswordView extends React.Component<Setting
         const {locale} = store;
 
         return (
-            <div>
+            <div className="view">
                 <Input type="password" placeholder={R.text(R.CURRENT_PASSWORD,   locale)} value={store.oldPassword} onChange={store.onOldPasswordChange} />
                 <Input type="password" placeholder={R.text(R.NEW_PASSWORD,       locale)} value={store.newPassword} onChange={store.onNewPasswordChange} />
                 <Input type="password" placeholder={R.text(R.NEW_PASSWORD_AGAIN, locale)} value={store.confirm}     onChange={store.onConfirmChange} />
