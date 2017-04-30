@@ -4,6 +4,7 @@
 import * as React from 'react';
 import Button     from 'client/components/common/button';
 import Input      from 'client/components/common/input';
+import Text       from 'client/components/common/text';
 import R          from 'client/libs/r';
 import {Store}    from './store';
 
@@ -32,7 +33,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
                 <Button onClick={store.onLogin}   >{R.text(R.LOGIN,    locale)}</Button>
                 <Button onClick={store.onSignup} url="/signup">{R.text(R.GO_SIGNUP, locale)}</Button>
                 <Button onClick={store.onForget} url="/forget">{R.text(R.GO_FORGET, locale)}</Button>
-                <span>{store.message}</span>
+                <Text>{store.message}</Text>
             </div>
         );
     }

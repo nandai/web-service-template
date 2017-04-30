@@ -6,6 +6,7 @@
 @import "./common.css";
 @import "../components/common/button.css";
 @import "../components/common/input.css";
+@import "../components/common/text.css";
 @import "../components/designated/main.css";
 @import "../components/views/forbidden-view/forbidden-view.css";
 @import "../components/views/not-found-view/not-found-view.css";

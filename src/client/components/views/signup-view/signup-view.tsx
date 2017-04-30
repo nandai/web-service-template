@@ -4,6 +4,7 @@
 import * as React from 'react';
 import Button     from 'client/components/common/button';
 import Input      from 'client/components/common/input';
+import Text       from 'client/components/common/text';
 import R          from 'client/libs/r';
 import {Store}    from './store';
 
@@ -31,7 +32,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
                 <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} onChange={store.onPasswordChange} />
                 <Button onClick={store.onSignup}  >{R.text(R.SIGNUP,   locale)}</Button>
                 <Button onClick={store.onTop}     >{R.text(R.GO_TOP,   locale)}</Button>
-                <span>{store.message}</span>
+                <Text>{store.message}</Text>
             </div>
         );
     }

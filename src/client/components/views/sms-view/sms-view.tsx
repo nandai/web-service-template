@@ -4,6 +4,7 @@
 import * as React from 'react';
 import Button     from 'client/components/common/button';
 import Input      from 'client/components/common/input';
+import Text       from 'client/components/common/text';
 import R          from 'client/libs/r';
 import {Store}    from './store';
 
@@ -26,7 +27,7 @@ export default class SmsView extends React.Component<SmsViewProps, {}>
             <div className="view">
                 <Input type="number" placeholder={R.text(R.LOGIN_CODE, locale)} value={store.smsCode} onChange={store.onSmsCodeChange} />
                 <Button onClick={store.onSend}  >{R.text(R.SEND,       locale)}</Button>
-                <span>{store.message}</span>
+                <Text>{store.message}</Text>
             </div>
         );
     }
