@@ -8,4 +8,5 @@ export interface Store
     message?       : string;
     onEmailChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onSend?        : () => void;
+    onBack?        : () => void;
 }

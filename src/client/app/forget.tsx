@@ -8,7 +8,7 @@ import ForgetView from '../components/views/forget-view/forget-view';
 import {Store}    from '../components/views/forget-view/store';
 import Utils      from '../libs/utils';
 
-const slog =  window['slog'];
+const slog = window['slog'];
 
 /**
  * forget app
@@ -28,7 +28,8 @@ export default class ForgetApp extends App
         {
             locale:        Utils.getLocale(),
             onEmailChange: this.onEmailChange.bind(this),
-            onSend:        this.onSend.       bind(this)
+            onSend:        this.onSend.       bind(this),
+            onBack:        this.onBack.       bind(this)
         };
     }
 

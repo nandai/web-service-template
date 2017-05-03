@@ -12,6 +12,7 @@ import SignupController        from './controllers/signup-controller';
 import ForgetController        from './controllers/forget-controller';
 import ResetController         from './controllers/reset-controller';
 import SettingsController      from './controllers/settings-controller';
+import UsersController         from './controllers/users-controller';
 import SignupApi               from './api/signup-api';
 import LoginApi                from './api/login-api';
 import LogoutApi               from './api/logout-api';
@@ -202,6 +203,8 @@ class Initializer
         this.app.get('/settings/account/link/twitter',  Access.auth, linkCommand, authTwitter);
         this.app.get('/settings/account/link/facebook', Access.auth, linkCommand, authFacebook);
         this.app.get('/settings/account/link/google',   Access.auth, linkCommand, authGoogle);
+
+        this.app.get('/users', UsersController.index);
 
         // APIs
         this.app.post(  `/api/signup/${provider}`,   SignupApi.onSignupProvider);

@@ -1,8 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Api       from './api';
-import {Request} from 'libs/request';
+import Api from './api';
 
 const slog = window['slog'];
 

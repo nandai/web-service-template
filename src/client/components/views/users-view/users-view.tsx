@@ -3,20 +3,18 @@
  */
 import * as React    from 'react';
 import Button        from 'client/components/common/button';
-import Input         from 'client/components/common/input';
-import Text          from 'client/components/common/text';
 import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
 import {Store}       from './store';
 
-interface ForgetViewProps
+interface UsersViewProps
 {
     store : Store;
 }
 
-export default class ForgetView extends React.Component<ForgetViewProps, {}>
+export default class UsersView extends React.Component<UsersViewProps, {}>
 {
     /**
      * render
@@ -26,14 +24,25 @@ export default class ForgetView extends React.Component<ForgetViewProps, {}>
         const {store} = this.props;
         const {locale} = store;
 
+        let elements;
+        if (store.userList)
+        {
+            elements = store.userList.map((user, i) =>
+            {
+                return (
+                    <p key={i}>
+                        {user.name}
+                    </p>
+                );
+            });
+        }
+
         return (
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    <Input type="text" placeholder={R.text(R.EMAIL,     locale)} value={store.email} onChange={store.onEmailChange} />
-                    <Button onClick={store.onSend}>{R.text(R.SEND_MAIL, locale)}</Button>
+                    {elements}
                     <Button onClick={store.onBack}>{R.text(R.BACK, locale)}</Button>
-                    <Text>{store.message}</Text>
                 </ViewContents>
             </ViewContainer>
         );

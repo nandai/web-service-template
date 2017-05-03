@@ -39,7 +39,8 @@ export default class LoginApp extends App
             onPasswordChange: this.onPasswordChange.bind(this),
             onLogin:          this.onLogin.         bind(this),
             onSignup:         this.onSignup.        bind(this),
-            onForget:         this.onForget.        bind(this)
+            onForget:         this.onForget.        bind(this),
+            onUsers:          this.onUsers.         bind(this)
         };
     }
 
@@ -147,6 +148,16 @@ export default class LoginApp extends App
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onForget');
         History.pushState('/forget');
+        log.stepOut();
+    }
+
+    /**
+     * onUsers
+     */
+    private onUsers() : void
+    {
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onUsers');
+        History.pushState('/users');
         log.stepOut();
     }
 

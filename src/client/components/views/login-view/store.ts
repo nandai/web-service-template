@@ -15,4 +15,5 @@ export interface Store
     onLogin?          : () => void;
     onSignup?         : () => void;
     onForget?         : () => void;
+    onUsers?          : () => void;
 }

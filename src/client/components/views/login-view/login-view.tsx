@@ -38,6 +38,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
                     <Button onClick={store.onLogin}   >{R.text(R.LOGIN,    locale)}</Button>
                     <Button onClick={store.onSignup} url="/signup">{R.text(R.GO_SIGNUP, locale)}</Button>
                     <Button onClick={store.onForget} url="/forget">{R.text(R.GO_FORGET, locale)}</Button>
+                    <Button onClick={store.onUsers}  url="/users"> {R.text(R.USER_LIST, locale)}</Button>
                     <Text>{store.message}</Text>
                 </ViewContents>
             </ViewContainer>
