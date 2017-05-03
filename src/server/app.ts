@@ -17,6 +17,7 @@ import LoginApi                from './api/login-api';
 import LogoutApi               from './api/logout-api';
 import ResetApi                from './api/reset-api';
 import SettingsApi             from './api/settings-api';
+import UserApi                 from './api/user-api';
 import Twitter                 from './provider/twitter';
 import Facebook                from './provider/facebook';
 import Google                  from './provider/google';
@@ -211,6 +212,7 @@ class Initializer
         this.app.post(  '/api/login/sms',            LoginApi. onLoginSms);
         this.app.post(  '/api/reset',                ResetApi. onRequestResetPassword);
         this.app.put(   '/api/reset/change',         ResetApi. onResetPassword);
+        this.app.get(   '/api/users',                UserApi.  onGetUserList);
 
         this.app.get(   '/api/settings/account',              Access.auth, SettingsApi.onGetAccount);
         this.app.put(   '/api/settings/account',              Access.auth, SettingsApi.onSetAccount);

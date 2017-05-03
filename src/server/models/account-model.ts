@@ -194,7 +194,7 @@ export default class AccountModel
      *
      * @return  Account。該当するアカウントを返す
      */
-    static findByCondition(cond : AccountFindCondition) : Promise<Account>
+    private static findByCondition(cond : AccountFindCondition) : Promise<Account>
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'findByCondition');
         log.d(JSON.stringify(cond, null, 2));
@@ -343,6 +343,32 @@ export default class AccountModel
             log.d('見つかりませんでした。');
             log.stepOut();
             resolve(null);
+        });
+    }
+
+    /**
+     * アカウント一覧を検索する
+     *
+     * @return  Account[]。該当するアカウントの一覧を返す
+     */
+    static findList()
+    {
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'findList');
+        return new Promise((resolve : (accounts : Account[]) => void, reject) =>
+        {
+            if (AccountModel.isUninitialize())
+            {
+                log.stepOut();
+                reject(new Error(AccountModel.MESSAGE_UNINITIALIZE));
+                return;
+            }
+
+            const accountList : Account[] = [];
+            for (const account of AccountModel.list)
+                accountList.push(account);
+
+            log.stepOut();
+            resolve(accountList);
         });
     }
 

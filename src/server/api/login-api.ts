@@ -37,7 +37,7 @@ export default class LoginApi extends ProviderApi
      */
     static async onLoginEmail(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(LoginApi.CLS_NAME_2, 'email');
+        const log = slog.stepIn(LoginApi.CLS_NAME_2, 'onLoginEmail');
         try
         {
             do
@@ -93,7 +93,7 @@ export default class LoginApi extends ProviderApi
      */
     static async onLoginSms(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(LoginApi.CLS_NAME_2, 'sms');
+        const log = slog.stepIn(LoginApi.CLS_NAME_2, 'onLoginSms');
         try
         {
             do

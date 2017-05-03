@@ -13,6 +13,11 @@ export namespace Response
         google   : boolean;
     }
 
+    export interface User
+    {
+        name : string;
+    }
+
     export interface LoginEmail
     {
         status   : number;
@@ -90,5 +95,11 @@ export namespace Response
     {
         status  : number;
         message : string;
+    }
+
+    export interface GetUserList
+    {
+        status   : number;
+        userList : User[];
     }
 }

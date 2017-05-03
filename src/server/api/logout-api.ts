@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Utils from '../libs/utils';
+import Utils                   from '../libs/utils';
 import SessionModel, {Session} from '../models/session-model';
 
 import express = require('express');
@@ -20,7 +20,7 @@ export default class LogoutApi
      */
     static async onLogout(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(LogoutApi.CLS_NAME, 'index');
+        const log = slog.stepIn(LogoutApi.CLS_NAME, 'onLogout');
         try
         {
             const session : Session = req.ext.session;

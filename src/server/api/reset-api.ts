@@ -24,7 +24,7 @@ export default class ResetApi
      */
     static async onRequestResetPassword(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(ResetApi.CLS_NAME, 'index');
+        const log = slog.stepIn(ResetApi.CLS_NAME, 'onRequestResetPassword');
         try
         {
             do
@@ -78,7 +78,7 @@ export default class ResetApi
      */
     static async onResetPassword(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(ResetApi.CLS_NAME, 'change');
+        const log = slog.stepIn(ResetApi.CLS_NAME, 'onResetPassword');
         try
         {
             do

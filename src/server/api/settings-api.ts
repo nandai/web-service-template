@@ -135,7 +135,7 @@ export default class SettingsApi
      */
     static async onUnlinkProvider(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'unlink');
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'onUnlinkProvider');
         try
         {
             do
@@ -195,7 +195,7 @@ export default class SettingsApi
      */
     static async onRequestChangeEmail(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'email');
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'onRequestChangeEmail');
         try
         {
             do
@@ -306,7 +306,7 @@ export default class SettingsApi
      */
     static async onChangeEmail(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'changeEmail');
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'onChangeEmail');
         try
         {
             do
@@ -385,7 +385,7 @@ export default class SettingsApi
      */
     static async onChangePassword(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'password');
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'onChangePassword');
         try
         {
             do
@@ -463,7 +463,7 @@ export default class SettingsApi
      */
     static async onDeleteAccount(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(SettingsApi.CLS_NAME, 'deleteAccount');
+        const log = slog.stepIn(SettingsApi.CLS_NAME, 'onDeleteAccount');
         try
         {
             const session : Session = req.ext.session;
