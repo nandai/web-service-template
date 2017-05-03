@@ -3,7 +3,7 @@
  */
 import * as React from 'react';
 
-export default class Main extends React.Component<{}, {}>
+export default class ViewContents extends React.Component<{}, {}>
 {
     /**
      * render
@@ -11,8 +11,8 @@ export default class Main extends React.Component<{}, {}>
     render() : JSX.Element
     {
         return (
-            <div className="wst-main" tabIndex={0}>
-                <div className="wst-contents">
+            <div className="view-contents">
+                <div className="view-contents-inner">
                     {this.props.children}
                 </div>
             </div>

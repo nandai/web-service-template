@@ -1,0 +1,14 @@
+.view-contents
+{
+    display:   flex;
+    flex-grow: 1;
+    overflow:  auto;
+
+    & > .view-contents-inner
+    {
+        position:  relative;
+        margin:    auto;
+        width:     calc(100% - 16px * 2);
+        max-width: 480px;
+    }
+}

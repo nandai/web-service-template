@@ -3,7 +3,6 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
-import Main          from 'client/components/designated/main';
 
 interface RootProps
 {
@@ -42,17 +41,17 @@ export default class Root extends React.Component<RootProps, RootState>
     render() : JSX.Element
     {
         const {state} = this;
-        let className = 'root';
+        let className = 'root-transition';
 
         if (state.fade)
             className += ' fade';
 
         return (
-            <Main>
+            <div className="root" tabIndex={0}>
                 <div className={className} ref="root" onTransitionEnd={this.onTransitionEnd}>
                     {this.state.view}
                 </div>
-            </Main>
+            </div>
         );
     }
 

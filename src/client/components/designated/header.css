@@ -1,0 +1,32 @@
+:root
+{
+    --header-height: 48px;
+}
+
+.header
+{
+    min-height: var(--header-height);
+}
+
+.header-fixed
+{
+    position:   fixed;
+    width:      100%;
+    z-index:    100;
+    min-height: var(--header-height);
+    color:            white;
+    background-color: rgb(39, 152, 142);
+    border-bottom:    1px solid white;
+    box-sizing:       border-box;
+    font-weight:      bold;
+
+    & > span
+    {
+        display:    block;
+        height:     var(--header-height);
+        padding:    calc((var(--header-height) - 1rem) / 2) 0;
+        box-sizing: border-box;
+        text-align: center;
+        cursor:     pointer;
+    }
+}

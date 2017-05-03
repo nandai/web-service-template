@@ -1,11 +1,14 @@
 /**
  * (C) 2016 printf.jp
  */
-import * as React from 'react';
-import Button     from 'client/components/common/button';
-import Text       from 'client/components/common/text';
-import R          from 'client/libs/r';
-import {Store}    from './store';
+import * as React    from 'react';
+import Button        from 'client/components/common/button';
+import Text          from 'client/components/common/text';
+import Header        from 'client/components/designated/header';
+import ViewContainer from 'client/components/views/view-container';
+import ViewContents  from 'client/components/views/view-contents';
+import R             from 'client/libs/r';
+import {Store}       from './store';
 
 interface TopViewProps
 {
@@ -23,11 +26,14 @@ export default class TopView extends React.Component<TopViewProps, {}>
         const {locale} = store;
 
         return (
-            <div className="view">
-                <Button onClick={store.onSettings} url="/settings">{R.text(R.GO_SETTINGS, locale)}</Button>
-                <Button onClick={store.onLogout}                  >{R.text(R.LOGOUT,      locale)}</Button>
-                <Text>{store.message}</Text>
-            </div>
+            <ViewContainer>
+                <Header />
+                <ViewContents>
+                    <Button onClick={store.onSettings} url="/settings">{R.text(R.GO_SETTINGS, locale)}</Button>
+                    <Button onClick={store.onLogout}                  >{R.text(R.LOGOUT,      locale)}</Button>
+                    <Text>{store.message}</Text>
+                </ViewContents>
+            </ViewContainer>
         );
     }
 }

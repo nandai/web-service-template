@@ -1,5 +1,6 @@
 .wst-text
 {
-    display: inline-block;
-    height:  2rem;
+    display: block;
+    width:   100%;
+    height:  48px;
 }
