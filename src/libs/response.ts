@@ -100,8 +100,9 @@ export namespace Response
 
     export interface GetUser
     {
-        status : number;
-        user   : User;
+        status?  : number;
+        user?    : User;
+        message? : string;
     }
 
     export interface GetUserList

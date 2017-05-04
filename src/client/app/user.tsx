@@ -36,14 +36,14 @@ export default class UserApp extends App
     /**
      * 初期化
      */
-    init()
+    init(params)
     {
         return new Promise(async (resolve : () => void, reject) =>
         {
             try
             {
                 const {store} = this;
-                const res = await UserApi.getUser();
+                const res = await UserApi.getUser({id:params.id});
                 store.user = res.user;
                 resolve();
             }

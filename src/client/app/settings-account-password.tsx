@@ -40,14 +40,14 @@ export default class SettingsAccountPasswordApp extends App
     /**
      * 初期化
      */
-    init()
+    init(params)
     {
         const {store} = this;
         store.oldPassword = '',
         store.newPassword = '',
         store.confirm =     '',
         store.message =     '';
-        return super.init();
+        return super.init(params);
     }
 
     /**

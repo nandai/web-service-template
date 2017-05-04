@@ -36,12 +36,12 @@ export default class ForgetApp extends App
     /**
      * 初期化
      */
-    init()
+    init(params)
     {
         const {store} = this;
         store.email =   '';
         store.message = '';
-        return super.init();
+        return super.init(params);
     }
 
     /**

@@ -1,8 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
+import {Request}               from 'libs/request';
 import {Response}              from 'libs/response';
 
 import express = require('express');
@@ -24,8 +26,27 @@ export default class UserApi
         const log = slog.stepIn(UserApi.CLS_NAME, 'onGetUser');
         try
         {
-            const data = await UserApi.getUser();
-            res.json(data);
+            do
+            {
+                const locale = req.ext.locale;
+                const param     : Request.GetUser = req.query;
+                const condition : Request.GetUser =
+                {
+                    id: ['number', null, true]
+                }
+
+                if (Utils.existsParameters(param, condition) === false)
+                {
+                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    break;
+                }
+
+                const id = <number>param.id;
+
+                const data = await UserApi.getUser(req, id);
+                res.json(data);
+            }
+            while (false);
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};
@@ -34,18 +55,26 @@ export default class UserApi
     /**
      * ユーザー取得
      */
-    static getUser()
+    static getUser(req : express.Request, id : number)
     {
         return new Promise(async (resolve : (data : Response.GetUser) => void, reject) =>
         {
             const log = slog.stepIn(UserApi.CLS_NAME, 'getUser');
             try
             {
-                const account = await AccountModel.find(133);
-                const data : Response.GetUser =
+                const locale = req.ext.locale;
+                const data : Response.GetUser = {};
+                const account = await AccountModel.find(id);
+
+                if (account === null)
                 {
-                    status: 0,
-                    user:   {id:account.id, name:account.name}
+                    data.status = 1;
+                    data.message = R.text(R.NOT_FOUND, locale);
+                }
+                else
+                {
+                    data.status = 0;
+                    data.user = {id:account.id, name:account.name}
                 }
 
                 log.stepOut();

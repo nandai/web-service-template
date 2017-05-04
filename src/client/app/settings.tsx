@@ -44,13 +44,13 @@ export default class SettingsApp extends App
     /**
      * 初期化
      */
-    init()
+    init(params)
     {
         const {store} = this;
         store.message = ssrStore.message;
 
         ssrStore.message = '';
-        return super.init();
+        return super.init(params);
     }
 
     /**

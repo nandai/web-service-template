@@ -59,7 +59,7 @@ class WstApp
             {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), auth:true},
             {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), query:true},
             {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), auth:true},
-            {url:'/user',                          app:new UserApp(),                       title:R.text(R.USER,                           locale)},
+            {url:'/users/:id',                     app:new UserApp(),                       title:R.text(R.USER,                           locale)},
             {url:'/users',                         app:new UsersApp(),                      title:R.text(R.USER_LIST,                      locale)},
             {url:'403',                            app:new ForbiddenApp(),                  title:R.text(R.FORBIDDEN,                      locale)},
             {url:'404',                            app:new NotFoundApp(),                   title:R.text(R.NOT_FOUND,                      locale)},
@@ -97,9 +97,13 @@ class WstApp
         return new Promise(async (resolve : () => void) =>
         {
             let route : Route;
+            let params;
+
             for (route of this.routes)
             {
-                if (route.url !== url)
+                params = Utils.getParamsFromUrl(url, route.url);
+
+                if (params === null)
                     continue;
 
                 if (route.auth && this.account === null)
@@ -121,7 +125,7 @@ class WstApp
                 {
                     try
                     {
-                        await this.currentApp.init();
+                        await this.currentApp.init(params);
                     }
                     catch (err)
                     {

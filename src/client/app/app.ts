@@ -9,7 +9,7 @@ export abstract class App
 {
     render : () => void;
 
-    init()
+    init(params)
     {
         return new Promise((resolve : () => void) =>
         {

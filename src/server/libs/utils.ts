@@ -51,7 +51,15 @@ export default class Utils
             const require : boolean = cond[2];
             let err = false;
 
-            if ((name in target) === false)
+            if (name in target)
+            {
+                if (type === 'number')
+                {
+                    const value = target[name];
+                    target[name] = Utils.toNumber(value);
+                }
+            }
+            else
             {
                 if (require === true)
                 {
@@ -81,6 +89,24 @@ export default class Utils
 
         log.stepOut();
         return exists;
+    }
+
+    /**
+     * 数値に変換する
+     *
+     * @param   value 数値に変換する任意のデータ。変換できなかった場合はこれをそのまま返す
+     */
+    private static toNumber(value) : any
+    {
+        let result = value;
+        if (value !== null)
+        {
+            const num = Number(value);
+
+            if (Number.isNaN(num) === false)
+                result = num;
+        }
+        return result;
     }
 
     /**

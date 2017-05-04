@@ -83,4 +83,9 @@ export namespace Request
         newPassword : string | any[];
         confirm     : string | any[];
     }
+
+    export interface GetUser
+    {
+        id : number | any[];
+    }
 }

@@ -41,4 +41,44 @@ export default class Utils
             return (key in args ? args[key] : match);
         });
     };
+
+    /**
+     * URLからパラメータを取得する
+     *
+     * @param   url     /users/1のようなURL（location.pathname相当）
+     * @param   format  /users/:idのようなフォーマット
+     *
+     * @return  {id:'1}のようなオブジェクト。内容はformatに依る
+     */
+    static getParamsFromUrl(url : string, format : string) : any
+    {
+        const formatKeys = format.split('/');
+        const urlKeys = url.split('/');
+        const count = formatKeys.length;
+        let params = {};
+
+        if (formatKeys.length !== urlKeys.length)
+            return null;
+
+        for (let i = 0; i < count; i++)
+        {
+            const formatKey = formatKeys[i];
+            const urlKey = urlKeys[i];
+
+            if (formatKey.charAt(0) === ':')
+            {
+                params[formatKey.substr(1)] = urlKey;
+            }
+            else
+            {
+                if (formatKey !== urlKey)
+                {
+                    params = null;
+                    break;
+                }
+            }
+        }
+
+        return params;
+    }
 }

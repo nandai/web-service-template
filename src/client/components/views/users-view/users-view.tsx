@@ -26,10 +26,11 @@ export default class UsersView extends React.Component<UsersViewProps, {}>
 
         const elements = store.userList.map((user, i) =>
         {
+            const url = `/users/${user.id}`;
             return (
-                <p key={i}>
+                <Button key={i} onClick={() => store.onUserClick(user.id)} url={url}>
                     {user.name}
-                </p>
+                </Button>
             );
         });
 

@@ -3,7 +3,7 @@
  */
 import * as React            from 'react';
 import * as ReactDOM         from 'react-dom/server';
-import {view}                from './view';
+import {view, notFound}      from './view';
 import UserApi               from '../api/user-api';
 import Root                  from 'client/components/root';
 import UserView              from 'client/components/views/user-view/user-view';
@@ -23,7 +23,7 @@ export default class UsersController
     private static CLS_NAME = 'UsersController';
 
     /**
-     * GET /user
+     * GET /users/:id
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -32,18 +32,28 @@ export default class UsersController
     {
         const log = slog.stepIn(UsersController.CLS_NAME, 'user');
         const locale = req.ext.locale;
+        const id = Number(req.params.id);
 
-        const data = await UserApi.getUser();
-        const store : UserStore =
+        const data = await UserApi.getUser(req, id);
+
+        if (data.user)
         {
-            locale: locale,
-            user:   data.user
-        };
+            const store : UserStore =
+            {
+                locale: locale,
+                user:   data.user
+            };
 
-        const title = ClientR.text(ClientR.USER, locale);
-        const el = <UserView store={store}/>;
-        const contents = ReactDOM.renderToString(<Root view={el} />);
-        res.send(view(title, 'wst.js', contents, store));
+            const title = ClientR.text(ClientR.USER, locale);
+            const el = <UserView store={store} />;
+            const contents = ReactDOM.renderToString(<Root view={el} />);
+            res.send(view(title, 'wst.js', contents, store));
+        }
+        else
+        {
+            notFound(req, res);
+        }
+
         log.stepOut();
     }
 

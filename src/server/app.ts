@@ -204,8 +204,8 @@ class Initializer
         this.app.get('/settings/account/link/facebook', Access.auth, linkCommand, authFacebook);
         this.app.get('/settings/account/link/google',   Access.auth, linkCommand, authGoogle);
 
-        this.app.get('/user',  UsersController.user);
-        this.app.get('/users', UsersController.users);
+        this.app.get('/users/:id(\\d+)', UsersController.user);
+        this.app.get('/users',           UsersController.users);
 
         // APIs
         this.app.post(  `/api/signup/${provider}`,   SignupApi.onSignupProvider);
