@@ -13,7 +13,7 @@ export abstract class App
     {
         return new Promise((resolve : () => void) =>
         {
-            resolve()
+            resolve();
         });
     }
 

@@ -15,6 +15,7 @@ export namespace Response
 
     export interface User
     {
+        id   : number;
         name : string;
     }
 
@@ -95,6 +96,12 @@ export namespace Response
     {
         status  : number;
         message : string;
+    }
+
+    export interface GetUser
+    {
+        status : number;
+        user   : User;
     }
 
     export interface GetUserList

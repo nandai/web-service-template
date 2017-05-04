@@ -1,14 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom/server';
-import {view}        from './view';
-import UserApi       from '../api/user-api';
-import Root          from 'client/components/root';
-import UsersView     from 'client/components/views/users-view/users-view';
-import {Store}       from 'client/components/views/users-view/store';
-import ClientR       from 'client/libs/r';
+import * as React            from 'react';
+import * as ReactDOM         from 'react-dom/server';
+import {view}                from './view';
+import UserApi               from '../api/user-api';
+import Root                  from 'client/components/root';
+import UserView              from 'client/components/views/user-view/user-view';
+import {Store as UserStore}  from 'client/components/views/user-view/store';
+import UsersView             from 'client/components/views/users-view/users-view';
+import {Store as UsersStore} from 'client/components/views/users-view/store';
+import ClientR               from 'client/libs/r';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -21,18 +23,43 @@ export default class UsersController
     private static CLS_NAME = 'UsersController';
 
     /**
+     * GET /user
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static async user(req : express.Request, res : express.Response)
+    {
+        const log = slog.stepIn(UsersController.CLS_NAME, 'user');
+        const locale = req.ext.locale;
+
+        const data = await UserApi.getUser();
+        const store : UserStore =
+        {
+            locale: locale,
+            user:   data.user
+        };
+
+        const title = ClientR.text(ClientR.USER, locale);
+        const el = <UserView store={store}/>;
+        const contents = ReactDOM.renderToString(<Root view={el} />);
+        res.send(view(title, 'wst.js', contents, store));
+        log.stepOut();
+    }
+
+    /**
      * GET /users
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async index(req : express.Request, res : express.Response)
+    static async users(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(UsersController.CLS_NAME, 'index');
+        const log = slog.stepIn(UsersController.CLS_NAME, 'users');
         const locale = req.ext.locale;
 
         const data = await UserApi.getUserList();
-        const store : Store =
+        const store : UsersStore =
         {
             locale:   locale,
             userList: data.userList

@@ -204,7 +204,8 @@ class Initializer
         this.app.get('/settings/account/link/facebook', Access.auth, linkCommand, authFacebook);
         this.app.get('/settings/account/link/google',   Access.auth, linkCommand, authGoogle);
 
-        this.app.get('/users', UsersController.index);
+        this.app.get('/user',  UsersController.user);
+        this.app.get('/users', UsersController.users);
 
         // APIs
         this.app.post(  `/api/signup/${provider}`,   SignupApi.onSignupProvider);
@@ -215,6 +216,7 @@ class Initializer
         this.app.post(  '/api/login/sms',            LoginApi. onLoginSms);
         this.app.post(  '/api/reset',                ResetApi. onRequestResetPassword);
         this.app.put(   '/api/reset/change',         ResetApi. onResetPassword);
+        this.app.get(   '/api/user',                 UserApi.  onGetUser);
         this.app.get(   '/api/users',                UserApi.  onGetUserList);
 
         this.app.get(   '/api/settings/account',              Access.auth, SettingsApi.onGetAccount);

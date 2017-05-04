@@ -9,12 +9,12 @@ import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
 import {Store}       from './store';
 
-interface UsersViewProps
+interface UserViewProps
 {
     store : Store;
 }
 
-export default class UsersView extends React.Component<UsersViewProps, {}>
+export default class UserView extends React.Component<UserViewProps, {}>
 {
     /**
      * render
@@ -24,20 +24,11 @@ export default class UsersView extends React.Component<UsersViewProps, {}>
         const {store} = this.props;
         const {locale} = store;
 
-        const elements = store.userList.map((user, i) =>
-        {
-            return (
-                <p key={i}>
-                    {user.name}
-                </p>
-            );
-        });
-
         return (
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    {elements}
+                    <p>{store.user.name}</p>
                     <Button onClick={store.onBack}>{R.text(R.BACK, locale)}</Button>
                 </ViewContents>
             </ViewContainer>

@@ -55,6 +55,7 @@ export default class R
             'tel':                        'TEL',
             'top':                        'Top',
             'unlinkProvider':             'Unlink ${provider}',
+            'user':                       'User',
             "userList":                   'User list'
         },
 
@@ -104,6 +105,7 @@ export default class R
             'tel':                        '電話番号',
             'top':                        'トップ',
             'unlinkProvider':             '${provider}との紐づけを解除する',
+            'user':                       'ユーザー',
             "userList":                   'ユーザー一覧'
         }
     };
@@ -152,6 +154,7 @@ export default class R
     static TEL =                           'tel';
     static TOP =                           'top';
     static UNLINK_PROVIDER =               'unlinkProvider';
+    static USER =                          'user';
     static USER_LIST =                     'userList';
 
     /**

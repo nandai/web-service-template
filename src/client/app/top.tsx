@@ -32,6 +32,7 @@ export default class TopApp extends App
             account:    ssrStore.account,
             message:    '',
             onSettings: this.onSettings.bind(this),
+            onUsers:    this.onUsers.   bind(this),
             onLogout:   this.onLogout.  bind(this)
         };
     }
@@ -51,6 +52,16 @@ export default class TopApp extends App
     {
         const log = slog.stepIn(TopApp.CLS_NAME, 'onSettings');
         History.pushState('/settings');
+        log.stepOut();
+    }
+
+    /**
+     * onUsers
+     */
+    private onUsers() : void
+    {
+        const log = slog.stepIn(TopApp.CLS_NAME, 'onUsers');
+        History.pushState('/users');
         log.stepOut();
     }
 

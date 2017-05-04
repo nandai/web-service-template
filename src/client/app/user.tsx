@@ -4,8 +4,8 @@
 import * as React from 'react';
 import {App}      from './app';
 import UserApi    from '../api/user-api';
-import UsersView  from '../components/views/users-view/users-view';
-import {Store}    from '../components/views/users-view/store';
+import UserView   from '../components/views/user-view/user-view';
+import {Store}    from '../components/views/user-view/store';
 import Utils      from '../libs/utils';
 
 const slog = window['slog'];
@@ -14,9 +14,9 @@ const ssrStore : Store = window['ssrStore'];
 /**
  * users app
  */
-export default class UsersApp extends App
+export default class UserApp extends App
 {
-    private static CLS_NAME = 'UsersApp';
+    private static CLS_NAME = 'UserApp';
     private store : Store;
 
     /**
@@ -27,9 +27,9 @@ export default class UsersApp extends App
         super();
         this.store =
         {
-            locale:   Utils.getLocale(),
-            userList: ssrStore.userList || [],
-            onBack:   this.onBack.bind(this)
+            locale: Utils.getLocale(),
+            user:   ssrStore.user,
+            onBack: this.onBack.bind(this)
         };
     }
 
@@ -43,8 +43,8 @@ export default class UsersApp extends App
             try
             {
                 const {store} = this;
-                const res = await UserApi.getUserList();
-                store.userList = res.userList;
+                const res = await UserApi.getUser();
+                store.user = res.user;
                 resolve();
             }
             catch (err) {reject(err)}
@@ -56,6 +56,6 @@ export default class UsersApp extends App
      */
     view() : JSX.Element
     {
-        return <UsersView store={this.store} />;
+        return <UserView store={this.store} />;
     }
 }

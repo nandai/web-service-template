@@ -16,6 +16,46 @@ export default class UserApi
     private static CLS_NAME = 'UserApi';
 
     /**
+     * ユーザー取得<br>
+     * GET /api/user
+     */
+    static async onGetUser(req : express.Request, res : express.Response)
+    {
+        const log = slog.stepIn(UserApi.CLS_NAME, 'onGetUser');
+        try
+        {
+            const data = await UserApi.getUser();
+            res.json(data);
+            log.stepOut();
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
+    }
+
+    /**
+     * ユーザー取得
+     */
+    static getUser()
+    {
+        return new Promise(async (resolve : (data : Response.GetUser) => void, reject) =>
+        {
+            const log = slog.stepIn(UserApi.CLS_NAME, 'getUser');
+            try
+            {
+                const account = await AccountModel.find(133);
+                const data : Response.GetUser =
+                {
+                    status: 0,
+                    user:   {id:account.id, name:account.name}
+                }
+
+                log.stepOut();
+                resolve(data);
+            }
+            catch (err) {log.stepOut(); reject(err)};
+        });
+    }
+
+    /**
      * ユーザー一覧取得<br>
      * GET /api/users
      */
@@ -44,7 +84,7 @@ export default class UserApi
                 const accountList = await AccountModel.findList();
                 const userList = accountList.map(account =>
                 {
-                    const user : Response.User = {name:account.name};
+                    const user : Response.User = {id:account.id, name:account.name};
                     return user;
                 });
 

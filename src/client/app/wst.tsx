@@ -17,6 +17,7 @@ import SettingsAccountApp            from './settings-account';
 import SettingsAccountEmailApp       from './settings-account-email';
 import SettingsAccountEmailChangeApp from './settings-account-email-change';
 import SettingsAccountPasswordApp    from './settings-account-password';
+import UserApp                       from './user';
 import UsersApp                      from './users';
 import ForbiddenApp                  from './forbidden';
 import NotFoundApp                   from './not-found';
@@ -58,6 +59,7 @@ class WstApp
             {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), auth:true},
             {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), query:true},
             {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), auth:true},
+            {url:'/user',                          app:new UserApp(),                       title:R.text(R.USER,                           locale)},
             {url:'/users',                         app:new UsersApp(),                      title:R.text(R.USER_LIST,                      locale)},
             {url:'403',                            app:new ForbiddenApp(),                  title:R.text(R.FORBIDDEN,                      locale)},
             {url:'404',                            app:new NotFoundApp(),                   title:R.text(R.NOT_FOUND,                      locale)},

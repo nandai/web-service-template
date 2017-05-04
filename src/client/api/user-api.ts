@@ -11,6 +11,22 @@ export default class UserApi extends Api
     private static CLS_NAME_2 = '(client)UserApi';
 
     /**
+     * ユーザー取得
+     */
+    static getUser()
+    {
+        return new Promise(async (resolve : (res : Response.GetUser) => void, reject) =>
+        {
+            const log = slog.stepIn(UserApi.CLS_NAME_2, 'getUser');
+            const url = `/api/user`;
+
+            const {ok, data} = await Api.sendGetRequest(url, {});
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
+
+    /**
      * ユーザー一覧取得
      */
     static getUserList()
