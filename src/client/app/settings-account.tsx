@@ -40,10 +40,11 @@ export default class SettingsAccountApp extends App
     /**
      * 初期化
      */
-    init() : void
+    init()
     {
         const {store} = this;
         store.message = '';
+        return super.init();
     }
 
     /**

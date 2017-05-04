@@ -9,8 +9,12 @@ export abstract class App
 {
     render : () => void;
 
-    init() : void
+    init()
     {
+        return new Promise((resolve : () => void) =>
+        {
+            resolve()
+        });
     }
 
     abstract view() : JSX.Element;

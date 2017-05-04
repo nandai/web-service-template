@@ -38,10 +38,11 @@ export default class SettingsAccountEmailApp extends App
     /**
      * 初期化
      */
-    init() : void
+    init()
     {
         const {store} = this;
         store.message = '';
+        return super.init();
     }
 
     /**

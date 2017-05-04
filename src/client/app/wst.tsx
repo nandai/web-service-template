@@ -5,7 +5,7 @@ import * as React                    from 'react';
 import * as ReactDOM                 from 'react-dom';
 import {Response}                    from 'libs/response';
 import {App}                         from './app';
-import TopApp                        from './index';
+import TopApp                        from './top';
 import LoginApp                      from './login';
 import SmsApp                        from './sms';
 import SignupApp                     from './signup';
@@ -26,6 +26,7 @@ import History                       from '../libs/history';
 import R                             from '../libs/r';
 import Utils                         from '../libs/utils';
 
+const slog =     window['slog'];
 const ssrStore = window['ssrStore'];
 
 /**
@@ -88,42 +89,78 @@ class WstApp
     /**
      * カレントApp更新
      */
-    updateCurrentApp(url : string) : void
+    updateCurrentApp(url : string, isInit : boolean)
     {
-        let route : Route;
-        for (route of this.routes)
+        const log = slog.stepIn('WstApp', 'updateCurrentApp');
+        return new Promise(async (resolve : () => void) =>
         {
-            if (route.url !== url)
-                continue;
+            let route : Route;
+            for (route of this.routes)
+            {
+                if (route.url !== url)
+                    continue;
 
-            if (route.auth && this.account === null)
-                continue;
+                if (route.auth && this.account === null)
+                    continue;
 
-            if (route.query !== true && location.search === '')
-                break;
+                if (route.query !== true && location.search === '')
+                    break;
 
-            if (route.query === true && location.search !== '')
-                break;
-        }
+                if (route.query === true && location.search !== '')
+                    break;
+            }
 
-        if (this.currentApp !== route.app)
-        {
-            this.currentApp = route.app;
-            document.title =  route.title;
+            if (this.currentApp !== route.app)
+            {
+                this.currentApp = route.app;
+                document.title =  route.title;
 
-            this.currentApp.init();
-            this.render();
-        }
+                if (isInit)
+                {
+                    try
+                    {
+                        await this.currentApp.init();
+                    }
+                    catch (err)
+                    {
+                        console.warn(err.message);
+                    }
+                }
+
+                this.render();
+            }
+
+            log.stepOut();
+            resolve();
+        });
     }
 
     /**
      * pushstate, popstate event
      */
-    private async onHistory()
+    private onHistory()
     {
-        const res = await SettingsApi.getAccount();
-        this.setAccount(res.account);
-        this.updateCurrentApp(location.pathname);
+        const log = slog.stepIn('WstApp', 'onHistory');
+        return new Promise(async (resolve) =>
+        {
+            let account : Response.Account = null;
+
+            try
+            {
+                const res = await SettingsApi.getAccount();
+                account = res.account;
+            }
+            catch (err)
+            {
+                console.warn(err.message);
+            }
+
+            this.setAccount(account);
+            await this.updateCurrentApp(location.pathname, true);
+
+            log.stepOut();
+            resolve();
+        });
     }
 
     /**
@@ -160,8 +197,9 @@ interface Route
 /**
  * onLoad
  */
-window.addEventListener('DOMContentLoaded', () =>
+window.addEventListener('DOMContentLoaded', async () =>
 {
+    const log = slog.stepIn('window', 'DOMContentLoaded');
     const locale = Utils.getLocale();
     let url = location.pathname;
 
@@ -170,7 +208,8 @@ window.addEventListener('DOMContentLoaded', () =>
 
     const app = new WstApp();
     app.init();
-    app.updateCurrentApp(url);
+    await app.updateCurrentApp(url, false);
+    log.stepOut();
 });
 
 if (window.location.hash === '#_=_')

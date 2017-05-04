@@ -20,7 +20,7 @@ export default class UserApi extends Api
             const log = slog.stepIn(UserApi.CLS_NAME_2, 'getUserList');
             const url = `/api/users`;
 
-            const {ok, data} = await Api.sendPostRequest(url, {});
+            const {ok, data} = await Api.sendGetRequest(url, {});
             log.stepOut();
             Api.result(ok, data, resolve, reject);
         });

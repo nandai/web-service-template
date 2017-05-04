@@ -47,7 +47,7 @@ export default class LoginApp extends App
     /**
      * 初期化
      */
-    init() : void
+    init()
     {
         document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 
@@ -55,6 +55,7 @@ export default class LoginApp extends App
         store.message =  ssrStore.message;
 
         ssrStore.message = '';
+        return super.init();
     }
 
     /**

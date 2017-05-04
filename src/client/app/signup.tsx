@@ -43,7 +43,7 @@ export default class SignupApp extends App
     /**
      * 初期化
      */
-    init() : void
+    init()
     {
         const {store} = this;
         store.email =    '',
@@ -51,6 +51,7 @@ export default class SignupApp extends App
         store.message =  ssrStore.message;
 
         ssrStore.message = '';
+        return super.init();
     }
 
     /**

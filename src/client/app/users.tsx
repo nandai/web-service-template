@@ -36,11 +36,19 @@ export default class UsersApp extends App
     /**
      * 初期化
      */
-    init() : void
+    init()
     {
-        const {store} = this;
-        // TODO:initをasyncにしてから対応する
-        // store.userList = await UserApi.getUserList();
+        return new Promise(async (resolve : () => void, reject) =>
+        {
+            try
+            {
+                const {store} = this;
+                const res = await UserApi.getUserList();
+                store.userList = res.userList;
+                resolve();
+            }
+            catch (err) {reject(err)}
+        });
     }
 
     /**
