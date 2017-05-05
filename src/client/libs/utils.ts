@@ -81,4 +81,12 @@ export default class Utils
 
         return params;
     }
+
+    /**
+     * Server Side Rendering Store を取得する
+     */
+    static getSsrStore<T>() : T
+    {
+        return window['ssrStore'];
+    }
 }

@@ -10,8 +10,7 @@ import SignupConfirmView from '../components/views/signup-confirm-view/signup-co
 import {Store}           from '../components/views/signup-confirm-view/store';
 import Utils             from '../libs/utils';
 
-const slog =     window['slog'];
-const ssrStore = window['ssrStore'];
+const slog = window['slog'];
 
 /**
  * signup confirm app

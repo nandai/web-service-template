@@ -3,6 +3,7 @@
  */
 import * as React    from 'react';
 import Button        from 'client/components/common/button';
+import Text          from 'client/components/common/text';
 import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
@@ -43,8 +44,8 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
                     <Button onClick={store.onAccount}  url="/settings/account">{R.text(R.GO_ACCOUNT_SETTINGS, locale)}</Button>
                     <Button onClick={store.onLeave}   >{R.text(R.DELETE_ACCOUNT, locale)}</Button>
                     <Button onClick={store.onBack}    >{R.text(R.BACK, locale)}</Button>
-                    <p>{account.name}</p>
-                    <p>{store.message}</p>
+                    <Text>{account.name}</Text>
+                    <Text>{store.message}</Text>
                 </ViewContents>
             </ViewContainer>
         );

@@ -9,8 +9,8 @@ import ResetView   from '../components/views/reset-view/reset-view';
 import {Store}     from '../components/views/reset-view/store';
 import Utils       from '../libs/utils';
 
-const slog =     window['slog'];
-const ssrStore = window['ssrStore'];
+const slog = window['slog'];
+const ssrStore = Utils.getSsrStore<Store>();
 
 /**
  * reset app

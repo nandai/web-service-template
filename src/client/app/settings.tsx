@@ -10,7 +10,7 @@ import History      from '../libs/history';
 import Utils        from '../libs/utils';
 
 const slog = window['slog'];
-const ssrStore : Store = window['ssrStore'];
+const ssrStore = Utils.getSsrStore<Store>();
 
 /**
  * settings app
@@ -30,6 +30,7 @@ export default class SettingsApp extends App
         {
             locale:     Utils.getLocale(),
             account:    ssrStore.account,
+            message:    ssrStore.message,
             onTwitter:  this.onTwitter. bind(this),
             onFacebook: this.onFacebook.bind(this),
             onGoogle:   this.onGoogle.  bind(this),
@@ -47,9 +48,7 @@ export default class SettingsApp extends App
     init(params)
     {
         const {store} = this;
-        store.message = ssrStore.message;
-
-        ssrStore.message = '';
+        store.message = '';
         return super.init(params);
     }
 

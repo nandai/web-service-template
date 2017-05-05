@@ -9,7 +9,7 @@ import {Store}                     from '../components/views/settings-account-pa
 import Utils                       from '../libs/utils';
 
 const slog = window['slog'];
-const ssrStore : Store = window['ssrStore'];
+const ssrStore = Utils.getSsrStore<Store>();
 
 /**
  * View

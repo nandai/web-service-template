@@ -9,7 +9,7 @@ import {Store}    from '../components/views/user-view/store';
 import Utils      from '../libs/utils';
 
 const slog = window['slog'];
-const ssrStore : Store = window['ssrStore'];
+const ssrStore = Utils.getSsrStore<Store>();
 
 /**
  * users app
