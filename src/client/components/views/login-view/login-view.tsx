@@ -34,12 +34,9 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
             {name:'about', label:'ABOUT', onClick:store.onAbout}
         ];
 
-        let contents : JSX.Element;
-
-        if (store.name === 'home')
-        {
-            contents = (
-                <div>
+        const home = (
+            <div style={{display:(store.name === 'home' ? 'flex' : 'none'), flexGrow:1}}>
+                <ViewContents>
                     <Button onClick={store.onTwitter} >{R.text(R.LOGIN_WITH_TWITTER,  locale)}</Button>
                     <Button onClick={store.onFacebook}>{R.text(R.LOGIN_WITH_FACEBOOK, locale)}</Button>
                     <Button onClick={store.onGoogle}  >{R.text(R.LOGIN_WITH_GOOGLE,   locale)}</Button>
@@ -50,26 +47,25 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
                     <Button onClick={store.onForget} url="/forget">{R.text(R.GO_FORGET, locale)}</Button>
                     <Button onClick={store.onUsers}  url="/users" >{R.text(R.USER_LIST, locale)}</Button>
                     <Text>{store.message}</Text>
-                </div>
-            );
-        }
-        else
-        {
-            contents = (
-                <div>
+                </ViewContents>
+            </div>
+        );
+
+        const about = (
+            <div style={{display:(store.name === 'about' ? 'flex' : 'none'), flexGrow:1}}>
+                <ViewContents>
                     <p style={{textAlign:'center'}}>
                         <a href="https://github.com/nandai/web-service-template" target="_blank">https://github.com/nandai/web-service-template</a>
                     </p>
-                </div>
-            );
-        }
+                </ViewContents>
+            </div>
+        );
 
         return (
             <ViewContainer>
                 <Header />
-                <ViewContents>
-                    {contents}
-                </ViewContents>
+                {home}
+                {about}
                 <Footer>
                     <Tabs active={store.name} items={items} />
                 </Footer>
