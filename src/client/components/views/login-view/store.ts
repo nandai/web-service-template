@@ -4,6 +4,7 @@
 export interface Store
 {
     locale            : string;
+    name              : string;
     email             : string;
     password          : string;
     message?          : string;
@@ -16,4 +17,6 @@ export interface Store
     onSignup?         : () => void;
     onForget?         : () => void;
     onUsers?          : () => void;
+    onHome?           : () => void;
+    onAbout?          : () => void;
 }

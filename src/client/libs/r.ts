@@ -11,6 +11,7 @@ export default class R
     {
         'en':
         {
+            'about':                      'ABOUT',
             'accountName':                'Account name',
             'authSms':                    '2 step verification',
             'back':                       'Back',
@@ -61,6 +62,7 @@ export default class R
 
         'ja':
         {
+            'about':                      'ABOUT',
             'accountName':                'アカウント名',
             'authSms':                    '二段階認証',
             'back':                       '戻る',
@@ -110,6 +112,7 @@ export default class R
         }
     };
 
+    static ABOUT =                         'about';
     static ACCOUNT_NAME =                  'accountName';
     static AUTH_SMS =                      'authSms';
     static BACK =                          'back';

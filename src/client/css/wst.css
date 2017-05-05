@@ -6,7 +6,9 @@
 @import "./common.css";
 @import "../components/common/button.css";
 @import "../components/common/input.css";
+@import "../components/common/tabs.css";
 @import "../components/common/text.css";
+@import "../components/designated/footer.css";
 @import "../components/designated/header.css";
 @import "../components/views/forbidden-view/forbidden-view.css";
 @import "../components/views/not-found-view/not-found-view.css";

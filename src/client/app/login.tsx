@@ -10,8 +10,8 @@ import {Store}    from '../components/views/login-view/store';
 import History    from '../libs/history';
 import Utils      from '../libs/utils';
 
-const slog =     window['slog'];
-const ssrStore = window['ssrStore'];
+const slog = window['slog'];
+const ssrStore : Store = window['ssrStore'];
 
 /**
  * login app
@@ -30,8 +30,10 @@ export default class LoginApp extends App
         this.store =
         {
             locale:           Utils.getLocale(),
+            name:             ssrStore.name,
             email:            '',
             password:         '',
+            message:          ssrStore.message,
             onTwitter:        this.onTwitter.       bind(this),
             onFacebook:       this.onFacebook.      bind(this),
             onGoogle:         this.onGoogle.        bind(this),
@@ -40,7 +42,9 @@ export default class LoginApp extends App
             onLogin:          this.onLogin.         bind(this),
             onSignup:         this.onSignup.        bind(this),
             onForget:         this.onForget.        bind(this),
-            onUsers:          this.onUsers.         bind(this)
+            onUsers:          this.onUsers.         bind(this),
+            onHome:           this.onHome.          bind(this),
+            onAbout:          this.onAbout.         bind(this)
         };
     }
 
@@ -52,9 +56,8 @@ export default class LoginApp extends App
         document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 
         const {store} = this;
-        store.message =  ssrStore.message;
-
-        ssrStore.message = '';
+        store.name = (location.pathname === '/' ? 'home' : 'about');
+        store.message =  '';
         return super.init(params);
     }
 
@@ -159,6 +162,26 @@ export default class LoginApp extends App
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onUsers');
         History.pushState('/users');
+        log.stepOut();
+    }
+
+    /**
+     * onHome
+     */
+    private onHome() : void
+    {
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onHome');
+        History.pushState('/');
+        log.stepOut();
+    }
+
+    /**
+     * onAbout
+     */
+    private onAbout() : void
+    {
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onAbout');
+        History.pushState('/about');
         log.stepOut();
     }
 

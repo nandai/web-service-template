@@ -1,0 +1,26 @@
+.wst-tabs
+{
+    position: relative;
+    display:  flex;
+
+    & > .wst-tab
+    {
+        flex-grow: 1;
+        width:     100%;
+
+        &:not(:first-child)
+        {
+            border-left: 1px solid white;
+        }
+    }
+
+    & .wst-tab-active
+    {
+        position: absolute;
+        z-index:  1;
+        top:     -4px;
+        height:   3px;
+        background-color: rgb(255, 128, 64);
+        transition: all .5s;
+    }
+}

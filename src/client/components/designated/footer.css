@@ -1,0 +1,23 @@
+:root
+{
+    --footer-height: 48px;
+}
+
+.footer
+{
+    min-height: var(--footer-height);
+}
+
+.footer-fixed
+{
+    position:   fixed;
+    width:      100%;
+    z-index:    100;
+    bottom:     0;
+    min-height: var(--footer-height);
+    color:            white;
+    background-color: rgb(39, 152, 142);
+    border-top:       1px solid white;
+    box-sizing:       border-box;
+    font-weight:      bold;
+}

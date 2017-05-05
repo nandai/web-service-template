@@ -30,6 +30,9 @@ export default class SignupApp extends App
         this.store =
         {
             locale:           Utils.getLocale(),
+            email:            '',
+            password:         '',
+            message:          ssrStore.message,
             onTwitter:        this.onTwitter.       bind(this),
             onFacebook:       this.onFacebook.      bind(this),
             onGoogle:         this.onGoogle.        bind(this),
@@ -48,9 +51,7 @@ export default class SignupApp extends App
         const {store} = this;
         store.email =    '',
         store.password = '',
-        store.message =  ssrStore.message;
-
-        ssrStore.message = '';
+        store.message =  '';
         return super.init(params);
     }
 
@@ -134,7 +135,8 @@ export default class SignupApp extends App
     private onTop() : void
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onTop');
-        History.back();
+//      History.back(); // SNSサインアップに失敗して戻ってきた場合に、back()では'/signup'になってしまう
+        History.replaceState('/');
         log.stepOut();
     }
 

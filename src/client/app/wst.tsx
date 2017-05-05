@@ -35,9 +35,9 @@ const ssrStore = window['ssrStore'];
  */
 class WstApp
 {
-    private currentApp : App = null;
-    private routes     : Route[] = null;
-    private account    : Response.Account;
+    private currentRoute : Route =   null;
+    private routes       : Route[] = null;
+    private account      : Response.Account;
 
     /**
      * 初期化
@@ -45,10 +45,12 @@ class WstApp
     init()
     {
         const locale = Utils.getLocale();
+        const loginApp = new LoginApp();
+
         this.routes =
         [
             {url:'/',                              app:new TopApp(),                        title:R.text(R.TOP,                            locale), auth:true},
-            {url:'/',                              app:new LoginApp(),                      title:R.text(R.LOGIN,                          locale)},
+            {url:'/',                              app:loginApp,                            title:R.text(R.LOGIN,                          locale)},
             {url:'/',                              app:new SmsApp(),                        title:R.text(R.AUTH_SMS,                       locale), query:true},
             {url:'/signup',                        app:new SignupApp(),                     title:R.text(R.SIGNUP,                         locale)},
             {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                 locale), query:true},
@@ -61,6 +63,7 @@ class WstApp
             {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), auth:true},
             {url:'/users/:id',                     app:new UserApp(),                       title:R.text(R.USER,                           locale)},
             {url:'/users',                         app:new UsersApp(),                      title:R.text(R.USER_LIST,                      locale)},
+            {url:'/about',                         app:loginApp,                            title:R.text(R.ABOUT,                          locale)},
             {url:'403',                            app:new ForbiddenApp(),                  title:R.text(R.FORBIDDEN,                      locale)},
             {url:'404',                            app:new NotFoundApp(),                   title:R.text(R.NOT_FOUND,                      locale)},
         ];
@@ -82,7 +85,7 @@ class WstApp
      */
     render() : void
     {
-        const view = this.currentApp.view();
+        const view = this.currentRoute.app.view();
         ReactDOM.render(
             <Root view={view} />,
             document.getElementById('root'));
@@ -116,25 +119,25 @@ class WstApp
                     break;
             }
 
-            if (this.currentApp !== route.app)
+            if (this.currentRoute !== route)
             {
-                this.currentApp = route.app;
-                document.title =  route.title;
+                this.currentRoute = route;
 
                 if (isInit)
                 {
                     try
                     {
-                        await this.currentApp.init(params);
+                        await this.currentRoute.app.init(params);
                     }
                     catch (err)
                     {
                         console.warn(err.message);
                     }
                 }
-
-                this.render();
             }
+
+            document.title = route.title;
+            this.render();
 
             log.stepOut();
             resolve();

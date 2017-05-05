@@ -184,6 +184,7 @@ class Initializer
         const provider = ':provider(twitter|facebook|google)';
 
         this.app.get('/',       TopController.   index);
+        this.app.get('/about',  TopController.   about);
         this.app.get('/signup', SignupController.index);
         this.app.get('/forget', ForgetController.index);
         this.app.get('/reset',  ResetController. index);

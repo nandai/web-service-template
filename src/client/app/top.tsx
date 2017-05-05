@@ -74,7 +74,7 @@ export default class TopApp extends App
         try
         {
             await LogoutApi.logout();
-            History.pushState('/');
+            History.replaceState('/');
             log.stepOut();
         }
         catch (err)

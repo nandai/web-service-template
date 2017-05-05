@@ -88,6 +88,7 @@ export default class TopController
                 const store : LoginStore =
                 {
                     locale:   locale,
+                    name:     'home',
                     email:    '',
                     password: '',
                     message:  message
@@ -96,7 +97,7 @@ export default class TopController
                 const title = ClientR.text(ClientR.LOGIN, locale);
                 const el = <LoginView store={store} />;
                 const contents = ReactDOM.renderToString(<Root view={el} />);
-                res.send(view(title, 'wst.js', contents, {message}));
+                res.send(view(title, 'wst.js', contents, store));
             }
             else
             {
@@ -116,6 +117,37 @@ export default class TopController
                 res.send(view(title, 'wst.js', contents, store));
             }
 
+            log.stepOut();
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
+    }
+
+    /**
+     * GET /about
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static async about(req : express.Request, res : express.Response)
+    {
+        const log = slog.stepIn(TopController.CLS_NAME, 'index');
+        const locale = req.ext.locale;
+
+        try
+        {
+            const store : LoginStore =
+            {
+                locale:   locale,
+                name:     'about',
+                email:    '',
+                password: '',
+                message:  ''
+            };
+
+            const title = ClientR.text(ClientR.ABOUT, locale);
+            const el = <LoginView store={store} />;
+            const contents = ReactDOM.renderToString(<Root view={el} />);
+            res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};

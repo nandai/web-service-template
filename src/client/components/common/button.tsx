@@ -7,6 +7,7 @@ interface ButtonProps
 {
     url?      : string;
     disabled? : boolean;
+    margin?   : string;
     onClick   : () => void;
 }
 
@@ -15,6 +16,7 @@ export default class Button extends React.Component<ButtonProps, {}>
     private static defaultProps : ButtonProps = {
         url:      null,
         disabled: false,
+        margin:   null,
         onClick:  null
     };
 
@@ -31,13 +33,15 @@ export default class Button extends React.Component<ButtonProps, {}>
     render() : JSX.Element
     {
         const {props, onClick} = this;
-        const {url, disabled, children} = props;
+        const {url, disabled, margin, children} = props;
+
+        const style = (margin ? {margin} : {});
         let el : JSX.Element;
 
         if (disabled === false && url)
         {
             el = (
-                <div className="wst-button" tabIndex={0} onKeyUp={this.onKeyUp}>
+                <div className="wst-button" style={style} tabIndex={0} onKeyUp={this.onKeyUp}>
                     <a tabIndex = {-1}
                        href =     {url}
                        onClick =  {onClick}>
@@ -50,6 +54,7 @@ export default class Button extends React.Component<ButtonProps, {}>
         {
             el = (
                 <button className = "wst-button"
+                        style=      {style}
                         type =      "button"
                         disabled =  {disabled}
                         onClick  =  {onClick}>
