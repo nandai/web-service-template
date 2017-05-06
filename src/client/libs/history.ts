@@ -4,49 +4,68 @@
 export default class History
 {
 //  private static onPushState : () => void = null;
+    private static count = 0;
 
-    static on(eventName : string, callback : () => void)
+    static setCallback(callback : (direction : string) => void)
     {
-        switch (eventName)
-        {
-            case 'pushstate':
-//              History.onPushState = callback;
-                window['onPushState'] = callback;
-                break;
-
-            case 'popstate':
-                window.addEventListener('popstate', callback);
-                break;
-        }
+//      History.onPushState = callback;
+        window['historyCallback'] = callback;
+        window.addEventListener('popstate', History.onPopState);
     }
 
-    static onPushState() : void
+    private static getCallback() : (direction : string) => void
     {
-//      const onPushState = History.onPushState;
-        const onPushState = window['onPushState'];
-
-        if (onPushState)
-            onPushState();
+        return window['historyCallback'];
     }
 
     static pushState(url : string) : void
     {
         if (location.pathname + location.search !== url)
-            history.pushState(null, null, url);
+            history.pushState(++History.count, null, url);
 
         // location.pathname + location.search === url であってもonPushStateはコールする
-        History.onPushState();
+        const callback = History.getCallback();
+        if (callback)
+            callback('forward');
     }
 
     static replaceState(url : string) : void
     {
-        history.replaceState(null, null, url);
-        History.onPushState();
+        history.replaceState(History.count, null, url);
+
+        const callback = History.getCallback();
+        if (callback)
+            callback('forward');
     }
 
     static back() : void
     {
+        History.count--;
         history.back();
-        History.onPushState();
+
+        const callback = History.getCallback();
+        if (callback)
+            callback('back');
+    }
+
+    static onPopState(e : PopStateEvent) : void
+    {
+//      console.log('count:' + History.count);
+        let direction : string;
+
+        if (e.state > History.count)
+        {
+            History.count++;
+            direction = 'forward';
+        }
+        else
+        {
+            History.count--;
+            direction = 'back';
+        }
+
+        const callback = History.getCallback();
+        if (callback)
+            callback(direction);
     }
 }

@@ -6,7 +6,8 @@ import * as ReactDOM from 'react-dom';
 
 interface RootProps
 {
-    view : JSX.Element;
+    view    : JSX.Element;
+    effect? : string;
 }
 
 interface RootState
@@ -60,7 +61,7 @@ export default class Root extends React.Component<RootProps, RootState>
      */
     componentWillReceiveProps(nextProps : RootProps)
     {
-        if (this.state.view.type === nextProps.view.type)
+        if (this.state.view.type === nextProps.view.type || nextProps.effect === undefined || nextProps.effect === 'none')
         {
             this.setState({view:nextProps.view});
         }

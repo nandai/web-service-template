@@ -37,6 +37,7 @@ class WstApp
 {
     private currentRoute : Route =   null;
     private routes       : Route[] = null;
+    private rootEffect   : string;
     private account      : Response.Account;
 
     /**
@@ -49,23 +50,23 @@ class WstApp
 
         this.routes =
         [
-            {url:'/',                              app:new TopApp(),                        title:R.text(R.TOP,                            locale), auth:true},
-            {url:'/',                              app:loginApp,                            title:R.text(R.LOGIN,                          locale)},
-            {url:'/',                              app:new SmsApp(),                        title:R.text(R.AUTH_SMS,                       locale), query:true},
-            {url:'/signup',                        app:new SignupApp(),                     title:R.text(R.SIGNUP,                         locale)},
-            {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                 locale), query:true},
-            {url:'/forget',                        app:new ForgetApp(),                     title:R.text(R.GO_FORGET,                      locale)},
-            {url:'/reset',                         app:new ResetApp(),                      title:R.text(R.RESET_PASSWORD,                 locale), query:true},
-            {url:'/settings',                      app:new SettingsApp(),                   title:R.text(R.SETTINGS,                       locale), auth:true},
-            {url:'/settings/account',              app:new SettingsAccountApp(),            title:R.text(R.SETTINGS_ACCOUNT,               locale), auth:true},
-            {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), auth:true},
-            {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), query:true},
-            {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), auth:true},
-            {url:'/users/:id',                     app:new UserApp(),                       title:R.text(R.USER,                           locale)},
-            {url:'/users',                         app:new UsersApp(),                      title:R.text(R.USER_LIST,                      locale)},
-            {url:'/about',                         app:loginApp,                            title:R.text(R.ABOUT,                          locale)},
-            {url:'403',                            app:new ForbiddenApp(),                  title:R.text(R.FORBIDDEN,                      locale)},
-            {url:'404',                            app:new NotFoundApp(),                   title:R.text(R.NOT_FOUND,                      locale)},
+            {url:'/',                              app:new TopApp(),                        title:R.text(R.TOP,                            locale), effect:'fade', auth:true},
+            {url:'/',                              app:loginApp,                            title:R.text(R.LOGIN,                          locale), effect:'fade'},
+            {url:'/',                              app:new SmsApp(),                        title:R.text(R.AUTH_SMS,                       locale), effect:'fade', query:true},
+            {url:'/signup',                        app:new SignupApp(),                     title:R.text(R.SIGNUP,                         locale), effect:'fade'},
+            {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                 locale), effect:'fade', query:true},
+            {url:'/forget',                        app:new ForgetApp(),                     title:R.text(R.GO_FORGET,                      locale), effect:'fade'},
+            {url:'/reset',                         app:new ResetApp(),                      title:R.text(R.RESET_PASSWORD,                 locale), effect:'fade', query:true},
+            {url:'/settings',                      app:new SettingsApp(),                   title:R.text(R.SETTINGS,                       locale), effect:'fade', auth:true},
+            {url:'/settings/account',              app:new SettingsAccountApp(),            title:R.text(R.SETTINGS_ACCOUNT,               locale), effect:'none', auth:true},
+            {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), effect:'none', auth:true},
+            {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), effect:'none', query:true},
+            {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), effect:'none', auth:true},
+            {url:'/users/:id',                     app:new UserApp(),                       title:R.text(R.USER,                           locale), effect:'fade'},
+            {url:'/users',                         app:new UsersApp(),                      title:R.text(R.USER_LIST,                      locale), effect:'fade'},
+            {url:'/about',                         app:loginApp,                            title:R.text(R.ABOUT,                          locale), effect:'fade'},
+            {url:'403',                            app:new ForbiddenApp(),                  title:R.text(R.FORBIDDEN,                      locale), effect:'fade'},
+            {url:'404',                            app:new NotFoundApp(),                   title:R.text(R.NOT_FOUND,                      locale), effect:'fade'},
         ];
 
         const render = this.render.bind(this);
@@ -75,9 +76,7 @@ class WstApp
         });
 
         this.setAccount(ssrStore.account);
-
-        History.on('pushstate', this.onHistory.bind(this));
-        History.on('popstate',  this.onHistory.bind(this));
+        History.setCallback(this.onHistory.bind(this));
     }
 
     /**
@@ -85,18 +84,20 @@ class WstApp
      */
     render() : void
     {
-        const view = this.currentRoute.app.view();
+        const route = this.currentRoute;
+        const view = route.app.view();
+
         ReactDOM.render(
-            <Root view={view} />,
+            <Root view={view} effect={this.rootEffect} />,
             document.getElementById('root'));
     }
 
     /**
-     * カレントApp更新
+     * カレントRoute更新
      */
-    updateCurrentApp(url : string, isInit : boolean)
+    updateCurrentRoute(url : string, isInit : boolean)
     {
-        const log = slog.stepIn('WstApp', 'updateCurrentApp');
+        const log = slog.stepIn('WstApp', 'updateCurrentRoute');
         return new Promise(async (resolve : () => void) =>
         {
             let route : Route;
@@ -137,8 +138,6 @@ class WstApp
             }
 
             document.title = route.title;
-            this.render();
-
             log.stepOut();
             resolve();
         });
@@ -147,11 +146,12 @@ class WstApp
     /**
      * pushstate, popstate event
      */
-    private onHistory()
+    private onHistory(direction : string)
     {
         const log = slog.stepIn('WstApp', 'onHistory');
         return new Promise(async (resolve) =>
         {
+            // アカウント情報の再取得と再設定
             let account : Response.Account = null;
 
             try
@@ -165,8 +165,23 @@ class WstApp
             }
 
             this.setAccount(account);
-            await this.updateCurrentApp(location.pathname, true);
 
+            // 画面遷移時のエフェクト設定
+            if (direction === 'back')
+            {
+                // 戻る場合は遷移元のエフェクトを使用
+                this.rootEffect = this.currentRoute.effect;
+            }
+
+            await this.updateCurrentRoute(location.pathname, true);
+
+            if (direction === 'forward')
+            {
+                // 進む場合は繊維先のエフェクトを使用
+                this.rootEffect = this.currentRoute.effect;
+            }
+
+            this.render();
             log.stepOut();
             resolve();
         });
@@ -199,6 +214,7 @@ interface Route
     url    : string;
     app    : App;
     title  : string;
+    effect : string;
     query? : boolean;
     auth?  : boolean;
 }
@@ -217,7 +233,8 @@ window.addEventListener('DOMContentLoaded', async () =>
 
     const app = new WstApp();
     app.init();
-    await app.updateCurrentApp(url, false);
+    await app.updateCurrentRoute(url, false);
+    app.render();
     log.stepOut();
 });
 
