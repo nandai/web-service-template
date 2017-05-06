@@ -202,26 +202,17 @@ export default class Provider
                                     {
                                         findAccount.sms_id =   Utils.createRundomText(32);
                                         findAccount.sms_code = Utils.createRundomText( 6, true);
-                                        AccountModel.update(findAccount);
-
-                                        await self.sendResponse(req, res, session, '/', null, findAccount.sms_id);
 
                                         // ログインコードをSMS送信
-                                        const accountSid = Config.TWILIO_ACCOUNT_SID;
-                                        const authToken =  Config.TWILIO_AUTH_TOKEN;
+                                        const locale = req.ext.locale;
+                                        const message = R.text(R.SMS_LOGIN_CODE, locale);
+                                        const success = await this.sendSms(findAccount.phone_no, `${message}：${findAccount.sms_code}`);
 
-                                        const client = new twilio.RestClient(accountSid, authToken);
-
-                                        client.messages.create(
+                                        // if (success) // TODO
                                         {
-                                            body: `ログインコード：${findAccount.sms_code}`,
-                                            to: findAccount.phone_no,
-                                            from: Config.TWILIO_FROM_PHONE_NO
-                                        }, (err, message) =>
-                                        {
-                                            if (err)
-                                                log.w(err.message);
-                                        });
+                                            AccountModel.update(findAccount);
+                                            await self.sendResponse(req, res, session, '/', null, findAccount.sms_id);
+                                        }
                                     }
                                 }
                                 else
@@ -376,6 +367,39 @@ export default class Provider
                 resolve();
             }
             catch (err) {Utils.internalServerError(err, res, log)};
+        });
+    }
+
+    /**
+     * SMSを送信する
+     */
+    private sendSms(phoneNo : string, message : string)
+    {
+        const log = slog.stepIn(Provider.CLS_NAME, 'sendSms');
+        return new Promise((resolve : (success : boolean) => void) =>
+        {
+            const accountSid = Config.TWILIO_ACCOUNT_SID;
+            const authToken =  Config.TWILIO_AUTH_TOKEN;
+            const client = new twilio(accountSid, authToken);
+
+            client.messages.create(
+            {
+                body: message,
+                to:   phoneNo,
+                from: Config.TWILIO_FROM_PHONE_NO
+            })
+            .then(message =>
+            {
+//              log.d(message)
+                log.stepOut();
+                resolve(true);
+            })
+            .catch(err =>
+            {
+                log.w(err.message);
+                log.stepOut();
+                resolve(false);
+            });
         });
     }
 }

@@ -51,6 +51,7 @@ export default class R
     static SETTINGS_COMPLETED = 'settingsCompleted';
     static SIGNUP_COMPLETED = 'signupCompleted';
     static SIGNUP_MAIL_SENDED = 'signupMailSended';
+    static SMS_LOGIN_CODE = 'smsLoginCode';
 
     private static mailTemplates =
     {

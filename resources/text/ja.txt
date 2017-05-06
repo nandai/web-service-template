@@ -31,5 +31,6 @@
     "resetMailSended": "パスワードリセットのメールを送信しました。",
     "settingsCompleted": "設定を完了しました。",
     "signupCompleted": "登録が完了しました。",
-    "signupMailSended": "仮登録のメールを送信しました。"
+    "signupMailSended": "仮登録のメールを送信しました。",
+    "smsLoginCode": "ログインコード"
 }

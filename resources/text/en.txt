@@ -31,5 +31,6 @@
     "resetMailSended": "I sent a password reset e-mail.",
     "settingsCompleted": "We have completed the setting.",
     "signupCompleted": "Registration has been completed.",
-    "signupMailSended": "An email has been sent to the temporary registration."
+    "signupMailSended": "An email has been sent to the temporary registration.",
+    "smsLoginCode": "Login code"
 }
