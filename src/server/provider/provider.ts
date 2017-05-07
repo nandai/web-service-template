@@ -207,7 +207,8 @@ export default class Provider
                                         // ログインコードをSMS送信
                                         const locale = req.ext.locale;
                                         const message = R.text(R.SMS_LOGIN_CODE, locale);
-                                        const success = await this.sendSms(findAccount.phone_no, `${message}：${findAccount.sms_code}`);
+                                        const phoneNo = this.normalizePhoneNo(findAccount.phone_no);
+                                        const success = await this.sendSms(phoneNo, `${message}：${findAccount.sms_code}`);
 
                                         if (success)
                                         {
@@ -374,6 +375,22 @@ export default class Provider
             }
             catch (err) {Utils.internalServerError(err, res, log)};
         });
+    }
+
+    /**
+     * 電話番号正規化
+     */
+    private normalizePhoneNo(phoneNo : string) : string
+    {
+        phoneNo = phoneNo.replace(/-/g, '');
+
+        if (phoneNo.charAt(0) !== '+')
+        {
+            if (phoneNo.charAt(0) === '0')
+                phoneNo = '+81' + phoneNo.substr(1);
+        }
+
+        return phoneNo;
     }
 
     /**
