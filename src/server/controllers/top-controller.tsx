@@ -46,11 +46,12 @@ export default class TopController
             cookie.clearPassport();
 
             const session : Session = req.ext.session;
+            const messageId = session.message_id;
             let message : string;
 
-            if (session.message_id)
+            if (messageId)
             {
-                message = R.text(session.message_id, locale);
+                message = R.text(messageId, locale);
                 session.message_id = null;
                 await SessionModel.update(session);
             }
@@ -81,7 +82,7 @@ export default class TopController
                     notFound(req, res);
                 }
             }
-            else if (session.account_id === null || message)
+            else if (session.account_id === null || (messageId !== R.COULD_NOT_SEND_SMS && message))
             {
                 log.d('ログイン画面を表示');
 
@@ -108,7 +109,7 @@ export default class TopController
                 {
                     locale:  locale,
                     account: data.account,
-                    message: ''
+                    message: message
                 };
 
                 const title = ClientR.text(ClientR.TOP, locale);

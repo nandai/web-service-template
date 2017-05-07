@@ -37,7 +37,7 @@ export default class SmsApp extends App
     /**
      * 初期化
      */
-    init(params)
+    init(params, message? : string)
     {
         const {store} = this;
         store.smsCode =   '';

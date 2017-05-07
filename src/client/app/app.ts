@@ -9,7 +9,13 @@ export abstract class App
 {
     render : () => void;
 
-    init(params)
+    /**
+     * 初期化
+     *
+     * @param   params  URLに含まれるパラメータ（Utils.getParamsFromUrl参照）
+     * @param   message 前画面から渡されるメッセージ（History.pushState参照）
+     */
+    init(params, message? : string)
     {
         return new Promise((resolve : () => void) =>
         {

@@ -36,7 +36,7 @@ export default class UserApp extends App
     /**
      * 初期化
      */
-    init(params)
+    init(params, message? : string)
     {
         return new Promise(async (resolve : () => void, reject) =>
         {

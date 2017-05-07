@@ -35,6 +35,7 @@ export default class R
     static COULD_NOT_SEND_CHANGE_MAIL = 'couldNotSendChangeMail';
     static COULD_NOT_SEND_RESET_MAIL = 'couldNotSendResetMail';
     static COULD_NOT_SEND_SIGNUP_MAIL = 'couldNotSendSignupMail';
+    static COULD_NOT_SEND_SMS = 'couldNotSendSms';
     static EMAIL_CHANGED = 'emailChanged';
     static INCORRECT_ACCOUNT = 'incorrectAccount';
     static INVALID_EMAIL = 'invalidEmail';

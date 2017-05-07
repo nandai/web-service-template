@@ -16,6 +16,7 @@
     "couldNotSendChangeMail": "メールアドレス変更手続きのメールを送信できませんでした。",
     "couldNotSendResetMail": "パスワードリセットのメールを送信できませんでした。",
     "couldNotSendSignupMail": "仮登録のメールを送信できませんでした。",
+    "couldNotSendSms": "SMSの送信に失敗したため二段階認証をスキップしました。電話番号を確認してください。",
     "emailChanged": "メールアドレスを変更しました。",
     "incorrectAccount": "アカウントが正しくありません。",
     "invalidEmail": "メールアドレスが正しくありません。",

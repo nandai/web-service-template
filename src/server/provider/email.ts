@@ -108,17 +108,22 @@ export default class Email extends Provider
         const log = slog.stepIn(Email.CLS_NAME_2, 'sendResponse');
         return new Promise((resolve : () => void, reject) =>
         {
-            if (phrase)
+            const locale = req.ext.locale;
+
+            if (phrase && phrase !== R.COULD_NOT_SEND_SMS)
             {
                 if (phrase === R.INCORRECT_ACCOUNT)
                     phrase =   R.INVALID_EMAIL_AUTH;
 
-                const locale = req.ext.locale;
                 res.ext.error(1, R.text(phrase, locale));
             }
             else
             {
                 const data : Response.LoginEmail = {status:0, smsId};
+
+                if (phrase)
+                    data.message = R.text(phrase, locale);
+
                 res.json(data);
             }
 

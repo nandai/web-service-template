@@ -94,8 +94,11 @@ class WstApp
 
     /**
      * カレントRoute更新
+     *
+     * @param   url     URL
+     * @param   isInit  app.init()をコールするかどうか。初回（DOMContentLoaded時）は不要（SSR Storeを使用してレンダリングするため）
      */
-    updateCurrentRoute(url : string, isInit : boolean)
+    updateCurrentRoute(url : string, isInit : boolean, message? : string)
     {
         const log = slog.stepIn('WstApp', 'updateCurrentRoute');
         return new Promise(async (resolve : () => void) =>
@@ -128,7 +131,7 @@ class WstApp
                 {
                     try
                     {
-                        await this.currentRoute.app.init(params);
+                        await this.currentRoute.app.init(params, message);
                     }
                     catch (err)
                     {
@@ -146,7 +149,7 @@ class WstApp
     /**
      * pushstate, popstate event
      */
-    private onHistory(direction : string)
+    private onHistory(direction : string, message? : string)
     {
         const log = slog.stepIn('WstApp', 'onHistory');
         return new Promise(async (resolve) =>
@@ -173,7 +176,7 @@ class WstApp
                 this.rootEffect = this.currentRoute.effect;
             }
 
-            await this.updateCurrentRoute(location.pathname, true);
+            await this.updateCurrentRoute(location.pathname, true, message);
 
             if (direction === 'forward')
             {

@@ -30,11 +30,21 @@ export default class TopApp extends App
         {
             locale:     Utils.getLocale(),
             account:    ssrStore.account,
-            message:    '',
+            message:    ssrStore.message,
             onSettings: this.onSettings.bind(this),
             onUsers:    this.onUsers.   bind(this),
             onLogout:   this.onLogout.  bind(this)
         };
+    }
+
+    /**
+     * 初期化
+     */
+    init(params, message? : string)
+    {
+        const {store} = this;
+        store.message =  message || '';
+        return super.init(params);
     }
 
     /**

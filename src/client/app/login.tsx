@@ -51,7 +51,7 @@ export default class LoginApp extends App
     /**
      * 初期化
      */
-    init(params)
+    init(params, message? : string)
     {
         document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 
@@ -197,7 +197,7 @@ export default class LoginApp extends App
             {
                 const res = await LoginApi.loginEmail(param);
 
-                if (res.message)
+                if (res.status)
                 {
                     this.store.message = res.message;
                     this.render();
@@ -206,7 +206,7 @@ export default class LoginApp extends App
                 {
                     if (res.smsId === undefined)
                     {
-                        History.pushState('/');
+                        History.pushState('/', res.message);
                     }
                     else
                     {

@@ -6,19 +6,19 @@ export default class History
 //  private static onPushState : () => void = null;
     private static count = 0;
 
-    static setCallback(callback : (direction : string) => void)
+    static setCallback(callback : (direction : string, massage? : string) => void)
     {
 //      History.onPushState = callback;
         window['historyCallback'] = callback;
         window.addEventListener('popstate', History.onPopState);
     }
 
-    private static getCallback() : (direction : string) => void
+    private static getCallback() : (direction : string, massage? : string) => void
     {
         return window['historyCallback'];
     }
 
-    static pushState(url : string) : void
+    static pushState(url : string, message? : string) : void
     {
         if (location.pathname + location.search !== url)
             history.pushState(++History.count, null, url);
@@ -26,7 +26,7 @@ export default class History
         // location.pathname + location.search === url であってもonPushStateはコールする
         const callback = History.getCallback();
         if (callback)
-            callback('forward');
+            callback('forward', message);
     }
 
     static replaceState(url : string) : void

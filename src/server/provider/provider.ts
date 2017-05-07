@@ -193,6 +193,7 @@ export default class Provider
                             if (session.account_id === null)
                             {
                                 log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
+                                let phrase : string;
 
                                 if (findAccount.phone_no !== null)
                                 {
@@ -208,14 +209,19 @@ export default class Provider
                                         const message = R.text(R.SMS_LOGIN_CODE, locale);
                                         const success = await this.sendSms(findAccount.phone_no, `${message}：${findAccount.sms_code}`);
 
-                                        // if (success) // TODO
+                                        if (success)
                                         {
                                             AccountModel.update(findAccount);
                                             await self.sendResponse(req, res, session, '/', null, findAccount.sms_id);
                                         }
+                                        else
+                                        {
+                                            phrase = R.COULD_NOT_SEND_SMS;
+                                        }
                                     }
                                 }
-                                else
+
+                                if (findAccount.phone_no === null || phrase !== undefined)
                                 {
                                     // セッション作成
                                     session.account_id = findAccount.id;
@@ -228,7 +234,7 @@ export default class Provider
                                     await LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
-                                    await self.sendResponse(req, res, session, '/');
+                                    await self.sendResponse(req, res, session, '/', phrase);
                                 }
                             }
                             else
