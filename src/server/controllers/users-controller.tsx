@@ -34,7 +34,7 @@ export default class UsersController
         const locale = req.ext.locale;
         const id = Number(req.params.id);
 
-        const data = await UserApi.getUser(req, id);
+        const data = await UserApi.getUser({id}, req);
 
         if (data.user)
         {

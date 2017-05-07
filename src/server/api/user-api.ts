@@ -41,9 +41,7 @@ export default class UserApi
                     break;
                 }
 
-                const id = <number>param.id;
-
-                const data = await UserApi.getUser(req, id);
+                const data = await UserApi.getUser(param, req);
                 res.json(data);
             }
             while (false);
@@ -55,7 +53,7 @@ export default class UserApi
     /**
      * ユーザー取得
      */
-    static getUser(req : express.Request, id : number)
+    static getUser(param : Request.GetUser, req : express.Request)
     {
         return new Promise(async (resolve : (data : Response.GetUser) => void, reject) =>
         {
@@ -64,6 +62,7 @@ export default class UserApi
             {
                 const locale = req.ext.locale;
                 const data : Response.GetUser = {};
+                const id = <number>param.id;
                 const account = await AccountModel.find(id);
 
                 if (account === null)
