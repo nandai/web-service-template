@@ -189,21 +189,32 @@ class Initializer
         this.app.get('/forget', ForgetController.index);
         this.app.get('/reset',  ResetController. index);
 
-        this.app.get('/signup/twitter',  signupCommand, authTwitter);
-        this.app.get('/signup/facebook', signupCommand, authFacebook);
-        this.app.get('/signup/google',   signupCommand, authGoogle);
-        this.app.get('/login/twitter',   loginCommand,  authTwitter);
-        this.app.get('/login/facebook',  loginCommand,  authFacebook);
-        this.app.get('/login/google',    loginCommand,  authGoogle);
+        if (Config.hasTwitter())
+        {
+            this.app.get('/signup/twitter',                              signupCommand, authTwitter);
+            this.app.get('/login/twitter',                               loginCommand,  authTwitter);
+            this.app.get('/settings/account/link/twitter',  Access.auth, linkCommand,   authTwitter);
+        }
+
+        if (Config.hasFacebook())
+        {
+            this.app.get('/signup/facebook',                             signupCommand, authFacebook);
+            this.app.get('/login/facebook',                              loginCommand,  authFacebook);
+            this.app.get('/settings/account/link/facebook', Access.auth, linkCommand,   authFacebook);
+        }
+
+        if (Config.hasGoogle())
+        {
+            this.app.get('/signup/google',                             signupCommand, authGoogle);
+            this.app.get('/login/google',                              loginCommand,  authGoogle);
+            this.app.get('/settings/account/link/google', Access.auth, linkCommand,   authGoogle);
+        }
 
         this.app.get('/settings',                       Access.auth, SettingsController.index);
         this.app.get('/settings/account',               Access.auth, SettingsController.account);
         this.app.get('/settings/account/email',         Access.auth, SettingsController.email);
         this.app.get('/settings/account/email/change',               SettingsController.changeEmail);
         this.app.get('/settings/account/password',      Access.auth, SettingsController.password);
-        this.app.get('/settings/account/link/twitter',  Access.auth, linkCommand, authTwitter);
-        this.app.get('/settings/account/link/facebook', Access.auth, linkCommand, authFacebook);
-        this.app.get('/settings/account/link/google',   Access.auth, linkCommand, authGoogle);
 
         this.app.get('/users/:id(\\d+)', UsersController.user);
         this.app.get('/users',           UsersController.users);

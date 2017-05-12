@@ -197,9 +197,7 @@ export default class Provider
 
                                 if (findAccount.phone_no !== null)
                                 {
-                                    if (Config.TWILIO_ACCOUNT_SID   !== ''
-                                    &&  Config.TWILIO_AUTH_TOKEN    !== ''
-                                    &&  Config.TWILIO_FROM_PHONE_NO !== '')
+                                    if (Config.hasTwilio())
                                     {
                                         findAccount.sms_id =   Utils.createRundomText(32);
                                         findAccount.sms_code = Utils.createRundomText( 6, true);

@@ -144,4 +144,57 @@ export default class Config
         }
         return false;
     }
+
+    /**
+     * Twitterの設定があるかどうか調べる
+     */
+    static hasTwitter() : boolean
+    {
+        if (Config.TWITTER_CONSUMER_KEY    !== ''
+        &&  Config.TWITTER_CONSUMER_SECRET !== '')
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Facebookの設定があるかどうか調べる
+     */
+    static hasFacebook() : boolean
+    {
+        if (Config.FACEBOOK_APPID     !== ''
+        &&  Config.FACEBOOK_APPSECRET !== '')
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Googleの設定があるかどうか調べる
+     */
+    static hasGoogle() : boolean
+    {
+        if (Config.GOOGLE_CLIENT_ID     !== ''
+        &&  Config.GOOGLE_CLIENT_SECRET !== '')
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Twilioの設定があるかどうか調べる
+     */
+    static hasTwilio() : boolean
+    {
+        if (Config.TWILIO_ACCOUNT_SID   !== ''
+        &&  Config.TWILIO_AUTH_TOKEN    !== ''
+        &&  Config.TWILIO_FROM_PHONE_NO !== '')
+        {
+            return true;
+        }
+        return false;
+    }
 }
