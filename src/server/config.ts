@@ -8,12 +8,15 @@ import path = require('path');
 
 const rootDir = __dirname + '/../..';
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+console.log('NODE_ENV ... ' + process.env.NODE_ENV);
+
 /**
  * コンフィグ
  */
 export default class Config
 {
-    private static path = rootDir + '/appconfig.json';
+    private static path = `${rootDir}/config/${process.env.NODE_ENV}/appconfig.json`;
 
     static ROOT_DIR =   rootDir;
     static STATIC_DIR = rootDir + '/www/static';

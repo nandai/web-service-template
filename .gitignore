@@ -1,10 +1,11 @@
-/appconfig.json
 /build/
 /build-client/
+/config/development/*
 /doc/
 /node_modules/
-/ssl/
+/ssl/*
 /storage/
-/typings/
 /www/static/js/
 /www/static/components/wst.css
+!.gitkeep
+!README.md

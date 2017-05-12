@@ -16,7 +16,7 @@ import express = require('express');
 import slog =    require('../slog');
 
 /**
- * ユーザー一覧コントローラ
+ * ユーザーコントローラ
  */
 export default class UsersController
 {

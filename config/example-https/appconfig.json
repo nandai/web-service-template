@@ -1,0 +1,27 @@
+{
+    "app":
+    {
+        "app-host":                "localhost",
+        "app-port":                443,
+        "ssl-key":                 "server.key",
+        "ssl-cert":                "server.crt",
+        "ssl-ca":                  "ca.crt",
+        "ssl-passphrase":          "passphrase",
+        "session-secret":          "web service template",
+        "password-salt":           "webservicetemplate",
+        "smtp-host":               "smtp.example.com",
+        "smtp-port":               587,
+        "smtp-user":               "example",
+        "smtp-password":           "password",
+        "smtp-from":               "web service template <info@example.com>",
+        "twitter-consumer-key":    "",
+        "twitter-consumer-secret": "",
+        "facebook-app-id":         "",
+        "facebook-app-secret":     "",
+        "google-client-id":        "",
+        "google-client-secret":    "",
+        "twilio-account-sid":      "",
+        "twilio-auth-token":       "",
+        "twilio-from-phone-no":    ""
+    }
+}

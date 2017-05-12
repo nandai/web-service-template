@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 const gulp =        require('gulp');
 const abspath =     require('gulp-absolute-path');
@@ -12,6 +12,7 @@ const postcss =     require('gulp-postcss');
 const cssImport =   require('postcss-import');
 const cssNext =     require('postcss-cssnext');
 const cssMixins =   require('postcss-mixins');
+
 const tsOptions =
 {
     target: 'es6',
@@ -23,6 +24,9 @@ const tsOptions =
 // {
 //   presets: ['latest']
 // };
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+console.log('NODE_ENV ... ' + process.env.NODE_ENV + '\n');
 
 /**
  * TypeScript
