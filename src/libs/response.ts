@@ -28,86 +28,93 @@ export namespace Response
 
     export interface LoginSms
     {
-        status   : number;
+        status   : Status;
         message? : string;
     }
 
     export interface GetAccount
     {
-        status  : number;
+        status  : Status;
         account : Account;
     }
 
     export interface SetAccount
     {
-        status  : number;
+        status  : Status;
         message : string;
     }
 
     export interface DeleteAccount
     {
-        status   : number;
+        status   : Status;
         message? : string;
     }
 
     export interface UnlinkProvider
     {
-        status   : number;
+        status   : Status;
         message? : string;
     }
 
     export interface RequestChangeEmail
     {
-        status  : number;
+        status  : Status;
         message : string;
     }
 
     export interface ChangeEmail
     {
-        status  : number;
+        status  : Status;
         message : string;
     }
 
     export interface ChangePassword
     {
-        status  : number;
+        status  : Status;
         message : string;
     }
 
     export interface RequestResetPassword
     {
-        status  : number;
+        status  : Status;
         message : string;
     }
 
     export interface ResetPassword
     {
-        status  : number;
+        status  : Status;
         message : string;
     }
 
     export interface SignupEmail
     {
-        status  : number;
+        status  : Status;
         message : string;
     }
 
     export interface ConfirmSignupEmail
     {
-        status  : number;
+        status  : Status;
         message : string;
     }
 
     export interface GetUser
     {
-        status?  : number;
+        status?  : Status;
         user?    : User;
         message? : string;
     }
 
     export interface GetUserList
     {
-        status   : number;
+        status   : Status;
         userList : User[];
+    }
+
+    export enum Status
+    {
+        BAD_REQUEST = -1,
+        OK =           0,
+        FAILED =       1
     }
 }

@@ -38,7 +38,7 @@ export default class ResetApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -47,7 +47,7 @@ export default class ResetApi
                 const account = await AccountModel.findByProviderId('email', email);
                 if (account === null || account.signup_id)
                 {
-                    res.ext.error(1, R.text(R.INVALID_EMAIL, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL, locale));
                     break;
                 }
 
@@ -98,19 +98,19 @@ export default class ResetApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
                 if (Utils.validatePassword(password) === false)
                 {
-                    res.ext.error(1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
                 }
 
                 if (param.password !== confirm)
                 {
-                    res.ext.error(1, R.text(R.MISMATCH_PASSWORD, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.MISMATCH_PASSWORD, locale));
                     break;
                 }
 
@@ -133,7 +133,7 @@ export default class ResetApi
                     // パスワードリセットの画面でパスワードリセットを完了させた後、再度パスワードリセットを完了させようとした場合にここに到達する想定。
                     // リセットIDで該当するアカウントがないということが必ずしもパスワードリセット済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、パスワードリセット済みというメッセージでOK。
-                    res.ext.error(1, R.text(R.ALREADY_PASSWORD_RESET, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.ALREADY_PASSWORD_RESET, locale));
                 }
             }
             while (false);

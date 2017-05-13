@@ -1,12 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import R         from '../libs/r';
-import Utils     from '../libs/utils';
-import Twitter   from '../provider/twitter';
-import Facebook  from '../provider/facebook';
-import Google    from '../provider/google';
-import {Request} from 'libs/request';
+import R          from '../libs/r';
+import Utils      from '../libs/utils';
+import Twitter    from '../provider/twitter';
+import Facebook   from '../provider/facebook';
+import Google     from '../provider/google';
+import {Request}  from 'libs/request';
+import {Response} from 'libs/response';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -74,7 +75,7 @@ export default class ProviderApi
 
             if (Utils.existsParameters(param, condition) === false)
             {
-                res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                res.ext.badRequest(locale);
                 break;
             }
 
@@ -117,7 +118,7 @@ export default class ProviderApi
 
             if (Utils.existsParameters(param, condition) === false)
             {
-                res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                res.ext.badRequest(locale);
                 break;
             }
 
@@ -158,7 +159,7 @@ export default class ProviderApi
 
             if (Utils.existsParameters(param, condition) === false)
             {
-                res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                res.ext.badRequest(locale);
                 break;
             }
 

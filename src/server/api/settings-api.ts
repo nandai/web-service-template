@@ -92,7 +92,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -104,7 +104,7 @@ export default class SettingsApi
 
                 if (len < 1 || 20 < len)
                 {
-                    res.ext.error(1, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
                 }
 
@@ -149,7 +149,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -161,7 +161,7 @@ export default class SettingsApi
                 &&  provider !== 'facebook'
                 &&  provider !== 'google')
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -180,7 +180,7 @@ export default class SettingsApi
                 else
                 {
                     const locale = req.ext.locale;
-                    res.ext.error(1, R.text(R.CANNOT_UNLINK, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.CANNOT_UNLINK, locale));
                 }
             }
             while (false);
@@ -209,7 +209,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -220,7 +220,7 @@ export default class SettingsApi
 
                 if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                 {
-                    res.ext.error(1, R.text(R.ALREADY_EXISTS_EMAIL, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.ALREADY_EXISTS_EMAIL, locale));
                     break;
                 }
 
@@ -246,7 +246,7 @@ export default class SettingsApi
                     }
                     else
                     {
-                        res.ext.error(1, R.text(R.CANNOT_EMPTY_EMAIL, locale));
+                        res.ext.error(Response.Status.FAILED, R.text(R.CANNOT_EMPTY_EMAIL, locale));
                     }
                 }
 
@@ -321,7 +321,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -338,7 +338,7 @@ export default class SettingsApi
 
                     if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                     {
-                        res.ext.error(1, R.text(R.ALREADY_EXISTS_EMAIL, locale));
+                        res.ext.error(Response.Status.FAILED, R.text(R.ALREADY_EXISTS_EMAIL, locale));
                         break;
                     }
 
@@ -347,7 +347,7 @@ export default class SettingsApi
 
                     if (hashPassword !== account.password)
                     {
-                        res.ext.error(1, R.text(R.INVALID_PASSWORD, locale));
+                        res.ext.error(Response.Status.FAILED, R.text(R.INVALID_PASSWORD, locale));
                         break;
                     }
 
@@ -370,7 +370,7 @@ export default class SettingsApi
                     // メールアドレス設定の確認画面でメールアドレスの設定を完了させた後、再度メールアドレスの設定を完了させようとした場合にここに到達する想定。
                     // 変更IDで該当するアカウントがないということが必ずしもメールアドレスの設定済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので変更済みというメッセージでOK。
-                    res.ext.error(1, R.text(R.ALREADY_EMAIL_CHANGED, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.ALREADY_EMAIL_CHANGED, locale));
                 }
             }
             while (false);
@@ -401,7 +401,7 @@ export default class SettingsApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -414,7 +414,7 @@ export default class SettingsApi
 
                 if (account.email === null)
                 {
-                    res.ext.error(1, R.text(R.CANNOT_SET_PASSWORD, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.CANNOT_SET_PASSWORD, locale));
                     break;
                 }
 
@@ -424,20 +424,20 @@ export default class SettingsApi
 
                     if (hashPassword !== account.password)
                     {
-                        res.ext.error(1, R.text(R.INVALID_PASSWORD, locale));
+                        res.ext.error(Response.Status.FAILED, R.text(R.INVALID_PASSWORD, locale));
                         break;
                     }
                 }
 
                 if (Utils.validatePassword(newPassword) === false)
                 {
-                    res.ext.error(1, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
                 }
 
                 if (param.newPassword !== confirm)
                 {
-                    res.ext.error(1, R.text(R.MISMATCH_PASSWORD, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.MISMATCH_PASSWORD, locale));
                     break;
                 }
 

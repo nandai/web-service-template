@@ -115,7 +115,7 @@ export default class Email extends Provider
                 if (phrase === R.INCORRECT_ACCOUNT)
                     phrase =   R.INVALID_EMAIL_AUTH;
 
-                res.ext.error(1, R.text(phrase, locale));
+                res.ext.error(Response.Status.FAILED, R.text(phrase, locale));
             }
             else
             {

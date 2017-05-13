@@ -341,12 +341,12 @@ export default class Provider
                 {
                     const message = '不要と思われた処理に侵入！';
                     log.e(message);
-                    res.ext.error(-1, message);
+                    res.ext.badRequest(message);
 
                 //     if (phrase)
                 //     {
                 //         const locale = req.ext.locale;
-                //         res.ext.error(1, R.text(phrase, locale));
+                //         res.ext.error(Response.Status.FAILED, R.text(phrase, locale));
                 //     }
                 //     else
                 //     {

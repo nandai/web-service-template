@@ -48,7 +48,7 @@ export default class SignupApi extends ProviderApi
 
             if (Utils.existsParameters(param, condition) === false)
             {
-                res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                res.ext.badRequest(locale);
                 break;
             }
 
@@ -57,7 +57,7 @@ export default class SignupApi extends ProviderApi
 
             if (Utils.validatePassword(password) === false)
             {
-                res.ext.error(1, R.text(R.INVALID_EMAIL_AUTH, locale));
+                res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL_AUTH, locale));
                 break;
             }
 
@@ -97,7 +97,7 @@ export default class SignupApi extends ProviderApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -110,7 +110,7 @@ export default class SignupApi extends ProviderApi
                     // サインアップの確認画面でサインアップを完了させた後、再度サインアップを完了させようとした場合にここに到達する想定。
                     // サインアップIDで該当するアカウントがないということが必ずしもサインアップ済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、登録済みというメッセージでOK。
-                    res.ext.error(1, R.text(R.ALREADY_SIGNUP, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.ALREADY_SIGNUP, locale));
                     break;
                 }
 
@@ -118,7 +118,7 @@ export default class SignupApi extends ProviderApi
 
                 if (account.password !== hashPassword)
                 {
-                    res.ext.error(1, R.text(R.INVALID_EMAIL_AUTH, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL_AUTH, locale));
                     break;
                 }
 

@@ -37,7 +37,7 @@ export default class UserApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 

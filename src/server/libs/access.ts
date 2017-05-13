@@ -6,6 +6,7 @@ import R                       from './r';
 import Utils                   from './utils';
 import {forbidden, notFound}   from '../controllers/view';
 import SessionModel, {Session} from '../models/session-model';
+import {Response}              from 'libs/response';
 import CommonUtils             from 'libs/utils';
 
 import express =    require('express');
@@ -45,7 +46,7 @@ export default class Access
                 log.d(`${req.method} ${req.path}`);
                 log.w('param: ' + bodyBuffer.toString());
 
-                res.ext.error(-1, R.text(R.BAD_REQUEST, 'en'));
+                res.ext.badRequest('en');
                 log.stepOut();
                 return;
             }
@@ -178,7 +179,7 @@ export default class Access
                 if (session === null)
                 {
                     // const locale = req.ext.locale;
-                    // res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    // res.ext.badRequest(locale);
                     // log.stepOut();
                     // return;
                     session = new Session();
@@ -220,7 +221,7 @@ export default class Access
                 if (req.path.startsWith('/api/'))
                 {
                     const locale = req.ext.locale;
-                    res.ext.error(1, R.text(R.NO_LOGIN, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.NO_LOGIN, locale));
                 }
                 else
                 {

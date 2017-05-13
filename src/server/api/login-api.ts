@@ -52,7 +52,7 @@ export default class LoginApi extends ProviderApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -67,7 +67,7 @@ export default class LoginApi extends ProviderApi
 
                 if (account === null || account.password !== hashPassword || account.signup_id)
                 {
-                    res.ext.error(1, R.text(R.INVALID_EMAIL_AUTH, locale));
+                    res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL_AUTH, locale));
                     break;
                 }
 
@@ -108,7 +108,7 @@ export default class LoginApi extends ProviderApi
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    res.ext.error(-1, R.text(R.BAD_REQUEST, locale));
+                    res.ext.badRequest(locale);
                     break;
                 }
 
@@ -120,7 +120,7 @@ export default class LoginApi extends ProviderApi
                 {
                     if (account.sms_code !== smsCode)
                     {
-                        res.ext.error(1, R.text(R.MISMATCH_SMS_CODE, locale));
+                        res.ext.error(Response.Status.FAILED, R.text(R.MISMATCH_SMS_CODE, locale));
                         break;
                     }
 
