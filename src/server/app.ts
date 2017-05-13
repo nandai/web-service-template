@@ -24,6 +24,7 @@ import Facebook                from './provider/facebook';
 import Google                  from './provider/google';
 import Email                   from './provider/email';
 import Access                  from './libs/access';
+import Authy                   from './libs/authy';
 import Utils                   from './libs/utils';
 import R                       from './libs/r';
 import {expressExtension}      from './libs/express-extension';
@@ -62,6 +63,8 @@ class Initializer
         LoginHistoryModel. load();
         DeleteAccountModel.load();
         R.                 load();
+
+        Authy.init();
 
         this.app = app;
         this.app.use(helmet.hidePoweredBy());

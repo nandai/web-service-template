@@ -23,6 +23,7 @@ export class Account
     email        : string = null;
     password     : string = null;
     phone_no     : string = null;
+    authy_id     : number = null;
     signup_id    : string = null;
     reset_id     : string = null;
     change_id    : string = null;

@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import Config                  from '../config';
+import Authy                   from '../libs/authy';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
@@ -111,9 +112,24 @@ export default class SettingsApi
                 // アカウント情報更新
                 const session : Session = req.ext.session;
                 const account = await AccountModel.find(session.account_id);
+                const prevPhoneNo = account.phone_no;
+                const newPhoneNo = (phoneNo && phoneNo.length > 0 ? phoneNo : null);
+
+                if (prevPhoneNo && prevPhoneNo !== newPhoneNo)
+                {
+                    // authyからユーザー削除
+                    await Authy.deleteUser(account.authy_id);
+                    account.authy_id = null;
+                }
+
+                if (account.email && newPhoneNo && newPhoneNo !== prevPhoneNo)
+                {
+                    // authyにユーザー登録
+                    account.authy_id = await Authy.registerUser(account.email, newPhoneNo);
+                }
 
                 account.name = name;
-                account.phone_no = (phoneNo && phoneNo.length > 0 ? phoneNo : null);
+                account.phone_no = newPhoneNo;
                 await AccountModel.update(account);
 
                 const data : Response.SetAccount =

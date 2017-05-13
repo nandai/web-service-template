@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import Config                            from '../config';
+import Authy                             from '../libs/authy';
 import Utils                             from '../libs/utils';
 import R                                 from '../libs/r';
 import Email                             from '../provider/email';
@@ -118,7 +119,8 @@ export default class LoginApi extends ProviderApi
                 const account = await AccountModel.findBySmsId(smsId);
                 if (account)
                 {
-                    if (account.sms_code !== smsCode)
+//                  if (account.sms_code !== smsCode)
+                    if (await Authy.verify(account.authy_id, Number(smsCode)) === false)
                     {
                         res.ext.error(Response.Status.FAILED, R.text(R.MISMATCH_SMS_CODE, locale));
                         break;

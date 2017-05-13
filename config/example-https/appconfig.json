@@ -22,6 +22,7 @@
         "google-client-secret":    "",
         "twilio-account-sid":      "",
         "twilio-auth-token":       "",
-        "twilio-from-phone-no":    ""
+        "twilio-from-phone-no":    "",
+        "authy-api-key":           ""
     }
 }

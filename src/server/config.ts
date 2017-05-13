@@ -50,6 +50,7 @@ export default class Config
     static TWILIO_ACCOUNT_SID = '';
     static TWILIO_AUTH_TOKEN = '';
     static TWILIO_FROM_PHONE_NO = '';
+    static AUTHY_API_KEY = '';
 
     /**
      * コンフィグをJSONファイルからロードする
@@ -105,6 +106,7 @@ export default class Config
         Config.TWILIO_ACCOUNT_SID =      Config.get(appData, 'twilio-account-sid');
         Config.TWILIO_AUTH_TOKEN =       Config.get(appData, 'twilio-auth-token');
         Config.TWILIO_FROM_PHONE_NO =    Config.get(appData, 'twilio-from-phone-no');
+        Config.AUTHY_API_KEY =           Config.get(appData, 'authy-api-key');
 
         Config.TWITTER_CALLBACK =  Utils.generateUrl('auth/twitter/callback');
         Config.FACEBOOK_CALLBACK = Utils.generateUrl('auth/facebook/callback');

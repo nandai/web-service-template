@@ -206,7 +206,9 @@ export default class Provider
                                         const locale = req.ext.locale;
                                         const message = R.text(R.SMS_LOGIN_CODE, locale);
                                         const phoneNo = this.normalizePhoneNo(findAccount.phone_no);
-                                        const success = await this.sendSms(phoneNo, `${message}：${findAccount.sms_code}`);
+// TODO:authyを使うかどうかで分ける
+//                                      const success = await this.sendSms(phoneNo, `${message}：${findAccount.sms_code}`);
+                                        const success = true;
 
                                         if (success)
                                         {
