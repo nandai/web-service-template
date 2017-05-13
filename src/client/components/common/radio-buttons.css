@@ -1,0 +1,58 @@
+/**
+ * (C) 2016-2017 printf.jp
+ */
+:root
+{
+    --wst-radio-button-color:         #f4f4f4;
+    --wst-radio-button-checked-color: #3197EE;
+}
+
+.wst-radio-button-outer
+{
+    margin: 4px 0;
+}
+
+.wst-radio-button
+{
+    position: absolute;
+    opacity:  0;
+
+    & + label
+    {
+        display: block;
+        cursor:  pointer;
+    }
+
+    & + label:before
+    {
+        content:  '';
+        position: relative;
+        display:  inline-block;
+        cursor:   pointer;
+        background-color: var(--wst-radio-button-color);
+        border-radius: 100%;
+        border: 1px solid #b4b4b4;
+        width:  1em;
+        height: 1em;
+        margin-right:   8px;
+        vertical-align: top;
+        transition: all .3s ease;
+    }
+
+    &:checked + label:before
+    {
+        background-color:           var(--wst-radio-button-checked-color);
+        box-shadow: inset 0 0 0 4px var(--wst-radio-button-color);
+    }
+
+    &:focus + label:before
+    {
+        outline: none;
+        border-color: var(--wst-radio-button-checked-color);
+    }
+
+    &:hover + label:before
+    {
+        border-color: var(--wst-radio-button-checked-color);
+    }
+}
