@@ -13,7 +13,7 @@ export default class R
         {
             'about':                      'ABOUT',
             'accountName':                'Account name',
-            'authSms':                    '2 step verification',
+            'authSms':                    'Two-Factor authentication',
             'back':                       'Back',
             'change':                     'Change',
             'currentPassword':            'Current password',
@@ -55,6 +55,9 @@ export default class R
             'signupWithTwitter':          'Sign up with Twitter',
             'tel':                        'TEL (03-1234-5678, +81-3-1234-5678)',
             'top':                        'Top',
+            'twoFactorAuthSms':           'Perform two-factor authentication with SMS.',
+            'twoFactorAuthAuthy':         'Perform two-factor authentication with Authy.',
+            'twoFactorAuthNone':          'Do not perform two-factor authentication.',
             'unlinkProvider':             'Unlink ${provider}',
             'user':                       'User',
             "userList":                   'User list'
@@ -106,6 +109,9 @@ export default class R
             'signupWithTwitter':          'Twitterでサインアップする',
             'tel':                        'TEL (03-1234-5678, +81-3-1234-5678)',
             'top':                        'トップ',
+            'twoFactorAuthSms':           'SMSで二段階認証を行う',
+            'twoFactorAuthAuthy':         'Authyで二段階認証を行う',
+            'twoFactorAuthNone':          '二段階認証を行わない',
             'unlinkProvider':             '${provider}との紐づけを解除する',
             'user':                       'ユーザー',
             "userList":                   'ユーザー一覧'
@@ -156,6 +162,9 @@ export default class R
     static SIGNUP_WITH_TWITTER =           'signupWithTwitter';
     static TEL =                           'tel';
     static TOP =                           'top';
+    static TWO_FACTOR_AUTH_SMS =           'twoFactorAuthSms';
+    static TWO_FACTOR_AUTH_AUTHY =         'twoFactorAuthAuthy';
+    static TWO_FACTOR_AUTH_NONE =          'twoFactorAuthNone';
     static UNLINK_PROVIDER =               'unlinkProvider';
     static USER =                          'user';
     static USER_LIST =                     'userList';

@@ -62,8 +62,9 @@ export namespace Request
 
     export interface SetAccount
     {
-        name    : string | any[];
-        phoneNo : string | any[];
+        name          : string | any[];
+        phoneNo       : string | any[];
+        twoFactorAuth : string | any[];
     }
 
     export interface RequestChangeEmail

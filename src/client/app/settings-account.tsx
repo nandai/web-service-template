@@ -32,6 +32,7 @@ export default class SettingsAccountApp extends App
             message:  '',
             onNameChange:    this.onNameChange.   bind(this),
             onPhoneNoChange: this.onPhoneNoChange.bind(this),
+            onTwoFactorAuth: this.onTwoFactorAuth.bind(this),
             onChange:        this.onChange.       bind(this),
             onBack:          this.onBack.         bind(this)
         };
@@ -74,6 +75,15 @@ export default class SettingsAccountApp extends App
     }
 
     /**
+     * onTwoFactorAuth
+     */
+    private onTwoFactorAuth(twoFactorAuth : string) : void
+    {
+        this.store.account.twoFactorAuth = twoFactorAuth;
+        this.render();
+    }
+
+    /**
      * onChange
      */
     private async onChange()
@@ -84,9 +94,9 @@ export default class SettingsAccountApp extends App
         try
         {
             const {account} = store;
-            const {name, phoneNo} = account;
+            const {name, phoneNo, twoFactorAuth} = account;
 
-            const res = await SettingsApi.setAccount({name, phoneNo});
+            const res = await SettingsApi.setAccount({name, phoneNo, twoFactorAuth});
             store.message = res.message;
             this.render();
             log.stepOut();

@@ -51,12 +51,13 @@ export default class SettingsApi
                 const account = await AccountModel.find(session.account_id);
                 const accountRes : Response.Account =
                 {
-                    name:      account.name,
-                    email:     account.email,
-                    phoneNo:   account.phone_no,
-                    twitter:  (account.twitter  !== null),
-                    facebook: (account.facebook !== null),
-                    google:   (account.google   !== null)
+                    name:          account.name,
+                    email:         account.email,
+                    phoneNo:       account.phone_no,
+                    twoFactorAuth: account.two_factor_auth,
+                    twitter:      (account.twitter  !== null),
+                    facebook:     (account.facebook !== null),
+                    google:       (account.google   !== null)
                 };
 
                 const data : Response.GetAccount =
@@ -87,8 +88,9 @@ export default class SettingsApi
                 const param     : Request.SetAccount = req.body;
                 const condition : Request.SetAccount =
                 {
-                    name:    ['string', null, true],
-                    phoneNo: ['string', null, true]
+                    name:          ['string', null, true],
+                    phoneNo:       ['string', null, true],
+                    twoFactorAuth: ['string', null, true]
                 }
 
                 if (Utils.existsParameters(param, condition) === false)
@@ -97,8 +99,9 @@ export default class SettingsApi
                     break;
                 }
 
-                const name =    <string>param.name;
-                const phoneNo = <string>param.phoneNo;
+                const name =          <string>param.name;
+                const phoneNo =       <string>param.phoneNo;
+                const twoFactorAuth = <string>param.twoFactorAuth;
 
                 // アカウント名チェック
                 const len = name.length;
@@ -107,6 +110,19 @@ export default class SettingsApi
                 {
                     res.ext.error(Response.Status.FAILED, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
+                }
+
+                // 二段階認証方式チェック
+                switch (twoFactorAuth)
+                {
+                    case 'SMS':
+                    case 'Authy':
+                    case null:
+                        break;
+
+                    default:
+                        res.ext.badRequest(locale);
+                        break;
                 }
 
                 // アカウント情報更新
@@ -128,8 +144,9 @@ export default class SettingsApi
                     account.authy_id = await Authy.registerUser(account.email, newPhoneNo);
                 }
 
-                account.name = name;
-                account.phone_no = newPhoneNo;
+                account.name =            name;
+                account.phone_no =        newPhoneNo;
+                account.two_factor_auth = twoFactorAuth;
                 await AccountModel.update(account);
 
                 const data : Response.SetAccount =

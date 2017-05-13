@@ -15,23 +15,24 @@ import slog =   require('../slog');
  */
 export class Account
 {
-    id           : number = null;
-    name         : string = null;
-    twitter      : string = null;
-    facebook     : string = null;
-    google       : string = null;
-    email        : string = null;
-    password     : string = null;
-    phone_no     : string = null;
-    authy_id     : number = null;
-    signup_id    : string = null;
-    reset_id     : string = null;
-    change_id    : string = null;
-    change_email : string = null;
-    sms_id       : string = null;
-    sms_code     : string = null;
-    created_at   : string = null;
-    deleted_at   : string = null;
+    id              : number = null;
+    name            : string = null;
+    twitter         : string = null;
+    facebook        : string = null;
+    google          : string = null;
+    email           : string = null;
+    password        : string = null;
+    phone_no        : string = null;
+    authy_id        : number = null;
+    two_factor_auth : string = null;
+    signup_id       : string = null;
+    reset_id        : string = null;
+    change_id       : string = null;
+    change_email    : string = null;
+    sms_id          : string = null;
+    sms_code        : string = null;
+    created_at      : string = null;
+    deleted_at      : string = null;
 
     /**
      * 紐づけを解除できるかどうか調べる

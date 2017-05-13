@@ -10,6 +10,7 @@ export interface Store
     message          : string;
     onNameChange?    : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onPhoneNoChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onTwoFactorAuth? : (twoFactorAuth : string) => void;
     onChange?        : () => void;
     onBack?          : () => void;
 }

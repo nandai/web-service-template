@@ -5,12 +5,13 @@ export namespace Response
 {
     export interface Account
     {
-        name     : string;
-        email    : string;
-        phoneNo  : string;
-        twitter  : boolean;
-        facebook : boolean;
-        google   : boolean;
+        name          : string;
+        email         : string;
+        phoneNo       : string;
+        twoFactorAuth : string;
+        twitter       : boolean;
+        facebook      : boolean;
+        google        : boolean;
     }
 
     export interface User
