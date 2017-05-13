@@ -193,43 +193,43 @@ export default class Provider
                             if (session.account_id === null)
                             {
                                 log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
-                                let isTwoFactorAuth = (findAccount.phone_no !== null && findAccount.two_factor_auth !== null);
                                 let phrase : string;
+                                let isTwoFactorAuth = Utils.canTwoFactorAuth(
+                                    findAccount.phone_no,
+                                    findAccount.two_factor_auth);
 
                                 if (isTwoFactorAuth)
                                 {
-                                    if (Config.hasTwilio() || Config.AUTHY_API_KEY !== '')
+                                    let success = false;
+
+                                    switch (findAccount.two_factor_auth)
                                     {
-                                        let success = false;
+                                        case 'SMS':
+                                            findAccount.sms_code = Utils.createRundomText( 6, true);
+
+                                            // ログインコードをSMS送信
+                                            const locale = req.ext.locale;
+                                            const message = R.text(R.SMS_LOGIN_CODE, locale);
+                                            const phoneNo = this.normalizePhoneNo(findAccount.phone_no);
+                                            success = await this.sendSms(phoneNo, `${message}：${findAccount.sms_code}`);
+                                            break;
+
+                                        case 'Authy':
+                                            success = true;
+                                            break;
+                                    }
+
+                                    if (success)
+                                    {
                                         findAccount.sms_id = Utils.createRundomText(32);
-
-                                        switch (findAccount.two_factor_auth)
-                                        {
-                                            case 'SMS':
-                                                findAccount.sms_code = Utils.createRundomText( 6, true);
-
-                                                // ログインコードをSMS送信
-                                                const locale = req.ext.locale;
-                                                const message = R.text(R.SMS_LOGIN_CODE, locale);
-                                                const phoneNo = this.normalizePhoneNo(findAccount.phone_no);
-                                                success = await this.sendSms(phoneNo, `${message}：${findAccount.sms_code}`);
-                                                break;
-
-                                            case 'Authy':
-                                                success = true;
-                                                break;
-                                        }
-
-                                        if (success)
-                                        {
-                                            AccountModel.update(findAccount);
-                                            await self.sendResponse(req, res, session, '/', null, findAccount.sms_id);
-                                        }
-                                        else
-                                        {
-                                            isTwoFactorAuth = false;
-                                            phrase = R.COULD_NOT_SEND_SMS;
-                                        }
+                                        AccountModel.update(findAccount);
+                                        await self.sendResponse(req, res, session, '/', null, findAccount.sms_id);
+                                    }
+                                    else
+                                    {
+                                        findAccount.sms_code = null;
+                                        isTwoFactorAuth = false;
+                                        phrase = R.COULD_NOT_SEND_SMS;
                                     }
                                 }
 

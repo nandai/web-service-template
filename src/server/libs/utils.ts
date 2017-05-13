@@ -297,4 +297,26 @@ export default class Utils
 
         return locale;
     }
+
+    /**
+     * 二段階認証を行えるかどうか
+     */
+    static canTwoFactorAuth(phoneNo : string, twoFactorAuth : string) : boolean
+    {
+        let possible = false;
+        if (phoneNo !== null)
+        {
+            switch (twoFactorAuth)
+            {
+                case 'SMS':
+                    possible = Config.hasTwilio();
+                    break;
+
+                case 'Authy':
+                    possible = (Config.AUTHY_API_KEY !== '');
+                    break;
+            }
+        }
+        return possible;
+    }
 }

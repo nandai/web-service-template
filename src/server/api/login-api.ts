@@ -119,6 +119,16 @@ export default class LoginApi extends ProviderApi
                 const account = await AccountModel.findBySmsId(smsId);
                 if (account)
                 {
+                    const canTwoFactorAuth = Utils.canTwoFactorAuth(
+                        account.phone_no,
+                        account.two_factor_auth);
+
+                    if (canTwoFactorAuth === false)
+                    {
+                        res.ext.badRequest(locale);
+                        break;
+                    }
+
                     let success = false;
                     switch (account.two_factor_auth)
                     {
