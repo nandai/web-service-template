@@ -218,7 +218,8 @@ export default class SettingsApi
                 // メールアドレスの重複チェック
                 const alreadyExistsAccount = await AccountModel.findByProviderId('email', changeEmail);
 
-                if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
+//              if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
+                if (alreadyExistsAccount !== null)
                 {
                     res.ext.error(Response.Status.FAILED, R.text(R.ALREADY_EXISTS_EMAIL, locale));
                     break;
