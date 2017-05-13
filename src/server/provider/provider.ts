@@ -193,22 +193,32 @@ export default class Provider
                             if (session.account_id === null)
                             {
                                 log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
+                                let isTwoFactorAuth = (findAccount.phone_no !== null && findAccount.two_factor_auth !== null);
                                 let phrase : string;
 
-                                if (findAccount.phone_no !== null)
+                                if (isTwoFactorAuth)
                                 {
-                                    if (Config.hasTwilio())
+                                    if (Config.hasTwilio() || Config.AUTHY_API_KEY !== '')
                                     {
-                                        findAccount.sms_id =   Utils.createRundomText(32);
-                                        findAccount.sms_code = Utils.createRundomText( 6, true);
+                                        let success = false;
+                                        findAccount.sms_id = Utils.createRundomText(32);
 
-                                        // ログインコードをSMS送信
-                                        const locale = req.ext.locale;
-                                        const message = R.text(R.SMS_LOGIN_CODE, locale);
-                                        const phoneNo = this.normalizePhoneNo(findAccount.phone_no);
-// TODO:authyを使うかどうかで分ける
-//                                      const success = await this.sendSms(phoneNo, `${message}：${findAccount.sms_code}`);
-                                        const success = true;
+                                        switch (findAccount.two_factor_auth)
+                                        {
+                                            case 'SMS':
+                                                findAccount.sms_code = Utils.createRundomText( 6, true);
+
+                                                // ログインコードをSMS送信
+                                                const locale = req.ext.locale;
+                                                const message = R.text(R.SMS_LOGIN_CODE, locale);
+                                                const phoneNo = this.normalizePhoneNo(findAccount.phone_no);
+                                                success = await this.sendSms(phoneNo, `${message}：${findAccount.sms_code}`);
+                                                break;
+
+                                            case 'Authy':
+                                                success = true;
+                                                break;
+                                        }
 
                                         if (success)
                                         {
@@ -217,12 +227,13 @@ export default class Provider
                                         }
                                         else
                                         {
+                                            isTwoFactorAuth = false;
                                             phrase = R.COULD_NOT_SEND_SMS;
                                         }
                                     }
                                 }
 
-                                if (findAccount.phone_no === null || phrase !== undefined)
+                                if (isTwoFactorAuth === false)
                                 {
                                     // セッション作成
                                     session.account_id = findAccount.id;

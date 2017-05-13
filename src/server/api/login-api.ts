@@ -119,8 +119,19 @@ export default class LoginApi extends ProviderApi
                 const account = await AccountModel.findBySmsId(smsId);
                 if (account)
                 {
-//                  if (account.sms_code !== smsCode)
-                    if (await Authy.verify(account.authy_id, Number(smsCode)) === false)
+                    let success = false;
+                    switch (account.two_factor_auth)
+                    {
+                        case 'SMS':
+                            success = (account.sms_code === smsCode);
+                            break;
+
+                        case 'Authy':
+                            success = await Authy.verify(account.authy_id, Number(smsCode));
+                            break;
+                    }
+
+                    if (success === false)
                     {
                         res.ext.error(Response.Status.FAILED, R.text(R.MISMATCH_SMS_CODE, locale));
                         break;
