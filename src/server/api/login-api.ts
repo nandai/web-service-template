@@ -116,9 +116,10 @@ export default class LoginApi extends ProviderApi
                 const smsId =   <string>param.smsId;
                 const smsCode = <string>param.smsCode;
 
-                const account = await AccountModel.findBySmsId(smsId);
-                if (account)
+                const session : Session = req.ext.session;
+                if (session.sms_id === smsId)
                 {
+                    const account = await AccountModel.find(session.account_id);
                     const canTwoFactorAuth = Utils.canTwoFactorAuth(
                         account.phone_no,
                         account.two_factor_auth);
@@ -147,13 +148,11 @@ export default class LoginApi extends ProviderApi
                         break;
                     }
 
-                    account.sms_id =   null;
                     account.sms_code = null;
                     await AccountModel.update(account);
 
                     // セッション更新
-                    const session : Session = req.ext.session;
-                    session.account_id = account.id;
+                    session.sms_id = null;
                     await SessionModel.update(session);
 
                     // ログイン履歴作成

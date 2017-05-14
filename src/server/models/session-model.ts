@@ -21,6 +21,7 @@ export class Session
     account_id : number = null;
     command_id : string = null;
     message_id : string = null;
+    sms_id     : string = null;
     created_at : string = null;
 }
 

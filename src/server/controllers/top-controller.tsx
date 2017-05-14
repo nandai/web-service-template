@@ -61,9 +61,7 @@ export default class TopController
 
             if (smsId)
             {
-                const account = await AccountModel.findBySmsId(smsId);
-
-                if (account)
+                if (session.sms_id === smsId)
                 {
                     const store : SmsStore =
                     {
@@ -82,7 +80,7 @@ export default class TopController
                     notFound(req, res);
                 }
             }
-            else if (session.account_id === null || (messageId !== R.COULD_NOT_SEND_SMS && message))
+            else if (session.account_id === null || session.sms_id || (messageId !== R.COULD_NOT_SEND_SMS && message))
             {
                 log.d('ログイン画面を表示');
 

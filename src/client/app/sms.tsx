@@ -40,7 +40,7 @@ export default class SmsApp extends App
     init(params, message? : string)
     {
         const {store} = this;
-        store.smsCode =   '';
+        store.smsCode = '';
         store.message = '';
         return super.init(params);
     }

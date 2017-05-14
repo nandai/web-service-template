@@ -215,7 +215,7 @@ export default class Access
         try
         {
             const session : Session = req.ext.session;
-            if (session.account_id === null)
+            if (session.account_id === null || session.sms_id)
             {
                 // 未認証
                 if (req.path.startsWith('/api/'))

@@ -349,6 +349,7 @@ function listen(app : express.Express) : void
         server = app.listen(Config.APP_PORT);
     }
 
+    console.log('URL ........ ' + Utils.generateUrl(''));
     log.stepOut();
 
     if (server === null)

@@ -29,7 +29,6 @@ export class Account
     reset_id        : string = null;
     change_id       : string = null;
     change_email    : string = null;
-    sms_id          : string = null;
     sms_code        : string = null;
     created_at      : string = null;
     deleted_at      : string = null;
@@ -215,8 +214,7 @@ export default class AccountModel
                 if ((cond.accountId === undefined || account.id        === cond.accountId)
                 &&  (cond.signupId  === undefined || account.signup_id === cond.signupId)
                 &&  (cond.resetId   === undefined || account.reset_id  === cond.resetId)
-                &&  (cond.changeId  === undefined || account.change_id === cond.changeId)
-                &&  (cond.smsId     === undefined || account.sms_id    === cond.smsId))
+                &&  (cond.changeId  === undefined || account.change_id === cond.changeId))
                 {
                     log.d('見つかりました。');
                     const findAccount : Account = __.clone(account);
@@ -279,18 +277,6 @@ export default class AccountModel
     static findByChangeId(changeId : string) : Promise<Account>
     {
         return AccountModel.findByCondition({changeId});
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   smsId   SMS ID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findBySmsId(smsId : string)
-    {
-        return AccountModel.findByCondition({smsId});
     }
 
     /**
@@ -420,7 +406,6 @@ export interface AccountFindCondition
     signupId?  : string;
     resetId?   : string;
     changeId?  : string;
-    smsId?     : string;
 }
 
 interface AccountResolve {(account : Account) : void}
