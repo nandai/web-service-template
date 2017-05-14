@@ -134,7 +134,7 @@ export default class Authy
      * 承認要求
      *
      * npmに登録されているものが最新ではないようで、Authy.authy.send_approval_requestがundefinedとなってしまうため、
-     * このメソッドだけ https://github.com/evilpacket/node-authy/blob/master/index.js から持ってきた。
+     * https://github.com/evilpacket/node-authy/blob/master/index.js から引用。
      */
     private static send_approval_request(authyId : number, user_payload, hidden_details, logos, callback) : void
     {
@@ -186,8 +186,8 @@ export default class Authy
     /**
      * 承認チェック
      *
-     * npmに登録されているものが最新ではないようで、Authy.authy.send_approval_requestがundefinedとなってしまうため、
-     * このメソッドだけ https://github.com/evilpacket/node-authy/blob/master/index.js から持ってきた。
+     * npmに登録されているものが最新ではないようで、Authy.authy.check_approval_statusがundefinedとなってしまうため、
+     * https://github.com/evilpacket/node-authy/blob/master/index.js から引用。
      */
     private static check_approval_status(uuid : string, callback) : void
     {

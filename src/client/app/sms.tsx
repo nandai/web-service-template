@@ -111,6 +111,7 @@ export default class SmsApp extends App
 
         if (res.approval)
         {
+            this.clearPollingTimer();
             History.replaceState('/');
         }
         else
@@ -119,17 +120,22 @@ export default class SmsApp extends App
         }
     }
 
+    /**
+     * ポーリングタイマーを設定
+     */
     private setPollingTimer() : void
     {
         this.approvalTimerId = setTimeout(this.pollingAuthyOneTouchApprival.bind(this), 500);
     }
 
+    /**
+    * ポーリングタイマーをクリア
+     */
     private clearPollingTimer() : void
     {
         if (this.approvalTimerId)
-        {
             clearTimeout(this.approvalTimerId);
-            this.approvalTimerId = 0;
-        }
+
+        this.approvalTimerId = 0;
     }
 }
