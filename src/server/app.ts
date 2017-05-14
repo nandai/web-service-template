@@ -229,6 +229,7 @@ class Initializer
         this.app.post(  `/api/login/${provider}`,    LoginApi. onLoginProvider);
         this.app.post(  '/api/login/email',          LoginApi. onLoginEmail);
         this.app.post(  '/api/login/sms',            LoginApi. onLoginSms);
+        this.app.get(   '/api/login/authy/onetouch', LoginApi. onLoginAuthyOneTouch);
         this.app.post(  '/api/reset',                ResetApi. onRequestResetPassword);
         this.app.put(   '/api/reset/change',         ResetApi. onResetPassword);
         this.app.get(   '/api/user',                 UserApi.  onGetUser);

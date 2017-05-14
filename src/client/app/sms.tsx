@@ -19,6 +19,7 @@ export default class SmsApp extends App
 {
     private static CLS_NAME = 'SmsView';
     private store : Store;
+    private approvalTimerId = 0;
 
     /**
      * @constructor
@@ -50,6 +51,9 @@ export default class SmsApp extends App
      */
     view() : JSX.Element
     {
+        if (this.store.onSend && this.approvalTimerId === 0)
+            this.setPollingTimer();
+
         return <SmsView store={this.store} />;
     }
 
@@ -79,6 +83,7 @@ export default class SmsApp extends App
 
             if (res.status === 0)
             {
+                this.clearPollingTimer();
                 History.replaceState('/');
             }
             else
@@ -94,6 +99,37 @@ export default class SmsApp extends App
             store.message = err.message;
             this.render();
             log.stepOut();
+        }
+    }
+
+    /**
+     * Authy OneTouch
+     */
+    private async pollingAuthyOneTouchApprival()
+    {
+        const res = await LoginApi.loginAuthyOneTouch();
+
+        if (res.approval)
+        {
+            History.replaceState('/');
+        }
+        else
+        {
+            this.setPollingTimer();
+        }
+    }
+
+    private setPollingTimer() : void
+    {
+        this.approvalTimerId = setTimeout(this.pollingAuthyOneTouchApprival.bind(this), 500);
+    }
+
+    private clearPollingTimer() : void
+    {
+        if (this.approvalTimerId)
+        {
+            clearTimeout(this.approvalTimerId);
+            this.approvalTimerId = 0;
         }
     }
 }

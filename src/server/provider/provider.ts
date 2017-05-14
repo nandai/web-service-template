@@ -2,6 +2,7 @@
  * (C) 2016 printf.jp
  */
 import Config                            from '../config';
+import Authy                             from '../libs/authy';
 import {PassportUser}                    from '../libs/passport';
 import R                                 from '../libs/r';
 import Utils                             from '../libs/utils';
@@ -216,6 +217,7 @@ export default class Provider
 
                                         case 'Authy':
                                             success = true;
+                                            session.authy_uuid = await Authy.sendApprovalRequest(findAccount.authy_id);
                                             break;
                                     }
 

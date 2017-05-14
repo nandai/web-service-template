@@ -152,7 +152,8 @@ export default class LoginApi extends ProviderApi
                     await AccountModel.update(account);
 
                     // セッション更新
-                    session.sms_id = null;
+                    session.sms_id =     null;
+                    session.authy_uuid = null;
                     await SessionModel.update(session);
 
                     // ログイン履歴作成
@@ -162,8 +163,45 @@ export default class LoginApi extends ProviderApi
                     await LoginHistoryModel.add(loginHistory);
                 }
 
-                // トップ画面へ
                 const data : Response.LoginSms = {status:0};
+                res.json(data);
+            }
+            while (false);
+            log.stepOut();
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
+    }
+
+    /**
+     * Authy OneTouchの認証ステータスをチェックする<br>
+     * GET /api/login/authy/onetouch
+     */
+    static async onLoginAuthyOneTouch(req : express.Request, res : express.Response)
+    {
+        const log = slog.stepIn(LoginApi.CLS_NAME_2, 'onLoginAuthyOneTouch');
+        try
+        {
+            do
+            {
+                const locale = req.ext.locale;
+                const session : Session = req.ext.session;
+
+                if (session.authy_uuid === null)
+                {
+                    res.ext.badRequest(locale);
+                    break;
+                }
+
+                const approval = await Authy.checkApprovalStatus(session.authy_uuid);
+
+                if (approval)
+                {
+                    session.sms_id =     null;
+                    session.authy_uuid = null;
+                    await SessionModel.update(session);
+                }
+
+                const data : Response.LoginAuthyOneTouch = {status:0, approval};
                 res.json(data);
             }
             while (false);

@@ -33,6 +33,12 @@ export namespace Response
         message? : string;
     }
 
+    export interface LoginAuthyOneTouch
+    {
+        status   : Status;
+        approval : boolean;
+    }
+
     export interface GetAccount
     {
         status  : Status;
