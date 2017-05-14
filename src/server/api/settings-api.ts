@@ -14,6 +14,8 @@ import {Response}              from 'libs/response';
 import express = require('express');
 import slog =    require('../slog');
 
+const lookup = require('country-data').lookup;
+
 /**
  * 設定API
  */
@@ -53,6 +55,7 @@ export default class SettingsApi
                 {
                     name:          account.name,
                     email:         account.email,
+                    countryCode:   account.country_code,
                     phoneNo:       account.phone_no,
                     twoFactorAuth: account.two_factor_auth,
                     twitter:      (account.twitter  !== null),
@@ -89,9 +92,12 @@ export default class SettingsApi
                 const condition : Request.SetAccount =
                 {
                     name:          ['string', null, true],
+                    countryCode:   ['string', null, true],
                     phoneNo:       ['string', null, true],
                     twoFactorAuth: ['string', null, true]
                 }
+
+                log.d(JSON.stringify(param, null, 2));
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -100,6 +106,7 @@ export default class SettingsApi
                 }
 
                 const name =          <string>param.name;
+                const countryCode =   <string>param.countryCode;
                 const phoneNo =       <string>param.phoneNo;
                 const twoFactorAuth = <string>param.twoFactorAuth;
 
@@ -110,6 +117,18 @@ export default class SettingsApi
                 {
                     res.ext.error(Response.Status.FAILED, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));
                     break;
+                }
+
+                // 国コードチェック
+                if (countryCode)
+                {
+                    const countries : any[] = lookup.countries({countryCallingCodes:countryCode});
+                    if (countries.length === 0)
+                    {
+                        // TODO:フロント側をリスト形式にする予定なのでとりあえず直文字列
+                        res.ext.error(Response.Status.FAILED, '国コードが正しくありません。');
+                        break;
+                    }
                 }
 
                 // 二段階認証方式チェック
@@ -128,23 +147,30 @@ export default class SettingsApi
                 // アカウント情報更新
                 const session : Session = req.ext.session;
                 const account = await AccountModel.find(session.account_id);
-                const prevPhoneNo = account.phone_no;
-                const newPhoneNo = (phoneNo && phoneNo.length > 0 ? phoneNo : null);
+                const prevCountryCode = account.country_code;
+                const prevPhoneNo =     account.phone_no;
+                const newCountryCode = (countryCode && countryCode.length > 0 ? countryCode : null);
+                const newPhoneNo =     (phoneNo     && phoneNo    .length > 0 ? phoneNo     : null);
 
-                if (prevPhoneNo && prevPhoneNo !== newPhoneNo)
+                if (account.authy_id && prevPhoneNo && prevPhoneNo !== newPhoneNo)
                 {
                     // authyからユーザー削除
                     await Authy.deleteUser(account.authy_id);
                     account.authy_id = null;
                 }
 
-                if (account.email && newPhoneNo && newPhoneNo !== prevPhoneNo)
+                if (twoFactorAuth === 'Authy'
+                && account.email
+                && newCountryCode
+                && newPhoneNo
+                && (newCountryCode !== prevCountryCode || newPhoneNo !== prevPhoneNo || account.authy_id === null))
                 {
                     // authyにユーザー登録
-                    account.authy_id = await Authy.registerUser(account.email, newPhoneNo);
+                    account.authy_id = await Authy.registerUser(account.email, newCountryCode.substr(1), newPhoneNo);
                 }
 
                 account.name =            name;
+                account.country_code =    newCountryCode;
                 account.phone_no =        newPhoneNo;
                 account.two_factor_auth = twoFactorAuth;
                 await AccountModel.update(account);

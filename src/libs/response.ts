@@ -7,6 +7,7 @@ export namespace Response
     {
         name          : string;
         email         : string;
+        countryCode   : string;
         phoneNo       : string;
         twoFactorAuth : string;
         twitter       : boolean;

@@ -30,11 +30,12 @@ export default class SettingsAccountApp extends App
             locale:   Utils.getLocale(),
             account:  ssrStore.account,
             message:  '',
-            onNameChange:    this.onNameChange.   bind(this),
-            onPhoneNoChange: this.onPhoneNoChange.bind(this),
-            onTwoFactorAuth: this.onTwoFactorAuth.bind(this),
-            onChange:        this.onChange.       bind(this),
-            onBack:          this.onBack.         bind(this)
+            onNameChange:        this.onNameChange.   bind(this),
+            onPhoneNoChange:     this.onPhoneNoChange.bind(this),
+            onTwoFactorAuth:     this.onTwoFactorAuth.bind(this),
+            onCountryCodeChange: this.onCountryCodeChange.bind(this),
+            onChange:            this.onChange.       bind(this),
+            onBack:              this.onBack.         bind(this)
         };
     }
 
@@ -75,6 +76,15 @@ export default class SettingsAccountApp extends App
     }
 
     /**
+     * onCountryCodeChange
+     */
+    private onCountryCodeChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    {
+        this.store.account.countryCode = e.target.value;
+        this.render();
+    }
+
+    /**
      * onTwoFactorAuth
      */
     private onTwoFactorAuth(twoFactorAuth : string) : void
@@ -94,9 +104,9 @@ export default class SettingsAccountApp extends App
         try
         {
             const {account} = store;
-            const {name, phoneNo, twoFactorAuth} = account;
+            const {name, countryCode, phoneNo, twoFactorAuth} = account;
 
-            const res = await SettingsApi.setAccount({name, phoneNo, twoFactorAuth});
+            const res = await SettingsApi.setAccount({name, countryCode, phoneNo, twoFactorAuth});
             store.message = res.message;
             this.render();
             log.stepOut();

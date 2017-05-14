@@ -125,7 +125,7 @@ export default class SmsApp extends App
      */
     private setPollingTimer() : void
     {
-        this.approvalTimerId = setTimeout(this.pollingAuthyOneTouchApprival.bind(this), 500);
+        this.approvalTimerId = setTimeout(this.pollingAuthyOneTouchApprival.bind(this), 1000);
     }
 
     /**

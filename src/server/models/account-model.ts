@@ -22,6 +22,7 @@ export class Account
     google          : string = null;
     email           : string = null;
     password        : string = null;
+    country_code    : string = null;
     phone_no        : string = null;
     authy_id        : number = null;
     two_factor_auth : string = null;

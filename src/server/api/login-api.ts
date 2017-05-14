@@ -121,6 +121,7 @@ export default class LoginApi extends ProviderApi
                 {
                     const account = await AccountModel.find(session.account_id);
                     const canTwoFactorAuth = Utils.canTwoFactorAuth(
+                        account.country_code,
                         account.phone_no,
                         account.two_factor_auth);
 
@@ -185,20 +186,18 @@ export default class LoginApi extends ProviderApi
             {
                 const locale = req.ext.locale;
                 const session : Session = req.ext.session;
+                let approval = false;
 
-                if (session.authy_uuid === null)
+                if (session.authy_uuid)
                 {
-                    res.ext.badRequest(locale);
-                    break;
-                }
+                    approval = await Authy.checkApprovalStatus(session.authy_uuid);
 
-                const approval = await Authy.checkApprovalStatus(session.authy_uuid);
-
-                if (approval)
-                {
-                    session.sms_id =     null;
-                    session.authy_uuid = null;
-                    await SessionModel.update(session);
+                    if (approval)
+                    {
+                        session.sms_id =     null;
+                        session.authy_uuid = null;
+                        await SessionModel.update(session);
+                    }
                 }
 
                 const data : Response.LoginAuthyOneTouch = {status:0, approval};

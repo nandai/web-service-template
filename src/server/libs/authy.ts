@@ -24,12 +24,12 @@ export default class Authy
     /**
      * ユーザー登録
      */
-    static registerUser(email : string, phoneNo : string)
+    static registerUser(email : string, countryCode : string, phoneNo : string)
     {
         return new Promise((resolve : (authyId : number) => void, reject) =>
         {
             const log = slog.stepIn(Authy.CLS_NAME, 'registerUser');
-            Authy.authy.register_user(email, phoneNo, '81', (err, response) =>
+            Authy.authy.register_user(email, phoneNo, countryCode, (err, response) =>
             {
                 let authyId : number = null;
                 if (err)

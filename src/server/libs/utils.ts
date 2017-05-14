@@ -301,10 +301,10 @@ export default class Utils
     /**
      * 二段階認証を行えるかどうか
      */
-    static canTwoFactorAuth(phoneNo : string, twoFactorAuth : string) : boolean
+    static canTwoFactorAuth(countryCode : string, phoneNo : string, twoFactorAuth : string) : boolean
     {
         let possible = false;
-        if (phoneNo !== null)
+        if (countryCode !== null && phoneNo !== null)
         {
             switch (twoFactorAuth)
             {

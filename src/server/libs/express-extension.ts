@@ -52,17 +52,7 @@ export function expressExtension(req : express.Request, res : express.Response, 
  */
 function error(status : Response.Status, message : string) : void
 {
-    const log = slog.stepIn('express-extension', 'error');
-    const self : express.Response = this;
-    const data = {status, message};
-
-    if (status === Response.Status.BAD_REQUEST)
-        self.status(400);
-
-    self.json(data);
-
-    log.w(JSON.stringify(data, null, 2));
-    log.stepOut();
+    sendErrorResponse(this, status, message);
 }
 
 /**
@@ -70,5 +60,24 @@ function error(status : Response.Status, message : string) : void
  */
 function badRequest(locale : string) : void
 {
-    error(Response.Status.BAD_REQUEST, R.text(R.BAD_REQUEST, locale));
+    sendErrorResponse(this, Response.Status.BAD_REQUEST, R.text(R.BAD_REQUEST, locale));
+}
+
+/**
+ * エラーレスポンス送信
+ */
+function sendErrorResponse(res : express.Response, status : Response.Status, message : string) : void
+{
+    const log = slog.stepIn('express-extension', 'sendErrorResponse');
+    const data = {status, message};
+
+    if (status === Response.Status.BAD_REQUEST)
+    {
+        res.status(400);
+    }
+
+    res.json(data);
+
+    log.w(JSON.stringify(data, null, 2));
+    log.stepOut();
 }
