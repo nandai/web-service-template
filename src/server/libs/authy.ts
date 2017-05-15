@@ -18,7 +18,8 @@ export default class Authy
      */
     static init()
     {
-        Authy.authy = require('authy')(Config.AUTHY_API_KEY);
+        if (Config.AUTHY_API_KEY !== '')
+            Authy.authy = require('authy')(Config.AUTHY_API_KEY);
     }
 
     /**

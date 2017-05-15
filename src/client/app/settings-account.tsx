@@ -30,12 +30,12 @@ export default class SettingsAccountApp extends App
             locale:   Utils.getLocale(),
             account:  ssrStore.account,
             message:  '',
-            onNameChange:        this.onNameChange.   bind(this),
-            onPhoneNoChange:     this.onPhoneNoChange.bind(this),
-            onTwoFactorAuth:     this.onTwoFactorAuth.bind(this),
+            onNameChange:        this.onNameChange.       bind(this),
+            onPhoneNoChange:     this.onPhoneNoChange.    bind(this),
+            onTwoFactorAuth:     this.onTwoFactorAuth.    bind(this),
             onCountryCodeChange: this.onCountryCodeChange.bind(this),
-            onChange:            this.onChange.       bind(this),
-            onBack:              this.onBack.         bind(this)
+            onChange:            this.onChange.           bind(this),
+            onBack:              this.onBack.             bind(this)
         };
     }
 

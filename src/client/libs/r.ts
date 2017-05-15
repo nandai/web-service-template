@@ -60,7 +60,7 @@ export default class R
             'twoFactorAuthNone':          'Do not perform two-factor authentication.',
             'unlinkProvider':             'Unlink ${provider}',
             'user':                       'User',
-            "userList":                   'User list'
+            'userList':                   'User list'
         },
 
         'ja':
@@ -114,7 +114,7 @@ export default class R
             'twoFactorAuthNone':          '二段階認証を行わない',
             'unlinkProvider':             '${provider}との紐づけを解除する',
             'user':                       'ユーザー',
-            "userList":                   'ユーザー一覧'
+            'userList':                   'ユーザー一覧'
         }
     };
 
