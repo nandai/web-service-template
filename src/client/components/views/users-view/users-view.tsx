@@ -3,6 +3,7 @@
  */
 import * as React    from 'react';
 import Button        from 'client/components/common/button';
+import List          from 'client/components/common/list';
 import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
@@ -24,21 +25,11 @@ export default class UsersView extends React.Component<UsersViewProps, {}>
         const {store} = this.props;
         const {locale} = store;
 
-        const elements = store.userList.map((user, i) =>
-        {
-            const url = `/users/${user.id}`;
-            return (
-                <Button key={i} onClick={() => store.onUserClick(user.id)} url={url}>
-                    {user.name}
-                </Button>
-            );
-        });
-
         return (
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    {elements}
+                    <List url="/users/${id}" items={store.userList} onClick={store.onUserClick} />
                     <Button onClick={store.onBack}>{R.text(R.BACK, locale)}</Button>
                 </ViewContents>
             </ViewContainer>

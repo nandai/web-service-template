@@ -24,10 +24,16 @@
     padding: 0;
     border:  0;
     border-radius: 3px;
-    cursor: pointer;
-    transition: all .3s;
+    cursor:      pointer;
+    transition:  all .3s;
     user-select: none;
-    outline: none;
+    outline:     none;
+    text-align:  center;
+
+    &.wst-button-left
+    {
+        text-align: left;
+    }
 
     &:hover,
     &:focus
@@ -54,12 +60,17 @@
         color: white;
         width: 100%;
         line-height: 1rem;
-        padding: calc((var(--wst-button-height) - 1rem) / 2) 0;
-        text-align: center;
+        padding: calc((var(--wst-button-height) - 1rem) / 2) 8px;
         text-decoration: none;
         position: absolute;
         left: 0;
         top:  0;
-        outline: none;
+        outline:    none;
+        box-sizing: border-box;
     }
+}
+
+button.wst-button
+{
+    padding: 0 8px;
 }

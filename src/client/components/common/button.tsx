@@ -5,19 +5,24 @@ import * as React from 'react';
 
 interface ButtonProps
 {
-    url?      : string;
-    disabled? : boolean;
-    margin?   : string;
-    onClick   : () => void;
+    className? : string;
+    url?       : string;
+    disabled?  : boolean;
+    align?     : string;
+    margin?    : string;
+    onClick    : () => void;
 }
 
 export default class Button extends React.Component<ButtonProps, {}>
 {
-    private static defaultProps : ButtonProps = {
-        url:      null,
-        disabled: false,
-        margin:   null,
-        onClick:  null
+    private static defaultProps : ButtonProps =
+    {
+        className: null,
+        url:       null,
+        disabled:  false,
+        align:     null,
+        margin:    null,
+        onClick:   null
     };
 
     constructor(props : ButtonProps)
@@ -33,7 +38,15 @@ export default class Button extends React.Component<ButtonProps, {}>
     render() : JSX.Element
     {
         const {props, onClick} = this;
-        const {url, disabled, margin, children} = props;
+        const {url, disabled, align, margin, children} = props;
+
+        let className = 'wst-button';
+
+        if (align)
+            className += ' wst-button-' + align;
+
+        if (props.className)
+            className += ' ' + props.className;
 
         const style = (margin ? {margin} : {});
         let el : JSX.Element;
@@ -41,7 +54,7 @@ export default class Button extends React.Component<ButtonProps, {}>
         if (disabled === false && url)
         {
             el = (
-                <div className="wst-button" style={style} tabIndex={0} onKeyUp={this.onKeyUp}>
+                <div className={className} style={style} tabIndex={0} onKeyUp={this.onKeyUp}>
                     <a tabIndex = {-1}
                        href =     {url}
                        onClick =  {onClick}>
@@ -53,7 +66,7 @@ export default class Button extends React.Component<ButtonProps, {}>
         else
         {
             el = (
-                <button className = "wst-button"
+                <button className = {className}
                         style=      {style}
                         type =      "button"
                         disabled =  {disabled}

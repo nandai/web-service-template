@@ -1,0 +1,33 @@
+/**
+ * (C) 2016-2017 printf.jp
+ */
+.wst-list
+{
+    border:   1px solid #aaa;
+    overflow: auto;
+}
+
+.wst-list-item
+{
+    font-weight:      normal;
+    color:            black !important;
+    background-color: white !important;
+    border-radius:    0;
+    box-sizing:       border-box;
+
+    &:not(:last-child)
+    {
+        border-bottom: 1px solid #aaa !important;
+    }
+
+    &:hover,
+    &:focus
+    {
+        background-color: #ddd !important;
+    }
+
+    & > a
+    {
+        color: black !important;
+    }
+}

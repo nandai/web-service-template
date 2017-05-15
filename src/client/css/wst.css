@@ -6,6 +6,7 @@
 @import "./common.css";
 @import "../components/common/button.css";
 @import "../components/common/input.css";
+@import "../components/common/list.css";
 @import "../components/common/radio-buttons.css";
 @import "../components/common/tabs.css";
 @import "../components/common/text.css";
