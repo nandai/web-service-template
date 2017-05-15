@@ -30,7 +30,6 @@ export class Account
     reset_id        : string = null;
     change_id       : string = null;
     change_email    : string = null;
-    sms_code        : string = null;
     created_at      : string = null;
     deleted_at      : string = null;
 

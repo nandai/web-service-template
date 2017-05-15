@@ -135,7 +135,7 @@ export default class LoginApi extends ProviderApi
                     switch (account.two_factor_auth)
                     {
                         case 'SMS':
-                            success = (account.sms_code === smsCode);
+                            success = (session.sms_code === smsCode);
                             break;
 
                         case 'Authy':
@@ -149,11 +149,11 @@ export default class LoginApi extends ProviderApi
                         break;
                     }
 
-                    account.sms_code = null;
                     await AccountModel.update(account);
 
                     // セッション更新
                     session.sms_id =     null;
+                    session.sms_code =   null;
                     session.authy_uuid = null;
                     await SessionModel.update(session);
 
