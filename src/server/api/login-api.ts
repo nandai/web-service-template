@@ -149,8 +149,6 @@ export default class LoginApi extends ProviderApi
                         break;
                     }
 
-                    await AccountModel.update(account);
-
                     // セッション更新
                     session.sms_id =     null;
                     session.sms_code =   null;
