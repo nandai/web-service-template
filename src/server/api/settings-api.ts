@@ -333,7 +333,7 @@ export default class SettingsApi
                 else
                 {
                     // パスワードが設定されている場合
-                    const changeId = Utils.createRundomText(32);
+                    const changeId = Utils.createRandomText(32);
                     const url = Utils.generateUrl('settings/account/email/change', changeId);
                     const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS, locale);
                     const contents = Utils.formatString(template.contents, {url});

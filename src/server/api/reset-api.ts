@@ -51,7 +51,7 @@ export default class ResetApi
                     break;
                 }
 
-                account.reset_id = Utils.createRundomText(32);
+                account.reset_id = Utils.createRandomText(32);
                 await AccountModel.update(account);
 
                 const url = Utils.generateUrl('reset', account.reset_id);

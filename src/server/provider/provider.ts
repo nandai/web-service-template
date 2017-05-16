@@ -208,7 +208,7 @@ export default class Provider
                                     switch (findAccount.two_factor_auth)
                                     {
                                         case 'SMS':
-                                            smsCode = Utils.createRundomText(6, true);
+                                            smsCode = Utils.createRandomText(6, true);
 
                                             // ログインコードをSMS送信
                                             const locale = req.ext.locale;
@@ -226,7 +226,7 @@ export default class Provider
                                     if (success)
                                     {
                                         session.account_id = findAccount.id;
-                                        session.sms_id = Utils.createRundomText(32);
+                                        session.sms_id = Utils.createRandomText(32);
                                         session.sms_code = smsCode;
                                         await SessionModel.update(session);
                                         await AccountModel.update(findAccount);

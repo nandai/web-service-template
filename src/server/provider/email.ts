@@ -96,7 +96,7 @@ export default class Email extends Provider
         account.name =      email.substr(0, email.indexOf('@'));
         account.email =     email;
         account.password =  user.refreshToken;
-        account.signup_id = Utils.createRundomText(32);
+        account.signup_id = Utils.createRandomText(32);
         return account;
     }
 

@@ -161,7 +161,7 @@ export default class Utils
      *
      * @return  ランダムテキスト
      */
-    static createRundomText(size : number, numberOnly = false) : string
+    static createRandomText(size : number, numberOnly = false) : string
     {
         const chars = (numberOnly
             ? '0123456789'
