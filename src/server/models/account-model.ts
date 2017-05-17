@@ -23,13 +23,14 @@ export class Account
     email           : string = null;
     password        : string = null;
     country_code    : string = null;
-    phone_no        : string = null;
+    phone_no        : string = null;    // TODO:要重複チェック
     authy_id        : number = null;
     two_factor_auth : string = null;
     signup_id       : string = null;
     reset_id        : string = null;
     change_id       : string = null;
     change_email    : string = null;
+    crypto_type     : number = null;
     created_at      : string = null;
     deleted_at      : string = null;
 
@@ -121,7 +122,9 @@ export default class AccountModel
         return new Promise((resolve : () => void, reject) =>
         {
             account.id = SeqModel.next('account');
+            account.crypto_type = 1;
             account.created_at = moment().format('YYYY/MM/DD HH:mm:ss');
+            AccountModel.encrypt(account);
             AccountModel.list.push(account);
             AccountModel.save();
 
@@ -144,9 +147,12 @@ export default class AccountModel
         {
             for (let i in AccountModel.list)
             {
-                if (AccountModel.list[i].id === account.id)
+                const findAccount = AccountModel.list[i];
+                if (findAccount.id === account.id)
                 {
-                    __.extend(AccountModel.list[i], account);
+                    __.extend(findAccount, account);
+                    findAccount.crypto_type = 1;
+                    AccountModel.encrypt(findAccount);
                     AccountModel.save();
                     log.d('更新しました。');
                     break;
@@ -217,7 +223,8 @@ export default class AccountModel
                 &&  (cond.changeId  === undefined || account.change_id === cond.changeId))
                 {
                     log.d('見つかりました。');
-                    const findAccount : Account = __.clone(account);
+                    const findAccount = __.clone(account);
+                    AccountModel.decrypt(findAccount);
 
                     log.stepOut();
                     resolve(findAccount);
@@ -314,12 +321,16 @@ export default class AccountModel
                     return;
                 }
 
+                if (provider === 'email')
+                    id = Utils.encrypt(id, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+
                 for (const account of AccountModel.list)
                 {
                     if (account[provider] === id)
                     {
                         log.d('見つかりました。');
-                        const findAccount : Account = __.clone(account);
+                        const findAccount = __.clone(account);
+                        AccountModel.decrypt(findAccount);
 
                         log.stepOut();
                         resolve(findAccount);
@@ -353,11 +364,46 @@ export default class AccountModel
 
             const accountList : Account[] = [];
             for (const account of AccountModel.list)
-                accountList.push(account);
+            {
+                const obj = __.clone(account);
+                AccountModel.decrypt(obj);
+                accountList.push(obj);
+            }
 
             log.stepOut();
             resolve(accountList);
         });
+    }
+
+    /**
+     * 暗号化
+     */
+    private static encrypt(account : Account) : void
+    {
+        account.crypto_type = 1;
+
+        const key = Config.CRYPTO_KEY;
+        const iv =  Config.CRYPTO_IV;
+
+        if (account.email)     account.email =     Utils.encrypt(account.email,     key, iv);
+        if (account.phone_no)  account.phone_no =  Utils.encrypt(account.phone_no,  key, iv);
+        if (account.change_id) account.change_id = Utils.encrypt(account.change_id, key, iv);
+    }
+
+    /**
+     * 復号
+     */
+    private static decrypt(account : Account) : void
+    {
+        if (account.crypto_type === 1)
+        {
+            const key = Config.CRYPTO_KEY;
+            const iv =  Config.CRYPTO_IV;
+
+            if (account.email)     account.email =     Utils.decrypt(account.email,     key, iv);
+            if (account.phone_no)  account.phone_no =  Utils.decrypt(account.phone_no,  key, iv);
+            if (account.change_id) account.change_id = Utils.decrypt(account.change_id, key, iv);
+        }
     }
 
     /**

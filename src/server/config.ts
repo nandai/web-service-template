@@ -28,6 +28,8 @@ export default class Config
     static SSL_PASSPHRASE = '';
     static SESSION_SECRET = '';
     static PASSWORD_SALT = '';
+    static CRYPTO_KEY = '';
+    static CRYPTO_IV = '';
 
     static SMTP_HOST = '';
     static SMTP_PORT = 0;
@@ -92,6 +94,8 @@ export default class Config
         Config.SSL_PASSPHRASE =          Config.get(appData, 'ssl-passphrase');
         Config.SESSION_SECRET =          Config.get(appData, 'session-secret');
         Config.PASSWORD_SALT =           Config.get(appData, 'password-salt');
+        Config.CRYPTO_KEY =              Config.get(appData, 'crypto-key');
+        Config.CRYPTO_IV =               Config.get(appData, 'crypto-iv');
         Config.SMTP_HOST =               Config.get(appData, 'smtp-host');
         Config.SMTP_PORT =               Config.get(appData, 'smtp-port', 'number');
         Config.SMTP_USER =               Config.get(appData, 'smtp-user');

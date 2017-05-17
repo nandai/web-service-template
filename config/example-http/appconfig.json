@@ -9,6 +9,8 @@
         "ssl-passphrase":          "",
         "session-secret":          "web service template",
         "password-salt":           "webservicetemplate",
+        "crypto-key":              "oQ7u6nWdkSACD5GlBaa5",
+        "crypto-iv":               "S2z3LCDO3r9uDKYzrhlA",
         "smtp-host":               "smtp.example.com",
         "smtp-port":               587,
         "smtp-user":               "example",

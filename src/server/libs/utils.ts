@@ -4,7 +4,7 @@
 import Config from '../config';
 
 import express = require('express');
-import crypt =   require('crypto');
+import crypto =  require('crypto');
 import mailer =  require('nodemailer');
 import smtp =    require('nodemailer-smtp-transport');
 import slog =    require('../slog');
@@ -138,12 +138,12 @@ export default class Utils
         const log = slog.stepIn(Utils.CLS_NAME, 'getHashPassword');
 
         const stretchingCount = 10000;
-        let hash : crypt.Hash;
+        let hash : crypto.Hash;
         let p = password;
 
         for (let i = 0; i < stretchingCount; i++)
         {
-            hash = crypt.createHash('sha256');
+            hash = crypto.createHash('sha256');
             hash.update(name + salt + p);
 
             p = hash.digest(i < stretchingCount - 1 ? 'hex' : 'base64');
@@ -151,6 +151,46 @@ export default class Utils
 
         log.stepOut();
         return p;
+    }
+
+    /**
+     * 暗号化
+     */
+    static encrypt(value : string, key : string, iv : string) : string
+    {
+        const cryptoKey = Utils.digest(key, 'sha256');
+        const cryptoIv =  Utils.digest(iv,  'md5');
+        const algorithm = 'aes-256-cbc';
+        const cipher = crypto.createCipheriv(algorithm, cryptoKey, cryptoIv);
+
+        let enc = cipher.update(value, 'utf8', 'base64');
+        enc += cipher.final('base64');
+        return enc;
+    }
+
+    /**
+     * 復号
+     */
+    static decrypt(value : string, key : string, iv : string)
+    {
+        const cryptoKey = Utils.digest(key, 'sha256');
+        const cryptoIv =  Utils.digest(iv,  'md5');
+        const algorithm = 'aes-256-cbc';
+        const decipher = crypto.createDecipheriv(algorithm, cryptoKey, cryptoIv);
+
+        let dec = decipher.update(value, 'base64', 'utf8');
+        dec += decipher.final('utf8');
+        return dec;
+    }
+
+    /**
+     * digest
+     */
+    private static digest(data : string, algorithm : string) : Buffer
+    {
+        const hash = crypto.createHash(algorithm);
+        hash.update(data, 'utf8');
+        return hash.digest();
     }
 
     /**

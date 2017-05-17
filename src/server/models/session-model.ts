@@ -181,7 +181,7 @@ export default class SessionModel
                 if (session.id === sessionId)
                 {
                     log.d('見つかりました。');
-                    const findSession : Session = __.clone(session);
+                    const findSession = __.clone(session);
 
                     log.stepOut();
                     resolve(findSession);
