@@ -15,24 +15,25 @@ import slog =   require('../slog');
  */
 export class Account
 {
-    id              : number = null;
-    name            : string = null;
-    twitter         : string = null;
-    facebook        : string = null;
-    google          : string = null;
-    email           : string = null;
-    password        : string = null;
-    country_code    : string = null;
-    phone_no        : string = null;    // TODO:要重複チェック
-    authy_id        : number = null;
-    two_factor_auth : string = null;
-    signup_id       : string = null;
-    reset_id        : string = null;
-    change_id       : string = null;
-    change_email    : string = null;
-    crypto_type     : number = null;
-    created_at      : string = null;
-    deleted_at      : string = null;
+    id                 : number = null;
+    name               : string = null;
+    twitter            : string = null;
+    facebook           : string = null;
+    google             : string = null;
+    email              : string = null;
+    password           : string = null;
+    country_code       : string = null;
+    phone_no           : string = null; // 例：03-1234-5678
+    normalize_phone_no : string = null; // 例：312345678。検索などで使う想定
+    authy_id           : number = null;
+    two_factor_auth    : string = null;
+    signup_id          : string = null;
+    reset_id           : string = null;
+    change_id          : string = null;
+    change_email       : string = null;
+    crypto_type        : number = null;
+    created_at         : string = null;
+    deleted_at         : string = null;
 
     /**
      * 紐づけを解除できるかどうか調べる
@@ -60,6 +61,28 @@ export class Account
             return false;
 
         return true;
+    }
+
+    /**
+     * 二段階認証を行えるかどうか
+     */
+    canTwoFactorAuth() : boolean
+    {
+        let possible = false;
+        if (this.country_code !== null && this.phone_no !== null)
+        {
+            switch (this.two_factor_auth)
+            {
+                case 'SMS':
+                    possible = Config.hasTwilio();
+                    break;
+
+                case 'Authy':
+                    possible = (Config.AUTHY_API_KEY !== '');
+                    break;
+            }
+        }
+        return possible;
     }
 }
 
@@ -122,6 +145,7 @@ export default class AccountModel
         return new Promise((resolve : () => void, reject) =>
         {
             account.id = SeqModel.next('account');
+            account.normalize_phone_no = AccountModel.normalizePhoneNo(account.phone_no);
             account.crypto_type = 1;
             account.created_at = moment().format('YYYY/MM/DD HH:mm:ss');
             AccountModel.encrypt(account);
@@ -151,6 +175,7 @@ export default class AccountModel
                 if (findAccount.id === account.id)
                 {
                     __.extend(findAccount, account);
+                    findAccount.normalize_phone_no = AccountModel.normalizePhoneNo(account.phone_no);
                     findAccount.crypto_type = 1;
                     AccountModel.encrypt(findAccount);
                     AccountModel.save();
@@ -225,6 +250,7 @@ export default class AccountModel
                     log.d('見つかりました。');
                     const findAccount = __.clone(account);
                     AccountModel.decrypt(findAccount);
+                    findAccount.normalize_phone_no = AccountModel.normalizePhoneNo(account.phone_no);
 
                     log.stepOut();
                     resolve(findAccount);
@@ -308,6 +334,7 @@ export default class AccountModel
                 return;
             }
 
+            let account : Account = null;
             if (id)
             {
                 if (provider !== 'twitter'
@@ -321,28 +348,43 @@ export default class AccountModel
                     return;
                 }
 
+                const email = id;
                 if (provider === 'email')
-                    id = Utils.encrypt(id, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-
-                for (const account of AccountModel.list)
                 {
-                    if (account[provider] === id)
-                    {
-                        log.d('見つかりました。');
-                        const findAccount = __.clone(account);
-                        AccountModel.decrypt(findAccount);
+                    // メールアドレスの場合、まずは暗号化してある前提で検索
+                    id = Utils.encrypt(id, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+                }
 
-                        log.stepOut();
-                        resolve(findAccount);
-                        return;
-                    }
+                account = AccountModel.find_by_provider_id(provider, id);
+
+                if (account === null && provider === 'email')
+                {
+                    // 見つからなければ平文で検索
+                    account = AccountModel.find_by_provider_id(provider, email);
                 }
             }
 
-            log.d('見つかりませんでした。');
+            if (account) log.d('見つかりました。');
+            else         log.d('見つかりませんでした。');
+
             log.stepOut();
-            resolve(null);
+            resolve(account);
         });
+    }
+
+    private static find_by_provider_id(provider : string, id : string) : Account
+    {
+        for (const account of AccountModel.list)
+        {
+            if (account[provider] === id)
+            {
+                const findAccount = __.clone(account);
+                AccountModel.decrypt(findAccount);
+                findAccount.normalize_phone_no = AccountModel.normalizePhoneNo(findAccount.phone_no);
+                return findAccount;
+            }
+        }
+        return null;
     }
 
     /**
@@ -385,9 +427,10 @@ export default class AccountModel
         const key = Config.CRYPTO_KEY;
         const iv =  Config.CRYPTO_IV;
 
-        if (account.email)     account.email =     Utils.encrypt(account.email,     key, iv);
-        if (account.phone_no)  account.phone_no =  Utils.encrypt(account.phone_no,  key, iv);
-        if (account.change_id) account.change_id = Utils.encrypt(account.change_id, key, iv);
+        if (account.email)              account.email =              Utils.encrypt(account.email,              key, iv);
+        if (account.phone_no)           account.phone_no =           Utils.encrypt(account.phone_no,           key, iv);
+        if (account.normalize_phone_no) account.normalize_phone_no = Utils.encrypt(account.normalize_phone_no, key, iv);
+        if (account.change_id)          account.change_id =          Utils.encrypt(account.change_id,          key, iv);
     }
 
     /**
@@ -400,10 +443,24 @@ export default class AccountModel
             const key = Config.CRYPTO_KEY;
             const iv =  Config.CRYPTO_IV;
 
-            if (account.email)     account.email =     Utils.decrypt(account.email,     key, iv);
-            if (account.phone_no)  account.phone_no =  Utils.decrypt(account.phone_no,  key, iv);
-            if (account.change_id) account.change_id = Utils.decrypt(account.change_id, key, iv);
+            if (account.email)              account.email =               Utils.decrypt(account.email,               key, iv);
+            if (account.phone_no)           account.phone_no =            Utils.decrypt(account.phone_no,            key, iv);
+            if (account.normalize_phone_no) account.normalize_phone_no =  Utils.decrypt(account.normalize_phone_no,  key, iv);
+            if (account.change_id)          account.change_id =           Utils.decrypt(account.change_id,           key, iv);
         }
+    }
+
+    /**
+     * 電話番号正規化
+     */
+    static normalizePhoneNo(phoneNo : string) : string
+    {
+        if (phoneNo)
+        {
+            phoneNo = phoneNo.replace(/-/g, '');
+            phoneNo = phoneNo.substr(1);    // 先頭の1文字を取り除く（'0'だったら、ではない）
+        }
+        return phoneNo;
     }
 
     /**

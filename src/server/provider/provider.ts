@@ -195,10 +195,7 @@ export default class Provider
                             {
                                 log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
                                 let phrase : string;
-                                let isTwoFactorAuth = Utils.canTwoFactorAuth(
-                                    findAccount.country_code,
-                                    findAccount.phone_no,
-                                    findAccount.two_factor_auth);
+                                let isTwoFactorAuth = findAccount.canTwoFactorAuth();
 
                                 if (isTwoFactorAuth)
                                 {
@@ -213,7 +210,7 @@ export default class Provider
                                             // ログインコードをSMS送信
                                             const locale = req.ext.locale;
                                             const message = R.text(R.SMS_LOGIN_CODE, locale);
-                                            const phoneNo = this.normalizePhoneNo(findAccount.country_code, findAccount.phone_no);
+                                            const phoneNo = findAccount.country_code + findAccount.normalize_phone_no;
                                             success = await this.sendSms(phoneNo, `${message}：${smsCode}`);
                                             break;
 
@@ -392,16 +389,6 @@ export default class Provider
             }
             catch (err) {Utils.internalServerError(err, res, log)};
         });
-    }
-
-    /**
-     * 電話番号正規化
-     */
-    private normalizePhoneNo(countryCode : string, phoneNo : string) : string
-    {
-        phoneNo = phoneNo.replace(/-/g, '');
-        phoneNo = countryCode + phoneNo.substr(1);
-        return phoneNo;
     }
 
     /**

@@ -155,6 +155,7 @@ export default class SettingsApi
                 if (account.authy_id && prevPhoneNo && prevPhoneNo !== newPhoneNo)
                 {
                     // authyからユーザー削除
+                    // TODO:他に同じ電話番号が登録されていないかチェック
                     await Authy.deleteUser(account.authy_id);
                     account.authy_id = null;
                 }
@@ -166,6 +167,7 @@ export default class SettingsApi
                 && (newCountryCode !== prevCountryCode || newPhoneNo !== prevPhoneNo || account.authy_id === null))
                 {
                     // authyにユーザー登録
+                    // TODO:既に同じ電話番号が登録されていないかチェック
                     account.authy_id = await Authy.registerUser(account.email, newCountryCode.substr(1), newPhoneNo);
                 }
 

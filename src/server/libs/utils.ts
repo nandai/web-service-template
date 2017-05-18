@@ -171,7 +171,7 @@ export default class Utils
     /**
      * 復号
      */
-    static decrypt(value : string, key : string, iv : string)
+    static decrypt(value : string, key : string, iv : string) : string
     {
         const cryptoKey = Utils.digest(key, 'sha256');
         const cryptoIv =  Utils.digest(iv,  'md5');
@@ -336,27 +336,5 @@ export default class Utils
             locale = 'en';
 
         return locale;
-    }
-
-    /**
-     * 二段階認証を行えるかどうか
-     */
-    static canTwoFactorAuth(countryCode : string, phoneNo : string, twoFactorAuth : string) : boolean
-    {
-        let possible = false;
-        if (countryCode !== null && phoneNo !== null)
-        {
-            switch (twoFactorAuth)
-            {
-                case 'SMS':
-                    possible = Config.hasTwilio();
-                    break;
-
-                case 'Authy':
-                    possible = (Config.AUTHY_API_KEY !== '');
-                    break;
-            }
-        }
-        return possible;
     }
 }
