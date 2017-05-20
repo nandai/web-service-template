@@ -7,6 +7,7 @@ interface ButtonProps
 {
     className? : string;
     url?       : string;
+    submit?    : boolean;
     disabled?  : boolean;
     align?     : string;
     margin?    : string;
@@ -19,6 +20,7 @@ export default class Button extends React.Component<ButtonProps, {}>
     {
         className: null,
         url:       null,
+        submit:    false,
         disabled:  false,
         align:     null,
         margin:    null,
@@ -38,7 +40,7 @@ export default class Button extends React.Component<ButtonProps, {}>
     render() : JSX.Element
     {
         const {props, onClick} = this;
-        const {url, disabled, align, margin, children} = props;
+        const {url, submit, disabled, align, margin, children} = props;
 
         let className = 'wst-button';
 
@@ -65,10 +67,11 @@ export default class Button extends React.Component<ButtonProps, {}>
         }
         else
         {
+            const type = (submit ? 'submit' : 'button');
             el = (
                 <button className = {className}
                         style=      {style}
-                        type =      "button"
+                        type =      {type}
                         disabled =  {disabled}
                         onClick  =  {onClick}>
                     {children}

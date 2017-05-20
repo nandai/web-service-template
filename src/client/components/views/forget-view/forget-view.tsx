@@ -30,10 +30,12 @@ export default class ForgetView extends React.Component<ForgetViewProps, {}>
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    <Input type="text" placeholder={R.text(R.EMAIL,     locale)} value={store.email} onChange={store.onEmailChange} />
-                    <Button onClick={store.onSend}>{R.text(R.SEND_MAIL, locale)}</Button>
-                    <Button onClick={store.onBack}>{R.text(R.BACK,      locale)}</Button>
-                    <Text>{store.message}</Text>
+                    <form>
+                        <Input type="text" placeholder={R.text(R.EMAIL, locale)} value={store.email} onChange={store.onEmailChange} />
+                        <Button submit={true} onClick={store.onSend}>{R.text(R.SEND_MAIL, locale)}</Button>
+                        <Button               onClick={store.onBack}>{R.text(R.BACK,      locale)}</Button>
+                        <Text>{store.message}</Text>
+                    </form>
                 </ViewContents>
             </ViewContainer>
         );

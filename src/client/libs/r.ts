@@ -16,6 +16,7 @@ export default class R
             'authSms':                    'Two-Factor authentication',
             'back':                       'Back',
             'change':                     'Change',
+            'countryCode':                'Country Code (e.g.+1)',
             'currentPassword':            'Current password',
             'deleteAccount':              'Delete account',
             'email':                      'Email',
@@ -39,6 +40,7 @@ export default class R
             'newPasswordAgain':           'New password again',
             'notFound':                   'NOT FOUND',
             'password':                   'Password',
+            'phoneNo':                    'Phone No (e.g.123-456-7890)',
             'problem':                    'There was a problem. Please contact the administrator.',
             'resetPassword':              'Reset password',
             'send':                       'Send',
@@ -53,7 +55,6 @@ export default class R
             'signupWithFacebook':         'Sign up with Facebook',
             'signupWithGoogle':           'Sign up with Google',
             'signupWithTwitter':          'Sign up with Twitter',
-            'tel':                        'Phone No (e.g.03-1234-5678)',
             'top':                        'Top',
             'twoFactorAuthSms':           'Perform two-factor authentication with SMS.',
             'twoFactorAuthAuthy':         'Perform two-factor authentication with Authy.',
@@ -70,6 +71,7 @@ export default class R
             'authSms':                    '二段階認証',
             'back':                       '戻る',
             'change':                     '変更する',
+            'countryCode':                '国コード (例:+81)',
             'currentPassword':            '現在のパスワード',
             'deleteAccount':              'アカウントを削除する',
             'email':                      'メールアドレス',
@@ -93,6 +95,7 @@ export default class R
             'newPasswordAgain':           'パスワードの確認',
             'notFound':                   'NOT FOUND',
             'password':                   'パスワード',
+            'phoneNo':                    '電話番号 (例:03-1234-5678)',
             'problem':                    '問題が発生しました。管理者にお問い合わせください。',
             'resetPassword':              'パスワードリセット',
             'send':                       '送信する',
@@ -107,7 +110,6 @@ export default class R
             'signupWithFacebook':         'Facebookでサインアップする',
             'signupWithGoogle':           'Googleでサインアップする',
             'signupWithTwitter':          'Twitterでサインアップする',
-            'tel':                        '電話番号 (例:03-1234-5678)',
             'top':                        'トップ',
             'twoFactorAuthSms':           'SMSで二段階認証を行う',
             'twoFactorAuthAuthy':         'Authyで二段階認証を行う',
@@ -123,6 +125,7 @@ export default class R
     static AUTH_SMS =                      'authSms';
     static BACK =                          'back';
     static CHANGE =                        'change';
+    static COUNTRY_CODE =                  'countryCode';
     static CURRENT_PASSWORD =              'currentPassword';
     static DELETE_ACCOUNT =                'deleteAccount';
     static EMAIL =                         'email';
@@ -146,6 +149,7 @@ export default class R
     static NEW_PASSWORD_AGAIN =            'newPasswordAgain';
     static NOT_FOUND =                     'notFound';
     static PASSWORD =                      'password';
+    static PHONE_NO =                      'phoneNo';
     static PROBLEM =                       'problem';
     static RESET_PASSWORD =                'resetPassword';
     static SEND =                          'send';
@@ -160,7 +164,6 @@ export default class R
     static SIGNUP_WITH_FACEBOOK =          'signupWithFacebook';
     static SIGNUP_WITH_GOOGLE =            'signupWithGoogle';
     static SIGNUP_WITH_TWITTER =           'signupWithTwitter';
-    static TEL =                           'tel';
     static TOP =                           'top';
     static TWO_FACTOR_AUTH_SMS =           'twoFactorAuthSms';
     static TWO_FACTOR_AUTH_AUTHY =         'twoFactorAuthAuthy';

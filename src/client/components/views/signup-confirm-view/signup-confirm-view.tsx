@@ -30,9 +30,11 @@ export default class SignupConfirmView extends React.Component<SignupConfirmView
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} onChange={store.onPasswordChange} />
-                    <Button onClick={store.onConfirm} >{R.text(R.SEND,     locale)}</Button>
-                    <Text>{store.message}</Text>
+                    <form>
+                        <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} onChange={store.onPasswordChange} />
+                        <Button submit={true} onClick={store.onConfirm}>{R.text(R.SEND, locale)}</Button>
+                        <Text>{store.message}</Text>
+                    </form>
                 </ViewContents>
             </ViewContainer>
         );

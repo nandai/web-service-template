@@ -38,13 +38,15 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    <Input type="text" placeholder={R.text(R.ACCOUNT_NAME, locale)} value={account.name}        onChange={store.onNameChange} />
-                    <Input type="text" placeholder={R.text(R.TEL,          locale)} value={account.phoneNo}     onChange={store.onPhoneNoChange} />
-                    <Input type="text" placeholder="Country Code"                   value={account.countryCode} onChange={store.onCountryCodeChange} />
-                    <RadioButtons name="two-factor-auth" items={items} value={account.twoFactorAuth} onClick={store.onTwoFactorAuth} />
-                    <Button onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
-                    <Button onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
-                    <Text>{store.message}</Text>
+                    <form>
+                        <Input type="text" placeholder={R.text(R.ACCOUNT_NAME, locale)} value={account.name}        onChange={store.onNameChange} />
+                        <Input type="text" placeholder={R.text(R.PHONE_NO,     locale)} value={account.phoneNo}     onChange={store.onPhoneNoChange} />
+                        <Input type="text" placeholder={R.text(R.COUNTRY_CODE, locale)} value={account.countryCode} onChange={store.onCountryCodeChange} />
+                        <RadioButtons name="two-factor-auth" items={items} value={account.twoFactorAuth} onClick={store.onTwoFactorAuth} />
+                        <Button submit={true} onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
+                        <Button               onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
+                        <Text>{store.message}</Text>
+                    </form>
                 </ViewContents>
             </ViewContainer>
         );

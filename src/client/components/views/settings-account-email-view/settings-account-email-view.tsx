@@ -31,10 +31,12 @@ export default class SettingsAccountEmailView extends React.Component<SettingsAc
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    <Input type="email"  placeholder={R.text(R.EMAIL,  locale)} value={account.email} onChange={store.onEmailChange} />
-                    <Button onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
-                    <Button onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
-                    <Text>{store.message}</Text>
+                    <form>
+                        <Input type="email" placeholder={R.text(R.EMAIL, locale)} value={account.email} onChange={store.onEmailChange} />
+                        <Button submit={true} onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
+                        <Button               onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
+                        <Text>{store.message}</Text>
+                    </form>
                 </ViewContents>
             </ViewContainer>
         );
