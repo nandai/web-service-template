@@ -388,11 +388,52 @@ export default class AccountModel
     }
 
     /**
+     * Authy IDを検索する
+     *
+     * @param   internationalPhoneNo    国際電話番号
+     * @param   excludeAccountId        検索から除外するアカウントID
+     *
+     * @return  Authy ID
+     */
+    static findAuthyId(internationalPhoneNo : string, excludeAccountId? : number)
+    {
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'getAuthyId');
+        return new Promise((resolve : (authyId : number) => void, reject) =>
+        {
+            if (AccountModel.isUninitialize())
+            {
+                log.stepOut();
+                reject(new Error(AccountModel.MESSAGE_UNINITIALIZE));
+                return;
+            }
+
+            internationalPhoneNo = Utils.encrypt(internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+            for (const account of AccountModel.list)
+            {
+                if (excludeAccountId && account.id === excludeAccountId)
+                    continue;
+
+                if (account.international_phone_no === internationalPhoneNo)
+                {
+                    log.d('見つかりました。');
+                    log.stepOut();
+                    resolve(account.authy_id);
+                    return;
+                }
+            }
+
+            log.d('見つかりませんでした。');
+            log.stepOut();
+            resolve(null);
+        });
+    }
+
+    /**
      * アカウント一覧を検索する
      *
      * @return  Account[]。該当するアカウントの一覧を返す
      */
-    static findList()
+    static findList(cond : AccountFindListCondition = {})
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'findList');
         return new Promise((resolve : (accounts : Account[]) => void, reject) =>
@@ -404,12 +445,18 @@ export default class AccountModel
                 return;
             }
 
+            if (cond.internationalPhoneNo)
+                cond.internationalPhoneNo = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+
             const accountList : Account[] = [];
             for (const account of AccountModel.list)
             {
-                const obj = __.clone(account);
-                AccountModel.decrypt(obj);
-                accountList.push(obj);
+                if (cond.internationalPhoneNo === undefined || account.international_phone_no === cond.internationalPhoneNo)
+                {
+                    const obj = __.clone(account);
+                    AccountModel.decrypt(obj);
+                    accountList.push(obj);
+                }
             }
 
             log.stepOut();
@@ -519,6 +566,14 @@ interface AccountFindCondition
     signupId?  : string;
     resetId?   : string;
     changeId?  : string;
+}
+
+/**
+ * アカウント一覧検索条件
+ */
+interface AccountFindListCondition
+{
+    internationalPhoneNo? : string;
 }
 
 interface AccountResolve {(account : Account) : void}

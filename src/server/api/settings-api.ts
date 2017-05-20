@@ -154,9 +154,15 @@ export default class SettingsApi
 
                 if (account.authy_id && prevPhoneNo && prevPhoneNo !== newPhoneNo)
                 {
-                    // authyからユーザー削除
-                    // TODO:他に同じ電話番号が登録されていないかチェック
-                    await Authy.deleteUser(account.authy_id);
+                    const internationalPhoneNo = AccountModel.internationalPhoneNo(prevCountryCode, prevPhoneNo);
+                    const authyId = await AccountModel.findAuthyId(internationalPhoneNo, account.id);
+
+                    if (authyId === null)
+                    {
+                        // 他に同じ電話番号がなければauthyからユーザー削除
+                        await Authy.deleteUser(account.authy_id);
+                    }
+
                     account.authy_id = null;
                 }
 
@@ -166,9 +172,19 @@ export default class SettingsApi
                 && newPhoneNo
                 && (newCountryCode !== prevCountryCode || newPhoneNo !== prevPhoneNo || account.authy_id === null))
                 {
-                    // authyにユーザー登録
-                    // TODO:既に同じ電話番号が登録されていないかチェック
-                    account.authy_id = await Authy.registerUser(account.email, newCountryCode.substr(1), newPhoneNo);
+                    const internationalPhoneNo = AccountModel.internationalPhoneNo(newCountryCode, newPhoneNo);
+                    const authyId = await AccountModel.findAuthyId(internationalPhoneNo);
+
+                    if (authyId === null)
+                    {
+                        // 同じ電話番号がなければauthyにユーザー登録
+                        account.authy_id = await Authy.registerUser(account.email, newCountryCode.substr(1), newPhoneNo);
+                    }
+                    else
+                    {
+                        // 同じ電話番号があればそのauthy_idを設定
+                        account.authy_id = authyId;
+                    }
                 }
 
                 account.name =            name;
