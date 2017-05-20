@@ -480,7 +480,7 @@ export default class AccountModel
         if (account.email)                  account.email =                  Utils.encrypt(account.email,                  key, iv);
         if (account.phone_no)               account.phone_no =               Utils.encrypt(account.phone_no,               key, iv);
         if (account.international_phone_no) account.international_phone_no = Utils.encrypt(account.international_phone_no, key, iv);
-        if (account.change_id)              account.change_id =              Utils.encrypt(account.change_id,              key, iv);
+        if (account.change_email)           account.change_email =           Utils.encrypt(account.change_email,           key, iv);
     }
 
     /**
@@ -496,7 +496,7 @@ export default class AccountModel
             if (account.email)                  account.email =                   Utils.decrypt(account.email,                   key, iv);
             if (account.phone_no)               account.phone_no =                Utils.decrypt(account.phone_no,                key, iv);
             if (account.international_phone_no) account.international_phone_no =  Utils.decrypt(account.international_phone_no,  key, iv);
-            if (account.change_id)              account.change_id =               Utils.decrypt(account.change_id,               key, iv);
+            if (account.change_email)           account.change_email =            Utils.decrypt(account.change_email,            key, iv);
         }
     }
 
