@@ -126,7 +126,8 @@ export default class Provider
                     {
                         // サインアップ処理
 //                      if (findAccount === null)
-                        if (findAccount === null || findAccount.signup_id)
+//                      if (findAccount === null || findAccount.signup_id)
+                        if (findAccount === null || findAccount.signup_id || findAccount.invite_id)
                         {
                             if (session.account_id === null)
                             {
@@ -142,7 +143,8 @@ export default class Provider
                                 else
                                 {
                                     // 仮登録中のメールアドレスのアカウントに新たなサインアップIDを設定する
-                                    account.id = findAccount.id;
+                                    account.id =        findAccount.id;
+                                    account.invite_id = findAccount.invite_id;
                                     await AccountModel.update(account);
                                 }
 
