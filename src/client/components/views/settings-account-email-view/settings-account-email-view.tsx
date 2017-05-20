@@ -24,8 +24,7 @@ export default class SettingsAccountEmailView extends React.Component<SettingsAc
     render() : JSX.Element
     {
         const {store} = this.props;
-        const {account} = store;
-        const {locale} = store;
+        const {locale, account} = store;
 
         return (
             <ViewContainer>

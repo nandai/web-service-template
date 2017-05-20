@@ -29,6 +29,7 @@ export default class R
             'goSettings':                 'Go settings',
             'goSignup':                   'Go sign up',
             'goTop':                      'Go top',
+            'invite':                     'Invite',
             'linkProvider':               'Link ${provider}',
             'login':                      'Log in',
             'loginCode':                  'Login code',
@@ -50,6 +51,7 @@ export default class R
             'settingsAccountEmail':       'email settings',
             'settingsAccountEmailChange': 'Confirm email',
             'settingsAccountPassword':    'Password settings',
+            'settingsInvite':             'Invite',
             'signup':                     'Sign up',
             'signupConfirm':              'Confirm sign up',
             'signupWithFacebook':         'Sign up with Facebook',
@@ -84,6 +86,7 @@ export default class R
             'goSettings':                 '設定画面へ',
             'goSignup':                   'サインアップ画面へ',
             'goTop':                      'トップ画面へ',
+            'invite':                     '招待する',
             'linkProvider':               '${provider}を紐づける',
             'login':                      'ログイン',
             'loginCode':                  'ログインコード',
@@ -105,6 +108,7 @@ export default class R
             'settingsAccountEmail':       'メールアドレスの設定',
             'settingsAccountEmailChange': 'メールアドレス設定の確認',
             'settingsAccountPassword':    'パスワードの設定',
+            'settingsInvite':             '招待',
             'signup':                     'サインアップ',
             'signupConfirm':              'サインアップの確認',
             'signupWithFacebook':         'Facebookでサインアップする',
@@ -138,6 +142,7 @@ export default class R
     static GO_SETTINGS =                   'goSettings';
     static GO_SIGNUP =                     'goSignup';
     static GO_TOP =                        'goTop';
+    static INVITE =                        'invite';
     static LINK_PROVIDER =                 'linkProvider';
     static LOGIN =                         'login';
     static LOGIN_CODE =                    'loginCode';
@@ -159,6 +164,7 @@ export default class R
     static SETTINGS_ACCOUNT_EMAIL =        'settingsAccountEmail';
     static SETTINGS_ACCOUNT_EMAIL_CHANGE = 'settingsAccountEmailChange';
     static SETTINGS_ACCOUNT_PASSWORD =     'settingsAccountPassword';
+    static SETTINGS_INVITE =               'settingsInvite';
     static SIGNUP =                        'signup';
     static SIGNUP_CONFIRM =                'signupConfirm';
     static SIGNUP_WITH_FACEBOOK =          'signupWithFacebook';

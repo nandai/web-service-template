@@ -28,6 +28,7 @@ export class Account
     authy_id               : number = null;
     two_factor_auth        : string = null;
     signup_id              : string = null;
+    invite_id              : string = null;
     reset_id               : string = null;
     change_id              : string = null;
     change_email           : string = null;
@@ -246,6 +247,7 @@ export default class AccountModel
             {
                 if ((cond.accountId === undefined || account.id        === cond.accountId)
                 &&  (cond.signupId  === undefined || account.signup_id === cond.signupId)
+                &&  (cond.inviteId  === undefined || account.invite_id === cond.inviteId)
                 &&  (cond.resetId   === undefined || account.reset_id  === cond.resetId)
                 &&  (cond.changeId  === undefined || account.change_id === cond.changeId))
                 {
@@ -453,7 +455,9 @@ export default class AccountModel
             const accountList : Account[] = [];
             for (const account of AccountModel.list)
             {
-                if ((cond.registered           === undefined || (account.signup_id === null)    === cond.registered)
+                const registered = (account.signup_id === null && account.invite_id === null);
+
+                if ((cond.registered           === undefined || registered                      === cond.registered)
                 &&  (cond.internationalPhoneNo === undefined ||  account.international_phone_no === cond.internationalPhoneNo))
                 {
                     const obj = __.clone(account);
@@ -567,6 +571,7 @@ interface AccountFindCondition
 {
     accountId? : number;
     signupId?  : string;
+    inviteId?  : string;
     resetId?   : string;
     changeId?  : string;
 }

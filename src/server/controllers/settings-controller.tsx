@@ -21,6 +21,8 @@ import SettingsAccountEmailChangeView             from 'client/components/views/
 import {Store as SettingsAccountEmailChangeStore} from 'client/components/views/settings-account-email-change-view/store';
 import SettingsAccountPasswordView                from 'client/components/views/settings-account-password-view/settings-account-password-view';
 import {Store as SettingsAccountPasswordStore}    from 'client/components/views/settings-account-password-view/store';
+import SettingsInviteView                         from 'client/components/views/settings-invite-view/settings-invite-view';
+import {Store as SettingsInviteStore}             from 'client/components/views/settings-invite-view/store';
 import ClientR                                    from 'client/libs/r';
 import {Response}                                 from 'libs/response';
 
@@ -221,6 +223,38 @@ export default class SettingsController
             {
                 notFound(req, res);
             }
+            log.stepOut();
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
+    }
+
+    /**
+     * 招待する画面<br>
+     * GET /settings/invite
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static async invite(req : express.Request, res : express.Response)
+    {
+        const log = slog.stepIn(SettingsController.CLS_NAME, 'invite');
+        const locale = req.ext.locale;
+
+        try
+        {
+            const data = await SettingsApi.getAccount(req);
+            const store : SettingsInviteStore =
+            {
+                locale:  locale,
+                account: data.account,
+                email:   '',
+                message: ''
+            };
+
+            const title = ClientR.text(ClientR.SETTINGS_INVITE, locale);
+            const el = <SettingsInviteView store={store} />;
+            const contents = ReactDOM.renderToString(<Root view={el} />);
+            res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log)};

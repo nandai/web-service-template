@@ -33,6 +33,7 @@ export default class R
     static CHANGE_MAIL_SENDED =                 'changeMailSended';
     static COULD_NOT_CHANGE_EMAIL =             'couldNotChangeEmail';
     static COULD_NOT_SEND_CHANGE_MAIL =         'couldNotSendChangeMail';
+    static COULD_NOT_SEND_INVITE_MAIL =          'couldNotSendInviteMail';
     static COULD_NOT_SEND_RESET_MAIL =          'couldNotSendResetMail';
     static COULD_NOT_SEND_SIGNUP_MAIL =         'couldNotSendSignupMail';
     static COULD_NOT_SEND_SMS =                 'couldNotSendSms';
@@ -42,6 +43,7 @@ export default class R
     static INVALID_EMAIL =                      'invalidEmail';
     static INVALID_EMAIL_AUTH =                 'invalidEmailAuth';
     static INVALID_PASSWORD =                   'invalidPassword';
+    static INVITE_MAIL_SENDED =                 'inviteMailSended';
     static MISMATCH_PASSWORD =                  'mismatchPassword';
     static MISMATCH_SMS_CODE =                  'mismatchSmsCode';
     static NO_LOGIN =                           'noLogin';
@@ -61,10 +63,11 @@ export default class R
         'ja': {}
     };
 
-    static NOTICE_SIGNUP =              'notice-signup';
-    static NOTICE_SET_MAIL_ADDRESS =    'notice-set-mail-address';
+    static NOTICE_INVITE =              'notice-invite';
     static NOTICE_CHANGE_MAIL_ADDRESS = 'notice-change-mail-address';
     static NOTICE_RESET_PASSWORD =      'notice-reset-password';
+    static NOTICE_SET_MAIL_ADDRESS =    'notice-set-mail-address';
+    static NOTICE_SIGNUP =              'notice-signup';
 
     /**
      * リソースをロードする
@@ -75,10 +78,11 @@ export default class R
         for (const locale of locales)
         {
             this.loadTextResources(locale);
-            this.loadMailTemplate(R.NOTICE_SIGNUP,              locale);
-            this.loadMailTemplate(R.NOTICE_SET_MAIL_ADDRESS,    locale);
+            this.loadMailTemplate(R.NOTICE_INVITE,              locale);
             this.loadMailTemplate(R.NOTICE_CHANGE_MAIL_ADDRESS, locale);
             this.loadMailTemplate(R.NOTICE_RESET_PASSWORD,      locale);
+            this.loadMailTemplate(R.NOTICE_SET_MAIL_ADDRESS,    locale);
+            this.loadMailTemplate(R.NOTICE_SIGNUP,              locale);
         }
     }
 

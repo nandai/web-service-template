@@ -90,4 +90,9 @@ export namespace Request
     {
         id : number | any[];
     }
+
+    export interface Invite
+    {
+        email : string | any[];
+    }
 }

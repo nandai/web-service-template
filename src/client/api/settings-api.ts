@@ -122,4 +122,20 @@ export default class SettingsApi extends Api
             Api.result(ok, data, resolve, reject);
         });
     }
+
+    /**
+     * 招待する
+     */
+    static invite(param : Request.Invite)
+    {
+        return new Promise(async (resolve : (res : Response.Invite) => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'invite');
+            const url = '/api/settings/invite';
+
+            const {ok, data} = await Api.sendPostRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
 }

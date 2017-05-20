@@ -17,6 +17,7 @@ import SettingsAccountApp            from './settings-account';
 import SettingsAccountEmailApp       from './settings-account-email';
 import SettingsAccountEmailChangeApp from './settings-account-email-change';
 import SettingsAccountPasswordApp    from './settings-account-password';
+import SettingsInviteApp             from './settings-invite';
 import UserApp                       from './user';
 import UsersApp                      from './users';
 import ForbiddenApp                  from './forbidden';
@@ -62,6 +63,7 @@ class WstApp
             {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), effect:'none', auth:true},
             {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), effect:'none', query:true},
             {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), effect:'none', auth:true},
+            {url:'/settings/invite',               app:new SettingsInviteApp(),             title:R.text(R.SETTINGS_INVITE,                locale), effect:'fade', auth:true},
             {url:'/users/:id',                     app:new UserApp(),                       title:R.text(R.USER,                           locale), effect:'fade'},
             {url:'/users',                         app:new UsersApp(),                      title:R.text(R.USER_LIST,                      locale), effect:'fade'},
             {url:'/about',                         app:loginApp,                            title:R.text(R.ABOUT,                          locale), effect:'fade'},

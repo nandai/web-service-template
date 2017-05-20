@@ -218,6 +218,7 @@ class Initializer
         this.app.get('/settings/account/email',         Access.auth, SettingsController.email);
         this.app.get('/settings/account/email/change',               SettingsController.changeEmail);
         this.app.get('/settings/account/password',      Access.auth, SettingsController.password);
+        this.app.get('/settings/invite',                Access.auth, SettingsController.invite);
 
         this.app.get('/users/:id(\\d+)', UsersController.user);
         this.app.get('/users',           UsersController.users);
@@ -242,6 +243,7 @@ class Initializer
         this.app.put(   '/api/settings/account/email',        Access.auth, SettingsApi.onRequestChangeEmail);
         this.app.put(   '/api/settings/account/email/change',              SettingsApi.onChangeEmail);
         this.app.put(   '/api/settings/account/password',     Access.auth, SettingsApi.onChangePassword);
+        this.app.post(  '/api/settings/invite',               Access.auth, SettingsApi.onInvite);
         this.app.post(  '/api/logout',                        Access.auth, LogoutApi.  onLogout);
 
         this.app.get('/auth/twitter/callback',  Twitter. customCallback, Twitter. callback);

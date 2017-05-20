@@ -9,6 +9,7 @@ export interface Store
     account     : Response.Account;
     message     : string;
     onSettings? : () => void;
+    onInvite?   : () => void;
     onUsers?    : () => void;
     onLogout?   : () => void;
 }

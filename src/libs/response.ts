@@ -119,6 +119,12 @@ export namespace Response
         userList : User[];
     }
 
+    export interface Invite
+    {
+        status  : Status;
+        message : string;
+    }
+
     export enum Status
     {
         BAD_REQUEST = -1,
