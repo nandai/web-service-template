@@ -15,25 +15,25 @@ import slog =   require('../slog');
  */
 export class Account
 {
-    id                 : number = null;
-    name               : string = null;
-    twitter            : string = null;
-    facebook           : string = null;
-    google             : string = null;
-    email              : string = null;
-    password           : string = null;
-    country_code       : string = null;
-    phone_no           : string = null; // 例：03-1234-5678
-    normalize_phone_no : string = null; // 例：312345678。検索などで使う想定
-    authy_id           : number = null;
-    two_factor_auth    : string = null;
-    signup_id          : string = null;
-    reset_id           : string = null;
-    change_id          : string = null;
-    change_email       : string = null;
-    crypto_type        : number = null;
-    created_at         : string = null;
-    deleted_at         : string = null;
+    id                     : number = null;
+    name                   : string = null;
+    twitter                : string = null;
+    facebook               : string = null;
+    google                 : string = null;
+    email                  : string = null;
+    password               : string = null;
+    country_code           : string = null;
+    phone_no               : string = null; // 例：03-1234-5678
+    international_phone_no : string = null; // 例：81312345678。検索などで使う想定
+    authy_id               : number = null;
+    two_factor_auth        : string = null;
+    signup_id              : string = null;
+    reset_id               : string = null;
+    change_id              : string = null;
+    change_email           : string = null;
+    crypto_type            : number = null;
+    created_at             : string = null;
+    deleted_at             : string = null;
 
     /**
      * 紐づけを解除できるかどうか調べる
@@ -145,7 +145,7 @@ export default class AccountModel
         return new Promise((resolve : () => void, reject) =>
         {
             account.id = SeqModel.next('account');
-            account.normalize_phone_no = AccountModel.normalizePhoneNo(account.phone_no);
+            account.international_phone_no = AccountModel.international_phone_no(account);
             account.crypto_type = 1;
             account.created_at = moment().format('YYYY/MM/DD HH:mm:ss');
             AccountModel.encrypt(account);
@@ -175,7 +175,7 @@ export default class AccountModel
                 if (findAccount.id === account.id)
                 {
                     __.extend(findAccount, account);
-                    findAccount.normalize_phone_no = AccountModel.normalizePhoneNo(account.phone_no);
+                    findAccount.international_phone_no = AccountModel.international_phone_no(account);
                     findAccount.crypto_type = 1;
                     AccountModel.encrypt(findAccount);
                     AccountModel.save();
@@ -250,7 +250,7 @@ export default class AccountModel
                     log.d('見つかりました。');
                     const findAccount = __.clone(account);
                     AccountModel.decrypt(findAccount);
-                    findAccount.normalize_phone_no = AccountModel.normalizePhoneNo(account.phone_no);
+                    findAccount.international_phone_no = AccountModel.international_phone_no(account);
 
                     log.stepOut();
                     resolve(findAccount);
@@ -380,7 +380,7 @@ export default class AccountModel
             {
                 const findAccount = __.clone(account);
                 AccountModel.decrypt(findAccount);
-                findAccount.normalize_phone_no = AccountModel.normalizePhoneNo(findAccount.phone_no);
+                findAccount.international_phone_no = AccountModel.international_phone_no(findAccount);
                 return findAccount;
             }
         }
@@ -427,10 +427,10 @@ export default class AccountModel
         const key = Config.CRYPTO_KEY;
         const iv =  Config.CRYPTO_IV;
 
-        if (account.email)              account.email =              Utils.encrypt(account.email,              key, iv);
-        if (account.phone_no)           account.phone_no =           Utils.encrypt(account.phone_no,           key, iv);
-        if (account.normalize_phone_no) account.normalize_phone_no = Utils.encrypt(account.normalize_phone_no, key, iv);
-        if (account.change_id)          account.change_id =          Utils.encrypt(account.change_id,          key, iv);
+        if (account.email)                  account.email =                  Utils.encrypt(account.email,                  key, iv);
+        if (account.phone_no)               account.phone_no =               Utils.encrypt(account.phone_no,               key, iv);
+        if (account.international_phone_no) account.international_phone_no = Utils.encrypt(account.international_phone_no, key, iv);
+        if (account.change_id)              account.change_id =              Utils.encrypt(account.change_id,              key, iv);
     }
 
     /**
@@ -443,24 +443,34 @@ export default class AccountModel
             const key = Config.CRYPTO_KEY;
             const iv =  Config.CRYPTO_IV;
 
-            if (account.email)              account.email =               Utils.decrypt(account.email,               key, iv);
-            if (account.phone_no)           account.phone_no =            Utils.decrypt(account.phone_no,            key, iv);
-            if (account.normalize_phone_no) account.normalize_phone_no =  Utils.decrypt(account.normalize_phone_no,  key, iv);
-            if (account.change_id)          account.change_id =           Utils.decrypt(account.change_id,           key, iv);
+            if (account.email)                  account.email =                   Utils.decrypt(account.email,                   key, iv);
+            if (account.phone_no)               account.phone_no =                Utils.decrypt(account.phone_no,                key, iv);
+            if (account.international_phone_no) account.international_phone_no =  Utils.decrypt(account.international_phone_no,  key, iv);
+            if (account.change_id)              account.change_id =               Utils.decrypt(account.change_id,               key, iv);
         }
     }
 
     /**
-     * 電話番号正規化
+     * 国際電話番号取得
      */
-    static normalizePhoneNo(phoneNo : string) : string
+    static internationalPhoneNo(countryCode : string, phoneNo : string) : string
     {
-        if (phoneNo)
+        if (countryCode && phoneNo)
         {
             phoneNo = phoneNo.replace(/-/g, '');
             phoneNo = phoneNo.substr(1);    // 先頭の1文字を取り除く（'0'だったら、ではない）
+            phoneNo = countryCode + phoneNo;
+        }
+        else
+        {
+            phoneNo = null;
         }
         return phoneNo;
+    }
+
+    private static international_phone_no(account : Account) : string
+    {
+        return AccountModel.internationalPhoneNo(account.country_code, account.phone_no);
     }
 
     /**
@@ -503,7 +513,7 @@ export default class AccountModel
 /**
  * アカウント検索条件
  */
-export interface AccountFindCondition
+interface AccountFindCondition
 {
     accountId? : number;
     signupId?  : string;

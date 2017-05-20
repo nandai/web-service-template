@@ -210,8 +210,7 @@ export default class Provider
                                             // ログインコードをSMS送信
                                             const locale = req.ext.locale;
                                             const message = R.text(R.SMS_LOGIN_CODE, locale);
-                                            const phoneNo = findAccount.country_code + findAccount.normalize_phone_no;
-                                            success = await this.sendSms(phoneNo, `${message}：${smsCode}`);
+                                            success = await this.sendSms(findAccount.international_phone_no, `${message}：${smsCode}`);
                                             break;
 
                                         case 'Authy':
