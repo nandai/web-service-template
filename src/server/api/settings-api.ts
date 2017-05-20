@@ -125,8 +125,7 @@ export default class SettingsApi
                     const countries : any[] = lookup.countries({countryCallingCodes:countryCode});
                     if (countries.length === 0)
                     {
-                        // TODO:フロント側をリスト形式にする予定なのでとりあえず直文字列
-                        res.ext.error(Response.Status.FAILED, '国コードが正しくありません。');
+                        res.ext.error(Response.Status.FAILED, R.text(R.INVALID_COUNTRY_CODE, locale));
                         break;
                     }
                 }
