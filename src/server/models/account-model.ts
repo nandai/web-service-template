@@ -148,8 +148,10 @@ export default class AccountModel
             account.international_phone_no = AccountModel.international_phone_no(account);
             account.crypto_type = 1;
             account.created_at = moment().format('YYYY/MM/DD HH:mm:ss');
-            AccountModel.encrypt(account);
-            AccountModel.list.push(account);
+
+            const workAccount = __.clone(account);
+            AccountModel.encrypt(workAccount);
+            AccountModel.list.push(workAccount);
             AccountModel.save();
 
             log.stepOut();
@@ -451,7 +453,8 @@ export default class AccountModel
             const accountList : Account[] = [];
             for (const account of AccountModel.list)
             {
-                if (cond.internationalPhoneNo === undefined || account.international_phone_no === cond.internationalPhoneNo)
+                if ((cond.registered           === undefined || (account.signup_id === null)    === cond.registered)
+                &&  (cond.internationalPhoneNo === undefined ||  account.international_phone_no === cond.internationalPhoneNo))
                 {
                     const obj = __.clone(account);
                     AccountModel.decrypt(obj);
@@ -573,6 +576,7 @@ interface AccountFindCondition
  */
 interface AccountFindListCondition
 {
+    registered?           : boolean;
     internationalPhoneNo? : string;
 }
 

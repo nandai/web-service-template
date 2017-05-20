@@ -109,7 +109,7 @@ export default class UserApi
             const log = slog.stepIn(UserApi.CLS_NAME, 'getUserList');
             try
             {
-                const accountList = await AccountModel.findList();
+                const accountList = await AccountModel.findList({registered:true});
                 const userList = accountList.map(account =>
                 {
                     const user : Response.User = {id:account.id, name:account.name};
