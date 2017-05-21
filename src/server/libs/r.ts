@@ -23,6 +23,7 @@ export default class R
     static ALREADY_EXISTS_EMAIL =               'alreadyExistsEmail';
     static ALREADY_LOGIN_ANOTHER_ACCOUNT =      'alreadyLoginAnotherAccount';
     static ALREADY_PASSWORD_RESET =             'alreadyPasswordReset';
+    static ALREADY_JOIN =                       'alreadyJoin';
     static ALREADY_SIGNUP =                     'alreadySignup';
     static BAD_REQUEST =                        'badRequest';
     static CANNOT_EMPTY_EMAIL =                 'cannotEmptyEmail';

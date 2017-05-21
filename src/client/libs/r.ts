@@ -30,6 +30,7 @@ export default class R
             'goSignup':                   'Go sign up',
             'goTop':                      'Go top',
             'invite':                     'Invite',
+            'join':                       'Join',
             'linkProvider':               'Link ${provider}',
             'login':                      'Log in',
             'loginCode':                  'Login code',
@@ -87,6 +88,7 @@ export default class R
             'goSignup':                   'サインアップ画面へ',
             'goTop':                      'トップ画面へ',
             'invite':                     '招待する',
+            'join':                       '参加する',
             'linkProvider':               '${provider}を紐づける',
             'login':                      'ログイン',
             'loginCode':                  'ログインコード',
@@ -143,6 +145,7 @@ export default class R
     static GO_SIGNUP =                     'goSignup';
     static GO_TOP =                        'goTop';
     static INVITE =                        'invite';
+    static JOIN =                          'join';
     static LINK_PROVIDER =                 'linkProvider';
     static LOGIN =                         'login';
     static LOGIN_CODE =                    'loginCode';

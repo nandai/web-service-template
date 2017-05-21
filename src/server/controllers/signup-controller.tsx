@@ -9,6 +9,8 @@ import Utils                         from '../libs/utils';
 import SessionModel, {Session}       from '../models/session-model';
 import AccountModel, {Account}       from '../models/account-model';
 import Root                          from 'client/components/root';
+import JoinView                      from 'client/components/views/join-view/join-view';
+import {Store as JoinStore}          from 'client/components/views/join-view/store';
 import SignupView                    from 'client/components/views/signup-view/signup-view';
 import {Store as SignupStore}        from 'client/components/views/signup-view/store';
 import SignupConfirmView             from 'client/components/views/signup-confirm-view/signup-confirm-view';
@@ -90,6 +92,48 @@ export default class SignupController
                 {
                     notFound(req, res);
                 }
+            }
+
+            log.stepOut();
+        }
+        catch (err) {Utils.internalServerError(err, res, log)};
+    }
+
+    /**
+     * GET /join
+     *
+     * @param   req httpリクエスト
+     * @param   res httpレスポンス
+     */
+    static async join(req : express.Request, res : express.Response)
+    {
+        const log = slog.stepIn(SignupController.CLS_NAME, 'join');
+        const locale = req.ext.locale;
+
+        try
+        {
+            const param = req.query;
+            const inviteId = param.id;
+
+            const account = await AccountModel.findByInviteId(inviteId);
+
+            if (account)
+            {
+                const store : JoinStore =
+                {
+                    locale:   locale,
+                    password: '',
+                    message:  ''
+                };
+
+                const title = ClientR.text(ClientR.JOIN, locale);
+                const el = <JoinView store={store} />;
+                const contents = ReactDOM.renderToString(<Root view={el} />);
+                res.send(view(title, 'wst.js', contents));
+            }
+            else
+            {
+                notFound(req, res);
             }
 
             log.stepOut();

@@ -295,6 +295,18 @@ export default class AccountModel
     /**
      * アカウントを検索する
      *
+     * @param   inviteId    サインアップID
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    static findByInviteId(inviteId : string) : Promise<Account>
+    {
+        return AccountModel.findByCondition({inviteId});
+    }
+
+    /**
+     * アカウントを検索する
+     *
      * @param   resetId リセットID
      *
      * @return  Account。該当するアカウントを返す

@@ -95,4 +95,10 @@ export namespace Request
     {
         email : string | any[];
     }
+
+    export interface Join
+    {
+        inviteId : string | any[];
+        password : string | any[];
+    }
 }

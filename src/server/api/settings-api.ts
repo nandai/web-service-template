@@ -592,7 +592,7 @@ export default class SettingsApi
                 if (account === null)
                 {
                     const inviteId = Utils.createRandomText(32);
-                    const url = Utils.generateUrl('invite', inviteId);
+                    const url = Utils.generateUrl('join', inviteId);
                     const template = R.mail(R.NOTICE_INVITE, locale);
                     const contents = Utils.formatString(template.contents, {url});
                     const result = await Utils.sendMail(template.subject, email, contents);

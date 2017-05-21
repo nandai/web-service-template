@@ -42,4 +42,20 @@ export default class SignupApi extends Api
             Api.result(ok, data, resolve, reject);
         });
     }
+
+    /**
+     * 参加する
+     */
+    static join(param : Request.Join)
+    {
+        return new Promise(async (resolve : (res : Response.Join) => void, reject) =>
+        {
+            const log = slog.stepIn(SignupApi.CLS_NAME_2, 'join');
+            const url = `/api/join`;
+
+            const {ok, data} = await Api.sendPostRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
 }

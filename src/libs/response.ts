@@ -125,6 +125,12 @@ export namespace Response
         message : string;
     }
 
+    export interface Join
+    {
+        status  : Status;
+        message : string;
+    }
+
     export enum Status
     {
         BAD_REQUEST = -1,

@@ -189,6 +189,7 @@ class Initializer
         this.app.get('/',       TopController.   index);
         this.app.get('/about',  TopController.   about);
         this.app.get('/signup', SignupController.index);
+        this.app.get('/join',   SignupController.join);
         this.app.get('/forget', ForgetController.index);
         this.app.get('/reset',  ResetController. index);
 
@@ -227,6 +228,7 @@ class Initializer
         this.app.post(  `/api/signup/${provider}`,   SignupApi.onSignupProvider);
         this.app.post(  '/api/signup/email',         SignupApi.onSignupEmail);
         this.app.post(  '/api/signup/email/confirm', SignupApi.onConfirmSignupEmail);
+        this.app.post(  '/api/join',                 SignupApi.onJoin);
         this.app.post(  `/api/login/${provider}`,    LoginApi. onLoginProvider);
         this.app.post(  '/api/login/email',          LoginApi. onLoginEmail);
         this.app.post(  '/api/login/sms',            LoginApi. onLoginSms);

@@ -4,6 +4,7 @@
     "alreadyExistsEmail": "そのメールアドレスは既に登録されています。",
     "alreadyLoginAnotherAccount": "既に別のアカウントでログインしています。",
     "alreadyPasswordReset": "パスワードはリセット済みです。",
+    "alreadyJoin": "既に参加しています。",
     "alreadySignup": "既に登録されています。",
     "badRequest": "リクエストが正しくありません。",
     "cannotEmptyEmail": "メールアドレスを未設定にできません。",
