@@ -1,45 +1,45 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config                  from './config';
-import SeqModel                from './models/seq-model';
-import AccountModel            from './models/account-model';
-import SessionModel, {Session} from './models/session-model';
-import LoginHistoryModel       from './models/login-history-model';
-import DeleteAccountModel      from './models/delete-account-model';
-import TopController           from './controllers/top-controller';
-import SignupController        from './controllers/signup-controller';
-import ForgetController        from './controllers/forget-controller';
-import ResetController         from './controllers/reset-controller';
-import SettingsController      from './controllers/settings-controller';
-import UsersController         from './controllers/users-controller';
-import SignupApi               from './api/signup-api';
 import LoginApi                from './api/login-api';
 import LogoutApi               from './api/logout-api';
 import ResetApi                from './api/reset-api';
 import SettingsApi             from './api/settings-api';
+import SignupApi               from './api/signup-api';
 import UserApi                 from './api/user-api';
-import Twitter                 from './provider/twitter';
-import Facebook                from './provider/facebook';
-import Google                  from './provider/google';
-import Email                   from './provider/email';
+import Config                  from './config';
+import ForgetController        from './controllers/forget-controller';
+import ResetController         from './controllers/reset-controller';
+import SettingsController      from './controllers/settings-controller';
+import SignupController        from './controllers/signup-controller';
+import TopController           from './controllers/top-controller';
+import UsersController         from './controllers/users-controller';
 import Access                  from './libs/access';
 import Authy                   from './libs/authy';
-import Utils                   from './libs/utils';
-import R                       from './libs/r';
 import {expressExtension}      from './libs/express-extension';
+import R                       from './libs/r';
+import Utils                   from './libs/utils';
+import AccountModel            from './models/account-model';
+import DeleteAccountModel      from './models/delete-account-model';
+import LoginHistoryModel       from './models/login-history-model';
+import SeqModel                from './models/seq-model';
+import SessionModel, {Session} from './models/session-model';
+import Email                   from './provider/email';
+import Facebook                from './provider/facebook';
+import Google                  from './provider/google';
+import Twitter                 from './provider/twitter';
 
+import bodyParser =       require('body-parser');
+import cookieParser =     require('cookie-parser');
 import express =          require('express');
 import session =          require('express-session');
+import fs =               require('fs');
 import helmet =           require('helmet');
-import cookieParser =     require('cookie-parser');
-import bodyParser =       require('body-parser');
+import https =            require('https');
 import passport =         require('passport');
-import passportTwitter =  require('passport-twitter');
 import passportFacebook = require('passport-facebook');
 import passportGoogle =   require('passport-google-oauth');
-import https =            require('https');
-import fs =               require('fs');
+import passportTwitter =  require('passport-twitter');
 import slog =             require('./slog');
 
 /**
@@ -287,7 +287,7 @@ function main() : void
  */
 function command(command : string) : express.Handler
 {
-    const handler = async function(req : express.Request, res : express.Response, next : express.NextFunction)
+    const handler = async (req : express.Request, res : express.Response, next : express.NextFunction) =>
     {
         const log = slog.stepIn('app.ts', 'command');
         log.d(command);
@@ -301,7 +301,7 @@ function command(command : string) : express.Handler
             log.stepOut();
             next();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     };
     return handler;
 }
@@ -357,8 +357,9 @@ function listen(app : express.Express) : void
     console.log('URL ........ ' + Utils.generateUrl(''));
     log.stepOut();
 
-    if (server === null)
+    if (server === null) {
         setTimeout(() => process.exit(), 3000);
+    }
 }
 
 main();

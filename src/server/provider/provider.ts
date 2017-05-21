@@ -7,13 +7,13 @@ import {PassportUser}                    from '../libs/passport';
 import R                                 from '../libs/r';
 import Utils                             from '../libs/utils';
 import AccountModel, {Account}           from '../models/account-model';
-import SessionModel, {Session}           from '../models/session-model';
 import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
+import SessionModel, {Session}           from '../models/session-model';
 
 import express =  require('express');
 import passport = require('passport');
+import twilio =   require('twilio');
 import slog =     require('../slog');
-const twilio =    require('twilio');
 
 /**
  * プロバイダ
@@ -54,7 +54,7 @@ export default class Provider
             }
             else
             {
-                req.login(user, options, (err) => next(err));
+                req.login(user, options, (_err) => next(_err));
             }
         });
 
@@ -68,14 +68,14 @@ export default class Provider
      * @param   refreshToken    リフレッシュトークン
      * @param   done
      */
-    protected static _verify(provider : string, accessToken : string, refreshToken : string, done : Function) : void
+    protected static _verify(provider : string, accessToken : string, refreshToken : string, done) : void
     {
         const log = slog.stepIn(Provider.CLS_NAME, '_verify');
         const user : PassportUser =
         {
-            provider:     provider,
-            accessToken:  accessToken,
-            refreshToken: refreshToken
+            provider,
+            accessToken,
+            refreshToken
         };
         log.d('user:' + JSON.stringify(user, null, 2));
 
@@ -117,8 +117,9 @@ export default class Provider
                 const session : Session = req.ext.session;
                 const command =           req.ext.command;
 
-                if (session === undefined)
+                if (session === undefined) {
                     log.e('sessionがありません。');
+                }
 
                 switch (command)
                 {
@@ -151,8 +152,9 @@ export default class Provider
                                 if (signupCallback)
                                 {
                                     const result = await signupCallback(account);
-                                    if (result === false)
+                                    if (result === false) {
                                         await AccountModel.remove(account.id);
+                                    }
                                 }
                                 else
                                 {
@@ -321,7 +323,7 @@ export default class Provider
                 log.stepOut();
                 resolve();
             }
-            catch (err) {Utils.internalServerError(err, res, log)};
+            catch (err) {Utils.internalServerError(err, res, log);}
         });
     }
 
@@ -379,8 +381,9 @@ export default class Provider
                         await SessionModel.update(session);
                     }
 
-                    if (smsId)
+                    if (smsId) {
                         redirect += `?id=${smsId}`;
+                    }
 
                     res.redirect(redirect);
                 }
@@ -388,7 +391,7 @@ export default class Provider
                 log.stepOut();
                 resolve();
             }
-            catch (err) {Utils.internalServerError(err, res, log)};
+            catch (err) {Utils.internalServerError(err, res, log);}
         });
     }
 
@@ -410,13 +413,13 @@ export default class Provider
                 to:   phoneNo,
                 from: Config.TWILIO_FROM_PHONE_NO
             })
-            .then(message =>
+            .then((_message) =>
             {
-//              log.d(message)
+//              log.d(_message)
                 log.stepOut();
                 resolve(true);
             })
-            .catch(err =>
+            .catch((err) =>
             {
                 log.w(err.message);
                 log.stepOut();

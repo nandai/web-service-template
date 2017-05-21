@@ -2,13 +2,14 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React  from 'react';
+
 import CommonUtils from 'libs/utils';
-import {App}       from './app';
 import LoginApi    from '../api/login-api';
 import SmsView     from '../components/views/sms-view/sms-view';
 import {Store}     from '../components/views/sms-view/store';
 import History     from '../libs/history';
 import Utils       from '../libs/utils';
+import {App}       from './app';
 
 const slog = window['slog'];
 
@@ -51,8 +52,9 @@ export default class SmsApp extends App
      */
     view() : JSX.Element
     {
-        if (this.store.onSend && this.approvalTimerId === 0)
+        if (this.store.onSend && this.approvalTimerId === 0) {
             this.setPollingTimer();
+        }
 
         return <SmsView store={this.store} />;
     }
@@ -129,12 +131,13 @@ export default class SmsApp extends App
     }
 
     /**
-    * ポーリングタイマーをクリア
+     * ポーリングタイマーをクリア
      */
     private clearPollingTimer() : void
     {
-        if (this.approvalTimerId)
+        if (this.approvalTimerId) {
             clearTimeout(this.approvalTimerId);
+        }
 
         this.approvalTimerId = 0;
     }

@@ -1,14 +1,14 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config                  from '../config';
-import Utils                   from '../libs/utils';
-import R                       from '../libs/r';
-import Email                   from '../provider/email';
-import ProviderApi             from './provider-api';
-import AccountModel, {Account} from '../models/account-model';
 import {Request}               from 'libs/request';
 import {Response}              from 'libs/response';
+import Config                  from '../config';
+import R                       from '../libs/r';
+import Utils                   from '../libs/utils';
+import AccountModel, {Account} from '../models/account-model';
+import Email                   from '../provider/email';
+import ProviderApi             from './provider-api';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -44,7 +44,7 @@ export default class SignupApi extends ProviderApi
             {
                 email:    ['string', null, true],
                 password: ['string', null, true]
-            }
+            };
 
             if (Utils.existsParameters(param, condition) === false)
             {
@@ -93,7 +93,7 @@ export default class SignupApi extends ProviderApi
                 {
                     signupId: ['string', null, true],
                     password: ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -136,7 +136,7 @@ export default class SignupApi extends ProviderApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -156,7 +156,7 @@ export default class SignupApi extends ProviderApi
                 {
                     inviteId: ['string', null, true],
                     password: ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -200,6 +200,6 @@ export default class SignupApi extends ProviderApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

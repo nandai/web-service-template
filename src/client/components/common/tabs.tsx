@@ -1,8 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React from 'react';
 import Button     from 'client/components/common/button';
+import * as React from 'react';
 
 export interface TabItem
 {
@@ -30,8 +30,9 @@ export default class Tabs extends React.Component<TabsProps, {}>
 
         const elements = items.map((item, i) =>
         {
-            if (item.name === props.active)
+            if (item.name === props.active) {
                 index = i;
+            }
 
             return (
                 <div key={i} className="wst-tab">

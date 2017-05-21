@@ -1,13 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import R          from '../libs/r';
-import Utils      from '../libs/utils';
-import Twitter    from '../provider/twitter';
-import Facebook   from '../provider/facebook';
-import Google     from '../provider/google';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
+import R          from '../libs/r';
+import Utils      from '../libs/utils';
+import Facebook   from '../provider/facebook';
+import Google     from '../provider/google';
+import Twitter    from '../provider/twitter';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -46,8 +46,9 @@ export default class ProviderApi
                 break;
         }
 
-        if (fn)
+        if (fn) {
             fn(req, res, command);
+        }
 
         log.stepOut();
     }
@@ -71,7 +72,7 @@ export default class ProviderApi
             {
                 accessToken:       ['string', null, true],
                 accessTokenSecret: ['string', null, true]
-            }
+            };
 
             if (Utils.existsParameters(param, condition) === false)
             {
@@ -114,7 +115,7 @@ export default class ProviderApi
             const condition : Request.Facebook =
             {
                 accessToken: ['string', null, true]
-            }
+            };
 
             if (Utils.existsParameters(param, condition) === false)
             {
@@ -155,7 +156,7 @@ export default class ProviderApi
             const condition : Request.Google =
             {
                 accessToken: ['string', null, true]
-            }
+            };
 
             if (Utils.existsParameters(param, condition) === false)
             {

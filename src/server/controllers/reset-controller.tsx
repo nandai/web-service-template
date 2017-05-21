@@ -3,13 +3,14 @@
  */
 import * as React              from 'react';
 import * as ReactDOM           from 'react-dom/server';
-import {view, notFound}        from './view';
-import Utils                   from '../libs/utils';
-import AccountModel, {Account} from '../models/account-model';
+
 import Root                    from 'client/components/root';
 import ResetView               from 'client/components/views/reset-view/reset-view';
 import {Store}                 from 'client/components/views/reset-view/store';
 import ClientR                 from 'client/libs/r';
+import Utils                   from '../libs/utils';
+import AccountModel, {Account} from '../models/account-model';
+import {notFound, view}        from './view';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -38,14 +39,15 @@ export default class ResetController
             const resetId : string = param.id;
             let account : Account = null;
 
-            if (resetId)
+            if (resetId) {
                 account = await AccountModel.findByResetId(resetId);
+            }
 
             if (account)
             {
                 const store : Store =
                 {
-                    locale:   locale,
+                    locale,
                     password: '',
                     confirm:  '',
                     message:  ''
@@ -63,6 +65,6 @@ export default class ResetController
 
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

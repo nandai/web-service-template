@@ -1,11 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {Request}               from 'libs/request';
+import {Response}              from 'libs/response';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
-import {Request}               from 'libs/request';
-import {Response}              from 'libs/response';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -33,7 +33,7 @@ export default class UserApi
                 const condition : Request.GetUser =
                 {
                     id: ['number', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -47,7 +47,7 @@ export default class UserApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -73,13 +73,13 @@ export default class UserApi
                 else
                 {
                     data.status = 0;
-                    data.user = {id:account.id, name:account.name}
+                    data.user = {id:account.id, name:account.name};
                 }
 
                 log.stepOut();
                 resolve(data);
             }
-            catch (err) {log.stepOut(); reject(err)};
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 
@@ -96,7 +96,7 @@ export default class UserApi
             res.json(data);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -110,7 +110,7 @@ export default class UserApi
             try
             {
                 const accountList = await AccountModel.findList({registered:true});
-                const userList = accountList.map(account =>
+                const userList = accountList.map((account) =>
                 {
                     const user : Response.User = {id:account.id, name:account.name};
                     return user;
@@ -119,13 +119,13 @@ export default class UserApi
                 const data : Response.GetUserList =
                 {
                     status:   0,
-                    userList: userList
-                }
+                    userList
+                };
 
                 log.stepOut();
                 resolve(data);
             }
-            catch (err) {log.stepOut(); reject(err)};
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 }

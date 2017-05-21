@@ -3,21 +3,22 @@
  */
 import * as React              from 'react';
 import * as ReactDOM           from 'react-dom/server';
-import {view, notFound}        from './view';
+
+import Root                    from 'client/components/root';
+import LoginView               from 'client/components/views/login-view/login-view';
+import {Store as LoginStore}   from 'client/components/views/login-view/store';
+import SmsView                 from 'client/components/views/sms-view/sms-view';
+import {Store as SmsStore}     from 'client/components/views/sms-view/store';
+import {Store as TopStore}     from 'client/components/views/top-view/store';
+import TopView                 from 'client/components/views/top-view/top-view';
+import ClientR                 from 'client/libs/r';
 import SettingsApi             from '../api/settings-api';
 import Cookie                  from '../libs/cookie';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
-import SessionModel, {Session} from '../models/session-model';
 import AccountModel, {Account} from '../models/account-model';
-import Root                    from 'client/components/root';
-import LoginView               from 'client/components/views/login-view/login-view';
-import {Store as LoginStore}   from 'client/components/views/login-view/store';
-import TopView                 from 'client/components/views/top-view/top-view';
-import {Store as TopStore}     from 'client/components/views/top-view/store';
-import SmsView                 from 'client/components/views/sms-view/sms-view';
-import {Store as SmsStore}     from 'client/components/views/sms-view/store';
-import ClientR                 from 'client/libs/r';
+import SessionModel, {Session} from '../models/session-model';
+import {notFound, view}        from './view';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -65,7 +66,7 @@ export default class TopController
                 {
                     const store : SmsStore =
                     {
-                        locale:  locale,
+                        locale,
                         smsCode: '',
                         message: ''
                     };
@@ -86,11 +87,11 @@ export default class TopController
 
                 const store : LoginStore =
                 {
-                    locale:   locale,
+                    locale,
                     name:     'home',
                     email:    '',
                     password: '',
-                    message:  message
+                    message
                 };
 
                 const title = ClientR.text(ClientR.LOGIN, locale);
@@ -105,9 +106,9 @@ export default class TopController
                 const data = await SettingsApi.getAccount(req);
                 const store : TopStore =
                 {
-                    locale:  locale,
+                    locale,
                     account: data.account,
-                    message: message
+                    message
                 };
 
                 const title = ClientR.text(ClientR.TOP, locale);
@@ -118,7 +119,7 @@ export default class TopController
 
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -136,7 +137,7 @@ export default class TopController
         {
             const store : LoginStore =
             {
-                locale:   locale,
+                locale,
                 name:     'about',
                 email:    '',
                 password: '',
@@ -149,6 +150,6 @@ export default class TopController
             res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

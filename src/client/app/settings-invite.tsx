@@ -2,11 +2,11 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React         from 'react';
-import {App}              from './app';
 import SettingsApi        from '../api/settings-api';
 import SettingsInviteView from '../components/views/settings-invite-view/settings-invite-view';
 import {Store}            from '../components/views/settings-invite-view/store';
 import Utils              from '../libs/utils';
+import {App}              from './app';
 
 const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
@@ -42,6 +42,7 @@ export default class SettingsInviteApp extends App
     init(params, message? : string)
     {
         const {store} = this;
+        store.email =   '';
         store.message = '';
         return super.init(params);
     }

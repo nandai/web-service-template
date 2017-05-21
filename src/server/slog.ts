@@ -19,19 +19,19 @@
  */
 // module slog
 // {
-    var STEP_IN    : number = 0;
-    var STEP_OUT   : number = 1;
-    var MESSAGE    : number = 2;
+    const STEP_IN    : number = 0;
+    const STEP_OUT   : number = 1;
+    const MESSAGE    : number = 2;
 
-    var DEBUG      : number = 0;    // デバッグ
-    var INFO       : number = 1;    // 情報
-    var WARN       : number = 2;    // 警告
-    var ERROR      : number = 3;    // エラー
+    const DEBUG      : number = 0;    // デバッグ
+    const INFO       : number = 1;    // 情報
+    const WARN       : number = 2;    // 警告
+    const ERROR      : number = 3;    // エラー
 
-    var INIT       : number = -1;
-    var CONNECTING : number =  0;
-    var OPEN       : number =  1;
-    var CLOSED     : number =  3;
+    const INIT       : number = -1;
+    const CONNECTING : number =  0;
+    const OPEN       : number =  1;
+    const CLOSED     : number =  3;
 
     /**
      * シーケンスログクライアント（singleton）
@@ -97,10 +97,11 @@
          */
         constructor()
         {
-            var i = 11; // 最小サイズ（STEP_OUT時のバッファサイズ）
+            let i = 11; // 最小サイズ（STEP_OUT時のバッファサイズ）
 
-            for (; i < 192; i++)
+            for (; i < 192; i++) {
                 this.arrayList[i] = new Uint8Array(i);
+            }
         }
 
         /**
@@ -118,42 +119,43 @@
          */
         setConfig(address : string, fileName : string, logLevel : string, userName : string, passwd : string) : void
         {
-            if (logLevel === 'ALL')   this.logLevel = DEBUG - 1;
-            if (logLevel === 'DEBUG') this.logLevel = DEBUG;
-            if (logLevel === 'INFO')  this.logLevel = INFO;
-            if (logLevel === 'WARN')  this.logLevel = WARN;
-            if (logLevel === 'ERROR') this.logLevel = ERROR;
-            if (logLevel === 'NONE')  this.logLevel = ERROR + 1;
+            if (logLevel === 'ALL')   {this.logLevel = DEBUG - 1;}
+            if (logLevel === 'DEBUG') {this.logLevel = DEBUG;}
+            if (logLevel === 'INFO')  {this.logLevel = INFO;}
+            if (logLevel === 'WARN')  {this.logLevel = WARN;}
+            if (logLevel === 'ERROR') {this.logLevel = ERROR;}
+            if (logLevel === 'NONE')  {this.logLevel = ERROR + 1;}
 
-            if (this.logLevel === ERROR + 1)
+            if (this.logLevel === ERROR + 1) {
                 return;
+            }
 
             // 接続
-            var self : SequenceLogClient = this;
-            var WebSocketClient = require('websocket').client;
-            var client = new WebSocketClient();
+            const self : SequenceLogClient = this;
+            const WebSocketClient = require('websocket').client;
+            const client = new WebSocketClient();
             this.readyState = CONNECTING;
 
             client.connect(address + '/outputLog');
-            client.on('connect', function(connection)
+            client.on('connect', (connection) =>
             {
                 self.ws = connection;
                 self.readyState = OPEN;
 
-                var fileNameLen : number = self.getStringBytes(fileName) + 1;
-                var userNameLen : number = self.getStringBytes(userName) + 1;
-                var passwdLen   : number = self.getStringBytes(passwd)   + 1;
+                const fileNameLen : number = self.getStringBytes(fileName) + 1;
+                const userNameLen : number = self.getStringBytes(userName) + 1;
+                const passwdLen   : number = self.getStringBytes(passwd)   + 1;
 
-                var array : Uint8Array = new Uint8Array(
+                const array : Uint8Array = new Uint8Array(
                     4 +
                     4 + userNameLen +
                     4 + passwdLen +
                     4 + fileNameLen +
                     4);
-                var pos : number = 0;
+                let pos : number = 0;
 
                 // プロセスID
-                var pid = process.pid;
+                const pid = process.pid;
                 array[pos++] = (pid >> 24) & 0xFF;
                 array[pos++] = (pid >> 16) & 0xFF;
                 array[pos++] = (pid >>  8) & 0xFF;
@@ -173,7 +175,6 @@
                 array[pos++] = (passwdLen >> 16) & 0xFF;
                 array[pos++] = (passwdLen >>  8) & 0xFF;
                 array[pos++] =  passwdLen        & 0xFF;
-
 
                 self.setStringToUint8Array(array, pos, passwd);
                 pos += passwdLen;
@@ -197,26 +198,26 @@
                 self.ws.sendBytes(self.toBuffer(array));
                 self.sendAllItems();
 
-                self.ws.on('message', function(e)
+                self.ws.on('message', (e) =>
                 {
-//                  var array = new DataView(e.data);
-//                  var seqNo = array.getInt32(0);
+//                  const array = new DataView(e.data);
+//                  const seqNo = array.getInt32(0);
                 });
 
-                self.ws.on('error', function(error)
+                self.ws.on('error', (error) =>
                 {
                     self.readyState = CLOSED;
                     console.error('error slog WebSocket');
                 });
 
-                self.ws.on('close', function()
+                self.ws.on('close', () =>
                 {
                     self.readyState = CLOSED;
                     console.info('close slog WebSocket');
                 });
             });
 
-            client.on('connectFailed', function(error)
+            client.on('connectFailed', (error) =>
             {
                 self.readyState = CLOSED;
                 console.error('connect failed slog WebSocket');
@@ -247,12 +248,12 @@
          */
         getStringBytes(str) : number
         {
-            var len   : number = str.length;
-            var bytes : number = 0;
+            const len : number = str.length;
+            let bytes : number = 0;
 
-            for (var i : number = 0; i < len; i++)
+            for (let i = 0; i < len; i++)
             {
-                var c : number = str.charCodeAt(i);
+                const c : number = str.charCodeAt(i);
 
                 if (c <= 0x7F)
                 {
@@ -288,12 +289,12 @@
          */
         setStringToUint8Array(array : Uint8Array, offset : number, str : string) : number
         {
-            var len : number = str.length;
-            var pos : number = offset;
+            const len : number = str.length;
+            let pos   : number = offset;
 
-            for (var i : number = 0; i < len; i++)
+            for (let i = 0; i < len; i++)
             {
-                var c : number = str.charCodeAt(i);
+                const c : number = str.charCodeAt(i);
 
                 if (c <= 0x7F)
                 {
@@ -336,11 +337,12 @@
          */
         toBuffer(array : Uint8Array) : Buffer
         {
-            var len = array.byteLength;
-            var buffer = new Buffer(len);
+            const len = array.byteLength;
+            const buffer = new Buffer(len);
 
-            for (var i = 0; i < len; ++i)
+            for (let i = 0; i < len; ++i) {
                 buffer[i] = array[i];
+            }
 
             return buffer;
         }
@@ -354,8 +356,9 @@
          */
         canOutput() : boolean
         {
-            if (this.logLevel === ERROR + 1)
+            if (this.logLevel === ERROR + 1) {
                 return false;
+            }
 
             if (this.readyState !== CONNECTING &&
                 this.readyState !== OPEN)
@@ -377,8 +380,8 @@
          */
         getItemBytes(item : SequenceLogItem) : number
         {
-            var pos : number = 0;
-            var len : number = 0;
+            let pos : number = 0;
+            let len : number = 0;
 
             // レコード長
             pos += 2;
@@ -444,9 +447,9 @@
          */
         itemToUint8Array(array : Uint8Array, offset : number, item : SequenceLogItem) : number
         {
-            var pos     : number = offset;
-            var posSave : number = 0;
-            var len     : number = 0;
+            let pos     : number = offset;
+            let posSave : number = 0;
+            let len     : number = 0;
 
             // レコード長
             pos += 2;
@@ -461,7 +464,7 @@
             array[pos++] = item.type;
 
             // スレッド ID
-            var tid = this.tid;
+            const tid = this.tid;
             array[pos++] = (tid >> 24) & 0xFF;
             array[pos++] = (tid >> 16) & 0xFF;
             array[pos++] = (tid >>  8) & 0xFF;
@@ -546,16 +549,21 @@
          */
         sendItem(item : SequenceLogItem) : void
         {
-            if (this.readyState === CONNECTING)
+            if (this.readyState === CONNECTING) {
                 return;
+            }
 
-            var size : number = this.getItemBytes(item);
-            var array : Uint8Array;
+            const size : number = this.getItemBytes(item);
+            let array : Uint8Array;
 
             if (size < this.arrayList.length)
+            {
                 array = this.arrayList[size];
+            }
             else
+            {
                 array = new Uint8Array(size);
+            }
 
             this.itemToUint8Array(array, 0, item);
             this.ws.sendBytes(this.toBuffer(array));
@@ -570,12 +578,12 @@
          */
         sendAllItems() : void
         {
-            var itemList : SequenceLogItem[] = this.itemList;
-            var count : number = itemList.length;
+            const itemList : SequenceLogItem[] = this.itemList;
+            const count : number = itemList.length;
 
-            for (var i : number = 0; i < count; i++)
+            for (let i = 0; i < count; i++)
             {
-                var item : SequenceLogItem = itemList[i];
+                const item : SequenceLogItem = itemList[i];
                 this.sendItem(item);
             }
 
@@ -591,17 +599,18 @@
          */
         getItem() : SequenceLogItem
         {
-            if (this.readyState === OPEN)
+            if (this.readyState === OPEN) {
                 this.itemListPos = 0;
+            }
 
-            var itemList : SequenceLogItem[] = this.itemList;
-            var count : number = itemList.length;
+            const itemList : SequenceLogItem[] = this.itemList;
+            const count : number = itemList.length;
 
-            var pos : number = this.itemListPos++;
+            const pos : number = this.itemListPos++;
 
             if (pos === count)
             {
-                var item : SequenceLogItem = new SequenceLogItem();
+                const item : SequenceLogItem = new SequenceLogItem();
                 itemList[count] = item;
             }
 
@@ -617,14 +626,14 @@
          */
         getSequenceLog() : SequenceLog
         {
-            var sequenceLogList : SequenceLog[] = this.sequenceLogList;
-            var count : number = sequenceLogList.length;
+            const sequenceLogList : SequenceLog[] = this.sequenceLogList;
+            const count : number = sequenceLogList.length;
 
-            var pos : number = this.sequenceLogListPos++;
+            const pos : number = this.sequenceLogListPos++;
 
             if (pos === count)
             {
-                var sequenceLog : SequenceLog = new SequenceLog();
+                const sequenceLog : SequenceLog = new SequenceLog();
                 sequenceLogList[count] = sequenceLog;
             }
 
@@ -711,12 +720,13 @@
          */
         stepIn(className : string, funcName : string) : void
         {
-            if (client.canOutput() === false)
+            if (client.canOutput() === false) {
                 return;
+            }
 
             this.seqNo = client.getSequenceNo();
 
-            var item : SequenceLogItem = client.getItem();
+            const item : SequenceLogItem = client.getItem();
             item.seqNo = this.seqNo;
             item.type = STEP_IN;
             item.className = className;
@@ -734,10 +744,11 @@
          */
         stepOut() : void
         {
-            if (client.canOutput() === false)
+            if (client.canOutput() === false) {
                 return;
+            }
 
-            var item : SequenceLogItem = client.getItem();
+            const item : SequenceLogItem = client.getItem();
             item.seqNo = this.seqNo;
             item.type = STEP_OUT;
 
@@ -759,10 +770,8 @@
          */
         assert(assertName : string, result : boolean) : void
         {
-            if (result === true)
-                this.i(assertName + ':PASSED');
-            else
-                this.e(assertName + ':FAILED');
+            if (result) {this.i(assertName + ':PASSED');}
+            else        {this.e(assertName + ':FAILED');}
         }
     }
 
@@ -775,10 +784,11 @@
      */
     function message(log : SequenceLog, level : number, msg : string) : void
     {
-        if (client.canOutput() === false)
+        if (client.canOutput() === false) {
             return;
+        }
 
-        var item : SequenceLogItem = client.getItem();
+        const item : SequenceLogItem = client.getItem();
         item.seqNo = log.seqNo;
         item.type = MESSAGE;
         item.level = level;
@@ -801,7 +811,7 @@
     export function setConfig(address, fileName, logLevel, userName : string, passwd : string) : void
     {
         client.setConfig(address, fileName, logLevel, userName, passwd);
-    };
+    }
 
     /**
      * メソッドのコールログを出力します。
@@ -816,13 +826,13 @@
      */
     export function stepIn(className : string, funcName : string) : SequenceLog
     {
-        var sequenceLog = client.getSequenceLog();
+        const sequenceLog = client.getSequenceLog();
         sequenceLog.stepIn(className, funcName);
         return sequenceLog;
-    };
+    }
 
     // シーケンスログクライアント生成
-    var client : SequenceLogClient = new SequenceLogClient();
+    const client : SequenceLogClient = new SequenceLogClient();
 // }
 
 // module.exports = slog;

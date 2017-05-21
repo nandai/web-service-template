@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
+
 import Button     from 'client/components/common/button';
 import Utils      from 'client/libs/utils';
 
@@ -42,8 +43,9 @@ export default class List extends React.Component<ListProps, {}>
         });
 
         let listStyle = {};
-        if (props.height)
+        if (props.height) {
             listStyle = {height:props.height};
+        }
 
         return (
             <div className="wst-list" style={listStyle}>

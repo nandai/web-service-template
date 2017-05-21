@@ -2,13 +2,14 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
+
 import {Request}  from 'libs/request';
-import {App}      from './app';
 import LoginApi   from '../api/login-api';
 import LoginView  from '../components/views/login-view/login-view';
 import {Store}    from '../components/views/login-view/store';
 import History    from '../libs/history';
 import Utils      from '../libs/utils';
+import {App}      from './app';
 
 const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
@@ -132,7 +133,7 @@ export default class LoginApp extends App
             });
             log.stepOut();
         }
-        catch (err) {log.stepOut()}
+        catch (err) {log.stepOut();}
     }
 
     /**

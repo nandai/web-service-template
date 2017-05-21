@@ -10,7 +10,7 @@ declare namespace Express
             locale  : string;
             command : string;
             session : any;
-        }
+        };
     }
 
     export interface Response
@@ -20,6 +20,6 @@ declare namespace Express
 //          ok         : (status : number, message? : string) => void;
             error      : (status : number, message  : string) => void;
             badRequest : (locale  : string) => void;
-        }
+        };
     }
 }

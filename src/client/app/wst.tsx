@@ -3,7 +3,13 @@
  */
 import * as React                    from 'react';
 import * as ReactDOM                 from 'react-dom';
+
 import {Response}                    from 'libs/response';
+import SettingsApi                   from '../api/settings-api';
+import Root                          from '../components/root';
+import History                       from '../libs/history';
+import R                             from '../libs/r';
+import Utils                         from '../libs/utils';
 import {App}                         from './app';
 import ForbiddenApp                  from './forbidden';
 import ForgetApp                     from './forget';
@@ -11,23 +17,18 @@ import JoinApp                       from './invite';
 import LoginApp                      from './login';
 import NotFoundApp                   from './not-found';
 import ResetApp                      from './reset';
-import SmsApp                        from './sms';
-import SignupApp                     from './signup';
-import SignupConfirmApp              from './signup-confirm';
 import SettingsApp                   from './settings';
 import SettingsAccountApp            from './settings-account';
 import SettingsAccountEmailApp       from './settings-account-email';
 import SettingsAccountEmailChangeApp from './settings-account-email-change';
 import SettingsAccountPasswordApp    from './settings-account-password';
 import SettingsInviteApp             from './settings-invite';
+import SignupApp                     from './signup';
+import SignupConfirmApp              from './signup-confirm';
+import SmsApp                        from './sms';
 import TopApp                        from './top';
 import UserApp                       from './user';
 import UsersApp                      from './users';
-import SettingsApi                   from '../api/settings-api';
-import Root                          from '../components/root';
-import History                       from '../libs/history';
-import R                             from '../libs/r';
-import Utils                         from '../libs/utils';
 
 const slog =     window['slog'];
 const ssrStore = window['ssrStore'];
@@ -110,21 +111,29 @@ class WstApp
             let route : Route;
             let params;
 
-            for (route of this.routes)
+            for (const _route of this.routes)
             {
-                params = Utils.getParamsFromUrl(url, route.url);
+                params = Utils.getParamsFromUrl(url, _route.url);
 
-                if (params === null)
+                if (params === null) {
                     continue;
+                }
 
-                if (route.auth && this.account === null)
+                if (_route.auth && this.account === null) {
                     continue;
+                }
 
-                if (route.query !== true && location.search === '')
+                if (_route.query !== true && location.search === '')
+                {
+                    route = _route;
                     break;
+                }
 
-                if (route.query === true && location.search !== '')
+                if (_route.query === true && location.search !== '')
+                {
+                    route = _route;
                     break;
+                }
             }
 
             if (this.currentRoute !== route)
@@ -235,8 +244,8 @@ window.addEventListener('DOMContentLoaded', async () =>
     const locale = Utils.getLocale();
     let url = location.pathname;
 
-    if (document.title === R.text(R.FORBIDDEN, locale)) url = '403';
-    if (document.title === R.text(R.NOT_FOUND, locale)) url = '404';
+    if (document.title === R.text(R.FORBIDDEN, locale)) {url = '403';}
+    if (document.title === R.text(R.NOT_FOUND, locale)) {url = '404';}
 
     const app = new WstApp();
     app.init();
@@ -251,5 +260,6 @@ if (window.location.hash === '#_=_')
     History.replaceState(window.location.pathname);
 }
 
-if (location.protocol === 'http:' && location.hostname === 'localhost')
+if (location.protocol === 'http:' && location.hostname === 'localhost') {
     console.warn('ブラウザによっては http://localhost ではcookieが保存されません。IPを指定するか、またはhostsにlocalhost.comのようなドメインを定義してください。');
+}

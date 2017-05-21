@@ -3,14 +3,15 @@
  */
 import * as React            from 'react';
 import * as ReactDOM         from 'react-dom/server';
-import {view, notFound}      from './view';
-import UserApi               from '../api/user-api';
+
 import Root                  from 'client/components/root';
-import UserView              from 'client/components/views/user-view/user-view';
 import {Store as UserStore}  from 'client/components/views/user-view/store';
-import UsersView             from 'client/components/views/users-view/users-view';
+import UserView              from 'client/components/views/user-view/user-view';
 import {Store as UsersStore} from 'client/components/views/users-view/store';
+import UsersView             from 'client/components/views/users-view/users-view';
 import ClientR               from 'client/libs/r';
+import UserApi               from '../api/user-api';
+import {notFound, view}      from './view';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -40,7 +41,7 @@ export default class UsersController
         {
             const store : UserStore =
             {
-                locale: locale,
+                locale,
                 user:   data.user
             };
 
@@ -71,7 +72,7 @@ export default class UsersController
         const data = await UserApi.getUserList();
         const store : UsersStore =
         {
-            locale:   locale,
+            locale,
             userList: data.userList
         };
 

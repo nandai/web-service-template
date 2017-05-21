@@ -1,13 +1,13 @@
 /**
  * (C) 2016 printf.jp
  */
-import Provider       from './provider';
+import {Response}     from 'libs/response';
 import {PassportUser} from '../libs/passport';
 import R              from '../libs/r';
 import Utils          from '../libs/utils';
 import {Account}      from '../models/account-model';
 import {Session}      from '../models/session-model';
-import {Response}     from 'libs/response';
+import Provider       from './provider';
 
 import express =  require('express');
 import passport = require('passport');
@@ -26,7 +26,7 @@ export default class Email extends Provider
      * @param   profile         プロフィール
      * @param   done
      */
-    static verify(email : string, password : string, done : Function) : void
+    static verify(email : string, password : string, done) : void
     {
         super._verify('email', email, password, done);
     }
@@ -64,7 +64,7 @@ export default class Email extends Provider
             });
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -112,8 +112,9 @@ export default class Email extends Provider
 
             if (phrase && phrase !== R.COULD_NOT_SEND_SMS)
             {
-                if (phrase === R.INCORRECT_ACCOUNT)
+                if (phrase === R.INCORRECT_ACCOUNT) {
                     phrase =   R.INVALID_EMAIL_AUTH;
+                }
 
                 res.ext.error(Response.Status.FAILED, R.text(phrase, locale));
             }
@@ -121,8 +122,9 @@ export default class Email extends Provider
             {
                 const data : Response.LoginEmail = {status:0, smsId};
 
-                if (phrase)
+                if (phrase) {
                     data.message = R.text(phrase, locale);
+                }
 
                 res.json(data);
             }

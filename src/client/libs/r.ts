@@ -192,8 +192,9 @@ export default class R
     {
         const texts = R.texts[locale];
 
-        if (phrase in texts)
+        if (phrase in texts) {
             return texts[phrase];
+        }
 
         return null;
     }

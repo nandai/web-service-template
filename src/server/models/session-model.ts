@@ -1,9 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import SeqModel from './seq-model';
 import Config   from '../config';
 import Utils    from '../libs/utils';
+import SeqModel from './seq-model';
 
 import fs =     require('fs');
 import __ =     require('lodash');
@@ -33,7 +33,7 @@ export class Session
 export default class SessionModel
 {
     private static CLS_NAME = 'SessionModel';
-    private static list: Session[] = null;
+    private static list : Session[] = null;
     private static path = Config.ROOT_DIR + '/storage/session.json';
     private static MESSAGE_UNINITIALIZE = 'SessionModelが初期化されていません。';
 
@@ -109,7 +109,7 @@ export default class SessionModel
         const log = slog.stepIn(SessionModel.CLS_NAME, 'update');
         return new Promise((resolve : () => void, reject) =>
         {
-            for (let i in SessionModel.list)
+            for (const i in SessionModel.list)
             {
                 if (SessionModel.list[i].pk === session.pk)
                 {
@@ -215,4 +215,4 @@ export interface SessionFindCondition
     accountId? : number;
 }
 
-interface SessionResolve {(session : Session) : void}
+interface SessionResolve {(session : Session) : void;}

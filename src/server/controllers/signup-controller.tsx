@@ -3,19 +3,20 @@
  */
 import * as React                    from 'react';
 import * as ReactDOM                 from 'react-dom/server';
-import {view, notFound}              from './view';
-import R                             from '../libs/r';
-import Utils                         from '../libs/utils';
-import SessionModel, {Session}       from '../models/session-model';
-import AccountModel, {Account}       from '../models/account-model';
+
 import Root                          from 'client/components/root';
 import JoinView                      from 'client/components/views/join-view/join-view';
 import {Store as JoinStore}          from 'client/components/views/join-view/store';
-import SignupView                    from 'client/components/views/signup-view/signup-view';
-import {Store as SignupStore}        from 'client/components/views/signup-view/store';
 import SignupConfirmView             from 'client/components/views/signup-confirm-view/signup-confirm-view';
 import {Store as SignupConfirmStore} from 'client/components/views/signup-confirm-view/store';
+import SignupView                    from 'client/components/views/signup-view/signup-view';
+import {Store as SignupStore}        from 'client/components/views/signup-view/store';
 import ClientR                       from 'client/libs/r';
+import R                             from '../libs/r';
+import Utils                         from '../libs/utils';
+import AccountModel, {Account}       from '../models/account-model';
+import SessionModel, {Session}       from '../models/session-model';
+import {notFound, view}              from './view';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -59,10 +60,10 @@ export default class SignupController
 
                 const store : SignupStore =
                 {
-                    locale:   locale,
+                    locale,
                     email:    '',
                     password: '',
-                    message:  message
+                    message
                 };
 
                 const title = ClientR.text(ClientR.SIGNUP, locale);
@@ -78,7 +79,7 @@ export default class SignupController
                 {
                     const store : SignupConfirmStore =
                     {
-                        locale:   locale,
+                        locale,
                         password: '',
                         message:  ''
                     };
@@ -96,7 +97,7 @@ export default class SignupController
 
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -121,7 +122,7 @@ export default class SignupController
             {
                 const store : JoinStore =
                 {
-                    locale:   locale,
+                    locale,
                     password: '',
                     message:  ''
                 };
@@ -138,6 +139,6 @@ export default class SignupController
 
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

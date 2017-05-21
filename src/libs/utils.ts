@@ -3,8 +3,8 @@
  */
 
 /**
-* ユーティリティ
-*/
+ * ユーティリティ
+ */
 export default class Utils
 {
     /**

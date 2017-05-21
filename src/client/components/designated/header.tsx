@@ -1,8 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React from 'react';
 import History    from 'client/libs/history';
+import * as React from 'react';
 
 export default class Header extends React.Component<{}, {}>
 {

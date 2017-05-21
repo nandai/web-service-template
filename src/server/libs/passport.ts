@@ -7,7 +7,7 @@
  */
 export interface PassportUser
 {
-    provider:     string,
-    accessToken:  string,
-    refreshToken: string
-};
+    provider     : string;
+    accessToken  : string;
+    refreshToken : string;
+}

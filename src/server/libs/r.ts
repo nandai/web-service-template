@@ -123,7 +123,7 @@ export default class R
         {
             fs.statSync(path);
             const text = fs.readFileSync(path, 'utf8');
-            let pos = text.indexOf('\n');
+            const pos = text.indexOf('\n');
 
             const subject =  text.substr(0, pos);
             const contents = text.substr(pos + 1 + 1);
@@ -150,8 +150,9 @@ export default class R
     {
         const texts = R.texts[locale];
 
-        if (phrase in texts)
+        if (phrase in texts) {
             return texts[phrase];
+        }
 
         return null;
     }
@@ -168,8 +169,9 @@ export default class R
     {
         const mailTemplates = R.mailTemplates[locale];
 
-        if (phrase in mailTemplates)
+        if (phrase in mailTemplates) {
             return mailTemplates[phrase];
+        }
 
         return null;
     }

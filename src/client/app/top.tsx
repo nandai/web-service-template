@@ -2,12 +2,12 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
-import {App}      from './app';
 import LogoutApi  from '../api/logout-api';
 import {Store}    from '../components/views/top-view/store';
 import TopView    from '../components/views/top-view/top-view';
 import History    from '../libs/history';
 import Utils      from '../libs/utils';
+import {App}      from './app';
 
 const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();

@@ -1,12 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {Request}               from 'libs/request';
+import {Response}              from 'libs/response';
 import Config                  from '../config';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
-import {Request}               from 'libs/request';
-import {Response}              from 'libs/response';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -34,7 +34,7 @@ export default class ResetApi
                 const condition : Request.RequestResetPassword =
                 {
                     email: ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -69,7 +69,7 @@ export default class ResetApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -90,7 +90,7 @@ export default class ResetApi
                     resetId:  ['string', null, true],
                     password: ['string', null, true],
                     confirm:  ['string', null, true]
-                }
+                };
 
                 const resetId =  <string>param.resetId;
                 const password = <string>param.password;
@@ -139,6 +139,6 @@ export default class ResetApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

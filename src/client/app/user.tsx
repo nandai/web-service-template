@@ -2,11 +2,11 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
-import {App}      from './app';
 import UserApi    from '../api/user-api';
-import UserView   from '../components/views/user-view/user-view';
 import {Store}    from '../components/views/user-view/store';
+import UserView   from '../components/views/user-view/user-view';
 import Utils      from '../libs/utils';
+import {App}      from './app';
 
 const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
@@ -47,7 +47,7 @@ export default class UserApp extends App
                 store.user = res.user;
                 resolve();
             }
-            catch (err) {reject(err)}
+            catch (err) {reject(err);}
         });
     }
 

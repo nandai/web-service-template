@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React    from 'react';
+
 import Button        from 'client/components/common/button';
 import Text          from 'client/components/common/text';
 import Header        from 'client/components/designated/header';

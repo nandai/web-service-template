@@ -122,7 +122,7 @@ export default class Config
      */
     private static get(data, key : string, type : string = 'string') : any
     {
-        let result = data[key];
+        const result = data[key];
         if (result === undefined)
         {
             console.log(`${key}がありません。`);

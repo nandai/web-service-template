@@ -2,13 +2,14 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React        from 'react';
+
 import {Request}         from 'libs/request';
 import CommonUtils       from 'libs/utils';
-import {App}             from './app';
 import SignupApi         from '../api/signup-api';
 import SignupConfirmView from '../components/views/signup-confirm-view/signup-confirm-view';
 import {Store}           from '../components/views/signup-confirm-view/store';
 import Utils             from '../libs/utils';
+import {App}             from './app';
 
 const slog = window['slog'];
 

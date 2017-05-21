@@ -3,28 +3,29 @@
  */
 import * as React                                 from 'react';
 import * as ReactDOM                              from 'react-dom/server';
-import {view, notFound}                           from './view';
+
+import Root                                       from 'client/components/root';
+import SettingsAccountEmailChangeView             from 'client/components/views/settings-account-email-change-view/settings-account-email-change-view';
+import {Store as SettingsAccountEmailChangeStore} from 'client/components/views/settings-account-email-change-view/store';
+import SettingsAccountEmailView                   from 'client/components/views/settings-account-email-view/settings-account-email-view';
+import {Store as SettingsAccountEmailStore}       from 'client/components/views/settings-account-email-view/store';
+import SettingsAccountPasswordView                from 'client/components/views/settings-account-password-view/settings-account-password-view';
+import {Store as SettingsAccountPasswordStore}    from 'client/components/views/settings-account-password-view/store';
+import SettingsAccountView                        from 'client/components/views/settings-account-view/settings-account-view';
+import {Store as SettingsAccountStore}            from 'client/components/views/settings-account-view/store';
+import SettingsInviteView                         from 'client/components/views/settings-invite-view/settings-invite-view';
+import {Store as SettingsInviteStore}             from 'client/components/views/settings-invite-view/store';
+import SettingsView                               from 'client/components/views/settings-view/settings-view';
+import {Store as SettingsStore}                   from 'client/components/views/settings-view/store';
+import ClientR                                    from 'client/libs/r';
+import {Response}                                 from 'libs/response';
 import SettingsApi                                from '../api/settings-api';
 import Cookie                                     from '../libs/cookie';
 import R                                          from '../libs/r';
 import Utils                                      from '../libs/utils';
-import SessionModel, {Session}                    from '../models/session-model';
 import AccountModel, {Account}                    from '../models/account-model';
-import Root                                       from 'client/components/root';
-import SettingsView                               from 'client/components/views/settings-view/settings-view';
-import {Store as SettingsStore}                   from 'client/components/views/settings-view/store';
-import SettingsAccountView                        from 'client/components/views/settings-account-view/settings-account-view';
-import {Store as SettingsAccountStore}            from 'client/components/views/settings-account-view/store';
-import SettingsAccountEmailView                   from 'client/components/views/settings-account-email-view/settings-account-email-view';
-import {Store as SettingsAccountEmailStore}       from 'client/components/views/settings-account-email-view/store';
-import SettingsAccountEmailChangeView             from 'client/components/views/settings-account-email-change-view/settings-account-email-change-view';
-import {Store as SettingsAccountEmailChangeStore} from 'client/components/views/settings-account-email-change-view/store';
-import SettingsAccountPasswordView                from 'client/components/views/settings-account-password-view/settings-account-password-view';
-import {Store as SettingsAccountPasswordStore}    from 'client/components/views/settings-account-password-view/store';
-import SettingsInviteView                         from 'client/components/views/settings-invite-view/settings-invite-view';
-import {Store as SettingsInviteStore}             from 'client/components/views/settings-invite-view/store';
-import ClientR                                    from 'client/libs/r';
-import {Response}                                 from 'libs/response';
+import SessionModel, {Session}                    from '../models/session-model';
+import {notFound, view}                           from './view';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -66,9 +67,9 @@ export default class SettingsController
             const data = await SettingsApi.getAccount(req);
             const store : SettingsStore =
             {
-                locale:  locale,
+                locale,
                 account: data.account,
-                message: message
+                message
             };
 
             const title = ClientR.text(ClientR.SETTINGS, locale);
@@ -77,7 +78,7 @@ export default class SettingsController
             res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -97,7 +98,7 @@ export default class SettingsController
             const data = await SettingsApi.getAccount(req);
             const store : SettingsAccountStore =
             {
-                locale:   locale,
+                locale,
                 account:  data.account,
                 message:  ''
             };
@@ -108,7 +109,7 @@ export default class SettingsController
             res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -128,7 +129,7 @@ export default class SettingsController
             const data = await SettingsApi.getAccount(req);
             const store : SettingsAccountEmailStore =
             {
-                locale:  locale,
+                locale,
                 account: data.account,
                 message: ''
             };
@@ -139,7 +140,7 @@ export default class SettingsController
             res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -160,14 +161,15 @@ export default class SettingsController
             const changeId = param.id;
             let account : Account = null;
 
-            if (changeId)
+            if (changeId) {
                 account = await AccountModel.findByChangeId(changeId);
+            }
 
             if (account)
             {
                 const store : SettingsAccountEmailChangeStore =
                 {
-                    locale:   locale,
+                    locale,
                     password: '',
                     message:  ''
                 };
@@ -184,7 +186,7 @@ export default class SettingsController
 
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -206,7 +208,7 @@ export default class SettingsController
             {
                 const store : SettingsAccountPasswordStore =
                 {
-                    locale:      locale,
+                    locale,
                     account:     data.account,
                     oldPassword: '',
                     newPassword: '',
@@ -225,7 +227,7 @@ export default class SettingsController
             }
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -245,7 +247,7 @@ export default class SettingsController
             const data = await SettingsApi.getAccount(req);
             const store : SettingsInviteStore =
             {
-                locale:  locale,
+                locale,
                 account: data.account,
                 email:   '',
                 message: ''
@@ -257,6 +259,6 @@ export default class SettingsController
             res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

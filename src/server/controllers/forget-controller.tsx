@@ -3,11 +3,12 @@
  */
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom/server';
-import {view}        from './view';
+
 import Root          from 'client/components/root';
 import ForgetView    from 'client/components/views/forget-view/forget-view';
 import {Store}       from 'client/components/views/forget-view/store';
 import ClientR       from 'client/libs/r';
+import {view}        from './view';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -32,7 +33,7 @@ export default class ForgetController
 
         const store : Store =
         {
-            locale:   locale,
+            locale,
             email:    '',
             message:  ''
         };

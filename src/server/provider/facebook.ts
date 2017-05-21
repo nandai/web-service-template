@@ -6,9 +6,9 @@ import Utils    from '../libs/utils';
 import Provider from './provider';
 
 import express =          require('express');
+import fb =               require('fb');
 import passportFacebook = require('passport-facebook');
 import slog =             require('../slog');
-const fb =                require('fb');
 
 /**
  * Facebook
@@ -34,7 +34,7 @@ export default class Facebook extends Provider
      * @param   profile         プロフィール
      * @param   done
      */
-    static verify(accessToken : string, refreshToken : string, profile : passportFacebook.Profile, done : Function) : void
+    static verify(accessToken : string, refreshToken : string, profile : passportFacebook.Profile, done) : void
     {
         super._verify('facebook', accessToken, refreshToken, done);
     }
@@ -54,7 +54,7 @@ export default class Facebook extends Provider
             await facebook.signupOrLogin(req, res);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -74,8 +74,9 @@ export default class Facebook extends Provider
             {
                 const success = await self.validateAccessToken(accessToken);
 
-                if (success)
+                if (success) {
                     await self.me(accessToken);
+                }
 
                 resolve();
             }
@@ -105,10 +106,11 @@ export default class Facebook extends Provider
             },
             (result) =>
             {
-                let error = ('error' in result);
+                const error = ('error' in result);
 
-                if (error)
+                if (error) {
                     log.w(JSON.stringify(result, null, 2));
+                }
 
                 log.stepOut();
                 resolve(error === false);

@@ -1,13 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {Response}              from 'libs/response';
+import CommonUtils             from 'libs/utils';
+import {forbidden, notFound}   from '../controllers/view';
+import SessionModel, {Session} from '../models/session-model';
 import Cookie                  from './cookie';
 import R                       from './r';
 import Utils                   from './utils';
-import {forbidden, notFound}   from '../controllers/view';
-import SessionModel, {Session} from '../models/session-model';
-import {Response}              from 'libs/response';
-import CommonUtils             from 'libs/utils';
 
 import express =    require('express');
 import bodyParser = require('body-parser');
@@ -33,13 +33,13 @@ export default class Access
 
         const fn = bodyParser.json(
         {
-            verify: function (req : express.Request, res : express.Response, body : Buffer, encoding : string)
+            verify: (_req : express.Request, _res : express.Response, body : Buffer, encoding : string) =>
             {
                 bodyBuffer = body;
             }
         });
 
-        fn(req, res, function (err)
+        fn(req, res, (err) =>
         {
             if (err)
             {
@@ -70,12 +70,13 @@ export default class Access
         log.d(`${req.method} ${req.path}`);
         const referrer = req.header('referrer');
 
-        if (referrer)
+        if (referrer) {
             log.d(`referrer:${referrer}`);
+        }
 
         // パラメータ
-        if (Object.keys(req.query).length > 0) log.d('req.query:' + JSON.stringify(req.query, null, 2));
-        if (Object.keys(req.body). length > 0) log.d('req.body:'  + JSON.stringify(req.body,  null, 2));
+        if (Object.keys(req.query).length > 0) {log.d('req.query:' + JSON.stringify(req.query, null, 2));}
+        if (Object.keys(req.body). length > 0) {log.d('req.body:'  + JSON.stringify(req.body,  null, 2));}
 
         // クッキー
         const cookies = req.header('cookie');
@@ -142,11 +143,13 @@ export default class Access
         }
 
         const pos = address.lastIndexOf(':');
-        if (pos > 0)
+        if (pos > 0) {
             address = address.substr(pos + 1);
+        }
 
-        if (address === '1')
+        if (address === '1') {
             address = '127.0.0.1';
+        }
 
         return {address, src};
     }
@@ -200,7 +203,7 @@ export default class Access
             log.stepOut();
             next();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -236,7 +239,7 @@ export default class Access
                 next();
             }
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -256,7 +259,7 @@ export default class Access
             {
                 status:  -1,
                 message: R.text(R.NOT_FOUND, locale)
-            }
+            };
             res.status(404).json(data);
         }
         else

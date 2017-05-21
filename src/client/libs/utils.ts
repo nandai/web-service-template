@@ -19,8 +19,9 @@ export default class Utils
 
         let locale = language.substr(0, 2);
 
-        if (locale !== 'ja')
+        if (locale !== 'ja') {
             locale = 'en';
+        }
 
         return locale;
     }
@@ -34,13 +35,13 @@ export default class Utils
      *
      * @return  文字列
      */
-    static formatString(format : string, args : Object) : string
+    static formatString(format : string, args) : string
     {
         return format.replace(/\${(.*?)}/g, (match, key) =>
         {
             return (key in args ? args[key] : match);
         });
-    };
+    }
 
     /**
      * URLからパラメータを取得する
@@ -57,8 +58,9 @@ export default class Utils
         const count = formatKeys.length;
         let params = {};
 
-        if (formatKeys.length !== urlKeys.length)
+        if (formatKeys.length !== urlKeys.length) {
             return null;
+        }
 
         for (let i = 0; i < count; i++)
         {

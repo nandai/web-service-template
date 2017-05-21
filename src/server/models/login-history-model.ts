@@ -23,7 +23,7 @@ export class LoginHistory
 export default class LoginHistoryModel
 {
     private static CLS_NAME = 'LoginHistoryModel';
-    private static list: LoginHistory[] = null;
+    private static list : LoginHistory[] = null;
     private static path = Config.ROOT_DIR + '/storage/loginHistory.json';
     private static MESSAGE_UNINITIALIZE = 'LoginHistoryModelが初期化されていません。';
 

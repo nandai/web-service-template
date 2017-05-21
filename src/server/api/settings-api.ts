@@ -1,15 +1,15 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {Request}               from 'libs/request';
+import {Response}              from 'libs/response';
 import Config                  from '../config';
 import Authy                   from '../libs/authy';
 import R                       from '../libs/r';
 import Utils                   from '../libs/utils';
 import AccountModel, {Account} from '../models/account-model';
-import SessionModel, {Session} from '../models/session-model';
 import DeleteAccountModel      from '../models/delete-account-model';
-import {Request}               from 'libs/request';
-import {Response}              from 'libs/response';
+import SessionModel, {Session} from '../models/session-model';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -36,7 +36,7 @@ export default class SettingsApi
             res.json(data);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -67,12 +67,12 @@ export default class SettingsApi
                 {
                     status:  0,
                     account: accountRes
-                }
+                };
 
                 log.stepOut();
                 resolve(data);
             }
-            catch (err) {log.stepOut(); reject(err)};
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 
@@ -95,7 +95,7 @@ export default class SettingsApi
                     countryCode:   ['string', null, true],
                     phoneNo:       ['string', null, true],
                     twoFactorAuth: ['string', null, true]
-                }
+                };
 
                 log.d(JSON.stringify(param, null, 2));
 
@@ -202,7 +202,7 @@ export default class SettingsApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -221,7 +221,7 @@ export default class SettingsApi
                 const condition : Request.UnlinkProvider =
                 {
                     provider: ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -255,14 +255,13 @@ export default class SettingsApi
                 }
                 else
                 {
-                    const locale = req.ext.locale;
                     res.ext.error(Response.Status.FAILED, R.text(R.CANNOT_UNLINK, locale));
                 }
             }
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -281,7 +280,7 @@ export default class SettingsApi
                 const condition : Request.RequestChangeEmail =
                 {
                     email: ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -374,7 +373,7 @@ export default class SettingsApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -394,7 +393,7 @@ export default class SettingsApi
                 {
                     changeId: ['string', null, true],
                     password: ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -453,7 +452,7 @@ export default class SettingsApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -474,7 +473,7 @@ export default class SettingsApi
                     oldPassword: ['string', null, true],
                     newPassword: ['string', null, true],
                     confirm:     ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -531,7 +530,7 @@ export default class SettingsApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -557,7 +556,7 @@ export default class SettingsApi
             res.json(data);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -576,7 +575,7 @@ export default class SettingsApi
                 const condition : Request.Invite =
                 {
                     email: ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -627,6 +626,6 @@ export default class SettingsApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

@@ -1,10 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import R          from '../libs/r';
-import Utils      from '../libs/utils';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
+import R          from '../libs/r';
+import Utils      from '../libs/utils';
 
 import request = require('superagent');
 const slog = window['slog'];
@@ -19,11 +19,9 @@ export default class Api
      * @param   url     送信先URL
      * @param   param   パラメータ
      */
-    protected static sendGetRequest(
-        url   : string,
-        param : Object)
+    protected static sendGetRequest(url : string, param)
     {
-        return new Promise((resolve : (res : {ok:boolean, data}) => void) =>
+        return new Promise((resolve : (res : {ok : boolean, data}) => void) =>
         {
             request
                 .get(url)
@@ -43,19 +41,17 @@ export default class Api
      * @param   param       パラメータ
      * @param   onProgress  送信進捗コールバック
      */
-    protected static sendPostRequest(
-        url         : string,
-        param       : Object,
-        onProgress? : (percent : number) => void)
+    protected static sendPostRequest(url : string, param, onProgress? : (percent : number) => void)
     {
-        return new Promise((resolve : (res : {ok:boolean, data}) => void) =>
+        return new Promise((resolve : (res : {ok : boolean, data}) => void) =>
         {
             request
                 .post(url)
                 .on('progress', (e) =>
                 {
-                    if (onProgress)
+                    if (onProgress) {
                         onProgress(e.percent);
+                    }
                 })
                 .send(param)
                 .end((err, res : request.Response) =>
@@ -73,19 +69,17 @@ export default class Api
      * @param   param       パラメータ
      * @param   onProgress  送信進捗コールバック
      */
-    protected static sendPutRequest(
-        url         : string,
-        param       : Object,
-        onProgress? : (percent : number) => void)
+    protected static sendPutRequest(url : string, param, onProgress? : (percent : number) => void)
     {
-        return new Promise(async (resolve : (res : {ok:boolean, data}) => void) =>
+        return new Promise(async (resolve : (res : {ok : boolean, data}) => void) =>
         {
             request
                 .put(url)
                 .on('progress', (e) =>
                 {
-                    if (onProgress)
+                    if (onProgress) {
                         onProgress(e.percent);
+                    }
                 })
                 .send(param)
                 .end((err, res : request.Response) =>
@@ -102,11 +96,9 @@ export default class Api
      * @param   url     送信先URL
      * @param   param   パラメータ
      */
-    protected static sendDeleteRequest(
-        url   : string,
-        param : Object)
+    protected static sendDeleteRequest(url : string, param)
     {
-        return new Promise(async (resolve : (res : {ok:boolean, data}) => void) =>
+        return new Promise(async (resolve : (res : {ok : boolean, data}) => void) =>
         {
             request
                 .del(url)
@@ -124,8 +116,8 @@ export default class Api
      */
     protected static result(ok : boolean, data, resolve, reject)
     {
-        if (ok) resolve(data);
-        else    reject( data);
+        if (ok) {resolve(data);}
+        else    {reject( data);}
     }
 
     /**
@@ -134,7 +126,7 @@ export default class Api
      * @param   err エラー
      * @param   res レスポンス
      */
-    private static hasError(err, res : request.Response) : {ok:boolean, data}
+    private static hasError(err, res : request.Response) : {ok : boolean, data}
     {
         const locale = Utils.getLocale();
         let ok = false;

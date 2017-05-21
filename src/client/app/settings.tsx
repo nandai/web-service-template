@@ -2,12 +2,12 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React   from 'react';
-import {App}        from './app';
 import SettingsApi  from '../api/settings-api';
 import SettingsView from '../components/views/settings-view/settings-view';
 import {Store}      from '../components/views/settings-view/store';
 import History      from '../libs/history';
 import Utils        from '../libs/utils';
+import {App}        from './app';
 
 const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
@@ -68,9 +68,13 @@ export default class SettingsApp extends App
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onTwitter');
 
         if (this.store.account.twitter === false)
+        {
             location.href = '/settings/account/link/twitter';
+        }
         else
+        {
             await this.unlink('twitter');
+        }
 
         log.stepOut();
     }
@@ -83,9 +87,13 @@ export default class SettingsApp extends App
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onFacebook');
 
         if (this.store.account.facebook === false)
+        {
             location.href = '/settings/account/link/facebook';
+        }
         else
+        {
             await this.unlink('facebook');
+        }
 
         log.stepOut();
     }
@@ -98,9 +106,13 @@ export default class SettingsApp extends App
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onGoogle');
 
         if (this.store.account.google === false)
+        {
             location.href = '/settings/account/link/google';
+        }
         else
+        {
             await this.unlink('google');
+        }
 
         log.stepOut();
     }
@@ -181,8 +193,8 @@ export default class SettingsApp extends App
             {
                 const res = await SettingsApi.unlinkProvider({provider});
 
-                if (res.status === 0) store.account[provider] = false;
-                else                  store.message = res.message;
+                if (res.status === 0) {store.account[provider] = false;}
+                else                  {store.message = res.message;}
 
                 this.render();
                 log.stepOut();

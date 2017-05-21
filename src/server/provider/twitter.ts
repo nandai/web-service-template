@@ -1,14 +1,14 @@
 /**
  * (C) 2016 printf.jp
  */
-import Provider from './provider';
-import Utils    from '../libs/utils';
 import Config   from '../config';
+import Utils    from '../libs/utils';
+import Provider from './provider';
 
 import express =         require('express');
 import passportTwitter = require('passport-twitter');
+import twit =            require('twit');
 import slog =            require('../slog');
-const twit =             require('twit');
 
 /**
  * Twitter
@@ -33,7 +33,7 @@ export default class Twitter extends Provider
      * @param   profile         プロフィール
      * @param   done
      */
-    static verify(accessToken : string, refreshToken : string, profile : passportTwitter.Profile, done : Function) : void
+    static verify(accessToken : string, refreshToken : string, profile : passportTwitter.Profile, done) : void
     {
         super._verify('twitter', accessToken, refreshToken, done);
     }
@@ -53,7 +53,7 @@ export default class Twitter extends Provider
             await twitter.signupOrLogin(req, res);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -94,7 +94,7 @@ export default class Twitter extends Provider
                         log.stepOut();
                         resolve();
                     })
-                    .catch(function (err)
+                    .catch((err) =>
                     {
                         log.d(err);
                         log.stepOut();
@@ -130,8 +130,9 @@ export default class Twitter extends Provider
                     const consumerKey = pair[1].replace(/"/g, '');
                     success = (consumerKey === Config.TWITTER_CONSUMER_KEY);
 
-                    if (success === false)
+                    if (success === false) {
                         log.w(consumerKey);
+                    }
 
                     break;
                 }

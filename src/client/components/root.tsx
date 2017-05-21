@@ -46,8 +46,9 @@ export default class Root extends React.Component<RootProps, RootState>
         const {state} = this;
         let className = 'root-transition';
 
-        if (state.fade)
+        if (state.fade) {
             className += ' fade';
+        }
 
         // スクロール位置を保持するため、非アクティブなビューは破棄せず非表示にしておく
         const elements = state.views.map((view, i) =>
@@ -57,7 +58,7 @@ export default class Root extends React.Component<RootProps, RootState>
                 display: (view.type === state.currentView.type ? 'flex' : 'none'),
                 flexGrow: 1
             };
-            return <div key={i} style={style}>{view}</div>
+            return <div key={i} style={style}>{view}</div>;
         });
 
         return (
@@ -139,8 +140,9 @@ export default class Root extends React.Component<RootProps, RootState>
             }
         }
 
-        if (exists === false)
+        if (exists === false) {
             newViews.push(addView);
+        }
 
         return newViews;
     }

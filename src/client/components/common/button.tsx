@@ -44,11 +44,13 @@ export default class Button extends React.Component<ButtonProps, {}>
 
         let className = 'wst-button';
 
-        if (align)
+        if (align) {
             className += ' wst-button-' + align;
+        }
 
-        if (props.className)
+        if (props.className) {
             className += ' ' + props.className;
+        }
 
         const style = (margin ? {margin} : {});
         let el : JSX.Element;
@@ -96,7 +98,8 @@ export default class Button extends React.Component<ButtonProps, {}>
      */
     private onKeyUp(e : React.KeyboardEvent<Element>)
     {
-        if (e.keyCode === 0x20 || e.keyCode === 0x0D)
+        if (e.keyCode === 0x20 || e.keyCode === 0x0D) {
             this.props.onClick();
+        }
     }
 }

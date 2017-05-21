@@ -18,8 +18,9 @@ export default class Authy
      */
     static init()
     {
-        if (Config.AUTHY_API_KEY !== '')
+        if (Config.AUTHY_API_KEY !== '') {
             Authy.authy = require('authy')(Config.AUTHY_API_KEY);
+        }
     }
 
     /**
@@ -147,16 +148,18 @@ export default class Authy
         };
 
         // only add logos if provided
-        if (logos)
+        if (logos) {
             message_parameters['logos'] = logos;
+        }
 
         // only add expiration time if provided
-        if (user_payload.seconds_to_expire)
+        if (user_payload.seconds_to_expire) {
             message_parameters['seconds_to_expire'] = user_payload.seconds_to_expire;
+        }
 
         const url= `/onetouch/json/users/${authyId}/approval_requests`;
         Authy.authy._request('post', url, message_parameters, callback);
-    };
+    }
 
     /**
      * 承認チェック
@@ -194,5 +197,5 @@ export default class Authy
     {
         const url=`/onetouch/json/approval_requests/${uuid}`;
         Authy.authy._request('get', url, {}, callback);
-    };
+    }
 }

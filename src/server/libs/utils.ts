@@ -3,12 +3,12 @@
  */
 import Config from '../config';
 
-import express = require('express');
 import crypto =  require('crypto');
+import express = require('express');
 import mailer =  require('nodemailer');
 import smtp =    require('nodemailer-smtp-transport');
+import Random =  require("random-js");
 import slog =    require('../slog');
-const Random =   require("random-js");
 
 const random = new Random(Random.engines.mt19937().autoSeed());
 
@@ -41,9 +41,8 @@ export default class Utils
     {
         const log = slog.stepIn(Utils.CLS_NAME, 'existsParameters');
         let exists = true;
-        let name;
 
-        for (name in condition)
+        for (const name in condition)
         {
             const cond = condition[name];
             const type : string =     cond[0];
@@ -83,8 +82,9 @@ export default class Utils
                 }
             }
 
-            if (err)
+            if (err) {
                 exists = false;
+            }
         }
 
         log.stepOut();
@@ -103,8 +103,9 @@ export default class Utils
         {
             const num = Number(value);
 
-            if (Number.isNaN(num) === false)
+            if (Number.isNaN(num) === false) {
                 result = num;
+            }
         }
         return result;
     }
@@ -118,8 +119,9 @@ export default class Utils
     {
         const len = password.length;
 
-        if (len < 8 || 16 < len)
+        if (len < 8 || 16 < len) {
             return false;
+        }
 
         return true;
     }
@@ -210,8 +212,9 @@ export default class Utils
         const len = chars.length;
         let text = '';
 
-        for (let i= 0; i < size; i++)
+        for (let i= 0; i < size; i++) {
             text += chars[random.integer(0, len - 1)];
+        }
 
         return text;
     }
@@ -233,11 +236,12 @@ export default class Utils
         const port = Config.APP_PORT;
         const isDefaultPort = (port === 80 || port === 443);
 
-        if (isDefaultPort) url = `${protocol}://${host}/${path}`;
-        else               url = `${protocol}://${host}:${port}/${path}`;
+        if (isDefaultPort) {url = `${protocol}://${host}/${path}`;}
+        else               {url = `${protocol}://${host}:${port}/${path}`;}
 
-        if (id)
+        if (id) {
             url += `?id=${id}`;
+        }
 
         return url;
     }
@@ -272,14 +276,15 @@ export default class Utils
             {
                 from:    Config.SMTP_FROM,
                 to:      toAddr,
-                subject: subject,
+                subject,
                 text:    contents
             };
 
-            transporter.sendMail(mailOptions, function (err : Error, response : mailer.SentMessageInfo)
+            transporter.sendMail(mailOptions, (err : Error, response : mailer.SentMessageInfo) =>
             {
-                if (err)
+                if (err) {
                     log.w(err.message);
+                }
 
                 log.stepOut();
                 resolve(err === null);
@@ -297,8 +302,9 @@ export default class Utils
     {
         for (const key in dst)
         {
-            if (key in src)
+            if (key in src) {
                 dst[key] = src[key];
+            }
         }
     }
 
@@ -311,7 +317,7 @@ export default class Utils
      *
      * @return  文字列
      */
-    static formatString(format : string, args : Object) : string
+    static formatString(format : string, args) : string
     {
         return format.replace(/\${(.*?)}/g, (match, key) =>
         {
@@ -329,11 +335,13 @@ export default class Utils
         const {headers} = req;
         let locale = 'en';
 
-        if ('accept-language' in headers)
+        if ('accept-language' in headers) {
             locale = headers['accept-language'].substr(0, 2);
+        }
 
-        if (locale !== 'ja')
+        if (locale !== 'ja') {
             locale = 'en';
+        }
 
         return locale;
     }

@@ -1,14 +1,14 @@
 /**
  * (C) 2016 printf.jp
  */
-import Provider from './provider';
-import Utils    from '../libs/utils';
 import Config   from '../config';
+import Utils    from '../libs/utils';
+import Provider from './provider';
 
 import express =        require('express');
+import google =         require('googleapis');
 import passportGoogle = require('passport-google-oauth');
 import slog =           require('../slog');
-const google =          require('googleapis');
 
 const plus = google.plus('v1');
 const oauth2Client = new google.auth.OAuth2(Config.GOOGLE_CLIENT_ID, Config.GOOGLE_CLIENT_SECRET, Config.GOOGLE_CALLBACK);
@@ -36,7 +36,7 @@ export default class Google extends Provider
      * @param   profile         プロフィール
      * @param   done
      */
-    static verify(accessToken : string, refreshToken : string, profile : passportGoogle.Profile, done : Function) : void
+    static verify(accessToken : string, refreshToken : string, profile : passportGoogle.Profile, done) : void
     {
         super._verify('google', accessToken, refreshToken, done);
     }
@@ -56,7 +56,7 @@ export default class Google extends Provider
             await google.signupOrLogin(req, res);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -80,7 +80,7 @@ export default class Google extends Provider
                     refresh_token: refreshToken
                 });
 
-                plus.people.get({userId:'me', auth:oauth2Client}, function(err, profile)
+                plus.people.get({userId:'me', auth:oauth2Client}, (err, profile) =>
                 {
 //                  console.log(err);
 //                  console.log(JSON.stringify(profile, null, 2));

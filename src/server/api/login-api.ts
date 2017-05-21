@@ -1,17 +1,17 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config                            from '../config';
-import Authy                             from '../libs/authy';
-import Utils                             from '../libs/utils';
-import R                                 from '../libs/r';
-import Email                             from '../provider/email';
-import ProviderApi                       from './provider-api';
-import AccountModel, {Account}           from '../models/account-model';
-import SessionModel, {Session}           from '../models/session-model';
-import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
 import {Request}                         from 'libs/request';
 import {Response}                        from 'libs/response';
+import Config                            from '../config';
+import Authy                             from '../libs/authy';
+import R                                 from '../libs/r';
+import Utils                             from '../libs/utils';
+import AccountModel, {Account}           from '../models/account-model';
+import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
+import SessionModel, {Session}           from '../models/session-model';
+import Email                             from '../provider/email';
+import ProviderApi                       from './provider-api';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -49,7 +49,7 @@ export default class LoginApi extends ProviderApi
                 {
                     email:    ['string', null, true],
                     password: ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -63,8 +63,9 @@ export default class LoginApi extends ProviderApi
                 const account = await AccountModel.findByProviderId('email', email);
                 let hashPassword : string;
 
-                if (account)
+                if (account) {
                     hashPassword = Utils.getHashPassword(email, password, Config.PASSWORD_SALT);
+                }
 
                 if (account === null || account.password !== hashPassword || account.signup_id)
                 {
@@ -85,7 +86,7 @@ export default class LoginApi extends ProviderApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -105,7 +106,7 @@ export default class LoginApi extends ProviderApi
                 {
                     smsId:   ['string', null, true],
                     smsCode: ['string', null, true]
-                }
+                };
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
@@ -165,7 +166,7 @@ export default class LoginApi extends ProviderApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
@@ -201,6 +202,6 @@ export default class LoginApi extends ProviderApi
             while (false);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

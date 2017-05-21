@@ -30,6 +30,6 @@ export default class LogoutApi
             res.json(data);
             log.stepOut();
         }
-        catch (err) {Utils.internalServerError(err, res, log)};
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

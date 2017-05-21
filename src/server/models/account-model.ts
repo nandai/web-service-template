@@ -1,9 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import SeqModel from './seq-model';
 import Config   from '../config';
 import Utils    from '../libs/utils';
+import SeqModel from './seq-model';
 
 import fs =     require('fs');
 import __ =     require('lodash');
@@ -58,8 +58,9 @@ export class Account
             existsProvider = 'email';
         }
 
-        if (count === 1 && existsProvider === provider)
+        if (count === 1 && existsProvider === provider) {
             return false;
+        }
 
         return true;
     }
@@ -172,7 +173,7 @@ export default class AccountModel
         const log = slog.stepIn(AccountModel.CLS_NAME, 'update');
         return new Promise((resolve : () => void, reject) =>
         {
-            for (let i in AccountModel.list)
+            for (const i in AccountModel.list)
             {
                 const findAccount = AccountModel.list[i];
                 if (findAccount.id === account.id)
@@ -206,7 +207,7 @@ export default class AccountModel
 
         return new Promise((resolve : () => void, reject) =>
         {
-            for (let i in AccountModel.list)
+            for (const i in AccountModel.list)
             {
                 if (AccountModel.list[i].id === accountId)
                 {
@@ -380,8 +381,8 @@ export default class AccountModel
                 }
             }
 
-            if (account) log.d('見つかりました。');
-            else         log.d('見つかりませんでした。');
+            if (account) {log.d('見つかりました。');}
+            else         {log.d('見つかりませんでした。');}
 
             log.stepOut();
             resolve(account);
@@ -426,8 +427,9 @@ export default class AccountModel
             internationalPhoneNo = Utils.encrypt(internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
             for (const account of AccountModel.list)
             {
-                if (excludeAccountId && account.id === excludeAccountId)
+                if (excludeAccountId && account.id === excludeAccountId) {
                     continue;
+                }
 
                 if (account.international_phone_no === internationalPhoneNo)
                 {
@@ -461,8 +463,9 @@ export default class AccountModel
                 return;
             }
 
-            if (cond.internationalPhoneNo)
+            if (cond.internationalPhoneNo) {
                 cond.internationalPhoneNo = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+            }
 
             const accountList : Account[] = [];
             for (const account of AccountModel.list)
@@ -493,10 +496,10 @@ export default class AccountModel
         const key = Config.CRYPTO_KEY;
         const iv =  Config.CRYPTO_IV;
 
-        if (account.email)                  account.email =                  Utils.encrypt(account.email,                  key, iv);
-        if (account.phone_no)               account.phone_no =               Utils.encrypt(account.phone_no,               key, iv);
-        if (account.international_phone_no) account.international_phone_no = Utils.encrypt(account.international_phone_no, key, iv);
-        if (account.change_email)           account.change_email =           Utils.encrypt(account.change_email,           key, iv);
+        if (account.email)                  {account.email =                  Utils.encrypt(account.email,                  key, iv);}
+        if (account.phone_no)               {account.phone_no =               Utils.encrypt(account.phone_no,               key, iv);}
+        if (account.international_phone_no) {account.international_phone_no = Utils.encrypt(account.international_phone_no, key, iv);}
+        if (account.change_email)           {account.change_email =           Utils.encrypt(account.change_email,           key, iv);}
     }
 
     /**
@@ -509,10 +512,10 @@ export default class AccountModel
             const key = Config.CRYPTO_KEY;
             const iv =  Config.CRYPTO_IV;
 
-            if (account.email)                  account.email =                   Utils.decrypt(account.email,                   key, iv);
-            if (account.phone_no)               account.phone_no =                Utils.decrypt(account.phone_no,                key, iv);
-            if (account.international_phone_no) account.international_phone_no =  Utils.decrypt(account.international_phone_no,  key, iv);
-            if (account.change_email)           account.change_email =            Utils.decrypt(account.change_email,            key, iv);
+            if (account.email)                  {account.email =                   Utils.decrypt(account.email,                   key, iv);}
+            if (account.phone_no)               {account.phone_no =                Utils.decrypt(account.phone_no,                key, iv);}
+            if (account.international_phone_no) {account.international_phone_no =  Utils.decrypt(account.international_phone_no,  key, iv);}
+            if (account.change_email)           {account.change_email =            Utils.decrypt(account.change_email,            key, iv);}
         }
     }
 
@@ -597,4 +600,4 @@ interface AccountFindListCondition
     internationalPhoneNo? : string;
 }
 
-interface AccountResolve {(account : Account) : void}
+interface AccountResolve {(account : Account) : void;}

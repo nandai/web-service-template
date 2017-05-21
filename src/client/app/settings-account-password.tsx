@@ -2,11 +2,11 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React                  from 'react';
-import {App}                       from './app';
 import SettingsApi                 from '../api/settings-api';
 import SettingsAccountPasswordView from '../components/views/settings-account-password-view/settings-account-password-view';
 import {Store}                     from '../components/views/settings-account-password-view/store';
 import Utils                       from '../libs/utils';
+import {App}                       from './app';
 
 const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();

@@ -1,9 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Account} from './account-model';
 import Config    from '../config';
 import Utils     from '../libs/utils';
+import {Account} from './account-model';
 
 import fs =     require('fs');
 import moment = require('moment');
