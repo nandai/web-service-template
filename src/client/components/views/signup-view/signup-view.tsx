@@ -35,6 +35,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
                         <Button onClick={store.onTwitter} >{R.text(R.SIGNUP_WITH_TWITTER,  locale)}</Button>
                         <Button onClick={store.onFacebook}>{R.text(R.SIGNUP_WITH_FACEBOOK, locale)}</Button>
                         <Button onClick={store.onGoogle}  >{R.text(R.SIGNUP_WITH_GOOGLE,   locale)}</Button>
+                        <Button onClick={store.onGithub}  >{R.text(R.SIGNUP_WITH_GITHUB,   locale)}</Button>
                         <Input type="text"     placeholder={R.text(R.EMAIL,    locale)} value={store.email}    onChange={store.onEmailChange} />
                         <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} onChange={store.onPasswordChange} />
                         <Button submit={true} onClick={store.onSignup}>{R.text(R.SIGNUP, locale)}</Button>

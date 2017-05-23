@@ -34,6 +34,7 @@ export default class SettingsApp extends App
             onTwitter:  this.onTwitter. bind(this),
             onFacebook: this.onFacebook.bind(this),
             onGoogle:   this.onGoogle.  bind(this),
+            onGithub:   this.onGithub.  bind(this),
             onEmail:    this.onEmail.   bind(this),
             onPassword: this.onPassword.bind(this),
             onAccount:  this.onAccount. bind(this),
@@ -118,6 +119,25 @@ export default class SettingsApp extends App
     }
 
     /**
+     * onGithub
+     */
+    private async onGithub()
+    {
+        const log = slog.stepIn(SettingsApp.CLS_NAME, 'onGithub');
+
+        if (this.store.account.github === false)
+        {
+            location.href = '/settings/account/link/github';
+        }
+        else
+        {
+            await this.unlink('github');
+        }
+
+        log.stepOut();
+    }
+
+    /**
      * onEmail
      */
     private onEmail() : void
@@ -182,7 +202,7 @@ export default class SettingsApp extends App
     /**
      * unlink
      */
-    private unlink(provider : 'twitter' | 'facebook' | 'google')
+    private unlink(provider : 'twitter' | 'facebook' | 'google' | 'github')
     {
         return new Promise(async (resolve : () => void, reject) =>
         {

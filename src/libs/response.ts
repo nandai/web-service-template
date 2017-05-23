@@ -13,6 +13,7 @@ export namespace Response
         twitter       : boolean;
         facebook      : boolean;
         google        : boolean;
+        github        : boolean;
     }
 
     export interface User

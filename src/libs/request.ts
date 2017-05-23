@@ -43,10 +43,16 @@ export namespace Request
         accessToken : string | any[];
     }
 
+    export interface Github
+    {
+        accessToken : string | any[];
+    }
+
     export interface Google
     {
         accessToken : string | any[];
     }
+
 
     export interface RequestResetPassword
     {

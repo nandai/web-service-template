@@ -22,6 +22,8 @@
         "facebook-app-secret":     "",
         "google-client-id":        "",
         "google-client-secret":    "",
+        "github-client-id":        "",
+        "github-client-secret":    "",
         "twilio-account-sid":      "",
         "twilio-auth-token":       "",
         "twilio-from-phone-no":    "",

@@ -6,6 +6,7 @@ import {Response} from 'libs/response';
 import R          from '../libs/r';
 import Utils      from '../libs/utils';
 import Facebook   from '../provider/facebook';
+import Github     from '../provider/github';
 import Google     from '../provider/google';
 import Twitter    from '../provider/twitter';
 
@@ -40,6 +41,7 @@ export default class ProviderApi
             case 'twitter':  fn = ProviderApi.twitter;  break;
             case 'facebook': fn = ProviderApi.facebook; break;
             case 'google':   fn = ProviderApi.google;   break;
+            case 'github':   fn = ProviderApi.github;   break;
             default:
                 // ルートパスの正規表現に誤りがない限りここに到達することはない
                 log.e('無効なプロバイダ');
@@ -172,6 +174,47 @@ export default class ProviderApi
                     req.ext.command = command;
                     req.user = user;
                     Google.callback(req, res);
+                });
+            });
+        }
+        while (false);
+        log.stepOut();
+    }
+
+    /**
+     * Githubでサインアップ、ログイン、または紐づけをする<br>
+     * POST /api/login/google
+     *
+     * @param   req     httpリクエスト
+     * @param   res     httpレスポンス
+     * @param   command コマンド（'signup', 'login', 'link'）
+     */
+    private static github(req : express.Request, res : express.Response, command : string) : void
+    {
+        const log = slog.stepIn(ProviderApi.CLS_NAME, 'github');
+        do
+        {
+            const locale = req.ext.locale;
+            const param     : Request.Github = req.body;
+            const condition : Request.Github =
+            {
+                accessToken: ['string', null, true]
+            };
+
+            if (Utils.existsParameters(param, condition) === false)
+            {
+                res.ext.badRequest(locale);
+                break;
+            }
+
+            const accessToken = <string>param.accessToken;
+            process.nextTick(() =>
+            {
+                Github.verify(accessToken, undefined, undefined, (err, user) =>
+                {
+                    req.ext.command = command;
+                    req.user = user;
+                    Github.callback(req, res);
                 });
             });
         }

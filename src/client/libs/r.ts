@@ -35,6 +35,7 @@ export default class R
             'login':                      'Log in',
             'loginCode':                  'Login code',
             'loginWithFacebook':          'Log in with Facebook',
+            'loginWithGithub':            'Log in with Github',
             'loginWithGoogle':            'Log in with Google',
             'loginWithTwitter':           'Log in with Twitter',
             'logout':                     'Log out',
@@ -56,6 +57,7 @@ export default class R
             'signup':                     'Sign up',
             'signupConfirm':              'Confirm sign up',
             'signupWithFacebook':         'Sign up with Facebook',
+            'signupWithGithub':           'Sign up with Github',
             'signupWithGoogle':           'Sign up with Google',
             'signupWithTwitter':          'Sign up with Twitter',
             'top':                        'Top',
@@ -93,6 +95,7 @@ export default class R
             'login':                      'ログイン',
             'loginCode':                  'ログインコード',
             'loginWithFacebook':          'Facebookでログインする',
+            'loginWithGithub':            'Githubでログインする',
             'loginWithGoogle':            'Googleでログインする',
             'loginWithTwitter':           'Twitterでログインする',
             'logout':                     'ログアウト',
@@ -114,6 +117,7 @@ export default class R
             'signup':                     'サインアップ',
             'signupConfirm':              'サインアップの確認',
             'signupWithFacebook':         'Facebookでサインアップする',
+            'signupWithGithub':           'Githubでサインアップする',
             'signupWithGoogle':           'Googleでサインアップする',
             'signupWithTwitter':          'Twitterでサインアップする',
             'top':                        'トップ',
@@ -150,6 +154,7 @@ export default class R
     static LOGIN =                         'login';
     static LOGIN_CODE =                    'loginCode';
     static LOGIN_WITH_FACEBOOK =           'loginWithFacebook';
+    static LOGIN_WITH_GITHUB =             'loginWithGithub';
     static LOGIN_WITH_GOOGLE =             'loginWithGoogle';
     static LOGIN_WITH_TWITTER =            'loginWithTwitter';
     static LOGOUT =                        'logout';
@@ -171,6 +176,7 @@ export default class R
     static SIGNUP =                        'signup';
     static SIGNUP_CONFIRM =                'signupConfirm';
     static SIGNUP_WITH_FACEBOOK =          'signupWithFacebook';
+    static SIGNUP_WITH_GITHUB =            'signupWithGithub';
     static SIGNUP_WITH_GOOGLE =            'signupWithGoogle';
     static SIGNUP_WITH_TWITTER =           'signupWithTwitter';
     static TOP =                           'top';

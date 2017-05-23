@@ -11,6 +11,7 @@ export interface Store
     onTwitter?  : () => void;
     onFacebook? : () => void;
     onGoogle?   : () => void;
+    onGithub?   : () => void;
     onEmail?    : () => void;
     onPassword? : () => void;
     onAccount?  : () => void;

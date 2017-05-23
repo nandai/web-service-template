@@ -60,7 +60,8 @@ export default class SettingsApi
                     twoFactorAuth: account.two_factor_auth,
                     twitter:      (account.twitter  !== null),
                     facebook:     (account.facebook !== null),
-                    google:       (account.google   !== null)
+                    google:       (account.google   !== null),
+                    github:       (account.github   !== null)
                 };
 
                 const data : Response.GetAccount =
@@ -235,7 +236,8 @@ export default class SettingsApi
 
                 if (provider !== 'twitter'
                 &&  provider !== 'facebook'
-                &&  provider !== 'google')
+                &&  provider !== 'google'
+                &&  provider !== 'github')
                 {
                     res.ext.badRequest(locale);
                     break;

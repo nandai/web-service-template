@@ -26,6 +26,7 @@ import SeqModel                from './models/seq-model';
 import SessionModel, {Session} from './models/session-model';
 import Email                   from './provider/email';
 import Facebook                from './provider/facebook';
+import Github                  from './provider/github';
 import Google                  from './provider/google';
 import Twitter                 from './provider/twitter';
 
@@ -38,6 +39,7 @@ import helmet =           require('helmet');
 import https =            require('https');
 import passport =         require('passport');
 import passportFacebook = require('passport-facebook');
+import passportGithub =   require('passport-github');
 import passportGoogle =   require('passport-google-oauth');
 import passportTwitter =  require('passport-twitter');
 import slog =             require('./slog');
@@ -148,6 +150,29 @@ class Initializer
     }
 
     /**
+     * githubを初期化する
+     */
+    github() : void
+    {
+        if (Config.GOOGLE_CLIENT_ID     !== ''
+        &&  Config.GOOGLE_CLIENT_SECRET !== '')
+        {
+            const options : passportGithub.StrategyOption =
+            {
+                clientID:     Config.GITHUB_CLIENT_ID,
+                clientSecret: Config.GITHUB_CLIENT_SECRET,
+                callbackURL:  Config.GITHUB_CALLBACK
+            };
+
+            passport.use(new passportGithub.Strategy(options, Github.verify));
+        }
+        else
+        {
+            console.warn('Github認証は未設定です。');
+        }
+    }
+
+    /**
      * sessionを初期化する
      */
     session() : void
@@ -183,6 +208,7 @@ class Initializer
         const authTwitter =  passport.authenticate('twitter');
         const authFacebook = passport.authenticate('facebook');
         const authGoogle =   passport.authenticate('google', {scope:['https://www.googleapis.com/auth/plus.login']});
+        const authGithub =   passport.authenticate('github');
 
         const provider = ':provider(twitter|facebook|google)';
 
@@ -212,6 +238,13 @@ class Initializer
             this.app.get('/signup/google',                             signupCommand, authGoogle);
             this.app.get('/login/google',                              loginCommand,  authGoogle);
             this.app.get('/settings/account/link/google', Access.auth, linkCommand,   authGoogle);
+        }
+
+        if (Config.hasGithub())
+        {
+            this.app.get('/signup/github',                             signupCommand, authGithub);
+            this.app.get('/login/github',                              loginCommand,  authGithub);
+            this.app.get('/settings/account/link/github', Access.auth, linkCommand,   authGithub);
         }
 
         this.app.get('/settings',                       Access.auth, SettingsController.index);
@@ -251,6 +284,7 @@ class Initializer
         this.app.get('/auth/twitter/callback',  Twitter. customCallback, Twitter. callback);
         this.app.get('/auth/facebook/callback', Facebook.customCallback, Facebook.callback);
         this.app.get('/auth/google/callback',   Google.  customCallback, Google.  callback);
+        this.app.get('/auth/github/callback',   Github.  customCallback, Github.  callback);
 
         this.app.use(Access.notFound);
     }
@@ -271,6 +305,7 @@ function main() : void
     init.twitter();
     init.facebook();
     init.google();
+    init.github();
     init.session();
     init.passport();
     init.route();

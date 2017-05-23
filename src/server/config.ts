@@ -49,6 +49,10 @@ export default class Config
     static GOOGLE_CLIENT_SECRET = '';
     static GOOGLE_CALLBACK = '';
 
+    static GITHUB_CLIENT_ID = '';
+    static GITHUB_CLIENT_SECRET = '';
+    static GITHUB_CALLBACK = '';
+
     static TWILIO_ACCOUNT_SID = '';
     static TWILIO_AUTH_TOKEN = '';
     static TWILIO_FROM_PHONE_NO = '';
@@ -107,6 +111,8 @@ export default class Config
         Config.FACEBOOK_APPSECRET =      Config.get(appData, 'facebook-app-secret');
         Config.GOOGLE_CLIENT_ID =        Config.get(appData, 'google-client-id');
         Config.GOOGLE_CLIENT_SECRET =    Config.get(appData, 'google-client-secret');
+        Config.GITHUB_CLIENT_ID =        Config.get(appData, 'github-client-id');
+        Config.GITHUB_CLIENT_SECRET =    Config.get(appData, 'github-client-secret');
         Config.TWILIO_ACCOUNT_SID =      Config.get(appData, 'twilio-account-sid');
         Config.TWILIO_AUTH_TOKEN =       Config.get(appData, 'twilio-auth-token');
         Config.TWILIO_FROM_PHONE_NO =    Config.get(appData, 'twilio-from-phone-no');
@@ -115,6 +121,7 @@ export default class Config
         Config.TWITTER_CALLBACK =  Utils.generateUrl('auth/twitter/callback');
         Config.FACEBOOK_CALLBACK = Utils.generateUrl('auth/facebook/callback');
         Config.GOOGLE_CALLBACK =   Utils.generateUrl('auth/google/callback');
+        Config.GITHUB_CALLBACK =   Utils.generateUrl('auth/github/callback');
     }
 
     /**
@@ -184,6 +191,19 @@ export default class Config
     {
         if (Config.GOOGLE_CLIENT_ID     !== ''
         &&  Config.GOOGLE_CLIENT_SECRET !== '')
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Githubの設定があるかどうか調べる
+     */
+    static hasGithub() : boolean
+    {
+        if (Config.GITHUB_CLIENT_ID     !== ''
+        &&  Config.GITHUB_CLIENT_SECRET !== '')
         {
             return true;
         }

@@ -37,6 +37,7 @@ export default class SignupApp extends App
             onTwitter:        this.onTwitter.       bind(this),
             onFacebook:       this.onFacebook.      bind(this),
             onGoogle:         this.onGoogle.        bind(this),
+            onGithub:         this.onGithub.        bind(this),
             onEmailChange:    this.onEmailChange.   bind(this),
             onPasswordChange: this.onPasswordChange.bind(this),
             onSignup:         this.onSignup.        bind(this),
@@ -91,6 +92,16 @@ export default class SignupApp extends App
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onGoogle');
         location.href = '/signup/google';
+        log.stepOut();
+    }
+
+    /**
+     * onGithub
+     */
+    private onGithub() : void
+    {
+        const log = slog.stepIn(SignupApp.CLS_NAME, 'onGithub');
+        location.href = '/signup/github';
         log.stepOut();
     }
 

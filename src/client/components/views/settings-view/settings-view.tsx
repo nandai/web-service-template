@@ -30,6 +30,7 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
         const twitterLabel =  this.getLinkLabel('Twitter',  'twitter');
         const facebookLabel = this.getLinkLabel('Facebook', 'facebook');
         const googleLabel =   this.getLinkLabel('Google',   'google');
+        const githubLabel =   this.getLinkLabel('Github',   'github');
 
         const passwordDisabled = (account.email === null);
 
@@ -40,6 +41,7 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
                     <Button onClick={store.onTwitter} >{twitterLabel}</Button>
                     <Button onClick={store.onFacebook}>{facebookLabel}</Button>
                     <Button onClick={store.onGoogle}  >{googleLabel}</Button>
+                    <Button onClick={store.onGithub}  >{githubLabel}</Button>
                     <Button onClick={store.onEmail}    url="/settings/account/email">{R.text(R.GO_EMAIL_SETTINGS, locale)}</Button>
                     <Button onClick={store.onPassword} url="/settings/account/password" disabled={passwordDisabled}>{R.text(R.GO_PASSWORD_SETTINGS, locale)}</Button>
                     <Button onClick={store.onAccount}  url="/settings/account">{R.text(R.GO_ACCOUNT_SETTINGS, locale)}</Button>

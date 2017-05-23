@@ -20,6 +20,7 @@ export class Account
     twitter                : string = null;
     facebook               : string = null;
     google                 : string = null;
+    github                 : string = null;
     email                  : string = null;
     password               : string = null;
     country_code           : string = null;
@@ -51,6 +52,7 @@ export class Account
         if (this.twitter)  {count++; existsProvider = 'twitter';}
         if (this.facebook) {count++; existsProvider = 'facebook';}
         if (this.google)   {count++; existsProvider = 'google';}
+        if (this.github)   {count++; existsProvider = 'github';}
 
         if (this.email && this.password)
         {
@@ -357,6 +359,7 @@ export default class AccountModel
                 if (provider !== 'twitter'
                 &&  provider !== 'facebook'
                 &&  provider !== 'google'
+                &&  provider !== 'github'
                 &&  provider !== 'email')
                 {
                     log.e('provider not supported.');
