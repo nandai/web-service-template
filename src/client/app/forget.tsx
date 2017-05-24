@@ -3,7 +3,7 @@
  */
 import * as React from 'react';
 import ResetApi   from '../api/reset-api';
-import ForgetView from '../components/views/forget-view/forget-view';
+import ForgetView from '../components/views/forget-view';
 import {Store}    from '../components/views/forget-view/store';
 import Utils      from '../libs/utils';
 import {App}      from './app';

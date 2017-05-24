@@ -5,11 +5,11 @@ import * as React                    from 'react';
 import * as ReactDOM                 from 'react-dom/server';
 
 import Root                          from 'client/components/root';
-import JoinView                      from 'client/components/views/join-view/join-view';
+import JoinView                      from 'client/components/views/join-view';
 import {Store as JoinStore}          from 'client/components/views/join-view/store';
-import SignupConfirmView             from 'client/components/views/signup-confirm-view/signup-confirm-view';
+import SignupConfirmView             from 'client/components/views/signup-confirm-view';
 import {Store as SignupConfirmStore} from 'client/components/views/signup-confirm-view/store';
-import SignupView                    from 'client/components/views/signup-view/signup-view';
+import SignupView                    from 'client/components/views/signup-view';
 import {Store as SignupStore}        from 'client/components/views/signup-view/store';
 import ClientR                       from 'client/libs/r';
 import R                             from '../libs/r';

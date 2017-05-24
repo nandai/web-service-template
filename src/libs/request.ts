@@ -53,7 +53,6 @@ export namespace Request
         accessToken : string | any[];
     }
 
-
     export interface RequestResetPassword
     {
         email : string | any[];

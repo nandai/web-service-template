@@ -13,7 +13,7 @@ import Utils                         from '../libs/utils';
 import {App}                         from './app';
 import ForbiddenApp                  from './forbidden';
 import ForgetApp                     from './forget';
-import JoinApp                       from './invite';
+import JoinApp                       from './join';
 import LoginApp                      from './login';
 import NotFoundApp                   from './not-found';
 import ResetApp                      from './reset';

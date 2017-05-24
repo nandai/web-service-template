@@ -3,7 +3,7 @@
  */
 import * as React         from 'react';
 import SettingsApi        from '../api/settings-api';
-import SettingsInviteView from '../components/views/settings-invite-view/settings-invite-view';
+import SettingsInviteView from '../components/views/settings-invite-view';
 import {Store}            from '../components/views/settings-invite-view/store';
 import Utils              from '../libs/utils';
 import {App}              from './app';

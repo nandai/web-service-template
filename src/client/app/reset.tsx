@@ -5,7 +5,7 @@ import * as React  from 'react';
 
 import CommonUtils from 'libs/utils';
 import ResetApi    from '../api/reset-api';
-import ResetView   from '../components/views/reset-view/reset-view';
+import ResetView   from '../components/views/reset-view';
 import {Store}     from '../components/views/reset-view/store';
 import Utils       from '../libs/utils';
 import {App}       from './app';

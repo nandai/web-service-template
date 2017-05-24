@@ -6,7 +6,7 @@ import * as React  from 'react';
 import {Request}   from 'libs/request';
 import CommonUtils from 'libs/utils';
 import SignupApi   from '../api/signup-api';
-import JoinView    from '../components/views/join-view/join-view';
+import JoinView    from '../components/views/join-view';
 import {Store}     from '../components/views/join-view/store';
 import Utils       from '../libs/utils';
 import {App}       from './app';

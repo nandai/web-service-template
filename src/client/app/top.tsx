@@ -3,8 +3,8 @@
  */
 import * as React from 'react';
 import LogoutApi  from '../api/logout-api';
+import TopView    from '../components/views/top-view';
 import {Store}    from '../components/views/top-view/store';
-import TopView    from '../components/views/top-view/top-view';
 import History    from '../libs/history';
 import Utils      from '../libs/utils';
 import {App}      from './app';

@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import {Request}  from 'libs/request';
 import SignupApi  from '../api/signup-api';
-import SignupView from '../components/views/signup-view/signup-view';
+import SignupView from '../components/views/signup-view';
 import {Store}    from '../components/views/signup-view/store';
 import History    from '../libs/history';
 import Utils      from '../libs/utils';

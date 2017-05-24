@@ -5,7 +5,7 @@ import * as React  from 'react';
 
 import CommonUtils from 'libs/utils';
 import LoginApi    from '../api/login-api';
-import SmsView     from '../components/views/sms-view/sms-view';
+import SmsView     from '../components/views/sms-view';
 import {Store}     from '../components/views/sms-view/store';
 import History     from '../libs/history';
 import Utils       from '../libs/utils';

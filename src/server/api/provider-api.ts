@@ -183,7 +183,7 @@ export default class ProviderApi
 
     /**
      * Githubでサインアップ、ログイン、または紐づけをする<br>
-     * POST /api/login/google
+     * POST /api/login/github
      *
      * @param   req     httpリクエスト
      * @param   res     httpレスポンス

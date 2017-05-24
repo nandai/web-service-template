@@ -5,12 +5,12 @@ import * as React              from 'react';
 import * as ReactDOM           from 'react-dom/server';
 
 import Root                    from 'client/components/root';
-import LoginView               from 'client/components/views/login-view/login-view';
+import LoginView               from 'client/components/views/login-view';
 import {Store as LoginStore}   from 'client/components/views/login-view/store';
-import SmsView                 from 'client/components/views/sms-view/sms-view';
+import SmsView                 from 'client/components/views/sms-view';
 import {Store as SmsStore}     from 'client/components/views/sms-view/store';
+import TopView                 from 'client/components/views/top-view';
 import {Store as TopStore}     from 'client/components/views/top-view/store';
-import TopView                 from 'client/components/views/top-view/top-view';
 import ClientR                 from 'client/libs/r';
 import SettingsApi             from '../api/settings-api';
 import Cookie                  from '../libs/cookie';

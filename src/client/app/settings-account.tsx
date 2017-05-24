@@ -3,7 +3,7 @@
  */
 import * as React          from 'react';
 import SettingsApi         from '../api/settings-api';
-import SettingsAccountView from '../components/views/settings-account-view/settings-account-view';
+import SettingsAccountView from '../components/views/settings-account-view';
 import {Store}             from '../components/views/settings-account-view/store';
 import Utils               from '../libs/utils';
 import {App}               from './app';

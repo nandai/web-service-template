@@ -3,7 +3,7 @@
  */
 import * as React               from 'react';
 import SettingsApi              from '../api/settings-api';
-import SettingsAccountEmailView from '../components/views/settings-account-email-view/settings-account-email-view';
+import SettingsAccountEmailView from '../components/views/settings-account-email-view';
 import {Store}                  from '../components/views/settings-account-email-view/store';
 import Utils                    from '../libs/utils';
 import {App}                    from './app';

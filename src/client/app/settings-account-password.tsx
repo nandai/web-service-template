@@ -3,7 +3,7 @@
  */
 import * as React                  from 'react';
 import SettingsApi                 from '../api/settings-api';
-import SettingsAccountPasswordView from '../components/views/settings-account-password-view/settings-account-password-view';
+import SettingsAccountPasswordView from '../components/views/settings-account-password-view';
 import {Store}                     from '../components/views/settings-account-password-view/store';
 import Utils                       from '../libs/utils';
 import {App}                       from './app';

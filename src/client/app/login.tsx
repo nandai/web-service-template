@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import {Request}  from 'libs/request';
 import LoginApi   from '../api/login-api';
-import LoginView  from '../components/views/login-view/login-view';
+import LoginView  from '../components/views/login-view';
 import {Store}    from '../components/views/login-view/store';
 import History    from '../libs/history';
 import Utils      from '../libs/utils';

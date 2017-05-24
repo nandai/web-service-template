@@ -3,8 +3,8 @@
  */
 import * as React from 'react';
 import UserApi    from '../api/user-api';
+import UserView   from '../components/views/user-view';
 import {Store}    from '../components/views/user-view/store';
-import UserView   from '../components/views/user-view/user-view';
 import Utils      from '../libs/utils';
 import {App}      from './app';
 

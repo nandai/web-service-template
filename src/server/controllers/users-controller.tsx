@@ -5,10 +5,10 @@ import * as React            from 'react';
 import * as ReactDOM         from 'react-dom/server';
 
 import Root                  from 'client/components/root';
+import UserView              from 'client/components/views/user-view';
 import {Store as UserStore}  from 'client/components/views/user-view/store';
-import UserView              from 'client/components/views/user-view/user-view';
+import UsersView             from 'client/components/views/users-view';
 import {Store as UsersStore} from 'client/components/views/users-view/store';
-import UsersView             from 'client/components/views/users-view/users-view';
 import ClientR               from 'client/libs/r';
 import UserApi               from '../api/user-api';
 import {notFound, view}      from './view';

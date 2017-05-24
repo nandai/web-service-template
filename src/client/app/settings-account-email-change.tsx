@@ -5,7 +5,7 @@ import * as React                     from 'react';
 
 import CommonUtils                    from 'libs/utils';
 import SettingsApi                    from '../api/settings-api';
-import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view/settings-account-email-change-view';
+import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view';
 import {Store}                        from '../components/views/settings-account-email-change-view/store';
 import Utils                          from '../libs/utils';
 import {App}                          from './app';
