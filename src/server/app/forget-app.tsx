@@ -14,11 +14,11 @@ import express = require('express');
 import slog =    require('../slog');
 
 /**
- * パスワードを忘れたコントローラ
+ * forget app
  */
-export default class ForgetController
+export default class ForgetApp
 {
-    private static CLS_NAME = 'ForgetController';
+    private static CLS_NAME = 'ForgetApp';
 
     /**
      * GET /forget
@@ -28,7 +28,7 @@ export default class ForgetController
      */
     static index(req : express.Request, res : express.Response) : void
     {
-        const log = slog.stepIn(ForgetController.CLS_NAME, 'index');
+        const log = slog.stepIn(ForgetApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
 
         const store : Store =

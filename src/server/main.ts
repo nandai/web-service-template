@@ -1,34 +1,41 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import LoginApi                from './api/login-api';
-import LogoutApi               from './api/logout-api';
-import ResetApi                from './api/reset-api';
-import SettingsApi             from './api/settings-api';
-import SignupApi               from './api/signup-api';
-import UserApi                 from './api/user-api';
-import ForgetController        from './app/forget-controller';
-import ResetController         from './app/reset-controller';
-import SettingsController      from './app/settings-controller';
-import SignupController        from './app/signup-controller';
-import TopController           from './app/top-controller';
-import UsersController         from './app/users-controller';
-import Config                  from './config';
-import Access                  from './libs/access';
-import Authy                   from './libs/authy';
-import {expressExtension}      from './libs/express-extension';
-import R                       from './libs/r';
-import Utils                   from './libs/utils';
-import AccountModel            from './models/account-model';
-import DeleteAccountModel      from './models/delete-account-model';
-import LoginHistoryModel       from './models/login-history-model';
-import SeqModel                from './models/seq-model';
-import SessionModel, {Session} from './models/session-model';
-import Email                   from './provider/email';
-import Facebook                from './provider/facebook';
-import Github                  from './provider/github';
-import Google                  from './provider/google';
-import Twitter                 from './provider/twitter';
+import LoginApi                      from './api/login-api';
+import LogoutApi                     from './api/logout-api';
+import ResetApi                      from './api/reset-api';
+import SettingsApi                   from './api/settings-api';
+import SignupApi                     from './api/signup-api';
+import UserApi                       from './api/user-api';
+import ForgetApp                     from './app/forget-app';
+import JoinApp                       from './app/join-app';
+import ResetApp                      from './app/reset-app';
+import SettingsAccountApp            from './app/settings-account-app';
+import SettingsAccountEmailApp       from './app/settings-account-email-app';
+import SettingsAccountEmailChangeApp from './app/settings-account-email-change-app';
+import SettingsAccountPasswordApp    from './app/settings-account-password-app';
+import SettingsApp                   from './app/settings-app';
+import SettingsInviteApp             from './app/settings-invite-app';
+import SignupApp                     from './app/signup-app';
+import TopApp                        from './app/top-app';
+import UserApp                       from './app/user-app';
+import UsersApp                      from './app/users-app';
+import Config                        from './config';
+import Access                        from './libs/access';
+import Authy                         from './libs/authy';
+import {expressExtension}            from './libs/express-extension';
+import R                             from './libs/r';
+import Utils                         from './libs/utils';
+import AccountModel                  from './models/account-model';
+import DeleteAccountModel            from './models/delete-account-model';
+import LoginHistoryModel             from './models/login-history-model';
+import SeqModel                      from './models/seq-model';
+import SessionModel, {Session}       from './models/session-model';
+import Email                         from './provider/email';
+import Facebook                      from './provider/facebook';
+import Github                        from './provider/github';
+import Google                        from './provider/google';
+import Twitter                       from './provider/twitter';
 
 import bodyParser =       require('body-parser');
 import cookieParser =     require('cookie-parser');
@@ -212,12 +219,12 @@ class Initializer
 
         const provider = ':provider(twitter|facebook|google)';
 
-        this.app.get('/',       TopController.   index);
-        this.app.get('/about',  TopController.   about);
-        this.app.get('/signup', SignupController.index);
-        this.app.get('/join',   SignupController.join);
-        this.app.get('/forget', ForgetController.index);
-        this.app.get('/reset',  ResetController. index);
+        this.app.get('/',       TopApp   .index);
+        this.app.get('/about',  TopApp   .about);
+        this.app.get('/signup', SignupApp.index);
+        this.app.get('/join',   JoinApp  .index);
+        this.app.get('/forget', ForgetApp.index);
+        this.app.get('/reset',  ResetApp .index);
 
         if (Config.hasTwitter())
         {
@@ -247,29 +254,29 @@ class Initializer
             this.app.get('/settings/account/link/github', Access.auth, linkCommand,   authGithub);
         }
 
-        this.app.get('/settings',                       Access.auth, SettingsController.index);
-        this.app.get('/settings/account',               Access.auth, SettingsController.account);
-        this.app.get('/settings/account/email',         Access.auth, SettingsController.email);
-        this.app.get('/settings/account/email/change',               SettingsController.changeEmail);
-        this.app.get('/settings/account/password',      Access.auth, SettingsController.password);
-        this.app.get('/settings/invite',                Access.auth, SettingsController.invite);
+        this.app.get('/settings',                       Access.auth, SettingsApp                  .index);
+        this.app.get('/settings/account',               Access.auth, SettingsAccountApp           .index);
+        this.app.get('/settings/account/email',         Access.auth, SettingsAccountEmailApp      .index);
+        this.app.get('/settings/account/email/change',               SettingsAccountEmailChangeApp.index);
+        this.app.get('/settings/account/password',      Access.auth, SettingsAccountPasswordApp   .index);
+        this.app.get('/settings/invite',                Access.auth, SettingsInviteApp            .index);
 
-        this.app.get('/users/:id(\\d+)', UsersController.user);
-        this.app.get('/users',           UsersController.users);
+        this.app.get('/users/:id(\\d+)', UserApp .index);
+        this.app.get('/users',           UsersApp.index);
 
         // APIs
         this.app.post(  `/api/signup/${provider}`,   SignupApi.onSignupProvider);
         this.app.post(  '/api/signup/email',         SignupApi.onSignupEmail);
         this.app.post(  '/api/signup/email/confirm', SignupApi.onConfirmSignupEmail);
         this.app.post(  '/api/join',                 SignupApi.onJoin);
-        this.app.post(  `/api/login/${provider}`,    LoginApi. onLoginProvider);
-        this.app.post(  '/api/login/email',          LoginApi. onLoginEmail);
-        this.app.post(  '/api/login/sms',            LoginApi. onLoginSms);
-        this.app.get(   '/api/login/authy/onetouch', LoginApi. onLoginAuthyOneTouch);
-        this.app.post(  '/api/reset',                ResetApi. onRequestResetPassword);
-        this.app.put(   '/api/reset/change',         ResetApi. onResetPassword);
-        this.app.get(   '/api/user',                 UserApi.  onGetUser);
-        this.app.get(   '/api/users',                UserApi.  onGetUserList);
+        this.app.post(  `/api/login/${provider}`,    LoginApi .onLoginProvider);
+        this.app.post(  '/api/login/email',          LoginApi .onLoginEmail);
+        this.app.post(  '/api/login/sms',            LoginApi .onLoginSms);
+        this.app.get(   '/api/login/authy/onetouch', LoginApi .onLoginAuthyOneTouch);
+        this.app.post(  '/api/reset',                ResetApi .onRequestResetPassword);
+        this.app.put(   '/api/reset/change',         ResetApi .onResetPassword);
+        this.app.get(   '/api/user',                 UserApi  .onGetUser);
+        this.app.get(   '/api/users',                UserApi  .onGetUserList);
 
         this.app.get(   '/api/settings/account',              Access.auth, SettingsApi.onGetAccount);
         this.app.put(   '/api/settings/account',              Access.auth, SettingsApi.onSetAccount);
@@ -279,12 +286,12 @@ class Initializer
         this.app.put(   '/api/settings/account/email/change',              SettingsApi.onChangeEmail);
         this.app.put(   '/api/settings/account/password',     Access.auth, SettingsApi.onChangePassword);
         this.app.post(  '/api/settings/invite',               Access.auth, SettingsApi.onInvite);
-        this.app.post(  '/api/logout',                        Access.auth, LogoutApi.  onLogout);
+        this.app.post(  '/api/logout',                        Access.auth, LogoutApi  .onLogout);
 
-        this.app.get('/auth/twitter/callback',  Twitter. customCallback, Twitter. callback);
+        this.app.get('/auth/twitter/callback',  Twitter. customCallback, Twitter .callback);
         this.app.get('/auth/facebook/callback', Facebook.customCallback, Facebook.callback);
-        this.app.get('/auth/google/callback',   Google.  customCallback, Google.  callback);
-        this.app.get('/auth/github/callback',   Github.  customCallback, Github.  callback);
+        this.app.get('/auth/google/callback',   Google.  customCallback, Google  .callback);
+        this.app.get('/auth/github/callback',   Github.  customCallback, Github  .callback);
 
         this.app.use(Access.notFound);
     }

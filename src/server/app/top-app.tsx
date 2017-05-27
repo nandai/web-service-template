@@ -24,11 +24,11 @@ import express = require('express');
 import slog =    require('../slog');
 
 /**
- * トップコントローラ
+ * top App
  */
-export default class TopController
+export default class TopApp
 {
-    private static CLS_NAME = 'TopController';
+    private static CLS_NAME = 'TopApp';
 
     /**
      * GET /
@@ -38,7 +38,7 @@ export default class TopController
      */
     static async index(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(TopController.CLS_NAME, 'index');
+        const log = slog.stepIn(TopApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
 
         try
@@ -130,7 +130,7 @@ export default class TopController
      */
     static async about(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(TopController.CLS_NAME, 'index');
+        const log = slog.stepIn(TopApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
 
         try

@@ -14,7 +14,7 @@ import {App}       from './app';
 const slog = window['slog'];
 
 /**
- * signup confirm app
+ * join app
  */
 export default class JoinApp extends App
 {

@@ -12,7 +12,7 @@ const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
 
 /**
- * settings account email app
+ * settings invite app
  */
 export default class SettingsInviteApp extends App
 {

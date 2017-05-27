@@ -16,11 +16,11 @@ import express = require('express');
 import slog =    require('../slog');
 
 /**
- * パスワードリセットコントローラ
+ * reset app
  */
-export default class ResetController
+export default class ResetApp
 {
-    private static CLS_NAME = 'ResetController';
+    private static CLS_NAME = 'ResetApp';
 
     /**
      * GET /reset
@@ -30,7 +30,7 @@ export default class ResetController
      */
     static async index(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(ResetController.CLS_NAME, 'index');
+        const log = slog.stepIn(ResetApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
 
         try

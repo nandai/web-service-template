@@ -12,7 +12,7 @@ const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
 
 /**
- * View
+ * settings account password app
  */
 export default class SettingsAccountPasswordApp extends App
 {
