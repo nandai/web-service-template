@@ -35,13 +35,29 @@ export default class JoinApp
 
         try
         {
-            const param = req.query;
-            const inviteId = param.id;
-
-            const account = await AccountModel.findByInviteId(inviteId);
-
-            if (account)
+            do
             {
+                const param = req.query;
+                const condition =
+                {
+                    id: ['string', null, true]
+                };
+
+                if (Utils.existsParameters(param, condition) === false)
+                {
+                    notFound(req, res);
+                    break;
+                }
+
+                const inviteId : string = param.id;
+                const account = await AccountModel.findByInviteId(inviteId);
+
+                if (account === null)
+                {
+                    notFound(req, res);
+                    break;
+                }
+
                 const store : Store =
                 {
                     locale,
@@ -54,11 +70,7 @@ export default class JoinApp
                 const contents = ReactDOM.renderToString(<Root view={el} />);
                 res.send(view(title, 'wst.js', contents));
             }
-            else
-            {
-                notFound(req, res);
-            }
-
+            while (false);
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

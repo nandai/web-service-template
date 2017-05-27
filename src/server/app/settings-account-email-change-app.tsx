@@ -36,16 +36,29 @@ export default class SettingsAccountEmailChangeApp
 
         try
         {
-            const param = req.query;
-            const changeId = param.id;
-            let account : Account = null;
-
-            if (changeId) {
-                account = await AccountModel.findByChangeId(changeId);
-            }
-
-            if (account)
+            do
             {
+                const param = req.query;
+                const condition =
+                {
+                    id: ['string', null, true]
+                };
+
+                if (Utils.existsParameters(param, condition) === false)
+                {
+                    notFound(req, res);
+                    break;
+                }
+
+                const changeId : string = param.id;
+                const account = await AccountModel.findByChangeId(changeId);
+
+                if (account === null)
+                {
+                    notFound(req, res);
+                    break;
+                }
+
                 const store : Store =
                 {
                     locale,
@@ -58,11 +71,7 @@ export default class SettingsAccountEmailChangeApp
                 const contents = ReactDOM.renderToString(<Root view={el} />);
                 res.send(view(title, 'wst.js', contents));
             }
-            else
-            {
-                notFound(req, res);
-            }
-
+            while (false);
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

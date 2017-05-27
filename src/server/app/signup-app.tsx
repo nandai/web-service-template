@@ -44,7 +44,7 @@ export default class SignupApp
         try
         {
             const session : Session = req.ext.session;
-            let message : string;
+            let message   : string;
 
             if (session.message_id)
             {
