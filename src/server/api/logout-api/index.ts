@@ -1,26 +1,24 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Utils                   from '../libs/utils';
-import SessionModel, {Session} from '../models/session-model';
+import Utils                   from 'server/libs/utils';
+import SessionModel, {Session} from 'server/models/session-model';
 
 import express = require('express');
-import slog =    require('../slog');
+import slog =    require('server/slog');
 
 /**
  * ログアウトAPI
  */
 export default class LogoutApi
 {
-    private static CLS_NAME = 'LogoutApi';
-
     /**
      * ログアウト<br>
      * POST /api/logout
      */
     static async onLogout(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(LogoutApi.CLS_NAME, 'onLogout');
+        const log = slog.stepIn('LogoutApi', 'onLogout');
         try
         {
             const session : Session = req.ext.session;
