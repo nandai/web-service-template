@@ -3,7 +3,7 @@
  */
 import {Response}              from 'libs/response';
 import CommonUtils             from 'libs/utils';
-import {forbidden, notFound}   from '../controllers/view';
+import {forbidden, notFound}   from '../app/view';
 import SessionModel, {Session} from '../models/session-model';
 import Cookie                  from './cookie';
 import R                       from './r';

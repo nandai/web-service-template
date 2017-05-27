@@ -2,7 +2,7 @@
   "name": "web-service-template",
   "version": "1.0.0",
   "description": "web service template",
-  "main": "app.js",
+  "main": "main.js",
   "dependencies": {
     "@types/body-parser": "^1.16.3",
     "@types/express": "^4.0.35",
@@ -65,7 +65,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node build/server/app"
+    "start": "node build/server/main"
   },
   "author": "",
   "license": "ISC",
