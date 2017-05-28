@@ -8,6 +8,7 @@
     "alreadySignup": "It has already been registered.",
     "badRequest": "Request is not correct.",
     "cannotEmptyEmail": "You can not e-mail address unset.",
+    "cannotEnterBeforeAfterSpace": "You can not enter only blanks or spaces before or after.",
     "cannotLink": "It can not be correlated string.",
     "cannotSetPassword": "I can not set a password.",
     "cannotSignup": "It can not be registered because it is logged.",

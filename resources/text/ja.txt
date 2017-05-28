@@ -8,6 +8,7 @@
     "alreadySignup": "既に登録されています。",
     "badRequest": "リクエストが正しくありません。",
     "cannotEmptyEmail": "メールアドレスを未設定にできません。",
+    "cannotEnterBeforeAfterSpace": "空白のみ、または前後に空白は入力できません。",
     "cannotLink": "紐づけできません。",
     "cannotSetPassword": "パスワードを設定できません。",
     "cannotSignup": "ログインしているので登録できません。",

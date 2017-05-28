@@ -49,8 +49,13 @@ export async function onSetAccount(req : express.Request, res : express.Response
             const twoFactorAuth = <string>param.twoFactorAuth;
 
             // アカウント名チェック
-            const len = name.length;
+            if (name !== name.trim())
+            {
+                res.ext.error(Response.Status.FAILED, R.text(R.CANNOT_ENTER_BEFORE_AFTER_SPACE, locale));
+                break;
+            }
 
+            const len = name.length;
             if (len < 1 || 20 < len)
             {
                 res.ext.error(Response.Status.FAILED, R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale));

@@ -30,7 +30,7 @@ export default class TopApp
      */
     static async index(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn('SmsApp', 'index');
+        const log = slog.stepIn('TopApp', 'index');
         const locale = req.ext.locale;
 
         try

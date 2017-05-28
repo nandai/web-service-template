@@ -27,6 +27,7 @@ export default class R
     static ALREADY_SIGNUP =                     'alreadySignup';
     static BAD_REQUEST =                        'badRequest';
     static CANNOT_EMPTY_EMAIL =                 'cannotEmptyEmail';
+    static CANNOT_ENTER_BEFORE_AFTER_SPACE =    'cannotEnterBeforeAfterSpace';
     static CANNOT_LINK =                        'cannotLink';
     static CANNOT_SET_PASSWORD =                'cannotSetPassword';
     static CANNOT_SIGNUP =                      'cannotSignup';
