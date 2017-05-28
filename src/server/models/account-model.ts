@@ -527,17 +527,19 @@ export default class AccountModel
      */
     static internationalPhoneNo(countryCode : string, phoneNo : string) : string
     {
-        if (countryCode && phoneNo)
+        let internationalPhoneNo = null;
+
+        if (phoneNo)
         {
-            phoneNo = phoneNo.replace(/-/g, '');
-            phoneNo = phoneNo.substr(1);    // 先頭の1文字を取り除く（'0'だったら、ではない）
-            phoneNo = countryCode + phoneNo;
+            internationalPhoneNo = phoneNo.replace(/-/g, '');
+            internationalPhoneNo = internationalPhoneNo.substr(1);  // 先頭の1文字を取り除く（'0'だったら、ではない）
         }
-        else
-        {
-            phoneNo = null;
+
+        if (countryCode) {
+            internationalPhoneNo = countryCode + (internationalPhoneNo || '');
         }
-        return phoneNo;
+
+        return internationalPhoneNo;
     }
 
     private static international_phone_no(account : Account) : string

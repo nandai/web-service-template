@@ -29,6 +29,7 @@ export default class R
     static CANNOT_EMPTY_EMAIL =                 'cannotEmptyEmail';
     static CANNOT_ENTER_BEFORE_AFTER_SPACE =    'cannotEnterBeforeAfterSpace';
     static CANNOT_LINK =                        'cannotLink';
+    static CANNOT_PERFORMED_WITH_AUTHY =        'cannotPerformedWithAuthy';
     static CANNOT_SET_PASSWORD =                'cannotSetPassword';
     static CANNOT_SIGNUP =                      'cannotSignup';
     static CANNOT_UNLINK =                      'cannotUnlink';
@@ -53,6 +54,7 @@ export default class R
     static PASSWORD_CHANGED =                   'passwordChanged';
     static PASSWORD_RESET =                     'passwordReset';
     static PASSWORD_TOO_SHORT_OR_TOO_LONG =     'passwordTooShortOrTooLong';
+    static REQUIRE_COUNTRY_CODE_AND_PHONE_NO =  'requireCountryCodeAndPhoneNo';
     static RESET_MAIL_SENDED =                  'resetMailSended';
     static SETTINGS_COMPLETED =                 'settingsCompleted';
     static SIGNUP_COMPLETED =                   'signupCompleted';

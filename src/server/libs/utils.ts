@@ -52,10 +52,16 @@ export default class Utils
 
             if (name in target)
             {
-                if (type === 'number')
+                const value = target[name];
+                switch (type)
                 {
-                    const value = target[name];
-                    target[name] = Utils.toNumber(value);
+                    case 'number':
+                        target[name] = Utils.toNumber(value);
+                        break;
+
+                    case 'string':
+                        target[name] = target[name] || null;
+                        break;
                 }
             }
             else

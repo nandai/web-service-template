@@ -50,6 +50,7 @@ export namespace Response
     export interface SetAccount
     {
         status  : Status;
+        account : Account;
         message : string;
     }
 
@@ -136,6 +137,7 @@ export namespace Response
     {
         BAD_REQUEST = -1,
         OK =           0,
-        FAILED =       1
+        FAILED =       1,
+        MESSAGE =      2
     }
 }

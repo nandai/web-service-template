@@ -107,6 +107,7 @@ export default class SettingsAccountApp extends App
             const {name, countryCode, phoneNo, twoFactorAuth} = account;
 
             const res = await SettingsApi.setAccount({name, countryCode, phoneNo, twoFactorAuth});
+            store.account = res.account;
             store.message = res.message;
             this.render();
             log.stepOut();
