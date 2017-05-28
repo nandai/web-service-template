@@ -9,6 +9,7 @@ import SignupApi                     from './api/signup-api';
 import UserApi                       from './api/user-api';
 import ForgetApp                     from './app/forget-app';
 import JoinApp                       from './app/join-app';
+import LoginApp                      from './app/login-app';
 import ResetApp                      from './app/reset-app';
 import SettingsAccountApp            from './app/settings-account-app';
 import SettingsAccountEmailApp       from './app/settings-account-email-app';
@@ -17,7 +18,6 @@ import SettingsAccountPasswordApp    from './app/settings-account-password-app';
 import SettingsApp                   from './app/settings-app';
 import SettingsInviteApp             from './app/settings-invite-app';
 import SignupApp                     from './app/signup-app';
-import TopApp                        from './app/top-app';
 import UserApp                       from './app/user-app';
 import UsersApp                      from './app/users-app';
 import Config                        from './config';
@@ -219,8 +219,8 @@ class Initializer
 
         const provider = ':provider(twitter|facebook|google)';
 
-        this.app.get('/',       TopApp   .index);
-        this.app.get('/about',  TopApp   .about);
+        this.app.get('/',       LoginApp .index);
+        this.app.get('/about',  LoginApp .about);
         this.app.get('/signup', SignupApp.index);
         this.app.get('/join',   JoinApp  .index);
         this.app.get('/forget', ForgetApp.index);
