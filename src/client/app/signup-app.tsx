@@ -4,6 +4,7 @@
 import * as React from 'react';
 
 import {Request}  from 'libs/request';
+import {Response} from 'libs/response';
 import SignupApi  from '../api/signup-api';
 import SignupView from '../components/views/signup-view';
 import {Store}    from '../components/views/signup-view/store';
@@ -169,7 +170,7 @@ export default class SignupApp extends App
             {
                 const res = await SignupApi.signupEmail(param);
 
-                if (res.status === 0)
+                if (res.status === Response.Status.OK)
                 {
                     History.pushState('/');
                 }

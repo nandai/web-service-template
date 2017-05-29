@@ -257,7 +257,7 @@ export default class Access
             const locale = req.ext.locale;
             const data =
             {
-                status:  -1,
+                status:  Response.Status.FAILED,
                 message: R.text(R.NOT_FOUND, locale)
             };
             res.status(404).json(data);

@@ -4,6 +4,7 @@
 import * as React from 'react';
 
 import {Request}  from 'libs/request';
+import {Response} from 'libs/response';
 import LoginApi   from '../api/login-api';
 import LoginView  from '../components/views/login-view';
 import {Store}    from '../components/views/login-view/store';
@@ -209,7 +210,7 @@ export default class LoginApp extends App
             {
                 const res = await LoginApi.loginEmail(param);
 
-                if (res.status)
+                if (res.status !== Response.Status.OK)
                 {
                     this.store.message = res.message;
                     this.render();

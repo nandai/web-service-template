@@ -2,6 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React   from 'react';
+
+import {Response}   from 'libs/response';
 import SettingsApi  from '../api/settings-api';
 import SettingsView from '../components/views/settings-view';
 import {Store}      from '../components/views/settings-view/store';
@@ -179,7 +181,7 @@ export default class SettingsApp extends App
         {
             const res = await SettingsApi.deleteAccount();
 
-            if (res.status === 0)
+            if (res.status === Response.Status.OK)
             {
                 History.back();
             }
@@ -213,8 +215,14 @@ export default class SettingsApp extends App
             {
                 const res = await SettingsApi.unlinkProvider({provider});
 
-                if (res.status === 0) {store.account[provider] = false;}
-                else                  {store.message = res.message;}
+                if (res.status === Response.Status.OK)
+                {
+                    store.account[provider] = false;
+                }
+                else
+                {
+                    store.message = res.message;
+                }
 
                 this.render();
                 log.stepOut();

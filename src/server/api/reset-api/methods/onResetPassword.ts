@@ -62,7 +62,7 @@ export async function onResetPassword(req : express.Request, res : express.Respo
 
                 const data : Response.ResetPassword =
                 {
-                    status:  1,
+                    status:  Response.Status.OK,
                     message: R.text(R.PASSWORD_RESET, locale)
                 };
                 res.json(data);

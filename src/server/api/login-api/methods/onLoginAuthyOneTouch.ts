@@ -36,7 +36,7 @@ export async function onLoginAuthyOneTouch(req : express.Request, res : express.
                 }
             }
 
-            const data : Response.LoginAuthyOneTouch = {status:0, approval};
+            const data : Response.LoginAuthyOneTouch = {status:Response.Status.OK, approval};
             res.json(data);
         }
         while (false);

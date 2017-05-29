@@ -79,7 +79,7 @@ export async function onChangePassword(req : express.Request, res : express.Resp
 
             const data : Response.ChangePassword =
             {
-                status:  1,
+                status:  Response.Status.OK,
                 message: R.text(R.PASSWORD_CHANGED, locale)
             };
             res.json(data);

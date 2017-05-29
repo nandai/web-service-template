@@ -64,7 +64,7 @@ export async function onJoin(req : express.Request, res : express.Response)
 
             const data : Response.Join =
             {
-                status:  1,
+                status:  Response.Status.OK,
                 message: R.text(R.SIGNUP_COMPLETED, locale)
             };
             res.json(data);

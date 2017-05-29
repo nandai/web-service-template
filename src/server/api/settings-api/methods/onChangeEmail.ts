@@ -71,7 +71,7 @@ export async function onChangeEmail(req : express.Request, res : express.Respons
 
                 const data : Response.ChangeEmail =
                 {
-                    status:  1,
+                    status:  Response.Status.OK,
                     message: R.text(R.EMAIL_CHANGED, locale)
                 };
                 res.json(data);

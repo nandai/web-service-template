@@ -69,7 +69,7 @@ export async function onInvite(req : express.Request, res : express.Response)
 
             const data : Response.Invite =
             {
-                status:  1,
+                status:  Response.Status.OK,
                 message: R.text(resource, locale)
             };
             res.json(data);

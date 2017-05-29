@@ -137,7 +137,6 @@ export namespace Response
     {
         BAD_REQUEST = -1,
         OK =           0,
-        FAILED =       1,
-        MESSAGE =      2
+        FAILED =       1
     }
 }

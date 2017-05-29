@@ -55,7 +55,7 @@ export default class Email extends Provider
 
                     const data : Response.SignupEmail =
                     {
-                        status:  1,
+                        status:  Response.Status.OK,
                         message: R.text(result ? R.SIGNUP_MAIL_SENDED : R.COULD_NOT_SEND_SIGNUP_MAIL, locale)
                     };
                     res.json(data);
@@ -120,7 +120,7 @@ export default class Email extends Provider
             }
             else
             {
-                const data : Response.LoginEmail = {status:0, smsId};
+                const data : Response.LoginEmail = {status:Response.Status.OK, smsId};
 
                 if (phrase) {
                     data.message = R.text(phrase, locale);

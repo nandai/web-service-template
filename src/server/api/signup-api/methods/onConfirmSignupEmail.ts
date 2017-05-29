@@ -63,7 +63,7 @@ export async function onConfirmSignupEmail(req : express.Request, res : express.
 
             const data : Response.ResetPassword =
             {
-                status:  1,
+                status:  Response.Status.OK,
                 message: R.text(R.SIGNUP_COMPLETED, locale)
             };
             res.json(data);

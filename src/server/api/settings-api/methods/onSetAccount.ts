@@ -57,7 +57,7 @@ export async function onSetAccount(req : express.Request, res : express.Response
                 break;
             }
 
-            let status = Response.Status.MESSAGE;
+            let status = Response.Status.OK;
             let phrase = R.SETTINGS_COMPLETED;
 
             // Authyからユーザーを削除する／しない

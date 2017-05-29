@@ -26,12 +26,12 @@ export function getUser(param : Request.GetUser, req : express.Request)
 
             if (account === null)
             {
-                data.status = 1;
+                data.status =  Response.Status.FAILED;
                 data.message = R.text(R.NOT_FOUND, locale);
             }
             else
             {
-                data.status = 0;
+                data.status = Response.Status.OK;
                 data.user = {id:account.id, name:account.name};
             }
 

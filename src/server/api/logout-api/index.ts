@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {Response}              from 'libs/response';
 import Utils                   from 'server/libs/utils';
 import SessionModel, {Session} from 'server/models/session-model';
 
@@ -24,7 +25,7 @@ export default class LogoutApi
             const session : Session = req.ext.session;
             await SessionModel.logout({sessionId:session.id});
 
-            const data = {status:0};
+            const data = {status:Response.Status.OK};
             res.json(data);
             log.stepOut();
         }

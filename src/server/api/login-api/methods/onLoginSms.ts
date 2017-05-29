@@ -84,7 +84,7 @@ export async function onLoginSms(req : express.Request, res : express.Response)
                 await LoginHistoryModel.add(loginHistory);
             }
 
-            const data : Response.LoginSms = {status:0};
+            const data : Response.LoginSms = {status:Response.Status.OK};
             res.json(data);
         }
         while (false);

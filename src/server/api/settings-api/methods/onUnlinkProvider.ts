@@ -57,7 +57,7 @@ export async function onUnlinkProvider(req : express.Request, res : express.Resp
                 account[provider] = null;
                 await AccountModel.update(account);
 
-                const data : Response.UnlinkProvider = {status:0};
+                const data : Response.UnlinkProvider = {status:Response.Status.OK};
                 res.json(data);
             }
             else

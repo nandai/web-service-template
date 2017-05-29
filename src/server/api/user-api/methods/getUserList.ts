@@ -19,13 +19,13 @@ export function getUserList()
             const accountList = await AccountModel.findList({registered:true});
             const userList = accountList.map((account) =>
             {
-                const user : Response.User = {id:account.id, name:account.name};
+                const  user : Response.User = {id:account.id, name:account.name};
                 return user;
             });
 
             const data : Response.GetUserList =
             {
-                status:   0,
+                status: Response.Status.OK,
                 userList
             };
 

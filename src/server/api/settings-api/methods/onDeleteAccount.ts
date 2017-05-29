@@ -29,7 +29,7 @@ export async function onDeleteAccount(req : express.Request, res : express.Respo
 
 //      req.logout();
 
-        const data : Response.DeleteAccount = {status:0};
+        const data : Response.DeleteAccount = {status:Response.Status.OK};
         res.json(data);
         log.stepOut();
     }

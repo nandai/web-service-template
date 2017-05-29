@@ -3,6 +3,7 @@
  */
 import * as React  from 'react';
 
+import {Response}  from 'libs/response';
 import CommonUtils from 'libs/utils';
 import LoginApi    from '../api/login-api';
 import SmsView     from '../components/views/sms-view';
@@ -83,7 +84,7 @@ export default class SmsApp extends App
             const {smsCode} = store;
             const res = await LoginApi.loginSms({smsId, smsCode});
 
-            if (res.status === 0)
+            if (res.status === Response.Status.OK)
             {
                 this.clearPollingTimer();
                 History.replaceState('/');

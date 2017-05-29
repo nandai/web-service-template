@@ -369,7 +369,7 @@ export default class Provider
                 //     }
                 //     else
                 //     {
-                //         const data = {status:0, smsId:smsId, sessionId:session.id};
+                //         const data = {status:Response.Status.OK, smsId:smsId, sessionId:session.id};
                 //         res.json(data);
                 //     }
                 }
