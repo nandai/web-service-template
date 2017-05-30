@@ -82,7 +82,7 @@ export default class SmsApp extends App
             const params = CommonUtils.parseRawQueryString(location.search.substring(1));
             const smsId : string = params.id;
             const {smsCode} = store;
-            const res = await LoginApi.loginSms({smsId, smsCode});
+            const res : Response.LoginSms = await LoginApi.loginSms({smsId, smsCode});
 
             if (res.status === Response.Status.OK)
             {
@@ -110,7 +110,7 @@ export default class SmsApp extends App
      */
     private async pollingAuthyOneTouchApprival()
     {
-        const res = await LoginApi.loginAuthyOneTouch();
+        const res : Response.LoginAuthyOneTouch = await LoginApi.loginAuthyOneTouch();
 
         if (res.approval)
         {

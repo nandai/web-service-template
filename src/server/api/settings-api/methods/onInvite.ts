@@ -37,6 +37,7 @@ export async function onInvite(req : express.Request, res : express.Response)
             const email = <string>param.email;
 
             let account = await AccountModel.findByProviderId('email', email);
+            let status = Response.Status.FAILED;
             let resource : string;
 
             if (account === null)
@@ -49,6 +50,7 @@ export async function onInvite(req : express.Request, res : express.Response)
 
                 if (result)
                 {
+                    status = Response.Status.OK;
                     resource = R.INVITE_MAIL_SENDED;
 
                     account = new Account();
@@ -67,11 +69,8 @@ export async function onInvite(req : express.Request, res : express.Response)
                 resource = R.ALREADY_EXISTS_EMAIL;
             }
 
-            const data : Response.Invite =
-            {
-                status:  Response.Status.OK,
-                message: R.text(resource, locale)
-            };
+            const message = R.text(resource, locale);
+            const data : Response.Invite = {status, message};
             res.json(data);
         }
         while (false);

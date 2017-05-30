@@ -2,6 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
+
+import {Response} from 'libs/response';
 import ResetApi   from '../api/reset-api';
 import ForgetView from '../components/views/forget-view';
 import {Store}    from '../components/views/forget-view/store';
@@ -71,7 +73,7 @@ export default class ForgetApp extends App
 
         try
         {
-            const res = await ResetApi.requestResetPassword({email:this.store.email});
+            const res : Response.RequestResetPassword = await ResetApi.requestResetPassword({email:this.store.email});
             store.message = res.message;
             this.render();
             log.stepOut();

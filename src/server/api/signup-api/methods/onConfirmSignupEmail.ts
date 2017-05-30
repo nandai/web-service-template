@@ -61,7 +61,7 @@ export async function onConfirmSignupEmail(req : express.Request, res : express.
             account.invite_id = null;
             await AccountModel.update(account);
 
-            const data : Response.ResetPassword =
+            const data : Response.ConfirmSignupEmail =
             {
                 status:  Response.Status.OK,
                 message: R.text(R.SIGNUP_COMPLETED, locale)

@@ -2,6 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React          from 'react';
+
+import {Response}          from 'libs/response';
 import SettingsApi         from '../api/settings-api';
 import SettingsAccountView from '../components/views/settings-account-view';
 import {Store}             from '../components/views/settings-account-view/store';
@@ -106,9 +108,13 @@ export default class SettingsAccountApp extends App
             const {account} = store;
             const {name, countryCode, phoneNo, twoFactorAuth} = account;
 
-            const res = await SettingsApi.setAccount({name, countryCode, phoneNo, twoFactorAuth});
-            store.account = res.account;
+            const res : Response.SetAccount = await SettingsApi.setAccount({name, countryCode, phoneNo, twoFactorAuth});
             store.message = res.message;
+
+            if (res.status === Response.Status.OK) {
+                store.account = res.account;
+            }
+
             this.render();
             log.stepOut();
         }

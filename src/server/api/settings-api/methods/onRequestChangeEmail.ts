@@ -86,10 +86,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                 }
 
                 const data : Response.RequestChangeEmail =
-                {
-                    status:  Response.Status.OK,
-                    message: R.text(result ? R.EMAIL_CHANGED : R.COULD_NOT_CHANGE_EMAIL, locale)
-                };
+                    Utils.createMessageResponse(result, R.EMAIL_CHANGED, R.COULD_NOT_CHANGE_EMAIL, locale);
                 res.json(data);
             }
 
@@ -110,10 +107,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                 }
 
                 const data : Response.RequestChangeEmail =
-                {
-                    status:  Response.Status.OK,
-                    message: R.text(result ? R.CHANGE_MAIL_SENDED : R.COULD_NOT_SEND_CHANGE_MAIL, locale)
-                };
+                    Utils.createMessageResponse(result, R.CHANGE_MAIL_SENDED, R.COULD_NOT_SEND_CHANGE_MAIL, locale);
                 res.json(data);
             }
         }

@@ -52,10 +52,7 @@ export async function onRequestResetPassword(req : express.Request, res : expres
             const result = await Utils.sendMail(template.subject, account.email, contents);
 
             const data : Response.RequestResetPassword =
-            {
-                status:  Response.Status.OK,
-                message: R.text(result ? R.RESET_MAIL_SENDED : R.COULD_NOT_SEND_RESET_MAIL, locale)
-            };
+                Utils.createMessageResponse(result, R.RESET_MAIL_SENDED, R.COULD_NOT_SEND_RESET_MAIL, locale);
             res.json(data);
         }
         while (false);

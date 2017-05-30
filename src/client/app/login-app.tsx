@@ -138,11 +138,8 @@ export default class LoginApp extends App
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onLogin');
         try
         {
-            await this.login('email',
-            {
-                email:    this.store.email,
-                password: this.store.password
-            });
+            const {email, password} = this.store;
+            await this.login({email, password});
             log.stepOut();
         }
         catch (err) {log.stepOut();}
@@ -201,14 +198,14 @@ export default class LoginApp extends App
     /**
      * login
      */
-    private login(sns : string, param : Request.LoginEmail)
+    private login(param : Request.LoginEmail)
     {
         return new Promise(async (resolve : () => void, reject) =>
         {
             const log = slog.stepIn(LoginApp.CLS_NAME, 'login');
             try
             {
-                const res = await LoginApi.loginEmail(param);
+                const res : Response.LoginEmail = await LoginApi.loginEmail(param);
 
                 if (res.status !== Response.Status.OK)
                 {

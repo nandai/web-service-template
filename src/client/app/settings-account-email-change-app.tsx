@@ -3,6 +3,7 @@
  */
 import * as React                     from 'react';
 
+import {Response}                     from 'libs/response';
 import CommonUtils                    from 'libs/utils';
 import SettingsApi                    from '../api/settings-api';
 import SettingsAccountEmailChangeView from '../components/views/settings-account-email-change-view';
@@ -67,7 +68,7 @@ export default class SettingsAccountEmailChangeApp extends App
             const changeId : string = params.id;
             const {password} = store;
 
-            const res = await SettingsApi.changeEmail({changeId, password});
+            const res : Response.ChangeEmail = await SettingsApi.changeEmail({changeId, password});
             store.message = res.message;
             this.render();
             log.stepOut();

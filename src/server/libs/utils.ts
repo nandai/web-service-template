@@ -1,7 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config from '../config';
+import {Response}   from 'libs/response';
+import Config       from 'server/config';
+import R            from 'server/libs/r';
 
 import crypto =  require('crypto');
 import express = require('express');
@@ -123,8 +125,11 @@ export default class Utils
      */
     static validatePassword(password : string) : boolean
     {
-        const len = password.length;
+        if (typeof password !== 'string') {
+            return false;
+        }
 
+        const len = password.length;
         if (len < 8 || 16 < len) {
             return false;
         }
@@ -350,5 +355,34 @@ export default class Utils
         }
 
         return locale;
+    }
+
+    /**
+     * メッセージレスポンスを作成する
+     */
+    static createMessageResponse(
+        ok           : boolean,
+        okPhrase     : string,
+        failedPhrase : string,
+        locale       : string)
+    {
+        let data : {status : number, message : string};
+        if (ok)
+        {
+            data =
+            {
+                status:  Response.Status.OK,
+                message: R.text(okPhrase, locale)
+            };
+        }
+        else
+        {
+            data =
+            {
+                status:  Response.Status.FAILED,
+                message: R.text(failedPhrase, locale)
+            };
+        }
+        return data;
     }
 }

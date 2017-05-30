@@ -179,7 +179,7 @@ export default class SettingsApp extends App
 
         try
         {
-            const res = await SettingsApi.deleteAccount();
+            const res : Response.DeleteAccount = await SettingsApi.deleteAccount();
 
             if (res.status === Response.Status.OK)
             {
@@ -213,7 +213,7 @@ export default class SettingsApp extends App
 
             try
             {
-                const res = await SettingsApi.unlinkProvider({provider});
+                const res : Response.UnlinkProvider = await SettingsApi.unlinkProvider({provider});
 
                 if (res.status === Response.Status.OK)
                 {

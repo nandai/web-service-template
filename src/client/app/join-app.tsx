@@ -4,6 +4,7 @@
 import * as React  from 'react';
 
 import {Request}   from 'libs/request';
+import {Response}  from 'libs/response';
 import CommonUtils from 'libs/utils';
 import SignupApi   from '../api/signup-api';
 import JoinView    from '../components/views/join-view';
@@ -67,7 +68,7 @@ export default class JoinApp extends App
             const params = CommonUtils.parseRawQueryString(location.search.substring(1));
             const inviteId : string = params.id;
             const password = store.password;
-            const res = await SignupApi.join({inviteId, password});
+            const res : Response.Join = await SignupApi.join({inviteId, password});
             store.message = res.message;
             this.render();
             log.stepOut();

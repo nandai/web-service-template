@@ -57,7 +57,6 @@ export async function onSetAccount(req : express.Request, res : express.Response
                 break;
             }
 
-            let status = Response.Status.OK;
             let phrase = R.SETTINGS_COMPLETED;
 
             // Authyからユーザーを削除する／しない
@@ -89,7 +88,6 @@ export async function onSetAccount(req : express.Request, res : express.Response
                 if (account.email === null)
                 {
                     twoFactorAuth = account.two_factor_auth;
-                    status = Response.Status.FAILED;
                     phrase = R.CANNOT_PERFORMED_WITH_AUTHY;
                 }
                 else
@@ -117,7 +115,7 @@ export async function onSetAccount(req : express.Request, res : express.Response
 
             const data : Response.SetAccount =
             {
-                status,
+                status:  Response.Status.OK,
                 account: Converter.accountToResponse(account),
                 message: R.text(phrase, locale)
             };

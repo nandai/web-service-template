@@ -174,7 +174,7 @@ class WstApp
 
             try
             {
-                const res = await SettingsApi.getAccount();
+                const res : Response.GetAccount = await SettingsApi.getAccount();
                 account = res.account;
             }
             catch (err)

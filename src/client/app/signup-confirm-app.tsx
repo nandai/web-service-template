@@ -4,6 +4,7 @@
 import * as React        from 'react';
 
 import {Request}         from 'libs/request';
+import {Response}        from 'libs/response';
 import CommonUtils       from 'libs/utils';
 import SignupApi         from '../api/signup-api';
 import SignupConfirmView from '../components/views/signup-confirm-view';
@@ -67,7 +68,7 @@ export default class SignupConfirmApp extends App
             const params = CommonUtils.parseRawQueryString(location.search.substring(1));
             const signupId : string = params.id;
             const password = store.password;
-            const res = await SignupApi.confirmSignupEmail({signupId, password});
+            const res : Response.ConfirmSignupEmail = await SignupApi.confirmSignupEmail({signupId, password});
             store.message = res.message;
             this.render();
             log.stepOut();

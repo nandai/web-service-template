@@ -2,6 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React from 'react';
+
+import {Response} from 'libs/response';
 import UserApi    from '../api/user-api';
 import UserView   from '../components/views/user-view';
 import {Store}    from '../components/views/user-view/store';
@@ -43,7 +45,7 @@ export default class UserApp extends App
             try
             {
                 const {store} = this;
-                const res = await UserApi.getUser({id:params.id});
+                const res : Response.GetUser = await UserApi.getUser({id:params.id});
                 store.user = res.user;
                 resolve();
             }

@@ -2,6 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React                  from 'react';
+
+import {Response}                  from 'libs/response';
 import SettingsApi                 from '../api/settings-api';
 import SettingsAccountPasswordView from '../components/views/settings-account-password-view';
 import {Store}                     from '../components/views/settings-account-password-view/store';
@@ -97,7 +99,7 @@ export default class SettingsAccountPasswordApp extends App
         {
             const {oldPassword, newPassword, confirm} = store;
 
-            const res = await SettingsApi.changePassword({oldPassword, newPassword, confirm});
+            const res : Response.ChangePassword = await SettingsApi.changePassword({oldPassword, newPassword, confirm});
             store.message = res.message;
             this.render();
             log.stepOut();

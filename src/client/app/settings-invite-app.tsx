@@ -2,6 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React         from 'react';
+
+import {Response}         from 'libs/response';
 import SettingsApi        from '../api/settings-api';
 import SettingsInviteView from '../components/views/settings-invite-view';
 import {Store}            from '../components/views/settings-invite-view/store';
@@ -76,7 +78,7 @@ export default class SettingsInviteApp extends App
         {
             const {email} = store;
 
-            const res = await SettingsApi.invite({email});
+            const res : Response.Invite = await SettingsApi.invite({email});
             store.message = res.message;
             this.render();
             log.stepOut();

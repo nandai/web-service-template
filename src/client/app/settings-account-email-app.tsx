@@ -2,6 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React               from 'react';
+
+import {Response}               from 'libs/response';
 import SettingsApi              from '../api/settings-api';
 import SettingsAccountEmailView from '../components/views/settings-account-email-view';
 import {Store}                  from '../components/views/settings-account-email-view/store';
@@ -75,7 +77,7 @@ export default class SettingsAccountEmailApp extends App
             const {account} = store;
             const {email} = account;
 
-            const res = await SettingsApi.requestChangeEmail({email});
+            const res : Response.RequestChangeEmail = await SettingsApi.requestChangeEmail({email});
             store.message = res.message;
             this.render();
             log.stepOut();

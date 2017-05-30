@@ -168,18 +168,9 @@ export default class SignupApp extends App
 
             try
             {
-                const res = await SignupApi.signupEmail(param);
-
-                if (res.status === Response.Status.OK)
-                {
-                    History.pushState('/');
-                }
-                else
-                {
-                    store.message = res.message;
-                    this.render();
-                }
-
+                const res : Response.SignupEmail = await SignupApi.signupEmail(param);
+                store.message = res.message;
+                this.render();
                 log.stepOut();
                 resolve();
             }

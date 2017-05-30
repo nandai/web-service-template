@@ -3,6 +3,7 @@
  */
 import * as React  from 'react';
 
+import {Response}  from 'libs/response';
 import CommonUtils from 'libs/utils';
 import ResetApi    from '../api/reset-api';
 import ResetView   from '../components/views/reset-view';
@@ -78,7 +79,7 @@ export default class ResetApp extends App
             const params = CommonUtils.parseRawQueryString(location.search.substring(1));
             const resetId : string = params.id;
             const {password, confirm} = store;
-            const res = await ResetApi.resetPassword({resetId, password, confirm});
+            const res : Response.ResetPassword = await ResetApi.resetPassword({resetId, password, confirm});
             store.message = res.message;
             this.render();
             log.stepOut();
