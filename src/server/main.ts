@@ -278,7 +278,7 @@ class Initializer
         this.app.get(   '/api/user',                 UserApi  .onGetUser);
         this.app.get(   '/api/users',                UserApi  .onGetUserList);
 
-        this.app.get(   '/api/settings/account',              Access.auth, SettingsApi.onGetAccount);
+        this.app.get(   '/api/settings/account',                           SettingsApi.onGetAccount);
         this.app.put(   '/api/settings/account',              Access.auth, SettingsApi.onSetAccount);
         this.app.delete('/api/settings/account',              Access.auth, SettingsApi.onDeleteAccount);
         this.app.put(   `/api/settings/account/unlink`,       Access.auth, SettingsApi.onUnlinkProvider);

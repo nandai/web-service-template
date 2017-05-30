@@ -8,6 +8,10 @@ export default class Converter
 {
     static accountToResponse(account : Account) : Response.Account
     {
+        if (account === null) {
+            return null;
+        }
+
         const response : Response.Account =
         {
             name:          account.name,
