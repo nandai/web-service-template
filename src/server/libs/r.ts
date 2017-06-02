@@ -1,7 +1,8 @@
 /**
  * (C) 2016 printf.jp
  */
-import Config from '../config';
+import CommonUtils from 'libs/utils';
+import Config      from '../config';
 
 import fs = require('fs');
 
@@ -18,48 +19,53 @@ export default class R
         'ja': {}
     };
 
-    static ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG = 'accountNameTooShortOrTooLong';
-    static ALREADY_EMAIL_CHANGED =              'alreadyEmailChanged';
-    static ALREADY_EXISTS_EMAIL =               'alreadyExistsEmail';
-    static ALREADY_LOGIN_ANOTHER_ACCOUNT =      'alreadyLoginAnotherAccount';
-    static ALREADY_PASSWORD_RESET =             'alreadyPasswordReset';
-    static ALREADY_JOIN =                       'alreadyJoin';
-    static ALREADY_SIGNUP =                     'alreadySignup';
-    static BAD_REQUEST =                        'badRequest';
-    static CANNOT_EMPTY_EMAIL =                 'cannotEmptyEmail';
-    static CANNOT_ENTER_BEFORE_AFTER_SPACE =    'cannotEnterBeforeAfterSpace';
-    static CANNOT_LINK =                        'cannotLink';
-    static CANNOT_PERFORMED_WITH_AUTHY =        'cannotPerformedWithAuthy';
-    static CANNOT_SET_PASSWORD =                'cannotSetPassword';
-    static CANNOT_SIGNUP =                      'cannotSignup';
-    static CANNOT_UNLINK =                      'cannotUnlink';
-    static CHANGE_MAIL_SENDED =                 'changeMailSended';
-    static COULD_NOT_CHANGE_EMAIL =             'couldNotChangeEmail';
-    static COULD_NOT_SEND_CHANGE_MAIL =         'couldNotSendChangeMail';
-    static COULD_NOT_SEND_INVITE_MAIL =          'couldNotSendInviteMail';
-    static COULD_NOT_SEND_RESET_MAIL =          'couldNotSendResetMail';
-    static COULD_NOT_SEND_SIGNUP_MAIL =         'couldNotSendSignupMail';
-    static COULD_NOT_SEND_SMS =                 'couldNotSendSms';
-    static EMAIL_CHANGED =                      'emailChanged';
-    static INCORRECT_ACCOUNT =                  'incorrectAccount';
-    static INVALID_COUNTRY_CODE =               'invalidCountryCode';
-    static INVALID_EMAIL =                      'invalidEmail';
-    static INVALID_EMAIL_AUTH =                 'invalidEmailAuth';
-    static INVALID_PASSWORD =                   'invalidPassword';
-    static INVITE_MAIL_SENDED =                 'inviteMailSended';
-    static MISMATCH_PASSWORD =                  'mismatchPassword';
-    static MISMATCH_SMS_CODE =                  'mismatchSmsCode';
-    static NO_LOGIN =                           'noLogin';
-    static NOT_FOUND =                          'notFound';
-    static PASSWORD_CHANGED =                   'passwordChanged';
-    static PASSWORD_RESET =                     'passwordReset';
-    static PASSWORD_TOO_SHORT_OR_TOO_LONG =     'passwordTooShortOrTooLong';
-    static REQUIRE_COUNTRY_CODE_AND_PHONE_NO =  'requireCountryCodeAndPhoneNo';
-    static RESET_MAIL_SENDED =                  'resetMailSended';
-    static SETTINGS_COMPLETED =                 'settingsCompleted';
-    static SIGNUP_COMPLETED =                   'signupCompleted';
-    static SIGNUP_MAIL_SENDED =                 'signupMailSended';
-    static SMS_LOGIN_CODE =                     'smsLoginCode';
+    static ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG =           'accountNameTooShortOrTooLong';
+    static ALREADY_EMAIL_CHANGED =                        'alreadyEmailChanged';
+    static ALREADY_EXISTS_EMAIL =                         'alreadyExistsEmail';
+    static ALREADY_LOGIN_ANOTHER_ACCOUNT =                'alreadyLoginAnotherAccount';
+    static ALREADY_PASSWORD_RESET =                       'alreadyPasswordReset';
+    static ALREADY_JOIN =                                 'alreadyJoin';
+    static ALREADY_SIGNUP =                               'alreadySignup';
+    static ALREADY_USE_USER_NAME =                        'alreadyUseUserName';
+    static BAD_REQUEST =                                  'badRequest';
+    static CANNOT_EMPTY_EMAIL =                           'cannotEmptyEmail';
+    static CANNOT_ENTER_ACCOUNT_NAME_BEFORE_AFTER_SPACE = 'cannotEnterAccountNameBeforeAfterSpace';
+    static CANNOT_ENTER_USER_NAME_ONLY_NUMBERS =          'cannotEnterUserNameOnlyNumbers';
+    static CANNOT_ENTER_USER_NAME_BEFORE_AFTER_SPACE =    'cannotEnterUserNameBeforeAfterSpace';
+    static CANNOT_LINK =                                  'cannotLink';
+    static CANNOT_PERFORMED_WITH_AUTHY =                  'cannotPerformedWithAuthy';
+    static CANNOT_SET_PASSWORD =                          'cannotSetPassword';
+    static CANNOT_SIGNUP =                                'cannotSignup';
+    static CANNOT_UNLINK =                                'cannotUnlink';
+    static CHANGE_MAIL_SENDED =                           'changeMailSended';
+    static COULD_NOT_CHANGE_EMAIL =                       'couldNotChangeEmail';
+    static COULD_NOT_SEND_CHANGE_MAIL =                   'couldNotSendChangeMail';
+    static COULD_NOT_SEND_INVITE_MAIL =                   'couldNotSendInviteMail';
+    static COULD_NOT_SEND_RESET_MAIL =                    'couldNotSendResetMail';
+    static COULD_NOT_SEND_SIGNUP_MAIL =                   'couldNotSendSignupMail';
+    static COULD_NOT_SEND_SMS =                           'couldNotSendSms';
+    static EMAIL_CHANGED =                                'emailChanged';
+    static ENTER_ALPHABETICAL_NUMBER =                    'enterAlphabeticalNumber';
+    static INCORRECT_ACCOUNT =                            'incorrectAccount';
+    static INVALID_COUNTRY_CODE =                         'invalidCountryCode';
+    static INVALID_EMAIL =                                'invalidEmail';
+    static INVALID_EMAIL_AUTH =                           'invalidEmailAuth';
+    static INVALID_PASSWORD =                             'invalidPassword';
+    static INVITE_MAIL_SENDED =                           'inviteMailSended';
+    static MISMATCH_PASSWORD =                            'mismatchPassword';
+    static MISMATCH_SMS_CODE =                            'mismatchSmsCode';
+    static NO_LOGIN =                                     'noLogin';
+    static NOT_FOUND =                                    'notFound';
+    static PASSWORD_CHANGED =                             'passwordChanged';
+    static PASSWORD_RESET =                               'passwordReset';
+    static PASSWORD_TOO_SHORT_OR_TOO_LONG =               'passwordTooShortOrTooLong';
+    static REQUIRE_COUNTRY_CODE_AND_PHONE_NO =            'requireCountryCodeAndPhoneNo';
+    static RESET_MAIL_SENDED =                            'resetMailSended';
+    static SETTINGS_COMPLETED =                           'settingsCompleted';
+    static SIGNUP_COMPLETED =                             'signupCompleted';
+    static SIGNUP_MAIL_SENDED =                           'signupMailSended';
+    static SMS_LOGIN_CODE =                               'smsLoginCode';
+    static USER_NAME_TOO_LONG =                           'userNameTooLong';
 
     private static mailTemplates =
     {
@@ -149,12 +155,16 @@ export default class R
      *
      * @return  文字列
      */
-    static text(phrase : string, locale : string) : string
+    static text(phrase : string, locale  : string, args = {}) : string
     {
+        if ((locale in R.texts) === false) {
+             locale = 'en';
+        }
+
         const texts = R.texts[locale];
 
         if (phrase in texts) {
-            return texts[phrase];
+            return CommonUtils.formatString(texts[phrase], args);
         }
 
         return null;

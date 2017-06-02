@@ -9,7 +9,7 @@ import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
-import Utils         from 'client/libs/utils';
+import CommonUtils   from 'libs/utils';
 import {Store}       from './store';
 
 interface SettingsViewProps
@@ -60,6 +60,6 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
         const format = R.text(store.account[key]
             ? R.UNLINK_PROVIDER
             : R.LINK_PROVIDER, store.locale);
-        return Utils.formatString(format, {provider});
+        return CommonUtils.formatString(format, {provider});
     }
 }

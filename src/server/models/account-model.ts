@@ -17,6 +17,7 @@ export class Account
 {
     id                     : number = null;
     name                   : string = null;
+    user_name              : string = null; // 重複不可
     twitter                : string = null;
     facebook               : string = null;
     google                 : string = null;
@@ -249,6 +250,7 @@ export default class AccountModel
             for (const account of AccountModel.list)
             {
                 if ((cond.accountId === undefined || account.id        === cond.accountId)
+                &&  (cond.userName  === undefined || account.user_name === cond.userName)
                 &&  (cond.signupId  === undefined || account.signup_id === cond.signupId)
                 &&  (cond.inviteId  === undefined || account.invite_id === cond.inviteId)
                 &&  (cond.resetId   === undefined || account.reset_id  === cond.resetId)
@@ -281,6 +283,18 @@ export default class AccountModel
     static find(accountId : number) : Promise<Account>
     {
         return AccountModel.findByCondition({accountId});
+    }
+
+    /**
+     * アカウントを検索する
+     *
+     * @param   userName    ユーザー名
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    static findByUserName(userName : string) : Promise<Account>
+    {
+        return AccountModel.findByCondition({userName});
     }
 
     /**
@@ -590,6 +604,7 @@ export default class AccountModel
 interface AccountFindCondition
 {
     accountId? : number;
+    userName?  : string;
     signupId?  : string;
     inviteId?  : string;
     resetId?   : string;

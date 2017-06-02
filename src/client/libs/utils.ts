@@ -27,23 +27,6 @@ export default class Utils
     }
 
     /**
-     * 文字列フォーマット<br>
-     * 使用方法: formatString('Hello ${name} !', {name:'Taro'});
-     *
-     * @param   format  フォーマット
-     * @param   args    引数
-     *
-     * @return  文字列
-     */
-    static formatString(format : string, args) : string
-    {
-        return format.replace(/\${(.*?)}/g, (match, key) =>
-        {
-            return (key in args ? args[key] : match);
-        });
-    }
-
-    /**
      * URLからパラメータを取得する
      *
      * @param   url     /users/1のようなURL（location.pathname相当）

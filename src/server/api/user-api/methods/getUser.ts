@@ -32,7 +32,12 @@ export function getUser(param : Request.GetUser, req : express.Request)
             else
             {
                 data.status = Response.Status.OK;
-                data.user = {id:account.id, name:account.name};
+                data.user =
+                {
+                    id:          account.id,
+                    accountName: account.name,
+                    name:        account.user_name
+                };
             }
 
             log.stepOut();

@@ -1,14 +1,17 @@
 {
-    "accountNameTooShortOrTooLong": "アカウント名が短い、または長すぎます。",
+    "accountNameTooShortOrTooLong": "アカウント名は${min}～${max}文字で入力してください。",
     "alreadyEmailChanged": "メールアドレスは変更済みです。",
     "alreadyExistsEmail": "そのメールアドレスは既に登録されています。",
     "alreadyLoginAnotherAccount": "既に別のアカウントでログインしています。",
     "alreadyPasswordReset": "パスワードはリセット済みです。",
     "alreadyJoin": "既に参加しています。",
     "alreadySignup": "既に登録されています。",
+    "alreadyUseUserName": "そのユーザー名は既に使われています。",
     "badRequest": "リクエストが正しくありません。",
     "cannotEmptyEmail": "メールアドレスを未設定にできません。",
-    "cannotEnterBeforeAfterSpace": "空白のみ、または前後に空白は入力できません。",
+    "cannotEnterAccountNameBeforeAfterSpace": "アカウント名に空白のみ、または前後に空白は入力できません。",
+    "cannotEnterUserNameOnlyNumbers": "数字のみのユーザー名は入力できません。",
+    "cannotEnterUserNameBeforeAfterSpace": "ユーザー名に空白のみ、または前後に空白は入力できません。",
     "cannotLink": "紐づけできません。",
     "cannotPerformedWithAuthy": "メールアドレスが設定されていないのでAuthyで二段階認証を行えません。",
     "cannotSetPassword": "パスワードを設定できません。",
@@ -22,6 +25,7 @@
     "couldNotSendSignupMail": "仮登録のメールを送信できませんでした。",
     "couldNotSendSms": "SMSの送信に失敗したため二段階認証をスキップしました。電話番号を確認してください。",
     "emailChanged": "メールアドレスを変更しました。",
+    "enterAlphabeticalNumber": "英数、または'-'、'_'を入力してください。",
     "incorrectAccount": "アカウントが正しくありません。",
     "invalidCountryCode": "国コードが正しくありません。",
     "invalidEmail": "メールアドレスが正しくありません。",
@@ -40,5 +44,6 @@
     "settingsCompleted": "設定を完了しました。",
     "signupCompleted": "登録が完了しました。",
     "signupMailSended": "仮登録のメールを送信しました。",
-    "smsLoginCode": "ログインコード"
+    "smsLoginCode": "ログインコード",
+    "userNameTooLong": "ユーザー名は${max}文字以内で入力してください。"
 }

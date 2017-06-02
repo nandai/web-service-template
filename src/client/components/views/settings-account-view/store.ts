@@ -9,6 +9,7 @@ export interface Store
     account              : Response.Account;
     message              : string;
     onNameChange?        : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onUserNameChange?    : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onPhoneNoChange?     : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onCountryCodeChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
     onTwoFactorAuth?     : (twoFactorAuth : string) => void;

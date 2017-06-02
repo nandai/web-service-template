@@ -6,6 +6,7 @@ export namespace Response
     export interface Account
     {
         name          : string;
+        userName      : string;
         email         : string;
         countryCode   : string;
         phoneNo       : string;
@@ -18,8 +19,9 @@ export namespace Response
 
     export interface User
     {
-        id   : number;
-        name : string;
+        id          : number;
+        accountName : string;
+        name        : string;
     }
 
     export interface LoginEmail

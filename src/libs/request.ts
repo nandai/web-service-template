@@ -68,6 +68,7 @@ export namespace Request
     export interface SetAccount
     {
         name          : string | any[];
+        userName      : string | any[];
         countryCode   : string | any[];
         phoneNo       : string | any[];
         twoFactorAuth : string | any[];

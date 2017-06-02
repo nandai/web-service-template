@@ -41,6 +41,7 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
                 <ViewContents>
                     <form>
                         <Input type="text" placeholder={R.text(R.ACCOUNT_NAME, locale)} value={account.name}        onChange={store.onNameChange} />
+                        <Input type="text" placeholder={R.text(R.USER_NAME,    locale)} value={account.userName}    onChange={store.onUserNameChange} />
                         <Input type="text" placeholder={R.text(R.PHONE_NO,     locale)} value={account.phoneNo}     onChange={store.onPhoneNoChange} />
                         <Input type="text" placeholder={R.text(R.COUNTRY_CODE, locale)} value={account.countryCode} onChange={store.onCountryCodeChange} />
                         <RadioButtons name="two-factor-auth" items={items} value={account.twoFactorAuth} onClick={store.onTwoFactorAuth} />

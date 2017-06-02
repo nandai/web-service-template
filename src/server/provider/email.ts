@@ -2,6 +2,7 @@
  * (C) 2016 printf.jp
  */
 import {Response}     from 'libs/response';
+import CommonUtils    from 'libs/utils';
 import {PassportUser} from '../libs/passport';
 import R              from '../libs/r';
 import Utils          from '../libs/utils';
@@ -50,7 +51,7 @@ export default class Email extends Provider
                     const url = Utils.generateUrl('signup', account.signup_id);
                     const locale = req.ext.locale;
                     const template = R.mail(R.NOTICE_SIGNUP, locale);
-                    const contents = Utils.formatString(template.contents, {url});
+                    const contents = CommonUtils.formatString(template.contents, {url});
                     const result = await Utils.sendMail(template.subject, account.email, contents);
 
                     const data : Response.SignupEmail =

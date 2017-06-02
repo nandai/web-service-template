@@ -31,6 +31,7 @@ export async function onSetAccount(req : express.Request, res : express.Response
             const condition : Request.SetAccount =
             {
                 name:          ['string', null, true],
+                userName:      ['string', null, true],
                 countryCode:   ['string', null, true],
                 phoneNo:       ['string', null, true],
                 twoFactorAuth: ['string', null, true]
@@ -45,22 +46,25 @@ export async function onSetAccount(req : express.Request, res : express.Response
             }
 
             const name =          <string>param.name;
+            const userName =      <string>param.userName;
             const countryCode =   <string>param.countryCode;
             const phoneNo =       <string>param.phoneNo;
             let   twoFactorAuth = <string>param.twoFactorAuth;
 
             // 検証
-            const result = isValid(name, countryCode, phoneNo, twoFactorAuth);
+            const session : Session = req.ext.session;
+            const alreadyExistsAccount = await AccountModel.findByUserName(userName);
+            const result = isValid(name, userName, countryCode, phoneNo, twoFactorAuth, session.account_id, alreadyExistsAccount, locale);
+
             if (result.status !== Response.Status.OK)
             {
-                res.ext.error(result.status, R.text(result.phrase, locale));
+                res.ext.error(result.status, result.message);
                 break;
             }
 
             let phrase = R.SETTINGS_COMPLETED;
 
             // Authyからユーザーを削除する／しない
-            const session : Session = req.ext.session;
             const account = await AccountModel.find(session.account_id);
             const newCountryCode = (countryCode && countryCode.length > 0 ? countryCode : null);
             const newPhoneNo =     (phoneNo     && phoneNo    .length > 0 ? phoneNo     : null);
@@ -108,6 +112,7 @@ export async function onSetAccount(req : express.Request, res : express.Response
 
             // アカウント情報更新
             account.name =            name;
+            account.user_name =       userName;
             account.country_code =    newCountryCode;
             account.phone_no =        newPhoneNo;
             account.two_factor_auth = twoFactorAuth;
@@ -130,10 +135,19 @@ export async function onSetAccount(req : express.Request, res : express.Response
 /**
  * 検証
  */
-function isValid(name : string, countryCode : string, phoneNo : string, twoFactorAuth : string)
+function isValid(
+    name                 : string,
+    userName             : string,
+    countryCode          : string,
+    phoneNo              : string,
+    twoFactorAuth        : string,
+    accountId            : number,
+    alreadyExistsAccount : Account,
+    locale               : string)
 {
     let status = Response.Status.OK;
     let phrase : string;
+    let args = {};
 
     do
     {
@@ -142,16 +156,58 @@ function isValid(name : string, countryCode : string, phoneNo : string, twoFacto
         if (name !== name.trim())
         {
             status = Response.Status.FAILED;
-            phrase = R.CANNOT_ENTER_BEFORE_AFTER_SPACE;
+            phrase = R.CANNOT_ENTER_ACCOUNT_NAME_BEFORE_AFTER_SPACE;
             break;
         }
 
-        const len = name.length;
+        let len = name.length;
         if (len < 1 || 20 < len)
         {
             status = Response.Status.FAILED;
             phrase = R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG;
+            args = {min:1, max:20};
             break;
+        }
+
+        // ユーザー名チェック
+        if (userName)
+        {
+            if (userName !== userName.trim())
+            {
+                status = Response.Status.FAILED;
+                phrase = R.CANNOT_ENTER_USER_NAME_BEFORE_AFTER_SPACE;
+                break;
+            }
+
+            len = userName.length;
+            if (len < 0 || 20 < len)
+            {
+                status = Response.Status.FAILED;
+                phrase = R.USER_NAME_TOO_LONG;
+                args = {min:0, max:20};
+                break;
+            }
+
+            if (userName && isNaN(Number(userName)) === false)
+            {
+                status = Response.Status.FAILED;
+                phrase = R.CANNOT_ENTER_USER_NAME_ONLY_NUMBERS;
+                break;
+            }
+
+            if (userName.match(/^[0-9a-zA-Z-_]+$/) === null)
+            {
+                status = Response.Status.FAILED;
+                phrase = R.ENTER_ALPHABETICAL_NUMBER;
+                break;
+            }
+
+            if (alreadyExistsAccount && alreadyExistsAccount.id !== accountId)
+            {
+                status = Response.Status.FAILED;
+                phrase = R.ALREADY_USE_USER_NAME;
+                break;
+            }
         }
 
         // 国コードチェック
@@ -186,7 +242,13 @@ function isValid(name : string, countryCode : string, phoneNo : string, twoFacto
         }
     }
     while (false);
-    return ({status, phrase});
+
+    let message : string;
+    if (phrase) {
+        message = R.text(phrase, locale, args);
+    }
+
+    return ({status, message});
 }
 
 /**

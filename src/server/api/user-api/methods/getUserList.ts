@@ -19,7 +19,12 @@ export function getUserList()
             const accountList = await AccountModel.findList({registered:true});
             const userList = accountList.map((account) =>
             {
-                const  user : Response.User = {id:account.id, name:account.name};
+                const  user : Response.User =
+                {
+                    id:          account.id,
+                    accountName: account.name,
+                    name:        account.user_name
+                };
                 return user;
             });
 

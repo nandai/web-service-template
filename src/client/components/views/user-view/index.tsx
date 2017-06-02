@@ -23,13 +23,19 @@ export default class UserView extends React.Component<UserViewProps, {}>
     render() : JSX.Element
     {
         const {store} = this.props;
-        const {locale} = store;
+        const {locale, user} = store;
+
+        let userNameEl : JSX.Element;
+        if (user.name) {
+            userNameEl = <p>@{store.user.name}</p>;
+        }
 
         return (
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    <p>{store.user.name}</p>
+                    <p>{store.user.accountName}</p>
+                    {userNameEl}
                     <Button onClick={store.onBack}>{R.text(R.BACK, locale)}</Button>
                 </ViewContents>
             </ViewContainer>

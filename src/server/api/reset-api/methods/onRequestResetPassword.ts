@@ -3,6 +3,7 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import CommonUtils  from 'libs/utils';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
 import AccountModel from 'server/models/account-model';
@@ -48,7 +49,7 @@ export async function onRequestResetPassword(req : express.Request, res : expres
 
             const url = Utils.generateUrl('reset', account.reset_id);
             const template = R.mail(R.NOTICE_RESET_PASSWORD, locale);
-            const contents = Utils.formatString(template.contents, {url});
+            const contents = CommonUtils.formatString(template.contents, {url});
             const result = await Utils.sendMail(template.subject, account.email, contents);
 
             const data : Response.RequestResetPassword =

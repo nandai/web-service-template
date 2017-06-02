@@ -15,6 +15,7 @@ export default class Converter
         const response : Response.Account =
         {
             name:          account.name,
+            userName:      account.user_name,
             email:         account.email,
             countryCode:   account.country_code,
             phoneNo:       account.phone_no,

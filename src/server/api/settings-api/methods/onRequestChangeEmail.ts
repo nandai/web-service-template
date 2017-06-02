@@ -3,6 +3,7 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import CommonUtils  from 'libs/utils';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
 import AccountModel from 'server/models/account-model';
@@ -96,7 +97,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                 const changeId = Utils.createRandomText(32);
                 const url = Utils.generateUrl('settings/account/email/change', changeId);
                 const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS, locale);
-                const contents = Utils.formatString(template.contents, {url});
+                const contents = CommonUtils.formatString(template.contents, {url});
                 const result = await Utils.sendMail(template.subject, changeEmail, contents);
 
                 if (result)

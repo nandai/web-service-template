@@ -26,11 +26,19 @@ export default class UsersView extends React.Component<UsersViewProps, {}>
         const {store} = this.props;
         const {locale} = store;
 
+        const items = store.userList.map((user) =>
+        {
+            return {
+                id:   user.id,
+                text: user.accountName
+            };
+        });
+
         return (
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    <List url="/users/${id}" items={store.userList} onClick={store.onUserClick} />
+                    <List url="/users/${id}" items={items} onClick={store.onUserClick} />
                     <Button onClick={store.onBack}>{R.text(R.BACK, locale)}</Button>
                 </ViewContents>
             </ViewContainer>

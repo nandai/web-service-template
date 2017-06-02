@@ -1,14 +1,17 @@
 {
-    "accountNameTooShortOrTooLong": "Account name is short, or too long.",
+    "accountNameTooShortOrTooLong": "The account name must be between ${min} and ${max} letters.",
     "alreadyEmailChanged": "E-mail address is already changed.",
     "alreadyExistsEmail": "The e-mail address is already registered.",
     "alreadyLoginAnotherAccount": "You are already logged in with a different account.",
     "alreadyPasswordReset": "The password is reset already.",
     "alreadyJoin": "I have already joined.",
     "alreadySignup": "It has already been registered.",
+    "alreadyUseUserName": "That user name is already in use.",
     "badRequest": "Request is not correct.",
     "cannotEmptyEmail": "You can not e-mail address unset.",
-    "cannotEnterBeforeAfterSpace": "You can not enter only blanks or spaces before or after.",
+    "cannotEnterAccountNameBeforeAfterSpace": "You can not enter only blank spaces or spaces before or after the account name.",
+    "cannotEnterUserNameOnlyNumbers": "You can not enter a user name with only numbers.",
+    "cannotEnterUserNameBeforeAfterSpace": "You can not enter only blank spaces or spaces before or after the user name.",
     "cannotLink": "It can not be correlated string.",
     "cannotPerformedWithAuthy": "Since mail address is not set, two-factor authentication can not be performed with Authy.",
     "cannotSetPassword": "I can not set a password.",
@@ -22,6 +25,7 @@
     "couldNotSendSignupMail": "Mail of provisional registration could not be sent.",
     "couldNotSendSms": "Two-factor authentication was skipped because transmission of SMS failed. Please check the phone number.",
     "emailChanged": "We changed the e-mail address.",
+    "enterAlphabeticalNumber": "Please enter an alphabetical number or '-', '_'.",
     "incorrectAccount": "Account is incorrect.",
     "invalidCountryCode": "The country code is incorrect.",
     "invalidEmail": "E-mail address is incorrect.",
@@ -40,5 +44,6 @@
     "settingsCompleted": "We have completed the setting.",
     "signupCompleted": "Registration has been completed.",
     "signupMailSended": "An email has been sent to the temporary registration.",
-    "smsLoginCode": "Login code"
+    "smsLoginCode": "Login code",
+    "userNameTooLong": "The user name can not exceed ${max} characters."
 }

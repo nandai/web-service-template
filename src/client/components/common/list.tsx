@@ -1,16 +1,15 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React from 'react';
+import * as React  from 'react';
 
-import Button     from 'client/components/common/button';
-import Utils      from 'client/libs/utils';
+import Button      from 'client/components/common/button';
+import CommonUtils from 'libs/utils';
 
 export interface ListItem
 {
-    id     : number;
-    name?  : string;
-    title? : string;
+    id   : number;
+    text : string;
 }
 
 interface ListProps
@@ -33,11 +32,10 @@ export default class List extends React.Component<ListProps, {}>
         const elements = items.map((item, i) =>
         {
             const {id} = item;
-            const url = Utils.formatString(props.url, {id});
-            const name = item.name || item.title;
+            const url = CommonUtils.formatString(props.url, {id});
             return (
                 <Button key={i} className="wst-list-item" align="left" margin="0" onClick={() => props.onClick(id)} url={url}>
-                    {name}
+                    {item.text}
                 </Button>
             );
         });
