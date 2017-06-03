@@ -23,7 +23,7 @@ export async function onGetUser(req : express.Request, res : express.Response)
             const param     : Request.GetUser = req.query;
             const condition : Request.GetUser =
             {
-                id: ['number', null, true]
+                id: ['any', null, true]
             };
 
             if (Utils.existsParameters(param, condition) === false)

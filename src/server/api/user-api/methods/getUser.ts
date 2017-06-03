@@ -1,10 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Request}    from 'libs/request';
-import {Response}   from 'libs/response';
-import R            from 'server/libs/r';
-import AccountModel from 'server/models/account-model';
+import {Request}               from 'libs/request';
+import {Response}              from 'libs/response';
+import R                       from 'server/libs/r';
+import AccountModel, {Account} from 'server/models/account-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -20,9 +20,18 @@ export function getUser(param : Request.GetUser, req : express.Request)
         try
         {
             const locale = req.ext.locale;
-            const data : Response.GetUser = {};
-            const id = <number>param.id;
-            const account = await AccountModel.find(id);
+            const data  : Response.GetUser = {};
+            let account : Account = null;
+            const id = <string>param.id;
+
+            if (id)
+            {
+                if (isNaN(Number(id))) {
+                    account = await AccountModel.findByUserName(id);
+                } else {
+                    account = await AccountModel.find(Number(id));
+                }
+            }
 
             if (account === null)
             {

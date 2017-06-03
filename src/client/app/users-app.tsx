@@ -68,7 +68,7 @@ export default class UsersApp extends App
      * user click event
      */
     @bind
-    private onUserClick(id : number) : void
+    private onUserClick(id : string) : void
     {
         const log = slog.stepIn(UsersApp.CLS_NAME, 'onUserClick');
         History.pushState(`/users/${id}`);

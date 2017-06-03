@@ -261,8 +261,8 @@ class Initializer
         this.app.get('/settings/account/password',      Access.auth, SettingsAccountPasswordApp   .index);
         this.app.get('/settings/invite',                Access.auth, SettingsInviteApp            .index);
 
-        this.app.get('/users/:id(\\d+)', UserApp .index);
-        this.app.get('/users',           UsersApp.index);
+        this.app.get('/users/:id', UserApp .index);
+        this.app.get('/users',     UsersApp.index);
 
         // APIs
         this.app.post(  `/api/signup/${provider}`,   SignupApi.onSignupProvider);

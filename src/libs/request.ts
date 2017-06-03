@@ -94,7 +94,7 @@ export namespace Request
 
     export interface GetUser
     {
-        id : number | any[];
+        id : string | any[];
     }
 
     export interface Invite

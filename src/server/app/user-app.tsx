@@ -31,7 +31,7 @@ export default class UserApp
     {
         const log = slog.stepIn(UserApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
-        const id = Number(req.params.id);
+        const id : string = req.params.id;
 
         const data = await UserApi.getUser({id}, req);
 

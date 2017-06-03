@@ -8,7 +8,7 @@ import CommonUtils from 'libs/utils';
 
 export interface ListItem
 {
-    id   : number;
+    id   : string;
     text : string;
 }
 
@@ -17,7 +17,7 @@ interface ListProps
     url     : string;
     items   : ListItem[];
     height? : string;
-    onClick : (id : number) => void;
+    onClick : (id : string) => void;
 }
 
 export default class List extends React.Component<ListProps, {}>

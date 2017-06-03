@@ -83,7 +83,7 @@ export default class Utils
             if (err === false)
             {
                 // 型チェック
-                if (target[name] !== null && typeof target[name] !== type)
+                if (target[name] !== null && type !== 'any' && typeof target[name] !== type)
                 {
                     log.w(name + 'の型が正しくありません。');
                     err = true;

@@ -7,6 +7,6 @@ export interface Store
 {
     locale       : string;
     userList     : Response.User[];
-    onUserClick? : (id : number) => void;
+    onUserClick? : (id : string) => void;
     onBack?      : () => void;
 }

@@ -29,7 +29,7 @@ export default class UsersView extends React.Component<UsersViewProps, {}>
         const items = store.userList.map((user) =>
         {
             return {
-                id:   user.id,
+                id:  (user.name ? user.name : user.id.toString()),
                 text: user.accountName
             };
         });
