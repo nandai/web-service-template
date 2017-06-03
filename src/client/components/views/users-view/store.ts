@@ -5,8 +5,8 @@ import {Response} from 'libs/response';
 
 export interface Store
 {
-    locale       : string;
-    userList     : Response.User[];
-    onUserClick? : (id : string) => void;
-    onBack?      : () => void;
+    locale   : string;
+    userList : Response.User[];
+    onUser?  : (id : string) => void;
+    onBack?  : () => void;
 }

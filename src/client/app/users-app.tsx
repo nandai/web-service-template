@@ -31,10 +31,10 @@ export default class UsersApp extends App
         super();
         this.store =
         {
-            locale:      Utils.getLocale(),
-            userList:    ssrStore.userList || [],
-            onUserClick: this.onUserClick,
-            onBack:      this.onBack,
+            locale:   Utils.getLocale(),
+            userList: ssrStore.userList || [],
+            onUser:   this.onUser,
+            onBack:   this.onBack,
         };
     }
 
@@ -68,9 +68,9 @@ export default class UsersApp extends App
      * user click event
      */
     @bind
-    private onUserClick(id : string) : void
+    private onUser(id : string) : void
     {
-        const log = slog.stepIn(UsersApp.CLS_NAME, 'onUserClick');
+        const log = slog.stepIn(UsersApp.CLS_NAME, 'onUser');
         History.pushState(`/users/${id}`);
         log.stepOut();
     }

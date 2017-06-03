@@ -37,7 +37,7 @@
     "noLogin": "ログインしていません。",
     "notFound": "存在しませんでした。",
     "passwordChanged": "パスワードを変更しました。",
-    "passwordReset": "パスワードをリセットしました。",
+    "passwordReset": "パスワードをリセットしました。二段階認証を有効にしていた場合は再設定してください。",
     "passwordTooShortOrTooLong": "パスワードが短い、または長すぎます。",
     "requireCountryCodeAndPhoneNo": "国コードと電話番号が必要です。",
     "resetMailSended": "パスワードリセットのメールを送信しました。",

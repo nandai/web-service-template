@@ -38,7 +38,7 @@ export default class UsersView extends React.Component<UsersViewProps, {}>
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    <List url="/users/${id}" items={items} onClick={store.onUserClick} />
+                    <List url="/users/${id}" items={items} onClick={store.onUser} />
                     <Button onClick={store.onBack}>{R.text(R.BACK, locale)}</Button>
                 </ViewContents>
             </ViewContainer>

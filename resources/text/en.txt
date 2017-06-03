@@ -37,7 +37,7 @@
     "noLogin": "You are not logged in.",
     "notFound": "It did not exist.",
     "passwordChanged": "Password changed.",
-    "passwordReset": "I reset the password.",
+    "passwordReset": "I reset the password.　Please re-configure if two-factor authentication was enabled.",
     "passwordTooShortOrTooLong": "Password is short, or too long.",
     "requireCountryCodeAndPhoneNo": "Country code and phone number are required.",
     "resetMailSended": "I sent a password reset e-mail.",

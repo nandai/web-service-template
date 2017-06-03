@@ -58,6 +58,7 @@ export async function onResetPassword(req : express.Request, res : express.Respo
             {
                 account.password = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
                 account.reset_id = null;
+                account.two_factor_auth = null;
                 await AccountModel.update(account);
 
                 const data : Response.ResetPassword =
