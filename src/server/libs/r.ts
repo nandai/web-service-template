@@ -104,7 +104,7 @@ export default class R
      */
     private static loadTextResources(locale : string) : void
     {
-        const path = `${R.path}/text/${locale}.txt`;
+        const path = `${R.path}/text/${locale}.json`;
 
         try
         {
