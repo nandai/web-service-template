@@ -12,102 +12,6 @@ export default class SettingsApi extends Api
     private static CLS_NAME_2 = '(client)SettingsApi';
 
     /**
-     * ユーザー名チェック
-     */
-    static checkUserName(param : Request.CheckUserName)
-    {
-        return new Promise(async (resolve : (res : Response.CheckUserName) => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'checkUserName');
-            const url = `/api/settings/account/username`;
-
-            const {ok, data} = await Api.sendGetRequest(url, param);
-            log.stepOut();
-            Api.result(ok, data, resolve, reject);
-        });
-    }
-
-    /**
-     * アカウント取得
-     */
-    static getAccount()
-    {
-        return new Promise(async (resolve : (res : Response.GetAccount) => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'getAccount');
-            const url = `/api/settings/account`;
-
-            const {ok, data} = await Api.sendGetRequest(url, {});
-            log.stepOut();
-            Api.result(ok, data, resolve, reject);
-        });
-    }
-
-    /**
-     * アカウント設定
-     */
-    static setAccount(param : Request.SetAccount)
-    {
-        return new Promise(async (resolve : (res : Response.SetAccount) => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'setAccount');
-            const url = '/api/settings/account';
-
-            const {ok, data} = await Api.sendPutRequest(url, param);
-            log.stepOut();
-            Api.result(ok, data, resolve, reject);
-        });
-    }
-
-    /**
-     * アカウント削除
-     */
-    static deleteAccount()
-    {
-        return new Promise(async (resolve : (res : Response.DeleteAccount) => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'deleteAccount');
-            const url = `/api/settings/account`;
-
-            const {ok, data} = await Api.sendDeleteRequest(url, {});
-            log.stepOut();
-            Api.result(ok, data, resolve, reject);
-        });
-    }
-
-    /**
-     * 紐付け解除
-     */
-    static unlinkProvider(param : Request.UnlinkProvider)
-    {
-        return new Promise(async (resolve : (res : Response.UnlinkProvider) => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'unlinkProvider');
-            const url = `/api/settings/account/unlink`;
-
-            const {ok, data} = await Api.sendPutRequest(url, param);
-            log.stepOut();
-            Api.result(ok, data, resolve, reject);
-        });
-    }
-
-    /**
-     * メールアドレスの変更を要求する
-     */
-    static requestChangeEmail(param : Request.RequestChangeEmail)
-    {
-        return new Promise(async (resolve : (res : Response.RequestChangeEmail) => void, reject) =>
-        {
-            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'requestChangeEmail');
-            const url = '/api/settings/account/email';
-
-            const {ok, data} = await Api.sendPutRequest(url, param);
-            log.stepOut();
-            Api.result(ok, data, resolve, reject);
-        });
-    }
-
-    /**
      * メールアドレスを変更する
      */
     static changeEmail(param : Request.ChangeEmail)
@@ -140,6 +44,54 @@ export default class SettingsApi extends Api
     }
 
     /**
+     * ユーザー名チェック
+     */
+    static checkUserName(param : Request.CheckUserName)
+    {
+        return new Promise(async (resolve : (res : Response.CheckUserName) => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'checkUserName');
+            const url = `/api/settings/account/username`;
+
+            const {ok, data} = await Api.sendGetRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
+
+    /**
+     * アカウント削除
+     */
+    static deleteAccount()
+    {
+        return new Promise(async (resolve : (res : Response.DeleteAccount) => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'deleteAccount');
+            const url = `/api/settings/account`;
+
+            const {ok, data} = await Api.sendDeleteRequest(url, {});
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
+
+    /**
+     * アカウント取得
+     */
+    static getAccount()
+    {
+        return new Promise(async (resolve : (res : Response.GetAccount) => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'getAccount');
+            const url = `/api/settings/account`;
+
+            const {ok, data} = await Api.sendGetRequest(url, {});
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
+
+    /**
      * 招待する
      */
     static invite(param : Request.Invite)
@@ -150,6 +102,54 @@ export default class SettingsApi extends Api
             const url = '/api/settings/invite';
 
             const {ok, data} = await Api.sendPostRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
+
+    /**
+     * メールアドレスの変更を要求する
+     */
+    static requestChangeEmail(param : Request.RequestChangeEmail)
+    {
+        return new Promise(async (resolve : (res : Response.RequestChangeEmail) => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'requestChangeEmail');
+            const url = '/api/settings/account/email';
+
+            const {ok, data} = await Api.sendPutRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
+
+    /**
+     * アカウント設定
+     */
+    static setAccount(param : Request.SetAccount)
+    {
+        return new Promise(async (resolve : (res : Response.SetAccount) => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'setAccount');
+            const url = '/api/settings/account';
+
+            const {ok, data} = await Api.sendPutRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
+
+    /**
+     * 紐付け解除
+     */
+    static unlinkProvider(param : Request.UnlinkProvider)
+    {
+        return new Promise(async (resolve : (res : Response.UnlinkProvider) => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'unlinkProvider');
+            const url = `/api/settings/account/unlink`;
+
+            const {ok, data} = await Api.sendPutRequest(url, param);
             log.stepOut();
             Api.result(ok, data, resolve, reject);
         });

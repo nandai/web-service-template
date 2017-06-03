@@ -12,6 +12,22 @@ export default class LoginApi extends Api
     private static CLS_NAME_2 = '(client)LoginApi';
 
     /**
+     * Authy OneTouchの認証ステータスをチェックする
+     */
+    static loginAuthyOneTouch()
+    {
+        return new Promise(async (resolve : (res : Response.LoginAuthyOneTouch) => void, reject) =>
+        {
+            const log = slog.stepIn(LoginApi.CLS_NAME_2, 'loginAuthyOneTouch');
+            const url = '/api/login/authy/onetouch';
+
+            const {ok, data} = await Api.sendGetRequest(url, {});
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
+
+    /**
      * メールアドレスでログインする
      */
     static loginEmail(param : Request.LoginEmail)
@@ -38,22 +54,6 @@ export default class LoginApi extends Api
             const url = '/api/login/sms';
 
             const {ok, data} = await Api.sendPostRequest(url, param);
-            log.stepOut();
-            Api.result(ok, data, resolve, reject);
-        });
-    }
-
-    /**
-     * Authy OneTouchの認証ステータスをチェックする
-     */
-    static loginAuthyOneTouch()
-    {
-        return new Promise(async (resolve : (res : Response.LoginAuthyOneTouch) => void, reject) =>
-        {
-            const log = slog.stepIn(LoginApi.CLS_NAME_2, 'loginAuthyOneTouch');
-            const url = '/api/login/authy/onetouch';
-
-            const {ok, data} = await Api.sendGetRequest(url, {});
             log.stepOut();
             Api.result(ok, data, resolve, reject);
         });
