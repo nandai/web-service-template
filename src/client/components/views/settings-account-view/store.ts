@@ -8,10 +8,10 @@ export interface Store
     locale               : string;
     account              : Response.Account;
     message              : string;
-    onNameChange?        : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onUserNameChange?    : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onPhoneNoChange?     : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onCountryCodeChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onNameChange?        : (value : string) => void;
+    onUserNameChange?    : (value : string) => void;
+    onPhoneNoChange?     : (value : string) => void;
+    onCountryCodeChange? : (value : string) => void;
     onTwoFactorAuth?     : (twoFactorAuth : string) => void;
     onChange?            : () => void;
     onBack?              : () => void;

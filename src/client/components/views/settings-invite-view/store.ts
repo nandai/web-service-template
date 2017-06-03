@@ -9,7 +9,7 @@ export interface Store
     account        : Response.Account;
     email          : string;
     message?       : string;
-    onEmailChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onEmailChange? : (value : string) => void;
     onInvite?      : () => void;
     onBack?        : () => void;
 }

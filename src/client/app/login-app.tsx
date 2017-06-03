@@ -121,9 +121,9 @@ export default class LoginApp extends App
      * onEmailChange
      */
     @bind
-    private onEmailChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onEmailChange(value : string) : void
     {
-        this.store.email = e.target.value;
+        this.store.email = value;
         this.render();
     }
 
@@ -131,9 +131,9 @@ export default class LoginApp extends App
      * onPasswordChange
      */
     @bind
-    private onPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onPasswordChange(value : string) : void
     {
-        this.store.password = e.target.value;
+        this.store.password = value;
         this.render();
     }
 

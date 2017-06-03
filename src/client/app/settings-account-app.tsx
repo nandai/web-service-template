@@ -65,9 +65,9 @@ export default class SettingsAccountApp extends App
      * onNameChange
      */
     @bind
-    private onNameChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onNameChange(value : string) : void
     {
-        this.store.account.name = e.target.value;
+        this.store.account.name = value;
         this.render();
     }
 
@@ -75,9 +75,9 @@ export default class SettingsAccountApp extends App
      * onUserNameChange
      */
     @bind
-    private onUserNameChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onUserNameChange(value : string) : void
     {
-        this.store.account.userName = e.target.value;
+        this.store.account.userName = value;
         this.render();
     }
 
@@ -85,9 +85,9 @@ export default class SettingsAccountApp extends App
      * onPhoneNoChange
      */
     @bind
-    private onPhoneNoChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onPhoneNoChange(value : string) : void
     {
-        this.store.account.phoneNo = e.target.value;
+        this.store.account.phoneNo = value;
         this.render();
     }
 
@@ -95,9 +95,9 @@ export default class SettingsAccountApp extends App
      * onCountryCodeChange
      */
     @bind
-    private onCountryCodeChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onCountryCodeChange(value : string) : void
     {
-        this.store.account.countryCode = e.target.value;
+        this.store.account.countryCode = value;
         this.render();
     }
 

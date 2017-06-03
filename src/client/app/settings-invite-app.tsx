@@ -62,9 +62,9 @@ export default class SettingsInviteApp extends App
      * onEmailChange
      */
     @bind
-    private onEmailChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onEmailChange(value : string) : void
     {
-        this.store.email = e.target.value;
+        this.store.email = value;
         this.render();
     }
 

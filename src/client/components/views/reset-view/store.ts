@@ -7,7 +7,7 @@ export interface Store
     password          : string;
     confirm           : string;
     message           : string;
-    onPasswordChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onConfirmChange?  : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onPasswordChange? : (value : string) => void;
+    onConfirmChange?  : (value : string) => void;
     onChange?         : () => void;
 }

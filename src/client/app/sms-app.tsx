@@ -65,9 +65,9 @@ export default class SmsApp extends App
      * onSmsCodeChange
      */
     @bind
-    private onSmsCodeChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onSmsCodeChange(value : string) : void
     {
-        this.store.smsCode = e.target.value;
+        this.store.smsCode = value;
         this.render();
     }
 

@@ -6,6 +6,6 @@ export interface Store
     locale           : string;
     smsCode?         : string;
     message?         : string;
-    onSmsCodeChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onSmsCodeChange? : (value : string) => void;
     onSend?          : () => void;
 }

@@ -11,8 +11,8 @@ export interface Store
     onFacebook?       : () => void;
     onGoogle?         : () => void;
     onGithub?         : () => void;
-    onEmailChange?    : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onPasswordChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onEmailChange?    : (value : string) => void;
+    onPasswordChange? : (value : string) => void;
     onSignup?         : () => void;
     onTop?            : () => void;
 }

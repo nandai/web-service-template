@@ -65,9 +65,9 @@ export default class SettingsAccountPasswordApp extends App
      * onOldPasswordChange
      */
     @bind
-    private onOldPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onOldPasswordChange(value : string) : void
     {
-        this.store.oldPassword = e.target.value;
+        this.store.oldPassword = value;
         this.render();
     }
 
@@ -75,9 +75,9 @@ export default class SettingsAccountPasswordApp extends App
      * onNewPasswordChange
      */
     @bind
-    private onNewPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onNewPasswordChange(value : string) : void
     {
-        this.store.newPassword = e.target.value;
+        this.store.newPassword = value;
         this.render();
     }
 
@@ -85,9 +85,9 @@ export default class SettingsAccountPasswordApp extends App
      * onConfirmChange
      */
     @bind
-    private onConfirmChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onConfirmChange(value : string) : void
     {
-        this.store.confirm = e.target.value;
+        this.store.confirm = value;
         this.render();
     }
 

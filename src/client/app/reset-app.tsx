@@ -53,9 +53,9 @@ export default class ResetApp extends App
      * onPasswordChange
      */
     @bind
-    private onPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onPasswordChange(value : string) : void
     {
-        this.store.password = e.target.value;
+        this.store.password = value;
         this.render();
     }
 
@@ -63,9 +63,9 @@ export default class ResetApp extends App
      * onConfirmChange
      */
     @bind
-    private onConfirmChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onConfirmChange(value : string) : void
     {
-        this.store.confirm = e.target.value;
+        this.store.confirm = value;
         this.render();
     }
 

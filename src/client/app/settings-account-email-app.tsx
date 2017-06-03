@@ -60,9 +60,9 @@ export default class SettingsAccountEmailApp extends App
      * onEmailChange
      */
     @bind
-    private onEmailChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onEmailChange(value : string) : void
     {
-        this.store.account.email = e.target.value;
+        this.store.account.email = value;
         this.render();
     }
 

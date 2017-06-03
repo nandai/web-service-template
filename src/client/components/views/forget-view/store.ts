@@ -6,7 +6,7 @@ export interface Store
     locale         : string;
     email?         : string;
     message?       : string;
-    onEmailChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onEmailChange? : (value : string) => void;
     onSend?        : () => void;
     onBack?        : () => void;
 }

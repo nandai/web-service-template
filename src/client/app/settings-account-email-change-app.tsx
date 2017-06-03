@@ -50,9 +50,9 @@ export default class SettingsAccountEmailChangeApp extends App
      * onPasswordChange
      */
     @bind
-    private onPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
+    private onPasswordChange(value : string) : void
     {
-        this.store.password = e.target.value;
+        this.store.password = value;
         this.render();
     }
 

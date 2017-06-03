@@ -8,7 +8,7 @@ export interface Store
     locale         : string;
     account        : Response.Account;
     message?       : string;
-    onEmailChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onEmailChange? : (value : string) => void;
     onChange?      : () => void;
     onBack?        : () => void;
 }

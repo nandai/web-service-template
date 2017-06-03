@@ -11,9 +11,9 @@ export interface Store
     newPassword?         : string;
     confirm?             : string;
     message?             : string;
-    onOldPasswordChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onNewPasswordChange? : (e : React.ChangeEvent<HTMLInputElement>) => void;
-    onConfirmChange?     : (e : React.ChangeEvent<HTMLInputElement>) => void;
+    onOldPasswordChange? : (value : string) => void;
+    onNewPasswordChange? : (value : string) => void;
+    onConfirmChange?     : (value : string) => void;
     onChange?            : () => void;
     onBack?              : () => void;
 }
