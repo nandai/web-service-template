@@ -17,6 +17,7 @@
     "cannotSetPassword": "パスワードを設定できません。",
     "cannotSignup": "ログインしているので登録できません。",
     "cannotUnlink": "紐づけを解除できません。",
+    "canUseUserName": "ユーザー名は使用できます。",
     "changeMailSended": "メールアドレス変更手続きのメールを送信しました。",
     "couldNotChangeEmail": "メールアドレスを変更できませんでした。",
     "couldNotSendChangeMail": "メールアドレス変更手続きのメールを送信できませんでした。",

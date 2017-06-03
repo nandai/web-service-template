@@ -107,4 +107,9 @@ export namespace Request
         inviteId : string | any[];
         password : string | any[];
     }
+
+    export interface CheckUserName
+    {
+        userName : string | any[];
+    }
 }

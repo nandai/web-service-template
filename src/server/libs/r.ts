@@ -37,6 +37,7 @@ export default class R
     static CANNOT_SET_PASSWORD =                          'cannotSetPassword';
     static CANNOT_SIGNUP =                                'cannotSignup';
     static CANNOT_UNLINK =                                'cannotUnlink';
+    static CAN_USE_USER_NAME =                            'canUseUserName';
     static CHANGE_MAIL_SENDED =                           'changeMailSended';
     static COULD_NOT_CHANGE_EMAIL =                       'couldNotChangeEmail';
     static COULD_NOT_SEND_CHANGE_MAIL =                   'couldNotSendChangeMail';

@@ -12,6 +12,22 @@ export default class SettingsApi extends Api
     private static CLS_NAME_2 = '(client)SettingsApi';
 
     /**
+     * ユーザー名チェック
+     */
+    static checkUserName(param : Request.CheckUserName)
+    {
+        return new Promise(async (resolve : (res : Response.CheckUserName) => void, reject) =>
+        {
+            const log = slog.stepIn(SettingsApi.CLS_NAME_2, 'checkUserName');
+            const url = `/api/settings/account/username`;
+
+            const {ok, data} = await Api.sendGetRequest(url, param);
+            log.stepOut();
+            Api.result(ok, data, resolve, reject);
+        });
+    }
+
+    /**
      * アカウント取得
      */
     static getAccount()

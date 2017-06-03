@@ -21,6 +21,7 @@ export default class SettingsAccountApp extends App
 {
     private static CLS_NAME = 'SettingsAccountApp';
     private store : Store;
+    private checkUserNameTimerId = 0;
 
     /**
      * @constructor
@@ -79,6 +80,12 @@ export default class SettingsAccountApp extends App
     {
         this.store.account.userName = value;
         this.render();
+
+        if (this.checkUserNameTimerId) {
+            clearTimeout(this.checkUserNameTimerId);
+        }
+
+        this.checkUserNameTimerId = setTimeout(this.checkUserName, 500) as any;
     }
 
     /**
@@ -141,5 +148,19 @@ export default class SettingsAccountApp extends App
             this.render();
             log.stepOut();
         }
+    }
+
+    /**
+     * ユーザー名チェック
+     */
+    @bind
+    private async checkUserName()
+    {
+        const {store} = this;
+        const userName = store.account.userName;
+        const res : Response.CheckUserName = await SettingsApi.checkUserName({userName});
+        store.message = res.message;
+        this.render();
+        this.checkUserNameTimerId = 0;
     }
 }

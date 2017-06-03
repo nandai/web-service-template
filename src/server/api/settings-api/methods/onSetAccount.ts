@@ -7,6 +7,7 @@ import Authy                   from 'server/libs/authy';
 import Converter               from 'server/libs/converter';
 import R                       from 'server/libs/r';
 import Utils                   from 'server/libs/utils';
+import Validator               from 'server/libs/validator';
 import AccountModel, {Account} from 'server/models/account-model';
 import {Session}               from 'server/models/session-model';
 
@@ -146,8 +147,7 @@ function isValid(
     locale               : string)
 {
     let status = Response.Status.OK;
-    let phrase : string;
-    let args = {};
+    let message : string;
 
     do
     {
@@ -156,58 +156,25 @@ function isValid(
         if (name !== name.trim())
         {
             status = Response.Status.FAILED;
-            phrase = R.CANNOT_ENTER_ACCOUNT_NAME_BEFORE_AFTER_SPACE;
+            message = R.text(R.CANNOT_ENTER_ACCOUNT_NAME_BEFORE_AFTER_SPACE, locale);
             break;
         }
 
-        let len = name.length;
+        const len = name.length;
         if (len < 1 || 20 < len)
         {
             status = Response.Status.FAILED;
-            phrase = R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG;
-            args = {min:1, max:20};
+            message = R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale, {min:1, max:20});
             break;
         }
 
         // ユーザー名チェック
-        if (userName)
+        const result = Validator.userName(userName, accountId, alreadyExistsAccount, locale);
+        if (result.status !== Response.Status.OK)
         {
-            if (userName !== userName.trim())
-            {
-                status = Response.Status.FAILED;
-                phrase = R.CANNOT_ENTER_USER_NAME_BEFORE_AFTER_SPACE;
-                break;
-            }
-
-            len = userName.length;
-            if (len < 0 || 20 < len)
-            {
-                status = Response.Status.FAILED;
-                phrase = R.USER_NAME_TOO_LONG;
-                args = {min:0, max:20};
-                break;
-            }
-
-            if (userName && isNaN(Number(userName)) === false)
-            {
-                status = Response.Status.FAILED;
-                phrase = R.CANNOT_ENTER_USER_NAME_ONLY_NUMBERS;
-                break;
-            }
-
-            if (userName.match(/^[0-9a-zA-Z-_]+$/) === null)
-            {
-                status = Response.Status.FAILED;
-                phrase = R.ENTER_ALPHABETICAL_NUMBER;
-                break;
-            }
-
-            if (alreadyExistsAccount && alreadyExistsAccount.id !== accountId)
-            {
-                status = Response.Status.FAILED;
-                phrase = R.ALREADY_USE_USER_NAME;
-                break;
-            }
+            status =  result.status;
+            message = result.message;
+            break;
         }
 
         // 国コードチェック
@@ -217,7 +184,7 @@ function isValid(
             if (countries.length === 0)
             {
                 status = Response.Status.FAILED;
-                phrase = R.INVALID_COUNTRY_CODE;
+                message = R.text(R.INVALID_COUNTRY_CODE, locale);
                 break;
             }
         }
@@ -229,7 +196,7 @@ function isValid(
             if (countryCode === null || phoneNo === null)
             {
                 status = Response.Status.FAILED;
-                phrase = R.REQUIRE_COUNTRY_CODE_AND_PHONE_NO;
+                message = R.text(R.REQUIRE_COUNTRY_CODE_AND_PHONE_NO, locale);
                 break;
             }
         }
@@ -237,17 +204,11 @@ function isValid(
         else if (twoFactorAuth !== null)
         {
             status = Response.Status.BAD_REQUEST;
-            phrase = R.BAD_REQUEST;
+            message = R.text(R.BAD_REQUEST, locale);
             break;
         }
     }
     while (false);
-
-    let message : string;
-    if (phrase) {
-        message = R.text(phrase, locale, args);
-    }
-
     return ({status, message});
 }
 

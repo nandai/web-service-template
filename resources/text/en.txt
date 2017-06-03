@@ -17,6 +17,7 @@
     "cannotSetPassword": "I can not set a password.",
     "cannotSignup": "It can not be registered because it is logged.",
     "cannotUnlink": "You can not release the string pickled.",
+    "canUseUserName": "The user name can be used.",
     "changeMailSended": "An email has been sent to the e-mail address change procedure.",
     "couldNotChangeEmail": "I could not change the e-mail address.",
     "couldNotSendChangeMail": "E-mail address change procedure could not be sent.",

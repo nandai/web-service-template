@@ -4,6 +4,7 @@
 import {getAccount}           from './methods/getAccount';
 import {onChangeEmail}        from './methods/onChangeEmail';
 import {onChangePassword}     from './methods/onChangePassword';
+import {onCheckUserName}      from './methods/onCheckUserName';
 import {onDeleteAccount}      from './methods/onDeleteAccount';
 import {onGetAccount}         from './methods/onGetAccount';
 import {onInvite}             from './methods/onInvite';
@@ -19,6 +20,7 @@ export default class SettingsApi
     static getAccount =           getAccount;
     static onChangeEmail =        onChangeEmail;
     static onChangePassword =     onChangePassword;
+    static onCheckUserName =      onCheckUserName;
     static onDeleteAccount =      onDeleteAccount;
     static onGetAccount =         onGetAccount;
     static onInvite =             onInvite;
