@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind                from 'bind-decorator';
 import * as React          from 'react';
 
 import {Response}          from 'libs/response';
@@ -32,13 +33,13 @@ export default class SettingsAccountApp extends App
             locale:   Utils.getLocale(),
             account:  ssrStore.account,
             message:  '',
-            onNameChange:        this.onNameChange.       bind(this),
-            onUserNameChange:    this.onUserNameChange.   bind(this),
-            onPhoneNoChange:     this.onPhoneNoChange.    bind(this),
-            onTwoFactorAuth:     this.onTwoFactorAuth.    bind(this),
-            onCountryCodeChange: this.onCountryCodeChange.bind(this),
-            onChange:            this.onChange.           bind(this),
-            onBack:              this.onBack.             bind(this)
+            onNameChange:        this.onNameChange,
+            onUserNameChange:    this.onUserNameChange,
+            onPhoneNoChange:     this.onPhoneNoChange,
+            onTwoFactorAuth:     this.onTwoFactorAuth,
+            onCountryCodeChange: this.onCountryCodeChange,
+            onChange:            this.onChange,
+            onBack:              this.onBack,
         };
     }
 
@@ -63,6 +64,7 @@ export default class SettingsAccountApp extends App
     /**
      * onNameChange
      */
+    @bind
     private onNameChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.account.name = e.target.value;
@@ -72,6 +74,7 @@ export default class SettingsAccountApp extends App
     /**
      * onUserNameChange
      */
+    @bind
     private onUserNameChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.account.userName = e.target.value;
@@ -81,6 +84,7 @@ export default class SettingsAccountApp extends App
     /**
      * onPhoneNoChange
      */
+    @bind
     private onPhoneNoChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.account.phoneNo = e.target.value;
@@ -90,6 +94,7 @@ export default class SettingsAccountApp extends App
     /**
      * onCountryCodeChange
      */
+    @bind
     private onCountryCodeChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.account.countryCode = e.target.value;
@@ -99,6 +104,7 @@ export default class SettingsAccountApp extends App
     /**
      * onTwoFactorAuth
      */
+    @bind
     private onTwoFactorAuth(twoFactorAuth : string) : void
     {
         this.store.account.twoFactorAuth = twoFactorAuth;
@@ -108,6 +114,7 @@ export default class SettingsAccountApp extends App
     /**
      * onChange
      */
+    @bind
     private async onChange()
     {
         const log = slog.stepIn(SettingsAccountApp.CLS_NAME, 'onChange');

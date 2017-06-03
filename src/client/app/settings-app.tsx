@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind         from 'bind-decorator';
 import * as React   from 'react';
 
 import {Response}   from 'libs/response';
@@ -33,15 +34,15 @@ export default class SettingsApp extends App
             locale:     Utils.getLocale(),
             account:    ssrStore.account,
             message:    ssrStore.message,
-            onTwitter:  this.onTwitter. bind(this),
-            onFacebook: this.onFacebook.bind(this),
-            onGoogle:   this.onGoogle.  bind(this),
-            onGithub:   this.onGithub.  bind(this),
-            onEmail:    this.onEmail.   bind(this),
-            onPassword: this.onPassword.bind(this),
-            onAccount:  this.onAccount. bind(this),
-            onLeave:    this.onLeave.   bind(this),
-            onBack:     this.onBack.    bind(this)
+            onTwitter:  this.onTwitter,
+            onFacebook: this.onFacebook,
+            onGoogle:   this.onGoogle,
+            onGithub:   this.onGithub,
+            onEmail:    this.onEmail,
+            onPassword: this.onPassword,
+            onAccount:  this.onAccount,
+            onLeave:    this.onLeave,
+            onBack:     this.onBack,
         };
     }
 
@@ -66,6 +67,7 @@ export default class SettingsApp extends App
     /**
      * onTwitter
      */
+    @bind
     private async onTwitter()
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onTwitter');
@@ -85,6 +87,7 @@ export default class SettingsApp extends App
     /**
      * onFacebook
      */
+    @bind
     private async onFacebook()
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onFacebook');
@@ -104,6 +107,7 @@ export default class SettingsApp extends App
     /**
      * onGoogle
      */
+    @bind
     private async onGoogle()
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onGoogle');
@@ -123,6 +127,7 @@ export default class SettingsApp extends App
     /**
      * onGithub
      */
+    @bind
     private async onGithub()
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onGithub');
@@ -142,6 +147,7 @@ export default class SettingsApp extends App
     /**
      * onEmail
      */
+    @bind
     private onEmail() : void
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onEmail');
@@ -152,6 +158,7 @@ export default class SettingsApp extends App
     /**
      * onPassword
      */
+    @bind
     private onPassword() : void
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onPassword');
@@ -162,6 +169,7 @@ export default class SettingsApp extends App
     /**
      * onAccount
      */
+    @bind
     private onAccount() : void
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onAccount');
@@ -172,6 +180,7 @@ export default class SettingsApp extends App
     /**
      * onLeave
      */
+    @bind
     private async onLeave()
     {
         const log = slog.stepIn(SettingsApp.CLS_NAME, 'onLeave');

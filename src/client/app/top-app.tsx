@@ -1,7 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind       from 'bind-decorator';
 import * as React from 'react';
+
 import LogoutApi  from '../api/logout-api';
 import TopView    from '../components/views/top-view';
 import {Store}    from '../components/views/top-view/store';
@@ -31,10 +33,10 @@ export default class TopApp extends App
             locale:     Utils.getLocale(),
             account:    ssrStore.account,
             message:    ssrStore.message,
-            onSettings: this.onSettings.bind(this),
-            onInvite:   this.onInvite.  bind(this),
-            onUsers:    this.onUsers.   bind(this),
-            onLogout:   this.onLogout.  bind(this)
+            onSettings: this.onSettings,
+            onInvite:   this.onInvite,
+            onUsers:    this.onUsers,
+            onLogout:   this.onLogout,
         };
     }
 
@@ -59,6 +61,7 @@ export default class TopApp extends App
     /**
      * onSettings
      */
+    @bind
     private onSettings() : void
     {
         const log = slog.stepIn(TopApp.CLS_NAME, 'onSettings');
@@ -69,6 +72,7 @@ export default class TopApp extends App
     /**
      * onInvite
      */
+    @bind
     private onInvite() : void
     {
         const log = slog.stepIn(TopApp.CLS_NAME, 'onInvite');
@@ -79,6 +83,7 @@ export default class TopApp extends App
     /**
      * onUsers
      */
+    @bind
     private onUsers() : void
     {
         const log = slog.stepIn(TopApp.CLS_NAME, 'onUsers');
@@ -89,6 +94,7 @@ export default class TopApp extends App
     /**
      * onLogout
      */
+    @bind
     private async onLogout()
     {
         const log = slog.stepIn(TopApp.CLS_NAME, 'onLogout');

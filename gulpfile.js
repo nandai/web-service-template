@@ -17,7 +17,8 @@ const tsOptions =
 {
     target: 'es6',
     module: 'commonjs',
-    jsx:    'react'
+    jsx:    'react',
+    experimentalDecorators: true
 };
 
 // const babelOptions =

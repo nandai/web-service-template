@@ -1,9 +1,9 @@
-// Visual Studio Codeのエディタでes6スタイルのコードがエラーと判定されないようにするための設定
 {
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
         "jsx": "react",
+        "experimentalDecorators": true,
         "baseUrl": "./src",
         "sourceMap": false,
         "removeComments": false

@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind       from 'bind-decorator';
 import * as React from 'react';
 
 import {Response} from 'libs/response';
@@ -29,9 +30,9 @@ export default class ForgetApp extends App
         this.store =
         {
             locale:        Utils.getLocale(),
-            onEmailChange: this.onEmailChange.bind(this),
-            onSend:        this.onSend.       bind(this),
-            onBack:        this.onBack.       bind(this)
+            onEmailChange: this.onEmailChange,
+            onSend:        this.onSend,
+            onBack:        this.onBack,
         };
     }
 
@@ -57,6 +58,7 @@ export default class ForgetApp extends App
     /**
      * onEmailChange
      */
+    @bind
     private onEmailChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.email = e.target.value;
@@ -66,6 +68,7 @@ export default class ForgetApp extends App
     /**
      * onSend
      */
+    @bind
     private async onSend()
     {
         const log = slog.stepIn(ForgetApp.CLS_NAME, 'onSend');

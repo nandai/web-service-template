@@ -1,8 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import History    from 'client/libs/history';
+import bind       from 'bind-decorator';
 import * as React from 'react';
+
+import History    from 'client/libs/history';
 
 export default class Header extends React.Component<{}, {}>
 {
@@ -12,7 +14,7 @@ export default class Header extends React.Component<{}, {}>
     constructor()
     {
         super();
-        this.onClick = this.onClick.bind(this);
+        this.onClick = this.onClick;
     }
 
     /**
@@ -33,6 +35,7 @@ export default class Header extends React.Component<{}, {}>
     /**
      * click event
      */
+    @bind
     private onClick() : void
     {
         History.pushState('/');

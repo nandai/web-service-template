@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind        from 'bind-decorator';
 import * as React  from 'react';
 
 import {Response}  from 'libs/response';
@@ -32,8 +33,8 @@ export default class SmsApp extends App
         this.store =
         {
             locale:          Utils.getLocale(),
-            onSmsCodeChange: this.onSmsCodeChange.bind(this),
-            onSend:          this.onSend.         bind(this)
+            onSmsCodeChange: this.onSmsCodeChange,
+            onSend:          this.onSend,
         };
     }
 
@@ -63,6 +64,7 @@ export default class SmsApp extends App
     /**
      * onSmsCodeChange
      */
+    @bind
     private onSmsCodeChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.smsCode = e.target.value;
@@ -72,6 +74,7 @@ export default class SmsApp extends App
     /**
      * onSend
      */
+    @bind
     private async onSend()
     {
         const log = slog.stepIn(SmsApp.CLS_NAME, 'onSend');
@@ -108,6 +111,7 @@ export default class SmsApp extends App
     /**
      * Authy OneTouch
      */
+    @bind
     private async pollingAuthyOneTouchApprival()
     {
         const res : Response.LoginAuthyOneTouch = await LoginApi.loginAuthyOneTouch();
@@ -128,7 +132,7 @@ export default class SmsApp extends App
      */
     private setPollingTimer() : void
     {
-        this.approvalTimerId = setTimeout(this.pollingAuthyOneTouchApprival.bind(this), 1000);
+        this.approvalTimerId = setTimeout(this.pollingAuthyOneTouchApprival, 1000) as any;
     }
 
     /**

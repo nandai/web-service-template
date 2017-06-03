@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind       from 'bind-decorator';
 import * as React from 'react';
 
 interface ButtonProps
@@ -26,13 +27,6 @@ export default class Button extends React.Component<ButtonProps, {}>
         margin:    null,
         onClick:   null
     };
-
-    constructor(props : ButtonProps)
-    {
-        super(props);
-        this.onClick = this.onClick.bind(this);
-        this.onKeyUp = this.onKeyUp.bind(this);
-    }
 
     /**
      * render
@@ -87,6 +81,7 @@ export default class Button extends React.Component<ButtonProps, {}>
     /**
      * click event
      */
+    @bind
     private onClick(e : React.MouseEvent<Element>)
     {
         e.preventDefault();
@@ -96,6 +91,7 @@ export default class Button extends React.Component<ButtonProps, {}>
     /**
      * keyup event
      */
+    @bind
     private onKeyUp(e : React.KeyboardEvent<Element>)
     {
         if (e.keyCode === 0x20 || e.keyCode === 0x0D) {

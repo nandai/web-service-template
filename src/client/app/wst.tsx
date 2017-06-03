@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind                          from 'bind-decorator';
 import * as React                    from 'react';
 import * as ReactDOM                 from 'react-dom';
 
@@ -76,19 +77,20 @@ class WstApp
             {url:'404',                            app:notFoundApp,                         title:R.text(R.NOT_FOUND,                      locale), effect:'fade', query:true}
         ];
 
-        const render = this.render.bind(this);
+        const render = this.render;
         this.routes.forEach((route) =>
         {
             const store = route.app.render = render;
         });
 
         this.setAccount(ssrStore.account);
-        History.setCallback(this.onHistory.bind(this));
+        History.setCallback(this.onHistory);
     }
 
     /**
      * render
      */
+    @bind
     render() : void
     {
         const route = this.currentRoute;
@@ -164,6 +166,7 @@ class WstApp
     /**
      * pushstate, popstate event
      */
+    @bind
     private onHistory(direction : string, message? : string)
     {
         const log = slog.stepIn('WstApp', 'onHistory');

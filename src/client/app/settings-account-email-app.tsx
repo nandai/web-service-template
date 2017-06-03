@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind                     from 'bind-decorator';
 import * as React               from 'react';
 
 import {Response}               from 'libs/response';
@@ -31,9 +32,9 @@ export default class SettingsAccountEmailApp extends App
         {
             locale:          Utils.getLocale(),
             account:         ssrStore.account,
-            onEmailChange:   this.onEmailChange.bind(this),
-            onChange:        this.onChange.     bind(this),
-            onBack:          this.onBack.       bind(this)
+            onEmailChange:   this.onEmailChange,
+            onChange:        this.onChange,
+            onBack:          this.onBack,
         };
     }
 
@@ -58,6 +59,7 @@ export default class SettingsAccountEmailApp extends App
     /**
      * onEmailChange
      */
+    @bind
     private onEmailChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.account.email = e.target.value;
@@ -67,6 +69,7 @@ export default class SettingsAccountEmailApp extends App
     /**
      * onChange
      */
+    @bind
     private async onChange()
     {
         const log = slog.stepIn(SettingsAccountEmailApp.CLS_NAME, 'onChange');

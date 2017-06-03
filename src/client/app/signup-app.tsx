@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind       from 'bind-decorator';
 import * as React from 'react';
 
 import {Request}  from 'libs/request';
@@ -35,14 +36,14 @@ export default class SignupApp extends App
             email:            '',
             password:         '',
             message:          ssrStore.message,
-            onTwitter:        this.onTwitter.       bind(this),
-            onFacebook:       this.onFacebook.      bind(this),
-            onGoogle:         this.onGoogle.        bind(this),
-            onGithub:         this.onGithub.        bind(this),
-            onEmailChange:    this.onEmailChange.   bind(this),
-            onPasswordChange: this.onPasswordChange.bind(this),
-            onSignup:         this.onSignup.        bind(this),
-            onTop:            this.onTop.           bind(this)
+            onTwitter:        this.onTwitter,
+            onFacebook:       this.onFacebook,
+            onGoogle:         this.onGoogle,
+            onGithub:         this.onGithub,
+            onEmailChange:    this.onEmailChange,
+            onPasswordChange: this.onPasswordChange,
+            onSignup:         this.onSignup,
+            onTop:            this.onTop,
         };
     }
 
@@ -69,6 +70,7 @@ export default class SignupApp extends App
     /**
      * onTwitter
      */
+    @bind
     private onTwitter() : void
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onTwitter');
@@ -79,6 +81,7 @@ export default class SignupApp extends App
     /**
      * onFacebook
      */
+    @bind
     private onFacebook() : void
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onFacebook');
@@ -89,6 +92,7 @@ export default class SignupApp extends App
     /**
      * onGoogle
      */
+    @bind
     private onGoogle() : void
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onGoogle');
@@ -99,6 +103,7 @@ export default class SignupApp extends App
     /**
      * onGithub
      */
+    @bind
     private onGithub() : void
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onGithub');
@@ -109,6 +114,7 @@ export default class SignupApp extends App
     /**
      * onEmailChange
      */
+    @bind
     private onEmailChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.email = e.target.value;
@@ -118,6 +124,7 @@ export default class SignupApp extends App
     /**
      * onPasswordChange
      */
+    @bind
     private onPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.password = e.target.value;
@@ -127,6 +134,7 @@ export default class SignupApp extends App
     /**
      * onSignup
      */
+    @bind
     private async onSignup()
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onSignup');
@@ -145,6 +153,7 @@ export default class SignupApp extends App
     /**
      * onTop
      */
+    @bind
     private onTop() : void
     {
         const log = slog.stepIn(SignupApp.CLS_NAME, 'onTop');

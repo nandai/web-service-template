@@ -155,7 +155,7 @@ export default class R
      *
      * @return  文字列
      */
-    static text(phrase : string, locale  : string, args = {}) : string
+    static text(phrase : string, locale : string, args = {}) : string
     {
         if ((locale in R.texts) === false) {
              locale = 'en';

@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind       from 'bind-decorator';
 import * as React from 'react';
 
 import {Request}  from 'libs/request';
@@ -36,18 +37,18 @@ export default class LoginApp extends App
             email:            '',
             password:         '',
             message:          ssrStore.message,
-            onTwitter:        this.onTwitter.       bind(this),
-            onFacebook:       this.onFacebook.      bind(this),
-            onGoogle:         this.onGoogle.        bind(this),
-            onGithub:         this.onGithub.        bind(this),
-            onEmailChange:    this.onEmailChange.   bind(this),
-            onPasswordChange: this.onPasswordChange.bind(this),
-            onLogin:          this.onLogin.         bind(this),
-            onSignup:         this.onSignup.        bind(this),
-            onForget:         this.onForget.        bind(this),
-            onUsers:          this.onUsers.         bind(this),
-            onHome:           this.onHome.          bind(this),
-            onAbout:          this.onAbout.         bind(this)
+            onTwitter:        this.onTwitter,
+            onFacebook:       this.onFacebook,
+            onGoogle:         this.onGoogle,
+            onGithub:         this.onGithub,
+            onEmailChange:    this.onEmailChange,
+            onPasswordChange: this.onPasswordChange,
+            onLogin:          this.onLogin,
+            onSignup:         this.onSignup,
+            onForget:         this.onForget,
+            onUsers:          this.onUsers,
+            onHome:           this.onHome,
+            onAbout:          this.onAbout,
         };
     }
 
@@ -75,6 +76,7 @@ export default class LoginApp extends App
     /**
      * onTwitter
      */
+    @bind
     private onTwitter() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onTwitter');
@@ -85,6 +87,7 @@ export default class LoginApp extends App
     /**
      * onFacebook
      */
+    @bind
     private onFacebook() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onFacebook');
@@ -95,6 +98,7 @@ export default class LoginApp extends App
     /**
      * onGoogle
      */
+    @bind
     private onGoogle() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onGoogle');
@@ -105,6 +109,7 @@ export default class LoginApp extends App
     /**
      * onGithub
      */
+    @bind
     private onGithub() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onGithub');
@@ -115,6 +120,7 @@ export default class LoginApp extends App
     /**
      * onEmailChange
      */
+    @bind
     private onEmailChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.email = e.target.value;
@@ -124,6 +130,7 @@ export default class LoginApp extends App
     /**
      * onPasswordChange
      */
+    @bind
     private onPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.password = e.target.value;
@@ -133,6 +140,7 @@ export default class LoginApp extends App
     /**
      * onLogin
      */
+    @bind
     private async onLogin()
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onLogin');
@@ -148,6 +156,7 @@ export default class LoginApp extends App
     /**
      * onSignup
      */
+    @bind
     private onSignup() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onSignup');
@@ -158,6 +167,7 @@ export default class LoginApp extends App
     /**
      * onForget
      */
+    @bind
     private onForget() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onForget');
@@ -168,6 +178,7 @@ export default class LoginApp extends App
     /**
      * onUsers
      */
+    @bind
     private onUsers() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onUsers');
@@ -178,6 +189,7 @@ export default class LoginApp extends App
     /**
      * onHome
      */
+    @bind
     private onHome() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onHome');
@@ -188,6 +200,7 @@ export default class LoginApp extends App
     /**
      * onAbout
      */
+    @bind
     private onAbout() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onAbout');

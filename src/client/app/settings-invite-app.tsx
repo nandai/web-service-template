@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind               from 'bind-decorator';
 import * as React         from 'react';
 
 import {Response}         from 'libs/response';
@@ -32,9 +33,9 @@ export default class SettingsInviteApp extends App
             locale:          Utils.getLocale(),
             account:         ssrStore.account,
             email:           ssrStore.email,
-            onEmailChange:   this.onEmailChange.bind(this),
-            onInvite:        this.onInvite.     bind(this),
-            onBack:          this.onBack.       bind(this)
+            onEmailChange:   this.onEmailChange,
+            onInvite:        this.onInvite,
+            onBack:          this.onBack,
         };
     }
 
@@ -60,6 +61,7 @@ export default class SettingsInviteApp extends App
     /**
      * onEmailChange
      */
+    @bind
     private onEmailChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.email = e.target.value;
@@ -69,6 +71,7 @@ export default class SettingsInviteApp extends App
     /**
      * onInvite
      */
+    @bind
     private async onInvite()
     {
         const log = slog.stepIn(SettingsInviteApp.CLS_NAME, 'onInvite');

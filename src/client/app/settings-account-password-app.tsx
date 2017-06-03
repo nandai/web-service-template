@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind                        from 'bind-decorator';
 import * as React                  from 'react';
 
 import {Response}                  from 'libs/response';
@@ -31,11 +32,11 @@ export default class SettingsAccountPasswordApp extends App
         {
             locale:              Utils.getLocale(),
             account:             ssrStore.account,
-            onOldPasswordChange: this.onOldPasswordChange.bind(this),
-            onNewPasswordChange: this.onNewPasswordChange.bind(this),
-            onConfirmChange:     this.onConfirmChange.    bind(this),
-            onChange:            this.onChange.           bind(this),
-            onBack:              this.onBack.             bind(this)
+            onOldPasswordChange: this.onOldPasswordChange,
+            onNewPasswordChange: this.onNewPasswordChange,
+            onConfirmChange:     this.onConfirmChange,
+            onChange:            this.onChange,
+            onBack:              this.onBack,
         };
     }
 
@@ -63,6 +64,7 @@ export default class SettingsAccountPasswordApp extends App
     /**
      * onOldPasswordChange
      */
+    @bind
     private onOldPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.oldPassword = e.target.value;
@@ -72,6 +74,7 @@ export default class SettingsAccountPasswordApp extends App
     /**
      * onNewPasswordChange
      */
+    @bind
     private onNewPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.newPassword = e.target.value;
@@ -81,6 +84,7 @@ export default class SettingsAccountPasswordApp extends App
     /**
      * onConfirmChange
      */
+    @bind
     private onConfirmChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.confirm = e.target.value;
@@ -90,6 +94,7 @@ export default class SettingsAccountPasswordApp extends App
     /**
      * onChange
      */
+    @bind
     private async onChange()
     {
         const log = slog.stepIn(SettingsAccountPasswordApp.CLS_NAME, 'onChange');

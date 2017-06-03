@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind    from 'bind-decorator';
 import History from '../libs/history';
 
 const slog = window['slog'];
@@ -28,6 +29,7 @@ export abstract class App
     /**
      * onBack
      */
+    @bind
     protected onBack() : void
     {
         const log = slog.stepIn('App', 'onBack');

@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind          from 'bind-decorator';
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 
@@ -34,8 +35,6 @@ export default class Root extends React.Component<RootProps, RootState>
             nextView:    null,
             fade:        false
         };
-
-        this.onTransitionEnd = this.onTransitionEnd.bind(this);
     }
 
     /**
@@ -99,6 +98,7 @@ export default class Root extends React.Component<RootProps, RootState>
     /**
      * onTransitionEnd
      */
+    @bind
     onTransitionEnd(e : React.TransitionEvent<Element>)
     {
         const {state} = this;

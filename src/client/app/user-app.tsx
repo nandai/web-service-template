@@ -31,7 +31,7 @@ export default class UserApp extends App
         {
             locale: Utils.getLocale(),
             user:   ssrStore.user,
-            onBack: this.onBack.bind(this)
+            onBack: this.onBack,
         };
     }
 

@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind        from 'bind-decorator';
 import * as React  from 'react';
 
 import {Request}   from 'libs/request';
@@ -33,8 +34,8 @@ export default class JoinApp extends App
             locale:   Utils.getLocale(),
             password: '',
             message:  '',
-            onPasswordChange: this.onPasswordChange.bind(this),
-            onJoin:           this.onJoin          .bind(this)
+            onPasswordChange: this.onPasswordChange,
+            onJoin:           this.onJoin,
         };
     }
 
@@ -49,6 +50,7 @@ export default class JoinApp extends App
     /**
      * onPasswordChange
      */
+    @bind
     private onPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.password = e.target.value;
@@ -58,6 +60,7 @@ export default class JoinApp extends App
     /**
      * onJoin
      */
+    @bind
     private async onJoin()
     {
         const log = slog.stepIn(JoinApp.CLS_NAME, 'onSend');

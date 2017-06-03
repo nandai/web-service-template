@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind       from 'bind-decorator';
 import * as React from 'react';
 
 import {Response} from 'libs/response';
@@ -32,8 +33,8 @@ export default class UsersApp extends App
         {
             locale:      Utils.getLocale(),
             userList:    ssrStore.userList || [],
-            onUserClick: this.onUserClick.bind(this),
-            onBack:      this.onBack.     bind(this)
+            onUserClick: this.onUserClick,
+            onBack:      this.onBack,
         };
     }
 
@@ -66,6 +67,7 @@ export default class UsersApp extends App
     /**
      * user click event
      */
+    @bind
     private onUserClick(id : number) : void
     {
         const log = slog.stepIn(UsersApp.CLS_NAME, 'onUserClick');

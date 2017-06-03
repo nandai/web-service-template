@@ -22,6 +22,7 @@
     "@types/superagent": "^2.0.37",
     "authy": "^1.2.0",
     "babel-preset-latest": "^6.24.1",
+    "bind-decorator": "^1.0.10",
     "body-parser": "^1.17.2",
     "browserify": "^14.4.0",
     "cookie-parser": "^1.4.3",

@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind                           from 'bind-decorator';
 import * as React                     from 'react';
 
 import {Response}                     from 'libs/response';
@@ -32,8 +33,8 @@ export default class SettingsAccountEmailChangeApp extends App
             locale:   Utils.getLocale(),
             password: '',
             message:  '',
-            onPasswordChange: this.onPasswordChange.bind(this),
-            onChange:         this.onChange.        bind(this)
+            onPasswordChange: this.onPasswordChange,
+            onChange:         this.onChange,
         };
     }
 
@@ -48,6 +49,7 @@ export default class SettingsAccountEmailChangeApp extends App
     /**
      * onPasswordChange
      */
+    @bind
     private onPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.password = e.target.value;
@@ -57,6 +59,7 @@ export default class SettingsAccountEmailChangeApp extends App
     /**
      * onChange
      */
+    @bind
     private async onChange()
     {
         const log = slog.stepIn(SettingsAccountEmailChangeApp.CLS_NAME, 'onChange');

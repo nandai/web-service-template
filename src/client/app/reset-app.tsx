@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind        from 'bind-decorator';
 import * as React  from 'react';
 
 import {Response}  from 'libs/response';
@@ -34,9 +35,9 @@ export default class ResetApp extends App
             password: '',
             confirm:  '',
             message:  '',
-            onPasswordChange: this.onPasswordChange.bind(this),
-            onConfirmChange:  this.onConfirmChange. bind(this),
-            onChange:         this.onChange.        bind(this)
+            onPasswordChange: this.onPasswordChange,
+            onConfirmChange:  this.onConfirmChange,
+            onChange:         this.onChange,
         };
     }
 
@@ -51,6 +52,7 @@ export default class ResetApp extends App
     /**
      * onPasswordChange
      */
+    @bind
     private onPasswordChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.password = e.target.value;
@@ -60,6 +62,7 @@ export default class ResetApp extends App
     /**
      * onConfirmChange
      */
+    @bind
     private onConfirmChange(e : React.ChangeEvent<HTMLInputElement>) : void
     {
         this.store.confirm = e.target.value;
@@ -69,6 +72,7 @@ export default class ResetApp extends App
     /**
      * onChange
      */
+    @bind
     private async onChange()
     {
         const log = slog.stepIn(ResetApp.CLS_NAME, 'onChange');
