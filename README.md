@@ -1,10 +1,10 @@
 # web service templateについて
-web service template（以下WST）は登録型ウェブサービス開発に向けたNode.js製のテンプレートです。メールアドレスやSNSアカウントでの登録、他のSNSアカウントの紐づけ、Twilioによる二段階認証に対応しています。  
+web service template（以下WST）は登録型ウェブサービス開発に向けたNode.js製のテンプレートです。メールアドレスやSNSアカウントでの登録、紐づけ、SMS（Twilio）やAuthyでの二段階認証に対応しています。AuthyではOneTouch認証も可能です。  
 
-SNSアカウント認証にはpassportを使用し、認証後はカスタムコールバックによりサインアップ画面やトップページなど、適切な画面に遷移することが特長です。
+SNSアカウント認証にはpassportを使用し、認証後はカスタムコールバックによりサインアップ画面やトップページなど、適切な画面に遷移します。
 
 # 設定
-SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し、ルートディレクトリ（package.jsonのあるディレクトリ）に配置します。フォーマットは以下の通り。
+SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し、ルートディレクトリ（package.jsonのあるディレクトリ）配下の/config/[NODE_ENV]/に配置します。フォーマットは以下の通り。
 
 ```json
 {
