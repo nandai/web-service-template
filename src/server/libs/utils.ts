@@ -7,6 +7,7 @@ import R            from 'server/libs/r';
 
 import crypto =  require('crypto');
 import express = require('express');
+import moment =  require('moment');
 import mailer =  require('nodemailer');
 import smtp =    require('nodemailer-smtp-transport');
 import Random =  require("random-js");
@@ -367,5 +368,13 @@ export default class Utils
             };
         }
         return data;
+    }
+
+    /**
+     * 現在日時（JST）を取得
+     */
+    static now() : string
+    {
+        return moment().format('YYYY/MM/DD HH:mm:ss');
     }
 }

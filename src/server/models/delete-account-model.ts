@@ -5,9 +5,8 @@ import Config    from '../config';
 import Utils     from '../libs/utils';
 import {Account} from './account-model';
 
-import fs =     require('fs');
-import moment = require('moment');
-import slog =   require('../slog');
+import fs =   require('fs');
+import slog = require('../slog');
 
 /**
  * 削除アカウントモデル
@@ -67,7 +66,7 @@ export default class DeleteAccountModel
         const log = slog.stepIn(DeleteAccountModel.CLS_NAME, 'add');
         return new Promise((resolve : () => void, reject) =>
         {
-            account.deleted_at = moment().format('YYYY/MM/DD HH:mm:ss');
+            account.deleted_at = Utils.now();
             DeleteAccountModel.list.push(account);
             DeleteAccountModel.save();
 

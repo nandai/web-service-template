@@ -8,7 +8,6 @@ import SeqModel from './seq-model';
 import fs =     require('fs');
 import __ =     require('lodash');
 import uuid =   require('node-uuid');
-import moment = require('moment');
 import slog =   require('../slog');
 
 /**
@@ -25,6 +24,7 @@ export class Session
     sms_code   : string = null;
     authy_uuid : string = null;
     created_at : string = null;
+    updated_at : string = null;
 }
 
 /**
@@ -84,11 +84,9 @@ export default class SessionModel
         const log = slog.stepIn(SessionModel.CLS_NAME, 'add');
         return new Promise((resolve : () => void, reject) =>
         {
-            const m = moment();
-
             session.pk = SeqModel.next('session');
             session.id = uuid.v4();
-            session.created_at = m.format('YYYY/MM/DD HH:mm:ss');
+            session.created_at = Utils.now();
             SessionModel.list.push(session);
             SessionModel.save();
 
@@ -111,9 +109,11 @@ export default class SessionModel
         {
             for (const i in SessionModel.list)
             {
-                if (SessionModel.list[i].pk === session.pk)
+                const findSession = SessionModel.list[i];
+                if (findSession.pk === session.pk)
                 {
-                    __.extend(SessionModel.list[i], session);
+                    __.extend(findSession, session);
+                    findSession.updated_at = Utils.now();
                     SessionModel.save();
                     log.d('更新しました。');
                     break;

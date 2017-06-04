@@ -5,10 +5,9 @@ import Config   from '../config';
 import Utils    from '../libs/utils';
 import SeqModel from './seq-model';
 
-import fs =     require('fs');
-import __ =     require('lodash');
-import moment = require('moment');
-import slog =   require('../slog');
+import fs =   require('fs');
+import __ =   require('lodash');
+import slog = require('../slog');
 
 /**
  * アカウント
@@ -36,6 +35,7 @@ export class Account
     change_email           : string = null;
     crypto_type            : number = null;
     created_at             : string = null;
+    updated_at             : string = null;
     deleted_at             : string = null;
 
     /**
@@ -152,7 +152,7 @@ export default class AccountModel
             account.id = SeqModel.next('account');
             account.international_phone_no = AccountModel.international_phone_no(account);
             account.crypto_type = 1;
-            account.created_at = moment().format('YYYY/MM/DD HH:mm:ss');
+            account.created_at = Utils.now();
 
             const workAccount = __.clone(account);
             AccountModel.encrypt(workAccount);
@@ -184,6 +184,7 @@ export default class AccountModel
                     __.extend(findAccount, account);
                     findAccount.international_phone_no = AccountModel.international_phone_no(account);
                     findAccount.crypto_type = 1;
+                    findAccount.updated_at = Utils.now();
                     AccountModel.encrypt(findAccount);
                     AccountModel.save();
                     log.d('更新しました。');

@@ -2,10 +2,10 @@
  * (C) 2016-2017 printf.jp
  */
 import Config from '../config';
+import Utils  from '../libs/utils';
 
-import fs =     require('fs');
-import moment = require('moment');
-import slog =   require('../slog');
+import fs =   require('fs');
+import slog = require('../slog');
 
 /**
  * ログイン履歴
@@ -65,9 +65,7 @@ export default class LoginHistoryModel
         const log = slog.stepIn(LoginHistoryModel.CLS_NAME, 'add');
         return new Promise((resolve : () => void, reject) =>
         {
-            const m = moment();
-
-            loginHistory.login_at = m.format('YYYY/MM/DD HH:mm:ss');
+            loginHistory.login_at = Utils.now();
             LoginHistoryModel.list.push(loginHistory);
             LoginHistoryModel.save();
 
