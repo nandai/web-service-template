@@ -15,7 +15,6 @@ import slog =   require('../slog');
  */
 export class Session
 {
-    pk         : number = null;
     id         : string = null;
     account_id : number = null;
     command_id : string = null;
@@ -84,7 +83,6 @@ export default class SessionModel
         const log = slog.stepIn(SessionModel.CLS_NAME, 'add');
         return new Promise((resolve : () => void, reject) =>
         {
-            session.pk = SeqModel.next('session');
             session.id = uuid.v4();
             session.created_at = Utils.now();
             SessionModel.list.push(session);
@@ -110,7 +108,7 @@ export default class SessionModel
             for (const i in SessionModel.list)
             {
                 const findSession = SessionModel.list[i];
-                if (findSession.pk === session.pk)
+                if (findSession.id === session.id)
                 {
                     __.extend(findSession, session);
                     findSession.updated_at = Utils.now();

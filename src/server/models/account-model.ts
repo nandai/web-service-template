@@ -207,7 +207,7 @@ export default class AccountModel
     static remove(accountId : number)
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'remove');
-        log.d(`sessionId:${accountId}`);
+        log.d(`accountId:${accountId}`);
 
         return new Promise((resolve : () => void, reject) =>
         {
