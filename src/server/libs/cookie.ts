@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Config from '../config';
 

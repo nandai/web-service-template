@@ -23,12 +23,12 @@ import UsersApp                      from './app/users-app';
 import Config                        from './config';
 import Access                        from './libs/access';
 import Authy                         from './libs/authy';
+import DB                            from './libs/database';
 import {expressExtension}            from './libs/express-extension';
 import R                             from './libs/r';
 import Utils                         from './libs/utils';
 import AccountModel                  from './models/account-model';
 import DeleteAccountModel            from './models/delete-account-model';
-import LoginHistoryModel             from './models/login-history-model';
 import SeqModel                      from './models/seq-model';
 import SessionModel, {Session}       from './models/session-model';
 import Email                         from './provider/email';
@@ -59,31 +59,36 @@ class Initializer
     private app : express.Express;
 
     /**
-     * @constructor
+     * 初期化
      */
-    constructor(app : express.Express)
+    init(app : express.Express)
     {
-        fs.mkdir(Config.ROOT_DIR + '/storage', '0755', () => {});
+        return new Promise(async (resolve : () => void) =>
+        {
+            fs.mkdir(Config.ROOT_DIR + '/storage', '0755', () => {});
 
-        Config.            load();
-        SeqModel.          load();
-        AccountModel.      load();
-        SessionModel.      load();
-        LoginHistoryModel. load();
-        DeleteAccountModel.load();
-        R.                 load();
+            Config.            load();
+            SeqModel.          load();
+            AccountModel.      load();
+            SessionModel.      load();
+            DeleteAccountModel.load();
+            R.                 load();
+            await DB.init();
 
-        Authy.init();
+            Authy.init();
 
-        this.app = app;
-        this.app.use(helmet.hidePoweredBy());
-        this.app.use(helmet.noSniff());
-        this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
-        this.app.use(expressExtension);
-        this.app.use(cookieParser());
-        this.app.use(bodyParser.urlencoded({extended:true}));
-        this.app.use(Access.jsonBodyParser);
-        this.app.use(Access.logger);
+            this.app = app;
+            this.app.use(helmet.hidePoweredBy());
+            this.app.use(helmet.noSniff());
+            this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
+            this.app.use(expressExtension);
+            this.app.use(cookieParser());
+            this.app.use(bodyParser.urlencoded({extended:true}));
+            this.app.use(Access.jsonBodyParser);
+            this.app.use(Access.logger);
+
+            resolve();
+        });
     }
 
     /**
@@ -301,15 +306,16 @@ class Initializer
 /**
  * main
  */
-function main() : void
+async function main()
 {
     slog.setConfig( 'ws://localhost:8080', 'webServiceTemplate.log', 'ALL', 'slog', 'gols');
 //  slog.setConfig('wss://localhost:8443', 'webServiceTemplate.log', 'ALL', 'slog', 'gols');
 
     const log = slog.stepIn('app.ts', 'main');
     const app = express();
-    const init = new Initializer(app);
+    const init = new Initializer();
 
+    await init.init(app);
     init.twitter();
     init.facebook();
     init.google();

@@ -1,10 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config from '../config';
-import Utils  from '../libs/utils';
+import DB    from '../libs/database';
+import Utils from '../libs/utils';
 
-import fs =   require('fs');
+import _ =    require('lodash');
 import slog = require('../slog');
 
 /**
@@ -12,6 +12,7 @@ import slog = require('../slog');
  */
 export class LoginHistory
 {
+    id         : number = null;
     account_id : number = null;
     device     : string = null;
     login_at   : string = null;
@@ -23,54 +24,34 @@ export class LoginHistory
 export default class LoginHistoryModel
 {
     private static CLS_NAME = 'LoginHistoryModel';
-    private static list : LoginHistory[] = null;
-    private static path = Config.ROOT_DIR + '/storage/loginHistory.json';
-    private static MESSAGE_UNINITIALIZE = 'LoginHistoryModelが初期化されていません。';
-
-    /**
-     * ログイン履歴をJSONファイルからロードする
-     */
-    static load() : void
-    {
-        try
-        {
-            fs.statSync(LoginHistoryModel.path);
-            const text = fs.readFileSync(LoginHistoryModel.path, 'utf8');
-            LoginHistoryModel.list = JSON.parse(text);
-        }
-        catch (err)
-        {
-            LoginHistoryModel.list = [];
-        }
-    }
-
-    /**
-     * ログイン履歴をJSONファイルにセーブする
-     */
-    private static save() : void
-    {
-        const text = JSON.stringify(LoginHistoryModel.list, null, 2);
-        fs.writeFileSync(LoginHistoryModel.path, text);
-    }
 
     /**
      * ログイン履歴を追加する
      *
-     * @param   loginHistory    ログイン履歴
+     * @param   model    ログイン履歴
      *
      * @return  なし
      */
-    static add(loginHistory : LoginHistory)
+    static add(model : LoginHistory)
     {
         const log = slog.stepIn(LoginHistoryModel.CLS_NAME, 'add');
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise(async (resolve : (model : LoginHistory) => void, reject : (err : Error) => void) =>
         {
-            loginHistory.login_at = Utils.now();
-            LoginHistoryModel.list.push(loginHistory);
-            LoginHistoryModel.save();
+            try
+            {
+                const newModel = _.clone(model);
+                delete newModel.id;
+                newModel.login_at = Utils.now();
 
-            log.stepOut();
-            resolve();
+                const sql = 'INSERT INTO login_history SET ?';
+                const values = newModel;
+                const results = await DB.query(sql, values);
+                newModel.id = results.insertId;
+
+                log.stepOut();
+                resolve(newModel);
+            }
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 }

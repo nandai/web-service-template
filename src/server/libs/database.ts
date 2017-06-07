@@ -1,0 +1,150 @@
+/**
+ * (C) 2016 printf.jp
+ */
+import Config from '../config';
+
+import mysql = require('mysql');
+import slog =  require('../slog');
+
+/**
+ * データベース
+ */
+export default class Database
+{
+    private static pool : mysql.IPool;
+
+    /**
+     * 初期化
+     */
+    static init()
+    {
+        return new Promise(async (resolve : () => void) =>
+        {
+            const log = slog.stepIn('Database', 'init');
+            try
+            {
+                const config : mysql.IPoolConfig =
+                {
+                    host:     Config.DB_HOST,
+                    user:     Config.DB_USER,
+                    password: Config.DB_PASSWORD,
+                    database: Config.DB_NAME,
+                    charset:  'utf8mb4'
+                };
+                Database.pool = mysql.createPool(config);
+
+                const conn = await Database.getConnection();
+                conn.release();
+
+                log.stepOut();
+                resolve();
+            }
+            catch (err)
+            {
+                console.error('MySQLの初期化に失敗しました。');
+                console.error(err.message);
+                log.e(err.message);
+                log.stepOut();
+
+                // すぐに終了するとログが出力されないので数秒待ってから終了する
+                setTimeout(() => process.exit(-1), 3000);
+            }
+        });
+    }
+
+    /**
+     * コネクション取得
+     */
+    private static getConnection()
+    {
+        return new Promise((resolve : (conn : Connection) => void, reject : (err : Error) => void) =>
+        {
+            Database.pool.getConnection((err: mysql.IError, connection: mysql.IConnection) =>
+            {
+                if (err)
+                {
+                    reject(err);
+                    return;
+                }
+
+                const conn = new Connection(connection);
+                resolve(conn);
+            });
+        });
+    }
+
+    /**
+     * クエリー実行
+     */
+    static query(sql : string, values?)
+    {
+        return new Promise(async (resolve : (results) => void, reject : (err : Error) => void) =>
+        {
+            let conn : Connection;
+            try
+            {
+                conn = await Database.getConnection();
+                const results = await conn.query(sql, values);
+                conn.release();
+                resolve(results);
+            }
+            catch (err)
+            {
+                if (conn) {
+                    conn.release();
+                }
+                reject(err);
+            }
+        });
+    }
+}
+
+/**
+ * コネクション
+ */
+class Connection
+{
+    private connection : mysql.IConnection;
+
+    /**
+     * @constructor
+     */
+    constructor(connection : mysql.IConnection)
+    {
+        this.connection = connection;
+    }
+
+    /**
+     * クエリー実行
+     */
+    query(sql : string, values?)
+    {
+        return new Promise((resolve : (results) => void, reject : (err : Error) => void) =>
+        {
+            const log = slog.stepIn('Connection', 'query');
+            const query = this.connection.query(sql, values, (err: mysql.IError, results) =>
+            {
+                if (err)
+                {
+                    log.e(err.message);
+                    log.stepOut();
+                    reject(err);
+                    return;
+                }
+
+                log.stepOut();
+                resolve(results);
+            });
+            log.d(query.sql);
+        });
+    }
+
+    /**
+     * リリース
+     */
+    release() : void
+    {
+        this.connection.release();
+        this.connection = null;
+    }
+}

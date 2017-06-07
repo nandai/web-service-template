@@ -27,6 +27,10 @@
         "twilio-account-sid":      "",
         "twilio-auth-token":       "",
         "twilio-from-phone-no":    "",
-        "authy-api-key":           ""
+        "authy-api-key":           "",
+        "db-host":                 "",
+        "db-user":                 "",
+        "db-password":             "",
+        "db-name":                 ""
     }
 }

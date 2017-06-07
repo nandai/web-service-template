@@ -371,10 +371,10 @@ export default class Utils
     }
 
     /**
-     * 現在日時（JST）を取得
+     * 現在日時（UTC）を取得
      */
     static now() : string
     {
-        return moment().format('YYYY/MM/DD HH:mm:ss');
+        return moment().utc().format('YYYY/MM/DD HH:mm:ss');
     }
 }

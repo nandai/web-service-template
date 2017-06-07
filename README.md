@@ -36,7 +36,11 @@ SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し
         "twilio-account-sid":      "",
         "twilio-auth-token":       "",
         "twilio-from-phone-no":    "",
-        "authy-api-key":           ""
+        "authy-api-key":           "",
+        "db-host":                 "",
+        "db-user":                 "",
+        "db-password":             "",
+        "db-name":                 ""
     }
 }
 ```
