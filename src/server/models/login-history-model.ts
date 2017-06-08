@@ -28,7 +28,7 @@ export default class LoginHistoryModel
     /**
      * ログイン履歴を追加する
      *
-     * @param   model    ログイン履歴
+     * @param   model   ログイン履歴
      *
      * @return  なし
      */

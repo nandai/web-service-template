@@ -172,8 +172,7 @@ export default class Access
 
             if (sessionId === undefined)
             {
-                session = new Session();
-                await SessionModel.add(session);
+                session = await SessionModel.add();
                 log.d('セッションを生成しました。');
             }
             else
@@ -185,8 +184,7 @@ export default class Access
                     // res.ext.badRequest(locale);
                     // log.stepOut();
                     // return;
-                    session = new Session();
-                    await SessionModel.add(session);
+                    session = await SessionModel.add();
                     log.d('セッションを再生成しました。');
                 }
                 else

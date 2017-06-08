@@ -1,12 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config   from '../config';
+import DB       from '../libs/database';
 import Utils    from '../libs/utils';
-import SeqModel from './seq-model';
 
-import fs =     require('fs');
-import __ =     require('lodash');
+import _ =      require('lodash');
 import uuid =   require('node-uuid');
 import slog =   require('../slog');
 
@@ -32,94 +30,62 @@ export class Session
 export default class SessionModel
 {
     private static CLS_NAME = 'SessionModel';
-    private static list : Session[] = null;
-    private static path = Config.ROOT_DIR + '/storage/session.json';
-    private static MESSAGE_UNINITIALIZE = 'SessionModelが初期化されていません。';
-
-    /**
-     * セッションをJSONファイルからロードする
-     */
-    static load() : void
-    {
-        try
-        {
-            SessionModel.list = [];
-
-            fs.statSync(SessionModel.path);
-            const text = fs.readFileSync(SessionModel.path, 'utf8');
-            const list = JSON.parse(text);
-
-            for (const obj of list)
-            {
-                const session = new Session();
-                Utils.copy(session, obj);
-                SessionModel.list.push(session);
-            }
-        }
-        catch (err)
-        {
-            SessionModel.list = [];
-        }
-    }
-
-    /**
-     * セッションをJSONファイルにセーブする
-     */
-    private static save() : void
-    {
-        const text = JSON.stringify(SessionModel.list, null, 2);
-        fs.writeFileSync(SessionModel.path, text);
-    }
 
     /**
      * セッションを追加する
      *
-     * @param   session セッション
+     * @param   model   セッション
      *
      * @return  なし
      */
-    static add(session : Session)
+    static add()
     {
         const log = slog.stepIn(SessionModel.CLS_NAME, 'add');
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise(async (resolve : SessionResolve, reject : (err : Error) => void) =>
         {
-            session.id = uuid.v4();
-            session.created_at = Utils.now();
-            SessionModel.list.push(session);
-            SessionModel.save();
+            try
+            {
+                const newModel = new Session();
+                newModel.id = uuid.v4();
+                newModel.created_at = Utils.now();
 
-            log.stepOut();
-            resolve();
+                const sql = 'INSERT INTO session SET ?';
+                const values = newModel;
+                const results = await DB.query(sql, values);
+
+                log.stepOut();
+                resolve(newModel);
+            }
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 
     /**
      * セッションを更新する
      *
-     * @param   session セッション
+     * @param   model   セッション
      *
      * @return  なし
      */
-    static update(session : Session)
+    static update(model : Session)
     {
         const log = slog.stepIn(SessionModel.CLS_NAME, 'update');
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise(async (resolve : () => void, reject : (err : Error) => void) =>
         {
-            for (const i in SessionModel.list)
+            try
             {
-                const findSession = SessionModel.list[i];
-                if (findSession.id === session.id)
-                {
-                    __.extend(findSession, session);
-                    findSession.updated_at = Utils.now();
-                    SessionModel.save();
-                    log.d('更新しました。');
-                    break;
-                }
-            }
+                const newModel = _.clone(model);
+                delete newModel.id;
+                newModel.updated_at = Utils.now();
 
-            log.stepOut();
-            resolve();
+                const sql = 'UPDATE session SET ? WHERE id=?';
+                const values = [newModel, model.id];
+                const results = await DB.query(sql, values);
+
+                log.stepOut();
+                resolve();
+            }
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 
@@ -135,21 +101,37 @@ export default class SessionModel
         const log = slog.stepIn(SessionModel.CLS_NAME, 'logout');
         log.d(JSON.stringify(cond, null, 2));
 
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise(async (resolve : () => void, reject : (err : Error) => void) =>
         {
-            for (const session of SessionModel.list)
+            try
             {
-                if ((cond.sessionId === undefined || session.id         === cond.sessionId)
-                &&  (cond.accountId === undefined || session.account_id === cond.accountId))
-                {
-                    session.account_id = null;
-                    log.d('ログアウトしました。');
-                }
-            }
-            SessionModel.save();
+                const sql = 'UPDATE session SET ? WHERE ??=?';
+                const values : any[] =
+                [
+                    {
+                        account_id: null,
+                        updated_at: Utils.now()
+                    }
+                ];
 
-            log.stepOut();
-            resolve();
+                if (cond.sessionId)
+                {
+                    values.push('id');
+                    values.push(cond.sessionId);
+                }
+
+                if (cond.accountId)
+                {
+                    values.push('account_id');
+                    values.push(cond.accountId);
+                }
+
+                const results = await DB.query(sql, values);
+
+                log.stepOut();
+                resolve();
+            }
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 
@@ -163,44 +145,34 @@ export default class SessionModel
     static find(sessionId : string) : Promise<Session>
     {
         const log = slog.stepIn(SessionModel.CLS_NAME, 'find');
-        log.d(`sessionId:${sessionId}`);
-
-        return new Promise((resolve : SessionResolve, reject) =>
+        return new Promise(async (resolve : SessionResolve, reject) =>
         {
-            if (SessionModel.isUninitialize())
+            try
             {
+                const sql = 'SELECT * FROM session WHERE id=?';
+                const values = sessionId;
+                const results = await DB.query(sql, values);
+                const model = SessionModel.toModel(results);
+
                 log.stepOut();
-                reject(new Error(SessionModel.MESSAGE_UNINITIALIZE));
-                return;
+                resolve(model);
             }
-
-            for (const session of SessionModel.list)
-            {
-                if (session.id === sessionId)
-                {
-                    log.d('見つかりました。');
-                    const findSession = __.clone(session);
-
-                    log.stepOut();
-                    resolve(findSession);
-                    return;
-                }
-            }
-
-            log.d('見つかりませんでした。');
-            log.stepOut();
-            resolve(null);
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 
     /**
-     * 未初期化かどうか調べる
-     *
-     * @return  未初期化ならtrueを返す
+     * Sessionに変換
      */
-    private static isUninitialize() : boolean
+    static toModel(data : any[]) : Session
     {
-        return (SessionModel.list === null);
+        let model : Session = null;
+        if (data.length === 1)
+        {
+            model = new Session();
+            Utils.copy(model, data[0]);
+        }
+        return model;
     }
 }
 
@@ -213,4 +185,4 @@ export interface SessionFindCondition
     accountId? : number;
 }
 
-interface SessionResolve {(session : Session) : void;}
+interface SessionResolve {(model : Session) : void;}

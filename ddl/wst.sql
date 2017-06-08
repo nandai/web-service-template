@@ -74,6 +74,7 @@ CREATE TABLE session
     command_id              varchar(32),
     message_id              varchar(256),
     sms_id                  varchar(32),
+    sms_code                varchar(6),
     authy_uuid              varchar(36),
     created_at              datetime NOT NULL,
     updated_at              datetime,

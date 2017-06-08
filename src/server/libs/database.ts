@@ -132,6 +132,10 @@ class Connection
                     return;
                 }
 
+                if (sql.startsWith('SELECT')) {
+                    log.d(`取得件数：${results.length} 件`);
+                }
+
                 log.stepOut();
                 resolve(results);
             });

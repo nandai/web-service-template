@@ -70,7 +70,6 @@ class Initializer
             Config.            load();
             SeqModel.          load();
             AccountModel.      load();
-            SessionModel.      load();
             DeleteAccountModel.load();
             R.                 load();
             await DB.init();
