@@ -78,9 +78,11 @@ export async function onLoginSms(req : express.Request, res : express.Response)
                 await SessionModel.update(session);
 
                 // ログイン履歴作成
-                const loginHistory = new LoginHistory();
-                loginHistory.account_id = account.id;
-                loginHistory.device = req.headers['user-agent'];
+                const loginHistory : LoginHistory =
+                {
+                    account_id: account.id,
+                    device:     req.headers['user-agent']
+                };
                 await LoginHistoryModel.add(loginHistory);
             }
 

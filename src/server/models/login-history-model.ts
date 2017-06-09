@@ -8,17 +8,6 @@ import _ =    require('lodash');
 import slog = require('../slog');
 
 /**
- * ログイン履歴
- */
-export class LoginHistory
-{
-    id         : number = null;
-    account_id : number = null;
-    device     : string = null;
-    login_at   : string = null;
-}
-
-/**
  * ログイン履歴モデル
  */
 export default class LoginHistoryModel
@@ -35,7 +24,7 @@ export default class LoginHistoryModel
     static add(model : LoginHistory)
     {
         const log = slog.stepIn(LoginHistoryModel.CLS_NAME, 'add');
-        return new Promise(async (resolve : (model : LoginHistory) => void, reject : (err : Error) => void) =>
+        return new Promise(async (resolve : (model : LoginHistory) => void, reject) =>
         {
             try
             {
@@ -54,4 +43,15 @@ export default class LoginHistoryModel
             catch (err) {log.stepOut(); reject(err);}
         });
     }
+}
+
+/**
+ * ログイン履歴
+ */
+export interface LoginHistory
+{
+    id?         : number;
+    account_id? : number;
+    device?     : string;
+    login_at?   : string;
 }

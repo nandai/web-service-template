@@ -163,9 +163,11 @@ export default class Provider
                                     await SessionModel.update(session);
 
                                     // ログイン履歴作成
-                                    const loginHistory = new LoginHistory();
-                                    loginHistory.account_id = account.id;
-                                    loginHistory.device = req.headers['user-agent'];
+                                    const loginHistory : LoginHistory =
+                                    {
+                                        account_id: account.id,
+                                        device:     req.headers['user-agent']
+                                    };
                                     await LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ
@@ -246,9 +248,11 @@ export default class Provider
                                     await SessionModel.update(session);
 
                                     // ログイン履歴作成
-                                    const loginHistory = new LoginHistory();
-                                    loginHistory.account_id = findAccount.id;
-                                    loginHistory.device = req.headers['user-agent'];
+                                    const loginHistory : LoginHistory =
+                                    {
+                                        account_id: findAccount.id,
+                                        device:     req.headers['user-agent']
+                                    };
                                     await LoginHistoryModel.add(loginHistory);
 
                                     // トップ画面へ

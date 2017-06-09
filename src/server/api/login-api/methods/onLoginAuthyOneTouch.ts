@@ -38,9 +38,11 @@ export async function onLoginAuthyOneTouch(req : express.Request, res : express.
                     await SessionModel.update(session);
 
                     // ログイン履歴作成
-                    const loginHistory = new LoginHistory();
-                    loginHistory.account_id = session.account_id;
-                    loginHistory.device = req.headers['user-agent'];
+                    const loginHistory : LoginHistory =
+                    {
+                        account_id: session.account_id,
+                        device:     req.headers['user-agent']
+                    };
                     await LoginHistoryModel.add(loginHistory);
                 }
             }

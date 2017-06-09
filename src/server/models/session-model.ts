@@ -1,28 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import DB       from '../libs/database';
-import Utils    from '../libs/utils';
+import DB     from '../libs/database';
+import Utils  from '../libs/utils';
 
-import _ =      require('lodash');
-import uuid =   require('node-uuid');
-import slog =   require('../slog');
-
-/**
- * セッション
- */
-export class Session
-{
-    id         : string = null;
-    account_id : number = null;
-    command_id : string = null;
-    message_id : string = null;
-    sms_id     : string = null;
-    sms_code   : string = null;
-    authy_uuid : string = null;
-    created_at : string = null;
-    updated_at : string = null;
-}
+import _ =    require('lodash');
+import uuid = require('node-uuid');
+import slog = require('../slog');
 
 /**
  * セッションモデル
@@ -41,13 +25,15 @@ export default class SessionModel
     static add()
     {
         const log = slog.stepIn(SessionModel.CLS_NAME, 'add');
-        return new Promise(async (resolve : SessionResolve, reject : (err : Error) => void) =>
+        return new Promise(async (resolve : SessionResolve, reject) =>
         {
             try
             {
-                const newModel = new Session();
-                newModel.id = uuid.v4();
-                newModel.created_at = Utils.now();
+                const newModel : Session =
+                {
+                    id:         uuid.v4(),
+                    created_at: Utils.now()
+                };
 
                 const sql = 'INSERT INTO session SET ?';
                 const values = newModel;
@@ -70,7 +56,7 @@ export default class SessionModel
     static update(model : Session)
     {
         const log = slog.stepIn(SessionModel.CLS_NAME, 'update');
-        return new Promise(async (resolve : () => void, reject : (err : Error) => void) =>
+        return new Promise(async (resolve : () => void, reject) =>
         {
             try
             {
@@ -101,7 +87,7 @@ export default class SessionModel
         const log = slog.stepIn(SessionModel.CLS_NAME, 'logout');
         log.d(JSON.stringify(cond, null, 2));
 
-        return new Promise(async (resolve : () => void, reject : (err : Error) => void) =>
+        return new Promise(async (resolve : () => void, reject) =>
         {
             try
             {
@@ -164,16 +150,55 @@ export default class SessionModel
     /**
      * Sessionに変換
      */
-    static toModel(data : any[]) : Session
+    static toModel(data) : Session
     {
-        let model : Session = null;
-        if (data.length === 1)
-        {
-            model = new Session();
-            Utils.copy(model, data[0]);
+        if (! data) {
+            return null;
         }
+
+        if (Array.isArray(data))
+        {
+            if (data.length !== 1) {
+                return null;
+            }
+            data = data[0];
+        }
+
+        return SessionModel.to_model(data);
+    }
+
+    private static to_model(data) : Session
+    {
+        const model : Session =
+        {
+            id:         data.id,
+            account_id: data.account_id,
+            command_id: data.command_id,
+            message_id: data.message_id,
+            sms_id:     data.sms_id,
+            sms_code:   data.sms_code,
+            authy_uuid: data.authy_uuid,
+            created_at: data.created_at,
+            updated_at: data.updated_at
+        };
         return model;
     }
+}
+
+/**
+ * セッション
+ */
+export interface Session
+{
+    id?         : string;
+    account_id? : number;
+    command_id? : string;
+    message_id? : string;
+    sms_id?     : string;
+    sms_code?   : string;
+    authy_uuid? : string;
+    created_at? : string;
+    updated_at? : string;
 }
 
 /**
