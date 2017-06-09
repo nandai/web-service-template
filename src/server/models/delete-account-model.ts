@@ -1,11 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config    from '../config';
+import DB        from '../libs/database';
 import Utils     from '../libs/utils';
 import {Account} from './account-model';
 
-import fs =   require('fs');
+import _ =    require('lodash');
 import slog = require('../slog');
 
 /**
@@ -14,45 +14,6 @@ import slog = require('../slog');
 export default class DeleteAccountModel
 {
     private static CLS_NAME = 'DeleteAccountModel';
-    private static list : Account[] = null;
-    private static backupList : Account[] = null;
-    private static path = Config.ROOT_DIR + '/storage/delete-account.json';
-    private static MESSAGE_UNINITIALIZE = 'DeleteAccountModelが初期化されていません。';
-
-    /**
-     * アカウントをJSONファイルからロードする
-     */
-    static load() : void
-    {
-        try
-        {
-            DeleteAccountModel.list = [];
-
-            fs.statSync(DeleteAccountModel.path);
-            const text = fs.readFileSync(DeleteAccountModel.path, 'utf8');
-            const list = JSON.parse(text);
-
-            for (const obj of list)
-            {
-                const account = new Account();
-                Utils.copy(account, obj);
-                DeleteAccountModel.list.push(account);
-            }
-        }
-        catch (err)
-        {
-            DeleteAccountModel.list = [];
-        }
-    }
-
-    /**
-     * アカウントをJSONファイルにセーブする
-     */
-    private static save() : void
-    {
-        const text = JSON.stringify(DeleteAccountModel.list, null, 2);
-        fs.writeFileSync(DeleteAccountModel.path, text);
-    }
 
     /**
      * アカウントを追加する
@@ -61,17 +22,24 @@ export default class DeleteAccountModel
      *
      * @return  なし
      */
-    static add(account : Account)
+    static add(model : Account)
     {
         const log = slog.stepIn(DeleteAccountModel.CLS_NAME, 'add');
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise(async (resolve : (model : Account) => void, reject) =>
         {
-            account.deleted_at = Utils.now();
-            DeleteAccountModel.list.push(account);
-            DeleteAccountModel.save();
+            try
+            {
+                const newModel = _.clone(model);
+                newModel.deleted_at = Utils.now();
 
-            log.stepOut();
-            resolve();
+                const sql = 'INSERT INTO delete_account SET ?';
+                const values = newModel;
+                const results = await DB.query(sql, values);
+
+                log.stepOut();
+                resolve(newModel);
+            }
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 }

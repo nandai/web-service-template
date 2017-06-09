@@ -32,7 +32,7 @@ CREATE TABLE account
 
 CREATE TABLE delete_account
 (
-    id                      int NOT NULL AUTO_INCREMENT,
+    id                      int NOT NULL,
     name                    varchar(20) NOT NULL,
     user_name               varchar(20),
     twitter                 varchar(32),
