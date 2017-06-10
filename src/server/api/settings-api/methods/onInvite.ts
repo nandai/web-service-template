@@ -43,8 +43,8 @@ export async function onInvite(req : express.Request, res : express.Response)
 
             if (account === null)
             {
-                const inviteId = Utils.createRandomText(32);
-                const url = Utils.generateUrl('join', inviteId);
+                const invite_id = Utils.createRandomText(32);
+                const url = Utils.generateUrl('join', invite_id);
                 const template = R.mail(R.NOTICE_INVITE, locale);
                 const contents = CommonUtils.formatString(template.contents, {url});
                 const result = await Utils.sendMail(template.subject, email, contents);
@@ -54,10 +54,8 @@ export async function onInvite(req : express.Request, res : express.Response)
                     status = Response.Status.OK;
                     resource = R.INVITE_MAIL_SENDED;
 
-                    account = new Account();
-                    account.name =      email.substr(0, email.indexOf('@'));
-                    account.email =     email;
-                    account.invite_id = inviteId;
+                    const name = email.substr(0, email.indexOf('@'));
+                    account = {name, email, invite_id};
                     account = await AccountModel.add(account);
                 }
                 else

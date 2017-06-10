@@ -52,7 +52,7 @@ export async function onUnlinkProvider(req : express.Request, res : express.Resp
             const session : Session = req.ext.session;
             const account = await AccountModel.find(session.account_id);
 
-            if (account.canUnlink(provider))
+            if (AccountModel.canUnlink(account, provider))
             {
                 account[provider] = null;
                 await AccountModel.update(account);

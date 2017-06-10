@@ -89,12 +89,14 @@ export default class Email extends Provider
      */
     protected createAccount(user : PassportUser) : Account
     {
-        const account = new Account();
         const email = user.accessToken;
-        account.name =      email.substr(0, email.indexOf('@'));
-        account.email =     email;
-        account.password =  user.refreshToken;
-        account.signup_id = Utils.createRandomText(32);
+        const account : Account =
+        {
+            name:      email.substr(0, email.indexOf('@')),
+            email,
+            password:  user.refreshToken,
+            signup_id: Utils.createRandomText(32)
+        };
         return account;
     }
 

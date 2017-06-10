@@ -201,7 +201,7 @@ export default class Provider
                             {
                                 log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
                                 let phrase : string;
-                                let isTwoFactorAuth = findAccount.canTwoFactorAuth();
+                                let isTwoFactorAuth = AccountModel.canTwoFactorAuth(findAccount);
 
                                 if (isTwoFactorAuth)
                                 {
@@ -344,9 +344,8 @@ export default class Provider
      */
     protected createAccount(user : PassportUser) : Account
     {
-        const account = new Account();
+        const account : Account = {name:this.name};
         account[user.provider] = this.id;
-        account.name = this.name;
         return account;
     }
 

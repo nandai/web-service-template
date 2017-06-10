@@ -45,7 +45,7 @@ export async function onLoginSms(req : express.Request, res : express.Response)
             if (session.sms_id === smsId)
             {
                 const account = await AccountModel.find(session.account_id);
-                const canTwoFactorAuth = account.canTwoFactorAuth();
+                const canTwoFactorAuth = AccountModel.canTwoFactorAuth(account);
 
                 if (canTwoFactorAuth === false)
                 {

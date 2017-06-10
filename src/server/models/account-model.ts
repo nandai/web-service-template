@@ -393,6 +393,58 @@ export default class AccountModel
     }
 
     /**
+     * 紐づけを解除できるかどうか調べる
+     *
+     * @param   provider    プロバイダ名
+     *
+     * @return  解除できる場合はtrueを返す
+     */
+    static canUnlink(model : Account, provider : string) : boolean
+    {
+        let count = 0;
+        let existsProvider = null;
+
+        if (model.twitter)  {count++; existsProvider = 'twitter';}
+        if (model.facebook) {count++; existsProvider = 'facebook';}
+        if (model.google)   {count++; existsProvider = 'google';}
+        if (model.github)   {count++; existsProvider = 'github';}
+
+        if (model.email && model.password)
+        {
+            count++;
+            existsProvider = 'email';
+        }
+
+        if (count === 1 && existsProvider === provider) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 二段階認証を行えるかどうか
+     */
+    static canTwoFactorAuth(model : Account) : boolean
+    {
+        let possible = false;
+        if (model.country_code !== null && model.phone_no !== null)
+        {
+            switch (model.two_factor_auth)
+            {
+                case 'SMS':
+                    possible = Config.hasTwilio();
+                    break;
+
+                case 'Authy':
+                    possible = (Config.AUTHY_API_KEY !== '');
+                    break;
+            }
+        }
+        return possible;
+    }
+
+    /**
      * Accountに変換
      */
     static toModel(data) : Account
@@ -426,57 +478,32 @@ export default class AccountModel
 
     private static to_model(data) : Account
     {
-        // const model : Account =
-        // {
-        //     id:                     data.id,
-        //     name:                   data.name,
-        //     user_name:              data.user_name,
-        //     twitter:                data.twitter,
-        //     facebook:               data.facebook,
-        //     google:                 data.google,
-        //     github:                 data.github,
-        //     email:                  data.email,
-        //     password:               data.password,
-        //     country_code:           data.country_code,
-        //     phone_no:               data.phone_no,
-        //     international_phone_no: data.international_phone_no,
-        //     authy_id:               data.authy_id,
-        //     two_factor_auth:        data.two_factor_auth,
-        //     signup_id:              data.signup_id,
-        //     invite_id:              data.invite_id,
-        //     reset_id:               data.reset_id,
-        //     change_id:              data.change_id,
-        //     change_email:           data.change_email,
-        //     crypto_type:            data.crypto_type,
-        //     created_at:             data.created_at,
-        //     updated_at:             data.updated_at,
-        //     deleted_at:             data.deleted_at
-        // };
-        const model = new Account();
-        model.id =                     data.id;
-        model.name =                   data.name;
-        model.user_name =              data.user_name;
-        model.twitter =                data.twitter;
-        model.facebook =               data.facebook;
-        model.google =                 data.google;
-        model.github =                 data.github;
-        model.email =                  data.email;
-        model.password =               data.password;
-        model.country_code =           data.country_code;
-        model.phone_no =               data.phone_no;
-        model.international_phone_no = data.international_phone_no;
-        model.authy_id =               data.authy_id;
-        model.two_factor_auth =        data.two_factor_auth;
-        model.signup_id =              data.signup_id;
-        model.invite_id =              data.invite_id;
-        model.reset_id =               data.reset_id;
-        model.change_id =              data.change_id;
-        model.change_email =           data.change_email;
-        model.crypto_type =            data.crypto_type;
-        model.created_at =             data.created_at;
-        model.updated_at =             data.updated_at;
-        model.deleted_at =             data.deleted_at;
-
+        const model : Account =
+        {
+            id:                     data.id,
+            name:                   data.name,
+            user_name:              data.user_name,
+            twitter:                data.twitter,
+            facebook:               data.facebook,
+            google:                 data.google,
+            github:                 data.github,
+            email:                  data.email,
+            password:               data.password,
+            country_code:           data.country_code,
+            phone_no:               data.phone_no,
+            international_phone_no: data.international_phone_no,
+            authy_id:               data.authy_id,
+            two_factor_auth:        data.two_factor_auth,
+            signup_id:              data.signup_id,
+            invite_id:              data.invite_id,
+            reset_id:               data.reset_id,
+            change_id:              data.change_id,
+            change_email:           data.change_email,
+            crypto_type:            data.crypto_type,
+            created_at:             data.created_at,
+            updated_at:             data.updated_at,
+            deleted_at:             data.deleted_at
+        };
         return model;
     }
 }
@@ -484,83 +511,31 @@ export default class AccountModel
 /**
  * アカウント
  */
-export class Account
+export interface Account
 {
-    id                     : number = null;
-    name                   : string = null;
-    user_name              : string = null; // 重複不可
-    twitter                : string = null;
-    facebook               : string = null;
-    google                 : string = null;
-    github                 : string = null;
-    email                  : string = null;
-    password               : string = null;
-    country_code           : string = null;
-    phone_no               : string = null; // 例：03-1234-5678
-    international_phone_no : string = null; // 例：81312345678。検索などで使う想定
-    authy_id               : number = null;
-    two_factor_auth        : string = null;
-    signup_id              : string = null;
-    invite_id              : string = null;
-    reset_id               : string = null;
-    change_id              : string = null;
-    change_email           : string = null;
-    crypto_type            : number = null;
-    created_at             : string = null;
-    updated_at             : string = null;
-    deleted_at             : string = null;
-
-    /**
-     * 紐づけを解除できるかどうか調べる
-     *
-     * @param   provider    プロバイダ名
-     *
-     * @return  解除できる場合はtrueを返す
-     */
-    canUnlink(provider : string) : boolean
-    {
-        let count = 0;
-        let existsProvider = null;
-
-        if (this.twitter)  {count++; existsProvider = 'twitter';}
-        if (this.facebook) {count++; existsProvider = 'facebook';}
-        if (this.google)   {count++; existsProvider = 'google';}
-        if (this.github)   {count++; existsProvider = 'github';}
-
-        if (this.email && this.password)
-        {
-            count++;
-            existsProvider = 'email';
-        }
-
-        if (count === 1 && existsProvider === provider) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * 二段階認証を行えるかどうか
-     */
-    canTwoFactorAuth() : boolean
-    {
-        let possible = false;
-        if (this.country_code !== null && this.phone_no !== null)
-        {
-            switch (this.two_factor_auth)
-            {
-                case 'SMS':
-                    possible = Config.hasTwilio();
-                    break;
-
-                case 'Authy':
-                    possible = (Config.AUTHY_API_KEY !== '');
-                    break;
-            }
-        }
-        return possible;
-    }
+    id?                     : number;
+    name?                   : string;
+    user_name?              : string;    // 重複不可
+    twitter?                : string;
+    facebook?               : string;
+    google?                 : string;
+    github?                 : string;
+    email?                  : string;
+    password?               : string;
+    country_code?           : string;
+    phone_no?               : string;    // 例：03-1234-5678
+    international_phone_no? : string;    // 例：81312345678。検索などで使う想定
+    authy_id?               : number;
+    two_factor_auth?        : string;
+    signup_id?              : string;
+    invite_id?              : string;
+    reset_id?               : string;
+    change_id?              : string;
+    change_email?           : string;
+    crypto_type?            : number;
+    created_at?             : string;
+    updated_at?             : string;
+    deleted_at?             : string;
 }
 
 /**

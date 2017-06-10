@@ -55,7 +55,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
             if (changeEmail === null || changeEmail === '')
             {
                 // メールアドレスを削除する場合
-                if (account.canUnlink('email'))
+                if (AccountModel.canUnlink(account, 'email'))
                 {
                     account.email = null;
                     account.password = null;
