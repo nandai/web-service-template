@@ -62,8 +62,6 @@ class Initializer
     {
         return new Promise(async (resolve : () => void) =>
         {
-            fs.mkdir(Config.ROOT_DIR + '/storage', '0755', () => {});
-
             Config.load();
             R     .load();
 
