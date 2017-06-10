@@ -17,10 +17,6 @@ export default class SessionModel
 
     /**
      * セッションを追加する
-     *
-     * @param   model   セッション
-     *
-     * @return  なし
      */
     static add()
     {

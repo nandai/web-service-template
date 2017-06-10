@@ -58,7 +58,7 @@ export async function onInvite(req : express.Request, res : express.Response)
                     account.name =      email.substr(0, email.indexOf('@'));
                     account.email =     email;
                     account.invite_id = inviteId;
-                    await AccountModel.add(account);
+                    account = await AccountModel.add(account);
                 }
                 else
                 {

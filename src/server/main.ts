@@ -27,8 +27,6 @@ import DB                            from './libs/database';
 import {expressExtension}            from './libs/express-extension';
 import R                             from './libs/r';
 import Utils                         from './libs/utils';
-import AccountModel                  from './models/account-model';
-import SeqModel                      from './models/seq-model';
 import SessionModel, {Session}       from './models/session-model';
 import Email                         from './provider/email';
 import Facebook                      from './provider/facebook';
@@ -66,13 +64,11 @@ class Initializer
         {
             fs.mkdir(Config.ROOT_DIR + '/storage', '0755', () => {});
 
-            Config.      load();
-            SeqModel.    load();
-            AccountModel.load();
-            R.           load();
-            await DB.init();
+            Config.load();
+            R     .load();
 
-            Authy.init();
+            await DB.init();
+            Authy   .init();
 
             this.app = app;
             this.app.use(helmet.hidePoweredBy());

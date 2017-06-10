@@ -135,11 +135,11 @@ export default class Provider
                                 log.i('サインアップ可能。ログインもしていないので、サインアップを続行し、トップ画面へ移動する');
 
                                 // アカウント作成
-                                const account = self.createAccount(user);
+                                let account = self.createAccount(user);
 
                                 if (findAccount === null)
                                 {
-                                    await AccountModel.add(account);
+                                    account = await AccountModel.add(account);
                                 }
                                 else
                                 {

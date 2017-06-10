@@ -1,13 +1,485 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config   from '../config';
-import Utils    from '../libs/utils';
-import SeqModel from './seq-model';
+import Config from '../config';
+import DB     from '../libs/database';
+import Utils  from '../libs/utils';
 
-import fs =   require('fs');
-import __ =   require('lodash');
+import _ =    require('lodash');
 import slog = require('../slog');
+
+/**
+ * アカウントモデル
+ */
+export default class AccountModel
+{
+    private static CLS_NAME = 'AccountModel';
+
+    /**
+     * アカウントを追加する
+     *
+     * @param   model   アカウント
+     */
+    static add(model : Account)
+    {
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'add');
+        return new Promise(async (resolve : (model : Account) => void, reject) =>
+        {
+            try
+            {
+                const newModel = _.clone(model);
+                delete newModel.id;
+                newModel.international_phone_no = AccountModel.international_phone_no(model);
+                newModel.crypto_type = 1;
+                newModel.created_at = Utils.now();
+
+                const encryptModel = _.clone(newModel);
+                AccountModel.encrypt(encryptModel);
+
+                const sql = 'INSERT INTO account SET ?';
+                const values = encryptModel;
+                const results = await DB.query(sql, values);
+                newModel.id = results.insertId;
+
+                log.stepOut();
+                resolve(newModel);
+            }
+            catch (err) {log.stepOut(); reject(err);}
+        });
+    }
+
+    /**
+     * アカウントを更新する
+     *
+     * @param   model   アカウント
+     *
+     * @return  なし
+     */
+    static update(model : Account)
+    {
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'update');
+        return new Promise(async (resolve : () => void, reject) =>
+        {
+            try
+            {
+                const newModel = _.clone(model);
+                delete newModel.id;
+                newModel.international_phone_no = AccountModel.international_phone_no(model);
+                newModel.crypto_type = 1;
+                newModel.updated_at = Utils.now();
+                AccountModel.encrypt(newModel);
+
+                const sql = 'UPDATE account SET ? WHERE id=?';
+                const values = [newModel, model.id];
+                const results = await DB.query(sql, values);
+
+                log.stepOut();
+                resolve();
+            }
+            catch (err) {log.stepOut(); reject(err);}
+        });
+    }
+
+    /**
+     * アカウントを削除する
+     *
+     * @param   accountId   アカウントID
+     *
+     * @return  なし
+     */
+    static remove(accountId : number)
+    {
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'remove');
+        log.d(`accountId:${accountId}`);
+
+        return new Promise(async (resolve : () => void, reject) =>
+        {
+            try
+            {
+                const sql = 'DELETE FROM account WHERE id=?';
+                const values = accountId;
+                const results = await DB.query(sql, values);
+
+                log.stepOut();
+                resolve();
+            }
+            catch (err) {log.stepOut(); reject(err);}
+        });
+    }
+
+    /**
+     * アカウントを検索する
+     *
+     * @param   fieldName   検索フィールド名
+     * @param   value       検索条件
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    private static findByCondition(fieldName : string, value) : Promise<Account>
+    {
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'findByCondition');
+        return new Promise(async (resolve : AccountResolve, reject) =>
+        {
+            try
+            {
+                const sql = 'SELECT * FROM account WHERE ??=?';
+                const values = [fieldName, value];
+                const results = await DB.query(sql, values);
+                const model = AccountModel.toModel(results);
+
+                if (model)
+                {
+                    AccountModel.decrypt(model);
+                    model.international_phone_no = AccountModel.international_phone_no(model);
+                }
+
+                log.stepOut();
+                resolve(model);
+            }
+            catch (err) {log.stepOut(); reject(err);}
+        });
+    }
+
+    /**
+     * アカウントを検索する
+     *
+     * @param   accountId   アカウントID
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    static find(accountId : number) : Promise<Account>
+    {
+        return AccountModel.findByCondition('id', accountId);
+    }
+
+    /**
+     * アカウントを検索する
+     *
+     * @param   userName    ユーザー名
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    static findByUserName(userName : string) : Promise<Account>
+    {
+        return AccountModel.findByCondition('user_name', userName);
+    }
+
+    /**
+     * アカウントを検索する
+     *
+     * @param   signupId    サインアップID
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    static findBySignupId(signupId : string) : Promise<Account>
+    {
+        return AccountModel.findByCondition('signup_id', signupId);
+    }
+
+    /**
+     * アカウントを検索する
+     *
+     * @param   inviteId    サインアップID
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    static findByInviteId(inviteId : string) : Promise<Account>
+    {
+        return AccountModel.findByCondition('invite_id', inviteId);
+    }
+
+    /**
+     * アカウントを検索する
+     *
+     * @param   resetId リセットID
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    static findByResetId(resetId : string) : Promise<Account>
+    {
+        return AccountModel.findByCondition('reset_id', resetId);
+    }
+
+    /**
+     * アカウントを検索する
+     *
+     * @param   changeId    変更ID
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    static findByChangeId(changeId : string) : Promise<Account>
+    {
+        return AccountModel.findByCondition('change_id', changeId);
+    }
+
+    /**
+     * アカウントを検索する
+     *
+     * @param   provider    プロバイダ名
+     * @param   id          プロバイダ毎のID
+     *
+     * @return  Account。該当するアカウントを返す
+     */
+    static findByProviderId(provider : string, id : string)
+    {
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'findByProviderId');
+        log.d(`provider:${provider}, id:${id}`);
+
+        return new Promise(async (resolve : AccountResolve, reject) =>
+        {
+            let account : Account = null;
+            if (id)
+            {
+                if (provider !== 'twitter'
+                &&  provider !== 'facebook'
+                &&  provider !== 'google'
+                &&  provider !== 'github'
+                &&  provider !== 'email')
+                {
+                    log.e('provider not supported.');
+                    log.stepOut();
+                    resolve(null);
+                    return;
+                }
+
+                const email = id;
+                if (provider === 'email')
+                {
+                    // メールアドレスの場合、まずは暗号化してある前提で検索
+                    id = Utils.encrypt(id, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+                }
+
+                account = await AccountModel.findByCondition(provider, id);
+
+                if (account === null && provider === 'email')
+                {
+                    // 見つからなければ平文で検索
+                    account = await AccountModel.findByCondition(provider, email);
+                }
+            }
+
+            log.stepOut();
+            resolve(account);
+        });
+    }
+
+    /**
+     * Authy IDを検索する
+     *
+     * @param   internationalPhoneNo    国際電話番号
+     * @param   excludeAccountId        検索から除外するアカウントID
+     *
+     * @return  Authy ID
+     */
+    static findAuthyId(internationalPhoneNo : string, excludeAccountId? : number)
+    {
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'getAuthyId');
+        return new Promise(async (resolve : (authyId : number) => void, reject) =>
+        {
+            try
+            {
+                internationalPhoneNo = Utils.encrypt(internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+
+                let sql = 'SELECT * FROM account WHERE international_phone_no=?';
+                const values : any[] = [internationalPhoneNo];
+
+                if (excludeAccountId)
+                {
+                    sql += ' AND id<>?';
+                    values.push(excludeAccountId);
+                }
+
+                const results = await DB.query(sql, values);
+                const model = AccountModel.toModel(results);
+                const authyId = (model ? model.authy_id : null);
+
+                log.stepOut();
+                resolve(authyId);
+            }
+            catch (err) {log.stepOut(); reject(err);}
+        });
+    }
+
+    /**
+     * アカウント一覧を検索する
+     *
+     * @return  Account[]。該当するアカウントの一覧を返す
+     */
+    static findList(cond : AccountFindListCondition = {})
+    {
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'findList');
+        return new Promise(async (resolve : (accounts : Account[]) => void, reject) =>
+        {
+            try
+            {
+                let sql : string;
+                let values;
+
+                if (cond.registered) {
+                    sql = 'SELECT * FROM account WHERE signup_id IS NULL AND invite_id IS NULL';
+                }
+
+                if (cond.internationalPhoneNo) {
+                    sql = 'SELECT * FROM account WHERE international_phone_no=?';
+                    values = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+                }
+
+                const results = await DB.query(sql, values);
+                const models = AccountModel.toModels(results);
+
+                log.stepOut();
+                resolve(models);
+            }
+            catch (err) {log.stepOut(); reject(err);}
+        });
+    }
+
+    /**
+     * 暗号化
+     */
+    private static encrypt(account : Account) : void
+    {
+        account.crypto_type = 1;
+
+        const key = Config.CRYPTO_KEY;
+        const iv =  Config.CRYPTO_IV;
+
+        if (account.email)                  {account.email =                  Utils.encrypt(account.email,                  key, iv);}
+        if (account.phone_no)               {account.phone_no =               Utils.encrypt(account.phone_no,               key, iv);}
+        if (account.international_phone_no) {account.international_phone_no = Utils.encrypt(account.international_phone_no, key, iv);}
+        if (account.change_email)           {account.change_email =           Utils.encrypt(account.change_email,           key, iv);}
+    }
+
+    /**
+     * 復号
+     */
+    private static decrypt(account : Account) : void
+    {
+        if (account.crypto_type === 1)
+        {
+            const key = Config.CRYPTO_KEY;
+            const iv =  Config.CRYPTO_IV;
+
+            if (account.email)                  {account.email =                   Utils.decrypt(account.email,                   key, iv);}
+            if (account.phone_no)               {account.phone_no =                Utils.decrypt(account.phone_no,                key, iv);}
+            if (account.international_phone_no) {account.international_phone_no =  Utils.decrypt(account.international_phone_no,  key, iv);}
+            if (account.change_email)           {account.change_email =            Utils.decrypt(account.change_email,            key, iv);}
+        }
+    }
+
+    /**
+     * 国際電話番号取得
+     */
+    static internationalPhoneNo(countryCode : string, phoneNo : string) : string
+    {
+        let internationalPhoneNo = null;
+
+        if (phoneNo)
+        {
+            internationalPhoneNo = phoneNo.replace(/-/g, '');
+            internationalPhoneNo = internationalPhoneNo.substr(1);  // 先頭の1文字を取り除く（'0'だったら、ではない）
+        }
+
+        if (countryCode) {
+            internationalPhoneNo = countryCode + (internationalPhoneNo || '');
+        }
+
+        return internationalPhoneNo;
+    }
+
+    private static international_phone_no(account : Account) : string
+    {
+        return AccountModel.internationalPhoneNo(account.country_code, account.phone_no);
+    }
+
+    /**
+     * Accountに変換
+     */
+    static toModel(data) : Account
+    {
+        if (! data) {
+            return null;
+        }
+
+        if (Array.isArray(data))
+        {
+            if (data.length !== 1) {
+                return null;
+            }
+            data = data[0];
+        }
+
+        return AccountModel.to_model(data);
+    }
+
+    private static toModels(results : any[]) : Account[]
+    {
+        const models = results.map((result) =>
+        {
+            const model = AccountModel.to_model(result);
+            AccountModel.decrypt(model);
+            model.international_phone_no = AccountModel.international_phone_no(model);
+            return model;
+        });
+        return models;
+    }
+
+    private static to_model(data) : Account
+    {
+        // const model : Account =
+        // {
+        //     id:                     data.id,
+        //     name:                   data.name,
+        //     user_name:              data.user_name,
+        //     twitter:                data.twitter,
+        //     facebook:               data.facebook,
+        //     google:                 data.google,
+        //     github:                 data.github,
+        //     email:                  data.email,
+        //     password:               data.password,
+        //     country_code:           data.country_code,
+        //     phone_no:               data.phone_no,
+        //     international_phone_no: data.international_phone_no,
+        //     authy_id:               data.authy_id,
+        //     two_factor_auth:        data.two_factor_auth,
+        //     signup_id:              data.signup_id,
+        //     invite_id:              data.invite_id,
+        //     reset_id:               data.reset_id,
+        //     change_id:              data.change_id,
+        //     change_email:           data.change_email,
+        //     crypto_type:            data.crypto_type,
+        //     created_at:             data.created_at,
+        //     updated_at:             data.updated_at,
+        //     deleted_at:             data.deleted_at
+        // };
+        const model = new Account();
+        model.id =                     data.id;
+        model.name =                   data.name;
+        model.user_name =              data.user_name;
+        model.twitter =                data.twitter;
+        model.facebook =               data.facebook;
+        model.google =                 data.google;
+        model.github =                 data.github;
+        model.email =                  data.email;
+        model.password =               data.password;
+        model.country_code =           data.country_code;
+        model.phone_no =               data.phone_no;
+        model.international_phone_no = data.international_phone_no;
+        model.authy_id =               data.authy_id;
+        model.two_factor_auth =        data.two_factor_auth;
+        model.signup_id =              data.signup_id;
+        model.invite_id =              data.invite_id;
+        model.reset_id =               data.reset_id;
+        model.change_id =              data.change_id;
+        model.change_email =           data.change_email;
+        model.crypto_type =            data.crypto_type;
+        model.created_at =             data.created_at;
+        model.updated_at =             data.updated_at;
+        model.deleted_at =             data.deleted_at;
+
+        return model;
+    }
+}
 
 /**
  * アカウント
@@ -89,527 +561,6 @@ export class Account
         }
         return possible;
     }
-}
-
-/**
- * アカウントモデル
- */
-export default class AccountModel
-{
-    private static CLS_NAME = 'AccountModel';
-    private static list : Account[] = null;
-    private static backupList : Account[] = null;
-    private static path = Config.ROOT_DIR + '/storage/account.json';
-    private static MESSAGE_UNINITIALIZE = 'AccountModelが初期化されていません。';
-
-    /**
-     * アカウントをJSONファイルからロードする
-     */
-    static load() : void
-    {
-        try
-        {
-            AccountModel.list = [];
-
-            fs.statSync(AccountModel.path);
-            const text = fs.readFileSync(AccountModel.path, 'utf8');
-            const list = JSON.parse(text);
-
-            for (const obj of list)
-            {
-                const account = new Account();
-                Utils.copy(account, obj);
-                AccountModel.list.push(account);
-            }
-        }
-        catch (err)
-        {
-            AccountModel.list = [];
-        }
-    }
-
-    /**
-     * アカウントをJSONファイルにセーブする
-     */
-    private static save() : void
-    {
-        const text = JSON.stringify(AccountModel.list, null, 2);
-        fs.writeFileSync(AccountModel.path, text);
-    }
-
-    /**
-     * アカウントを追加する
-     *
-     * @param   account アカウント
-     *
-     * @return  なし
-     */
-    static add(account : Account)
-    {
-        const log = slog.stepIn(AccountModel.CLS_NAME, 'add');
-        return new Promise((resolve : () => void, reject) =>
-        {
-            account.id = SeqModel.next('account');
-            account.international_phone_no = AccountModel.international_phone_no(account);
-            account.crypto_type = 1;
-            account.created_at = Utils.now();
-
-            const workAccount = __.clone(account);
-            AccountModel.encrypt(workAccount);
-            AccountModel.list.push(workAccount);
-            AccountModel.save();
-
-            log.stepOut();
-            resolve();
-        });
-    }
-
-    /**
-     * アカウントを更新する
-     *
-     * @param   account アカウント
-     *
-     * @return  なし
-     */
-    static update(account : Account)
-    {
-        const log = slog.stepIn(AccountModel.CLS_NAME, 'update');
-        return new Promise((resolve : () => void, reject) =>
-        {
-            for (const i in AccountModel.list)
-            {
-                const findAccount = AccountModel.list[i];
-                if (findAccount.id === account.id)
-                {
-                    __.extend(findAccount, account);
-                    findAccount.international_phone_no = AccountModel.international_phone_no(account);
-                    findAccount.crypto_type = 1;
-                    findAccount.updated_at = Utils.now();
-                    AccountModel.encrypt(findAccount);
-                    AccountModel.save();
-                    log.d('更新しました。');
-                    break;
-                }
-            }
-
-            log.stepOut();
-            resolve();
-        });
-    }
-
-    /**
-     * アカウントを削除する
-     *
-     * @param   accountId   アカウントID
-     *
-     * @return  なし
-     */
-    static remove(accountId : number)
-    {
-        const log = slog.stepIn(AccountModel.CLS_NAME, 'remove');
-        log.d(`accountId:${accountId}`);
-
-        return new Promise((resolve : () => void, reject) =>
-        {
-            for (const i in AccountModel.list)
-            {
-                if (AccountModel.list[i].id === accountId)
-                {
-                    AccountModel.list.splice(Number(i), 1);
-                    AccountModel.save();
-                    log.d('削除しました。');
-                    break;
-                }
-            }
-
-            log.stepOut();
-            resolve();
-        });
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   cond    検索条件
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    private static findByCondition(cond : AccountFindCondition) : Promise<Account>
-    {
-        const log = slog.stepIn(AccountModel.CLS_NAME, 'findByCondition');
-        log.d(JSON.stringify(cond, null, 2));
-
-        return new Promise((resolve : AccountResolve, reject) =>
-        {
-            if (AccountModel.isUninitialize())
-            {
-                log.stepOut();
-                reject(new Error(AccountModel.MESSAGE_UNINITIALIZE));
-                return;
-            }
-
-            for (const account of AccountModel.list)
-            {
-                if ((cond.accountId === undefined || account.id        === cond.accountId)
-                &&  (cond.userName  === undefined || account.user_name === cond.userName)
-                &&  (cond.signupId  === undefined || account.signup_id === cond.signupId)
-                &&  (cond.inviteId  === undefined || account.invite_id === cond.inviteId)
-                &&  (cond.resetId   === undefined || account.reset_id  === cond.resetId)
-                &&  (cond.changeId  === undefined || account.change_id === cond.changeId))
-                {
-                    log.d('見つかりました。');
-                    const findAccount = __.clone(account);
-                    AccountModel.decrypt(findAccount);
-                    findAccount.international_phone_no = AccountModel.international_phone_no(account);
-
-                    log.stepOut();
-                    resolve(findAccount);
-                    return;
-                }
-            }
-
-            log.d('見つかりませんでした。');
-            log.stepOut();
-            resolve(null);
-        });
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   accountId   アカウントID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static find(accountId : number) : Promise<Account>
-    {
-        return AccountModel.findByCondition({accountId});
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   userName    ユーザー名
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByUserName(userName : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition({userName});
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   signupId    サインアップID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findBySignupId(signupId : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition({signupId});
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   inviteId    サインアップID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByInviteId(inviteId : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition({inviteId});
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   resetId リセットID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByResetId(resetId : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition({resetId});
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   changeId    変更ID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByChangeId(changeId : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition({changeId});
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   provider    プロバイダ名
-     * @param   id          プロバイダ毎のID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByProviderId(provider : string, id : string)
-    {
-        const log = slog.stepIn(AccountModel.CLS_NAME, 'findByProviderId');
-        log.d(`provider:${provider}, id:${id}`);
-
-        return new Promise((resolve : AccountResolve, reject) =>
-        {
-            if (AccountModel.isUninitialize())
-            {
-                log.stepOut();
-                reject(new Error(AccountModel.MESSAGE_UNINITIALIZE));
-                return;
-            }
-
-            let account : Account = null;
-            if (id)
-            {
-                if (provider !== 'twitter'
-                &&  provider !== 'facebook'
-                &&  provider !== 'google'
-                &&  provider !== 'github'
-                &&  provider !== 'email')
-                {
-                    log.e('provider not supported.');
-                    log.stepOut();
-                    resolve(null);
-                    return;
-                }
-
-                const email = id;
-                if (provider === 'email')
-                {
-                    // メールアドレスの場合、まずは暗号化してある前提で検索
-                    id = Utils.encrypt(id, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-                }
-
-                account = AccountModel.find_by_provider_id(provider, id);
-
-                if (account === null && provider === 'email')
-                {
-                    // 見つからなければ平文で検索
-                    account = AccountModel.find_by_provider_id(provider, email);
-                }
-            }
-
-            if (account) {log.d('見つかりました。');}
-            else         {log.d('見つかりませんでした。');}
-
-            log.stepOut();
-            resolve(account);
-        });
-    }
-
-    private static find_by_provider_id(provider : string, id : string) : Account
-    {
-        for (const account of AccountModel.list)
-        {
-            if (account[provider] === id)
-            {
-                const findAccount = __.clone(account);
-                AccountModel.decrypt(findAccount);
-                findAccount.international_phone_no = AccountModel.international_phone_no(findAccount);
-                return findAccount;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Authy IDを検索する
-     *
-     * @param   internationalPhoneNo    国際電話番号
-     * @param   excludeAccountId        検索から除外するアカウントID
-     *
-     * @return  Authy ID
-     */
-    static findAuthyId(internationalPhoneNo : string, excludeAccountId? : number)
-    {
-        const log = slog.stepIn(AccountModel.CLS_NAME, 'getAuthyId');
-        return new Promise((resolve : (authyId : number) => void, reject) =>
-        {
-            if (AccountModel.isUninitialize())
-            {
-                log.stepOut();
-                reject(new Error(AccountModel.MESSAGE_UNINITIALIZE));
-                return;
-            }
-
-            internationalPhoneNo = Utils.encrypt(internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-            for (const account of AccountModel.list)
-            {
-                if (excludeAccountId && account.id === excludeAccountId) {
-                    continue;
-                }
-
-                if (account.international_phone_no === internationalPhoneNo)
-                {
-                    log.d('見つかりました。');
-                    log.stepOut();
-                    resolve(account.authy_id);
-                    return;
-                }
-            }
-
-            log.d('見つかりませんでした。');
-            log.stepOut();
-            resolve(null);
-        });
-    }
-
-    /**
-     * アカウント一覧を検索する
-     *
-     * @return  Account[]。該当するアカウントの一覧を返す
-     */
-    static findList(cond : AccountFindListCondition = {})
-    {
-        const log = slog.stepIn(AccountModel.CLS_NAME, 'findList');
-        return new Promise((resolve : (accounts : Account[]) => void, reject) =>
-        {
-            if (AccountModel.isUninitialize())
-            {
-                log.stepOut();
-                reject(new Error(AccountModel.MESSAGE_UNINITIALIZE));
-                return;
-            }
-
-            if (cond.internationalPhoneNo) {
-                cond.internationalPhoneNo = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-            }
-
-            const accountList : Account[] = [];
-            for (const account of AccountModel.list)
-            {
-                const registered = (account.signup_id === null && account.invite_id === null);
-
-                if ((cond.registered           === undefined || registered                      === cond.registered)
-                &&  (cond.internationalPhoneNo === undefined ||  account.international_phone_no === cond.internationalPhoneNo))
-                {
-                    const obj = __.clone(account);
-                    AccountModel.decrypt(obj);
-                    accountList.push(obj);
-                }
-            }
-
-            log.stepOut();
-            resolve(accountList);
-        });
-    }
-
-    /**
-     * 暗号化
-     */
-    private static encrypt(account : Account) : void
-    {
-        account.crypto_type = 1;
-
-        const key = Config.CRYPTO_KEY;
-        const iv =  Config.CRYPTO_IV;
-
-        if (account.email)                  {account.email =                  Utils.encrypt(account.email,                  key, iv);}
-        if (account.phone_no)               {account.phone_no =               Utils.encrypt(account.phone_no,               key, iv);}
-        if (account.international_phone_no) {account.international_phone_no = Utils.encrypt(account.international_phone_no, key, iv);}
-        if (account.change_email)           {account.change_email =           Utils.encrypt(account.change_email,           key, iv);}
-    }
-
-    /**
-     * 復号
-     */
-    private static decrypt(account : Account) : void
-    {
-        if (account.crypto_type === 1)
-        {
-            const key = Config.CRYPTO_KEY;
-            const iv =  Config.CRYPTO_IV;
-
-            if (account.email)                  {account.email =                   Utils.decrypt(account.email,                   key, iv);}
-            if (account.phone_no)               {account.phone_no =                Utils.decrypt(account.phone_no,                key, iv);}
-            if (account.international_phone_no) {account.international_phone_no =  Utils.decrypt(account.international_phone_no,  key, iv);}
-            if (account.change_email)           {account.change_email =            Utils.decrypt(account.change_email,            key, iv);}
-        }
-    }
-
-    /**
-     * 国際電話番号取得
-     */
-    static internationalPhoneNo(countryCode : string, phoneNo : string) : string
-    {
-        let internationalPhoneNo = null;
-
-        if (phoneNo)
-        {
-            internationalPhoneNo = phoneNo.replace(/-/g, '');
-            internationalPhoneNo = internationalPhoneNo.substr(1);  // 先頭の1文字を取り除く（'0'だったら、ではない）
-        }
-
-        if (countryCode) {
-            internationalPhoneNo = countryCode + (internationalPhoneNo || '');
-        }
-
-        return internationalPhoneNo;
-    }
-
-    private static international_phone_no(account : Account) : string
-    {
-        return AccountModel.internationalPhoneNo(account.country_code, account.phone_no);
-    }
-
-    /**
-     * 未初期化かどうか調べる
-     *
-     * @return  未初期化ならtrueを返す
-     */
-    private static isUninitialize() : boolean
-    {
-        return (AccountModel.list === null);
-    }
-
-    /**
-     * アカウントをバックアップする
-     */
-    static _backup() : void
-    {
-        AccountModel.backupList = __.clone(AccountModel.list);
-    }
-
-    /**
-     * アカウントをリセットする
-     */
-    static _reset() : void
-    {
-        AccountModel.list = [];
-        AccountModel.save();
-    }
-
-    /**
-     * アカウントをリストアする
-     */
-    static _restore() : void
-    {
-        AccountModel.list = __.clone(AccountModel.backupList);
-        AccountModel.save();
-    }
-}
-
-/**
- * アカウント検索条件
- */
-interface AccountFindCondition
-{
-    accountId? : number;
-    userName?  : string;
-    signupId?  : string;
-    inviteId?  : string;
-    resetId?   : string;
-    changeId?  : string;
 }
 
 /**
