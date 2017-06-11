@@ -1,10 +1,10 @@
 /**
  * (C) 2016 printf.jp
  */
-import Config from '../config';
+import Config from 'server/config';
 
 import mysql = require('mysql');
-import slog =  require('../slog');
+import slog =  require('server/slog');
 
 /**
  * データベース

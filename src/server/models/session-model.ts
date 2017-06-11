@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import DB    from '../libs/database';
+import DB    from '../database/mysql';
 import Utils from '../libs/utils';
 
 import _ =    require('lodash');

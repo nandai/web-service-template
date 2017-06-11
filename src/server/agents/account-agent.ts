@@ -1,14 +1,15 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config                  from 'server/config';
-import Utils                   from 'server/libs/utils';
-import AccountModel, {Account} from 'server/models/account-model';
+import Config            from 'server/config';
+import AccountCollection from 'server/database/mysql/account-collection';
+import Utils             from 'server/libs/utils';
+import {Account}         from 'server/models/account-model';
 
 import _ =    require('lodash');
 import slog = require('../slog');
 
-const Storage = AccountModel;
+const Collection = AccountCollection;
 
 export default class AccountAgent
 {
@@ -36,7 +37,7 @@ export default class AccountAgent
                 AccountAgent.encrypt(encryptModel);
 
                 // ストレージに追加して、
-                encryptModel = await Storage.add(encryptModel);
+                encryptModel = await Collection.add(encryptModel);
 
                 // 暗号化前のデータにidを設定して、それを返す
                 newModel.id = encryptModel.id;
@@ -65,7 +66,7 @@ export default class AccountAgent
         AccountAgent.encrypt(newModel);
 
         // 更新する
-        return Storage.update(newModel);
+        return Collection.update(newModel);
     }
 
     /**
@@ -77,7 +78,7 @@ export default class AccountAgent
      */
     static async remove(accountId : number)
     {
-        return Storage.remove(accountId);
+        return Collection.remove(accountId);
     }
 
     /**
@@ -94,7 +95,7 @@ export default class AccountAgent
         {
             try
             {
-                const data = await Storage.findByCondition(fieldName, value);
+                const data = await Collection.findByCondition(fieldName, value);
                 const model = AccountAgent.toModel(data);
 
                 if (model)
@@ -244,7 +245,7 @@ export default class AccountAgent
     static async findAuthyId(internationalPhoneNo : string, excludeAccountId? : number)
     {
         internationalPhoneNo = Utils.encrypt(internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-        return Storage.findAuthyId(internationalPhoneNo, excludeAccountId);
+        return Collection.findAuthyId(internationalPhoneNo, excludeAccountId);
     }
 
     /**
@@ -262,7 +263,7 @@ export default class AccountAgent
                     cond.internationalPhoneNo = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
                 }
 
-                const data = await Storage.findList(cond);
+                const data = await Collection.findList(cond);
                 const models = AccountAgent.toModels(data);
 
                 AccountAgent.decrypts(models);
