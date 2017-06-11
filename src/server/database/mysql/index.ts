@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2017 printf.jp
  */
 import Config from 'server/config';
 
@@ -31,10 +31,17 @@ export default class Database
                     database: Config.DB_NAME,
                     charset:  'utf8mb4'
                 };
-                Database.pool = mysql.createPool(config);
 
-                const conn = await Database.getConnection();
-                conn.release();
+                if (config.host     !== ''
+                &&  config.user     !== ''
+                &&  config.password !== ''
+                &&  config.database !== '')
+                {
+                    Database.pool = mysql.createPool(config);
+
+                    const conn = await Database.getConnection();
+                    conn.release();
+                }
 
                 log.stepOut();
                 resolve();

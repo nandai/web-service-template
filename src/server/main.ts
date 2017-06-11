@@ -21,7 +21,8 @@ import SignupApp                     from './app/signup-app';
 import UserApp                       from './app/user-app';
 import UsersApp                      from './app/users-app';
 import Config                        from './config';
-import DB                            from './database/mysql';
+import MongoDB                       from './database/mongodb';
+import MySQL                         from './database/mysql';
 import Access                        from './libs/access';
 import Authy                         from './libs/authy';
 import {expressExtension}            from './libs/express-extension';
@@ -65,8 +66,9 @@ class Initializer
             Config.load();
             R     .load();
 
-            await DB.init();
-            Authy   .init();
+            await MongoDB.init();
+            await MySQL  .init();
+            Authy        .init();
 
             this.app = app;
             this.app.use(helmet.hidePoweredBy());

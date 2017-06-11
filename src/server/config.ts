@@ -63,6 +63,8 @@ export default class Config
     static DB_PASSWORD = '';
     static DB_NAME = '';
 
+    static MONGO_URL = '';
+
     /**
      * コンフィグをJSONファイルからロードする
      */
@@ -126,6 +128,7 @@ export default class Config
         Config.DB_USER =                 Config.get(appData, 'db-user');
         Config.DB_PASSWORD =             Config.get(appData, 'db-password');
         Config.DB_NAME =                 Config.get(appData, 'db-name');
+        Config.MONGO_URL =               Config.get(appData, 'mongo-url');
 
         Config.TWITTER_CALLBACK =  Utils.generateUrl('auth/twitter/callback');
         Config.FACEBOOK_CALLBACK = Utils.generateUrl('auth/facebook/callback');
