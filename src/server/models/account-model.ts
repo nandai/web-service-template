@@ -102,17 +102,16 @@ export default class AccountModel
     static findByCondition(fieldName : string, value)
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'findByCondition');
-        return new Promise(async (resolve : (model : Account) => void, reject) =>
+        return new Promise(async (resolve : (results) => void, reject) =>
         {
             try
             {
                 const sql = 'SELECT * FROM account WHERE ??=?';
                 const values = [fieldName, value];
                 const results = await DB.query(sql, values);
-                const model = AccountModel.toModel(results);
 
                 log.stepOut();
-                resolve(model);
+                resolve(results);
             }
             catch (err) {log.stepOut(); reject(err);}
         });
@@ -133,7 +132,7 @@ export default class AccountModel
         {
             try
             {
-                let sql = 'SELECT * FROM account WHERE international_phone_no=?';
+                let sql = 'SELECT authy_id FROM account WHERE international_phone_no=?';
                 const values : any[] = [internationalPhoneNo];
 
                 if (excludeAccountId)
@@ -143,8 +142,7 @@ export default class AccountModel
                 }
 
                 const results = await DB.query(sql, values);
-                const model = AccountModel.toModel(results);
-                const authyId = (model ? model.authy_id : null);
+                const authyId = (results ? results.authy_id : null);
 
                 log.stepOut();
                 resolve(authyId);
@@ -161,7 +159,7 @@ export default class AccountModel
     static findList(cond : AccountFindListCondition = {})
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'findList');
-        return new Promise(async (resolve : (accounts : Account[]) => void, reject) =>
+        return new Promise(async (resolve : (results) => void, reject) =>
         {
             try
             {
@@ -179,70 +177,12 @@ export default class AccountModel
                 }
 
                 const results = await DB.query(sql, values);
-                const models = AccountModel.toModels(results);
 
                 log.stepOut();
-                resolve(models);
+                resolve(results);
             }
             catch (err) {log.stepOut(); reject(err);}
         });
-    }
-
-    /**
-     * Accountに変換
-     */
-    static toModel(data) : Account
-    {
-        if (! data) {
-            return null;
-        }
-
-        if (Array.isArray(data))
-        {
-            if (data.length !== 1) {
-                return null;
-            }
-            data = data[0];
-        }
-
-        return AccountModel.to_model(data);
-    }
-
-    private static toModels(results : any[]) : Account[]
-    {
-        const  models = results.map((result) => AccountModel.to_model(result));
-        return models;
-    }
-
-    private static to_model(data) : Account
-    {
-        const model : Account =
-        {
-            id:                     data.id,
-            name:                   data.name,
-            user_name:              data.user_name,
-            twitter:                data.twitter,
-            facebook:               data.facebook,
-            google:                 data.google,
-            github:                 data.github,
-            email:                  data.email,
-            password:               data.password,
-            country_code:           data.country_code,
-            phone_no:               data.phone_no,
-            international_phone_no: data.international_phone_no,
-            authy_id:               data.authy_id,
-            two_factor_auth:        data.two_factor_auth,
-            signup_id:              data.signup_id,
-            invite_id:              data.invite_id,
-            reset_id:               data.reset_id,
-            change_id:              data.change_id,
-            change_email:           data.change_email,
-            crypto_type:            data.crypto_type,
-            created_at:             data.created_at,
-            updated_at:             data.updated_at,
-            deleted_at:             data.deleted_at
-        };
-        return model;
     }
 }
 

@@ -94,7 +94,9 @@ export default class AccountAgent
         {
             try
             {
-                const model = await Storage.findByCondition(fieldName, value);
+                const data = await Storage.findByCondition(fieldName, value);
+                const model = AccountAgent.toModel(data);
+
                 if (model)
                 {
                     AccountAgent.decrypt(model);
@@ -260,7 +262,9 @@ export default class AccountAgent
                     cond.internationalPhoneNo = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
                 }
 
-                const models = await Storage.findList(cond);
+                const data = await Storage.findList(cond);
+                const models = AccountAgent.toModels(data);
+
                 AccountAgent.decrypts(models);
                 resolve(models);
             }
@@ -378,5 +382,62 @@ export default class AccountAgent
             }
         }
         return possible;
+    }
+
+    /**
+     * Accountに変換
+     */
+    static toModel(data) : Account
+    {
+        if (! data) {
+            return null;
+        }
+
+        if (Array.isArray(data))
+        {
+            if (data.length !== 1) {
+                return null;
+            }
+            data = data[0];
+        }
+
+        return AccountAgent.to_model(data);
+    }
+
+    private static toModels(results : any[]) : Account[]
+    {
+        const  models = results.map((data) => AccountAgent.to_model(data));
+        return models;
+    }
+
+    private static to_model(data) : Account
+    {
+        const model : Account =
+        {
+            id:                     data.id,
+            name:                   data.name,
+            user_name:              data.user_name,
+            twitter:                data.twitter,
+            facebook:               data.facebook,
+            google:                 data.google,
+            github:                 data.github,
+            email:                  data.email,
+            password:               data.password,
+            country_code:           data.country_code,
+            phone_no:               data.phone_no,
+            international_phone_no: data.international_phone_no,
+            authy_id:               data.authy_id,
+            two_factor_auth:        data.two_factor_auth,
+            signup_id:              data.signup_id,
+            invite_id:              data.invite_id,
+            reset_id:               data.reset_id,
+            change_id:              data.change_id,
+            change_email:           data.change_email,
+            crypto_type:            data.crypto_type,
+            created_at:             data.created_at,
+            updated_at:             data.updated_at,
+            deleted_at:             data.deleted_at
+        };
+        return model;
     }
 }
