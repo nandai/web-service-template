@@ -3,10 +3,10 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
 import Config       from 'server/config';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import AccountModel from 'server/models/account-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -45,7 +45,7 @@ export async function onJoin(req : express.Request, res : express.Response)
                 break;
             }
 
-            const account = await AccountModel.findByInviteId(inviteId);
+            const account = await AccountAgent.findByInviteId(inviteId);
             if (account === null)
             {
                 // 参加画面で参加を完了させた後、再度参加を完了させようとした場合にここに到達する想定。
@@ -60,7 +60,7 @@ export async function onJoin(req : express.Request, res : express.Response)
             account.password =  hashPassword;
             account.signup_id = null;
             account.invite_id = null;
-            await AccountModel.update(account);
+            await AccountAgent.update(account);
 
             const data : Response.Join =
             {

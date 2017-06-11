@@ -3,10 +3,10 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
 import Config       from 'server/config';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import AccountModel from 'server/models/account-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -39,7 +39,7 @@ export async function onConfirmSignupEmail(req : express.Request, res : express.
             const signupId = <string>param.signupId;
             const password = <string>param.password;
 
-            const account = await AccountModel.findBySignupId(signupId);
+            const account = await AccountAgent.findBySignupId(signupId);
             if (account === null)
             {
                 // サインアップの確認画面でサインアップを完了させた後、再度サインアップを完了させようとした場合にここに到達する想定。
@@ -59,7 +59,7 @@ export async function onConfirmSignupEmail(req : express.Request, res : express.
 
             account.signup_id = null;
             account.invite_id = null;
-            await AccountModel.update(account);
+            await AccountAgent.update(account);
 
             const data : Response.ConfirmSignupEmail =
             {

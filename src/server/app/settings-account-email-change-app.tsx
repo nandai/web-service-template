@@ -8,8 +8,9 @@ import Root                           from 'client/components/root';
 import SettingsAccountEmailChangeView from 'client/components/views/settings-account-email-change-view';
 import {Store}                        from 'client/components/views/settings-account-email-change-view/store';
 import ClientR                        from 'client/libs/r';
-import Utils                          from '../libs/utils';
-import AccountModel, {Account}        from '../models/account-model';
+import AccountAgent                   from 'server/agents/account-agent';
+import Utils                          from 'server/libs/utils';
+import {Account}                      from 'server/models/account-model';
 import {notFound, view}               from './view';
 
 import express = require('express');
@@ -51,7 +52,7 @@ export default class SettingsAccountEmailChangeApp
                 }
 
                 const changeId : string = param.id;
-                const account = await AccountModel.findByChangeId(changeId);
+                const account = await AccountAgent.findByChangeId(changeId);
 
                 if (account === null)
                 {

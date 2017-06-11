@@ -3,10 +3,10 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
 import Config       from 'server/config';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import AccountModel from 'server/models/account-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -53,13 +53,13 @@ export async function onResetPassword(req : express.Request, res : express.Respo
                 break;
             }
 
-            const account = await AccountModel.findByResetId(resetId);
+            const account = await AccountAgent.findByResetId(resetId);
             if (account)
             {
                 account.password = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
                 account.reset_id = null;
                 account.two_factor_auth = null;
-                await AccountModel.update(account);
+                await AccountAgent.update(account);
 
                 const data : Response.ResetPassword =
                 {

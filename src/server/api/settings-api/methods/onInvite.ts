@@ -1,12 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Request}               from 'libs/request';
-import {Response}              from 'libs/response';
-import CommonUtils             from 'libs/utils';
-import R                       from 'server/libs/r';
-import Utils                   from 'server/libs/utils';
-import AccountModel, {Account} from 'server/models/account-model';
+import {Request}    from 'libs/request';
+import {Response}   from 'libs/response';
+import CommonUtils  from 'libs/utils';
+import AccountAgent from 'server/agents/account-agent';
+import R            from 'server/libs/r';
+import Utils        from 'server/libs/utils';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -37,7 +37,7 @@ export async function onInvite(req : express.Request, res : express.Response)
 
             const email = <string>param.email;
 
-            let account = await AccountModel.findByProviderId('email', email);
+            let account = await AccountAgent.findByProviderId('email', email);
             let status = Response.Status.FAILED;
             let resource : string;
 
@@ -56,7 +56,7 @@ export async function onInvite(req : express.Request, res : express.Response)
 
                     const name = email.substr(0, email.indexOf('@'));
                     account = {name, email, invite_id};
-                    account = await AccountModel.add(account);
+                    account = await AccountAgent.add(account);
                 }
                 else
                 {

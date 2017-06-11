@@ -3,10 +3,10 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
 import Validator    from 'server/libs/validator';
-import AccountModel from 'server/models/account-model';
 import {Session}    from 'server/models/session-model';
 
 import express = require('express');
@@ -40,7 +40,7 @@ export async function onCheckUserName(req : express.Request, res : express.Respo
 
             // 検証
             const session : Session = req.ext.session;
-            const alreadyExistsAccount = await AccountModel.findByUserName(userName);
+            const alreadyExistsAccount = await AccountAgent.findByUserName(userName);
             const result = Validator.userName(userName, session.account_id, alreadyExistsAccount, locale);
 
             if (result.status !== Response.Status.OK)

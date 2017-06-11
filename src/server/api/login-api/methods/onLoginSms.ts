@@ -3,10 +3,10 @@
  */
 import {Request}                         from 'libs/request';
 import {Response}                        from 'libs/response';
+import AccountAgent                      from 'server/agents/account-agent';
 import Authy                             from 'server/libs/authy';
 import R                                 from 'server/libs/r';
 import Utils                             from 'server/libs/utils';
-import AccountModel                      from 'server/models/account-model';
 import LoginHistoryModel, {LoginHistory} from 'server/models/login-history-model';
 import SessionModel, {Session}           from 'server/models/session-model';
 
@@ -44,8 +44,8 @@ export async function onLoginSms(req : express.Request, res : express.Response)
             const session : Session = req.ext.session;
             if (session.sms_id === smsId)
             {
-                const account = await AccountModel.find(session.account_id);
-                const canTwoFactorAuth = AccountModel.canTwoFactorAuth(account);
+                const account = await AccountAgent.find(session.account_id);
+                const canTwoFactorAuth = AccountAgent.canTwoFactorAuth(account);
 
                 if (canTwoFactorAuth === false)
                 {

@@ -8,8 +8,8 @@ import Root              from 'client/components/root';
 import SignupConfirmView from 'client/components/views/signup-confirm-view';
 import {Store}           from 'client/components/views/signup-confirm-view/store';
 import ClientR           from 'client/libs/r';
-import Utils             from '../libs/utils';
-import AccountModel      from '../models/account-model';
+import AccountAgent      from 'server/agents/account-agent';
+import Utils             from 'server/libs/utils';
 import {notFound, view}  from './view';
 
 import express = require('express');
@@ -50,7 +50,7 @@ export default class SignupConfirmApp
                 }
 
                 const signupId : string = param.id;
-                const account = await AccountModel.findBySignupId(signupId);
+                const account = await AccountAgent.findBySignupId(signupId);
 
                 if (account === null)
                 {

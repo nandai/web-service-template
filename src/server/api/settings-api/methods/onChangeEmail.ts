@@ -3,10 +3,10 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
 import Config       from 'server/config';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import AccountModel from 'server/models/account-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -39,13 +39,13 @@ export async function onChangeEmail(req : express.Request, res : express.Respons
             const changeId = <string>param.changeId;
             const password = <string>param.password;
 
-            const account = await AccountModel.findByChangeId(changeId);
+            const account = await AccountAgent.findByChangeId(changeId);
             if (account)
             {
                 // メールアドレス変更メールを送信してから確認までの間に同じメールアドレスが本登録される可能性があるため、
                 // メールアドレスの重複チェックを行う
                 const changeEmail = account.change_email;
-                const alreadyExistsAccount = await AccountModel.findByProviderId('email', changeEmail);
+                const alreadyExistsAccount = await AccountAgent.findByProviderId('email', changeEmail);
 
                 if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                 {
@@ -67,7 +67,7 @@ export async function onChangeEmail(req : express.Request, res : express.Respons
                 account.password = Utils.getHashPassword(changeEmail, password, Config.PASSWORD_SALT);
                 account.change_id = null;
                 account.change_email = null;
-                await AccountModel.update(account);
+                await AccountAgent.update(account);
 
                 const data : Response.ChangeEmail =
                 {

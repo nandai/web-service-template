@@ -3,10 +3,10 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
 import Config       from 'server/config';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import AccountModel from 'server/models/account-model';
 import {Session}    from 'server/models/session-model';
 
 import express = require('express');
@@ -43,7 +43,7 @@ export async function onChangePassword(req : express.Request, res : express.Resp
             const confirm =     <string>param.confirm;
 
             const session : Session = req.ext.session;
-            const account = await AccountModel.find(session.account_id);
+            const account = await AccountAgent.find(session.account_id);
 
             if (account.email === null)
             {
@@ -75,7 +75,7 @@ export async function onChangePassword(req : express.Request, res : express.Resp
             }
 
             account.password = Utils.getHashPassword(account.email, param.newPassword, Config.PASSWORD_SALT);
-            await AccountModel.update(account);
+            await AccountAgent.update(account);
 
             const data : Response.ChangePassword =
             {

@@ -3,10 +3,10 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
 import Config       from 'server/config';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import AccountModel from 'server/models/account-model';
 import Email        from 'server/provider/email';
 
 import express = require('express');
@@ -40,7 +40,7 @@ export async function onLoginEmail(req : express.Request, res : express.Response
             const email =    <string>param.email;
             const password = <string>param.password;
 
-            const account = await AccountModel.findByProviderId('email', email);
+            const account = await AccountAgent.findByProviderId('email', email);
             let hashPassword : string;
 
             if (account) {

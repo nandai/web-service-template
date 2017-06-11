@@ -1,10 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Request}               from 'libs/request';
-import {Response}              from 'libs/response';
-import R                       from 'server/libs/r';
-import AccountModel, {Account} from 'server/models/account-model';
+import {Request}    from 'libs/request';
+import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
+import R            from 'server/libs/r';
+import {Account}    from 'server/models/account-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -27,9 +28,9 @@ export function getUser(param : Request.GetUser, req : express.Request)
             if (id)
             {
                 if (isNaN(Number(id))) {
-                    account = await AccountModel.findByUserName(id);
+                    account = await AccountAgent.findByUserName(id);
                 } else {
-                    account = await AccountModel.find(Number(id));
+                    account = await AccountAgent.find(Number(id));
                 }
             }
 

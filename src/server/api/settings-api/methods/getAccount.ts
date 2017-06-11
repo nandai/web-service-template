@@ -2,8 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
 import Converter    from 'server/libs/converter';
-import AccountModel from 'server/models/account-model';
 import {Session}    from 'server/models/session-model';
 
 import express = require('express');
@@ -20,7 +20,7 @@ export function getAccount(req : express.Request)
         try
         {
             const session : Session = req.ext.session;
-            const account = await AccountModel.find(session.account_id);
+            const account = await AccountAgent.find(session.account_id);
 
             const data : Response.GetAccount =
             {

@@ -27,18 +27,11 @@ export default class AccountModel
         {
             try
             {
-                const newModel = _.clone(model);
-                delete newModel.id;
-                newModel.international_phone_no = AccountModel.international_phone_no(model);
-                newModel.crypto_type = 1;
-                newModel.created_at = Utils.now();
-
-                const encryptModel = _.clone(newModel);
-                AccountModel.encrypt(encryptModel);
-
                 const sql = 'INSERT INTO account SET ?';
-                const values = encryptModel;
+                const values = model;
                 const results = await DB.query(sql, values);
+
+                const newModel = _.clone(model);
                 newModel.id = results.insertId;
 
                 log.stepOut();
@@ -62,15 +55,8 @@ export default class AccountModel
         {
             try
             {
-                const newModel = _.clone(model);
-                delete newModel.id;
-                newModel.international_phone_no = AccountModel.international_phone_no(model);
-                newModel.crypto_type = 1;
-                newModel.updated_at = Utils.now();
-                AccountModel.encrypt(newModel);
-
                 const sql = 'UPDATE account SET ? WHERE id=?';
-                const values = [newModel, model.id];
+                const values = [model, model.id];
                 const results = await DB.query(sql, values);
 
                 log.stepOut();
@@ -90,8 +76,6 @@ export default class AccountModel
     static remove(accountId : number)
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'remove');
-        log.d(`accountId:${accountId}`);
-
         return new Promise(async (resolve : () => void, reject) =>
         {
             try
@@ -115,10 +99,10 @@ export default class AccountModel
      *
      * @return  Account。該当するアカウントを返す
      */
-    private static findByCondition(fieldName : string, value) : Promise<Account>
+    static findByCondition(fieldName : string, value)
     {
         const log = slog.stepIn(AccountModel.CLS_NAME, 'findByCondition');
-        return new Promise(async (resolve : AccountResolve, reject) =>
+        return new Promise(async (resolve : (model : Account) => void, reject) =>
         {
             try
             {
@@ -127,139 +111,10 @@ export default class AccountModel
                 const results = await DB.query(sql, values);
                 const model = AccountModel.toModel(results);
 
-                if (model)
-                {
-                    AccountModel.decrypt(model);
-                    model.international_phone_no = AccountModel.international_phone_no(model);
-                }
-
                 log.stepOut();
                 resolve(model);
             }
             catch (err) {log.stepOut(); reject(err);}
-        });
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   accountId   アカウントID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static find(accountId : number) : Promise<Account>
-    {
-        return AccountModel.findByCondition('id', accountId);
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   userName    ユーザー名
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByUserName(userName : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition('user_name', userName);
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   signupId    サインアップID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findBySignupId(signupId : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition('signup_id', signupId);
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   inviteId    サインアップID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByInviteId(inviteId : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition('invite_id', inviteId);
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   resetId リセットID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByResetId(resetId : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition('reset_id', resetId);
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   changeId    変更ID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByChangeId(changeId : string) : Promise<Account>
-    {
-        return AccountModel.findByCondition('change_id', changeId);
-    }
-
-    /**
-     * アカウントを検索する
-     *
-     * @param   provider    プロバイダ名
-     * @param   id          プロバイダ毎のID
-     *
-     * @return  Account。該当するアカウントを返す
-     */
-    static findByProviderId(provider : string, id : string)
-    {
-        const log = slog.stepIn(AccountModel.CLS_NAME, 'findByProviderId');
-        log.d(`provider:${provider}, id:${id}`);
-
-        return new Promise(async (resolve : AccountResolve, reject) =>
-        {
-            let account : Account = null;
-            if (id)
-            {
-                if (provider !== 'twitter'
-                &&  provider !== 'facebook'
-                &&  provider !== 'google'
-                &&  provider !== 'github'
-                &&  provider !== 'email')
-                {
-                    log.e('provider not supported.');
-                    log.stepOut();
-                    resolve(null);
-                    return;
-                }
-
-                const email = id;
-                if (provider === 'email')
-                {
-                    // メールアドレスの場合、まずは暗号化してある前提で検索
-                    id = Utils.encrypt(id, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-                }
-
-                account = await AccountModel.findByCondition(provider, id);
-
-                if (account === null && provider === 'email')
-                {
-                    // 見つからなければ平文で検索
-                    account = await AccountModel.findByCondition(provider, email);
-                }
-            }
-
-            log.stepOut();
-            resolve(account);
         });
     }
 
@@ -273,13 +128,11 @@ export default class AccountModel
      */
     static findAuthyId(internationalPhoneNo : string, excludeAccountId? : number)
     {
-        const log = slog.stepIn(AccountModel.CLS_NAME, 'getAuthyId');
+        const log = slog.stepIn(AccountModel.CLS_NAME, 'findAuthyId');
         return new Promise(async (resolve : (authyId : number) => void, reject) =>
         {
             try
             {
-                internationalPhoneNo = Utils.encrypt(internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-
                 let sql = 'SELECT * FROM account WHERE international_phone_no=?';
                 const values : any[] = [internationalPhoneNo];
 
@@ -319,9 +172,10 @@ export default class AccountModel
                     sql = 'SELECT * FROM account WHERE signup_id IS NULL AND invite_id IS NULL';
                 }
 
-                if (cond.internationalPhoneNo) {
+                if (cond.internationalPhoneNo)
+                {
                     sql = 'SELECT * FROM account WHERE international_phone_no=?';
-                    values = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+                    values = cond.internationalPhoneNo;
                 }
 
                 const results = await DB.query(sql, values);
@@ -332,116 +186,6 @@ export default class AccountModel
             }
             catch (err) {log.stepOut(); reject(err);}
         });
-    }
-
-    /**
-     * 暗号化
-     */
-    private static encrypt(account : Account) : void
-    {
-        account.crypto_type = 1;
-
-        const key = Config.CRYPTO_KEY;
-        const iv =  Config.CRYPTO_IV;
-
-        if (account.email)                  {account.email =                  Utils.encrypt(account.email,                  key, iv);}
-        if (account.phone_no)               {account.phone_no =               Utils.encrypt(account.phone_no,               key, iv);}
-        if (account.international_phone_no) {account.international_phone_no = Utils.encrypt(account.international_phone_no, key, iv);}
-        if (account.change_email)           {account.change_email =           Utils.encrypt(account.change_email,           key, iv);}
-    }
-
-    /**
-     * 復号
-     */
-    private static decrypt(account : Account) : void
-    {
-        if (account.crypto_type === 1)
-        {
-            const key = Config.CRYPTO_KEY;
-            const iv =  Config.CRYPTO_IV;
-
-            if (account.email)                  {account.email =                   Utils.decrypt(account.email,                   key, iv);}
-            if (account.phone_no)               {account.phone_no =                Utils.decrypt(account.phone_no,                key, iv);}
-            if (account.international_phone_no) {account.international_phone_no =  Utils.decrypt(account.international_phone_no,  key, iv);}
-            if (account.change_email)           {account.change_email =            Utils.decrypt(account.change_email,            key, iv);}
-        }
-    }
-
-    /**
-     * 国際電話番号取得
-     */
-    static internationalPhoneNo(countryCode : string, phoneNo : string) : string
-    {
-        let internationalPhoneNo = null;
-
-        if (phoneNo)
-        {
-            internationalPhoneNo = phoneNo.replace(/-/g, '');
-            internationalPhoneNo = internationalPhoneNo.substr(1);  // 先頭の1文字を取り除く（'0'だったら、ではない）
-        }
-
-        if (countryCode) {
-            internationalPhoneNo = countryCode + (internationalPhoneNo || '');
-        }
-
-        return internationalPhoneNo;
-    }
-
-    private static international_phone_no(account : Account) : string
-    {
-        return AccountModel.internationalPhoneNo(account.country_code, account.phone_no);
-    }
-
-    /**
-     * 紐づけを解除できるかどうか調べる
-     *
-     * @param   provider    プロバイダ名
-     *
-     * @return  解除できる場合はtrueを返す
-     */
-    static canUnlink(model : Account, provider : string) : boolean
-    {
-        let count = 0;
-        let existsProvider = null;
-
-        if (model.twitter)  {count++; existsProvider = 'twitter';}
-        if (model.facebook) {count++; existsProvider = 'facebook';}
-        if (model.google)   {count++; existsProvider = 'google';}
-        if (model.github)   {count++; existsProvider = 'github';}
-
-        if (model.email && model.password)
-        {
-            count++;
-            existsProvider = 'email';
-        }
-
-        if (count === 1 && existsProvider === provider) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * 二段階認証を行えるかどうか
-     */
-    static canTwoFactorAuth(model : Account) : boolean
-    {
-        let possible = false;
-        if (model.country_code !== null && model.phone_no !== null)
-        {
-            switch (model.two_factor_auth)
-            {
-                case 'SMS':
-                    possible = Config.hasTwilio();
-                    break;
-
-                case 'Authy':
-                    possible = (Config.AUTHY_API_KEY !== '');
-                    break;
-            }
-        }
-        return possible;
     }
 
     /**
@@ -466,13 +210,7 @@ export default class AccountModel
 
     private static toModels(results : any[]) : Account[]
     {
-        const models = results.map((result) =>
-        {
-            const model = AccountModel.to_model(result);
-            AccountModel.decrypt(model);
-            model.international_phone_no = AccountModel.international_phone_no(model);
-            return model;
-        });
+        const  models = results.map((result) => AccountModel.to_model(result));
         return models;
     }
 
@@ -546,5 +284,3 @@ interface AccountFindListCondition
     registered?           : boolean;
     internationalPhoneNo? : string;
 }
-
-interface AccountResolve {(account : Account) : void;}

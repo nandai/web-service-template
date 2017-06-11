@@ -3,9 +3,9 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import AccountModel from 'server/models/account-model';
 import {Session}    from 'server/models/session-model';
 
 import express = require('express');
@@ -50,12 +50,12 @@ export async function onUnlinkProvider(req : express.Request, res : express.Resp
 
             // アカウント更新
             const session : Session = req.ext.session;
-            const account = await AccountModel.find(session.account_id);
+            const account = await AccountAgent.find(session.account_id);
 
-            if (AccountModel.canUnlink(account, provider))
+            if (AccountAgent.canUnlink(account, provider))
             {
                 account[provider] = null;
-                await AccountModel.update(account);
+                await AccountAgent.update(account);
 
                 const data : Response.UnlinkProvider = {status:Response.Status.OK};
                 res.json(data);

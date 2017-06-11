@@ -1,15 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Request}               from 'libs/request';
-import {Response}              from 'libs/response';
-import Authy                   from 'server/libs/authy';
-import Converter               from 'server/libs/converter';
-import R                       from 'server/libs/r';
-import Utils                   from 'server/libs/utils';
-import Validator               from 'server/libs/validator';
-import AccountModel, {Account} from 'server/models/account-model';
-import {Session}               from 'server/models/session-model';
+import {Request}    from 'libs/request';
+import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
+import Authy        from 'server/libs/authy';
+import Converter    from 'server/libs/converter';
+import R            from 'server/libs/r';
+import Utils        from 'server/libs/utils';
+import Validator    from 'server/libs/validator';
+import {Account}    from 'server/models/account-model';
+import {Session}    from 'server/models/session-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -54,7 +55,7 @@ export async function onSetAccount(req : express.Request, res : express.Response
 
             // 検証
             const session : Session = req.ext.session;
-            const alreadyExistsAccount = await AccountModel.findByUserName(userName);
+            const alreadyExistsAccount = await AccountAgent.findByUserName(userName);
             const result = isValid(name, userName, countryCode, phoneNo, twoFactorAuth, session.account_id, alreadyExistsAccount, locale);
 
             if (result.status !== Response.Status.OK)
@@ -66,15 +67,15 @@ export async function onSetAccount(req : express.Request, res : express.Response
             let phrase = R.SETTINGS_COMPLETED;
 
             // Authyからユーザーを削除する／しない
-            const account = await AccountModel.find(session.account_id);
+            const account = await AccountAgent.find(session.account_id);
             const newCountryCode = (countryCode && countryCode.length > 0 ? countryCode : null);
             const newPhoneNo =     (phoneNo     && phoneNo    .length > 0 ? phoneNo     : null);
-            const prevInternationalPhoneNo = AccountModel.internationalPhoneNo(account.country_code, account.phone_no);
-            const newInternationalPhoneNo =  AccountModel.internationalPhoneNo(newCountryCode, newPhoneNo);
+            const prevInternationalPhoneNo = AccountAgent.internationalPhoneNo(account.country_code, account.phone_no);
+            const newInternationalPhoneNo =  AccountAgent.internationalPhoneNo(newCountryCode, newPhoneNo);
 
             if (shouldAuthyUserDelete(account, prevInternationalPhoneNo, newInternationalPhoneNo))
             {
-                const authyId = await AccountModel.findAuthyId(prevInternationalPhoneNo, account.id);
+                const authyId = await AccountAgent.findAuthyId(prevInternationalPhoneNo, account.id);
                 if (authyId === null)
                 {
                     log.d('現在のアカウントの他には同じ電話番号がないのでAuthyからユーザーを削除します。');
@@ -97,7 +98,7 @@ export async function onSetAccount(req : express.Request, res : express.Response
                 }
                 else
                 {
-                    const authyId = await AccountModel.findAuthyId(newInternationalPhoneNo);
+                    const authyId = await AccountAgent.findAuthyId(newInternationalPhoneNo);
                     if (authyId === null)
                     {
                         log.d('現在のアカウントの他に同じ電話番号がないのでAuthyにユーザーを登録します。');
@@ -117,7 +118,7 @@ export async function onSetAccount(req : express.Request, res : express.Response
             account.country_code =    newCountryCode;
             account.phone_no =        newPhoneNo;
             account.two_factor_auth = twoFactorAuth;
-            await AccountModel.update(account);
+            await AccountAgent.update(account);
 
             const data : Response.SetAccount =
             {

@@ -4,9 +4,9 @@
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
 import CommonUtils  from 'libs/utils';
+import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import AccountModel from 'server/models/account-model';
 import {Session}    from 'server/models/session-model';
 
 import express = require('express');
@@ -39,7 +39,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
             const changeEmail = <string>param.email;
 
             // メールアドレスの重複チェック
-            const alreadyExistsAccount = await AccountModel.findByProviderId('email', changeEmail);
+            const alreadyExistsAccount = await AccountAgent.findByProviderId('email', changeEmail);
 
 //          if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
             if (alreadyExistsAccount !== null)
@@ -50,16 +50,16 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
 
             // パスワードがなければメールアドレスを設定し、あれば変更メールを送信する
             const session : Session = req.ext.session;
-            const account = await AccountModel.find(session.account_id);
+            const account = await AccountAgent.find(session.account_id);
 
             if (changeEmail === null || changeEmail === '')
             {
                 // メールアドレスを削除する場合
-                if (AccountModel.canUnlink(account, 'email'))
+                if (AccountAgent.canUnlink(account, 'email'))
                 {
                     account.email = null;
                     account.password = null;
-                    await AccountModel.update(account);
+                    await AccountAgent.update(account);
 
                     const data : Response.RequestChangeEmail =
                     {
@@ -83,7 +83,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                 if (result)
                 {
                     account.email = changeEmail;
-                    await AccountModel.update(account);
+                    await AccountAgent.update(account);
                 }
 
                 const data : Response.RequestChangeEmail =
@@ -104,7 +104,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                 {
                     account.change_id = changeId;
                     account.change_email = changeEmail;
-                    await AccountModel.update(account);
+                    await AccountAgent.update(account);
                 }
 
                 const data : Response.RequestChangeEmail =

@@ -1,14 +1,15 @@
 /**
  * (C) 2016 printf.jp
  */
-import Config                            from '../config';
-import Authy                             from '../libs/authy';
-import {PassportUser}                    from '../libs/passport';
-import R                                 from '../libs/r';
-import Utils                             from '../libs/utils';
-import AccountModel, {Account}           from '../models/account-model';
-import LoginHistoryModel, {LoginHistory} from '../models/login-history-model';
-import SessionModel, {Session}           from '../models/session-model';
+import AccountAgent                      from 'server/agents/account-agent';
+import Config                            from 'server/config';
+import Authy                             from 'server/libs/authy';
+import {PassportUser}                    from 'server/libs/passport';
+import R                                 from 'server/libs/r';
+import Utils                             from 'server/libs/utils';
+import {Account}                         from 'server/models/account-model';
+import LoginHistoryModel, {LoginHistory} from 'server/models/login-history-model';
+import SessionModel, {Session}           from 'server/models/session-model';
 
 import express =  require('express');
 import passport = require('passport');
@@ -113,7 +114,7 @@ export default class Provider
                     return;
                 }
 
-                const findAccount = await AccountModel.findByProviderId(user.provider, self.id);
+                const findAccount = await AccountAgent.findByProviderId(user.provider, self.id);
                 const session : Session = req.ext.session;
                 const command =           req.ext.command;
 
@@ -139,21 +140,21 @@ export default class Provider
 
                                 if (findAccount === null)
                                 {
-                                    account = await AccountModel.add(account);
+                                    account = await AccountAgent.add(account);
                                 }
                                 else
                                 {
                                     // 仮登録中のメールアドレスのアカウントに新たなサインアップIDを設定する
                                     account.id =        findAccount.id;
                                     account.invite_id = findAccount.invite_id;
-                                    await AccountModel.update(account);
+                                    await AccountAgent.update(account);
                                 }
 
                                 if (signupCallback)
                                 {
                                     const result = await signupCallback(account);
                                     if (result === false) {
-                                        await AccountModel.remove(account.id);
+                                        await AccountAgent.remove(account.id);
                                     }
                                 }
                                 else
@@ -201,7 +202,7 @@ export default class Provider
                             {
                                 log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
                                 let phrase : string;
-                                let isTwoFactorAuth = AccountModel.canTwoFactorAuth(findAccount);
+                                let isTwoFactorAuth = AccountAgent.canTwoFactorAuth(findAccount);
 
                                 if (isTwoFactorAuth)
                                 {
@@ -231,7 +232,7 @@ export default class Provider
                                         session.sms_id = Utils.createRandomText(32);
                                         session.sms_code = smsCode;
                                         await SessionModel.update(session);
-                                        await AccountModel.update(findAccount);
+                                        await AccountAgent.update(findAccount);
                                         await self.sendResponse(req, res, session, '/', null, session.sms_id);
                                     }
                                     else
@@ -297,9 +298,9 @@ export default class Provider
                                 log.i('紐づけ可能。ログインしているので、紐づけを続行し、設定画面へ移動する');
 
                                 // アカウント更新
-                                const account = await AccountModel.find(session.account_id);
+                                const account = await AccountAgent.find(session.account_id);
                                 account[user.provider] = self.id;
-                                await AccountModel.update(account);
+                                await AccountAgent.update(account);
 
                                 // 設定画面へ
                                 await self.sendResponse(req, res, session, '/settings');

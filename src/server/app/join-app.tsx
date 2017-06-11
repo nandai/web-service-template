@@ -8,8 +8,8 @@ import Root             from 'client/components/root';
 import JoinView         from 'client/components/views/join-view';
 import {Store}          from 'client/components/views/join-view/store';
 import ClientR          from 'client/libs/r';
-import Utils            from '../libs/utils';
-import AccountModel     from '../models/account-model';
+import AccountAgent     from 'server/agents/account-agent';
+import Utils            from 'server/libs/utils';
 import {notFound, view} from './view';
 
 import express = require('express');
@@ -50,7 +50,7 @@ export default class JoinApp
                 }
 
                 const inviteId : string = param.id;
-                const account = await AccountModel.findByInviteId(inviteId);
+                const account = await AccountAgent.findByInviteId(inviteId);
 
                 if (account === null)
                 {

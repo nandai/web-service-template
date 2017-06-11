@@ -4,9 +4,9 @@
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
 import CommonUtils  from 'libs/utils';
+import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import AccountModel from 'server/models/account-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -37,7 +37,7 @@ export async function onRequestResetPassword(req : express.Request, res : expres
 
             const email = <string>param.email;
 
-            const account = await AccountModel.findByProviderId('email', email);
+            const account = await AccountAgent.findByProviderId('email', email);
             if (account === null || account.signup_id)
             {
                 res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL, locale));
@@ -45,7 +45,7 @@ export async function onRequestResetPassword(req : express.Request, res : expres
             }
 
             account.reset_id = Utils.createRandomText(32);
-            await AccountModel.update(account);
+            await AccountAgent.update(account);
 
             const url = Utils.generateUrl('reset', account.reset_id);
             const template = R.mail(R.NOTICE_RESET_PASSWORD, locale);

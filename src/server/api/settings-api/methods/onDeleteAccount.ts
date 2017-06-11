@@ -2,8 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response}              from 'libs/response';
+import AccountAgent            from 'server/agents/account-agent';
 import Utils                   from 'server/libs/utils';
-import AccountModel            from 'server/models/account-model';
 import DeleteAccountModel      from 'server/models/delete-account-model';
 import SessionModel, {Session} from 'server/models/session-model';
 
@@ -21,10 +21,10 @@ export async function onDeleteAccount(req : express.Request, res : express.Respo
     {
         const session : Session = req.ext.session;
         const accountId = session.account_id;
-        const account = await AccountModel.find(accountId);
+        const account = await AccountAgent.find(accountId);
 
         await DeleteAccountModel.add(account);
-        await AccountModel.remove( accountId);
+        await AccountAgent.remove( accountId);
         await SessionModel.logout({accountId});
 
 //      req.logout();
