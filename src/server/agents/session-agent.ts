@@ -1,16 +1,26 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import MonboDBCollection from 'server/database/mongodb/session-collection';
+import Config            from 'server/config';
+import MongoDBCollection from 'server/database/mongodb/session-collection';
 import MySQLCollection   from 'server/database/mysql/session-collection';
 import Utils             from 'server/libs/utils';
 import {Session}         from 'server/models/session';
 
 import uuid = require('node-uuid');
 
-// const Collection = MonboDBCollection;
-const Collection = MySQLCollection;
+function collection()
+{
+    switch (Config.SELECT_DB)
+     {
+        case 'mongodb': return MongoDBCollection;
+        case 'mysql':   return MySQLCollection;
+    }
+}
 
+/**
+ * セッションエージェント
+ */
 export default class SessionAgent
 {
     private static CLS_NAME = 'SessionAgent';
@@ -25,7 +35,7 @@ export default class SessionAgent
             id:         uuid.v4(),
             created_at: Utils.now()
         };
-        return Collection.add(SessionAgent.toModel(model));
+        return collection().add(SessionAgent.toModel(model));
     }
 
     /**
@@ -40,7 +50,7 @@ export default class SessionAgent
         const newModel = SessionAgent.toModel(model);
         newModel.updated_at = Utils.now();
 
-        return Collection.update(newModel, {sessionId:newModel.id});
+        return collection().update(newModel, {sessionId:newModel.id});
     }
 
     /**
@@ -57,7 +67,7 @@ export default class SessionAgent
             account_id: null,
             updated_at: Utils.now()
         };
-        return Collection.update(model, cond);
+        return collection().update(model, cond);
     }
 
     /**
@@ -73,7 +83,7 @@ export default class SessionAgent
         {
             try
             {
-                const data = await Collection.find(sessionId);
+                const data = await collection().find(sessionId);
                 const model = SessionAgent.toModel(data);
 
                 resolve(model);

@@ -2,16 +2,25 @@
  * (C) 2016-2017 printf.jp
  */
 import Config            from 'server/config';
-import MonboDBCollection from 'server/database/mongodb/account-collection';
+import MongoDBCollection from 'server/database/mongodb/account-collection';
 import MySQLCollection   from 'server/database/mysql/account-collection';
 import Utils             from 'server/libs/utils';
 import {Account}         from 'server/models/account';
 
 import slog = require('../slog');
 
-// const Collection = MonboDBCollection;
-const Collection = MySQLCollection;
+function collection()
+{
+    switch (Config.SELECT_DB)
+     {
+        case 'mongodb': return MongoDBCollection;
+        case 'mysql':   return MySQLCollection;
+    }
+}
 
+/**
+ * アカウントエージェント
+ */
 export default class AccountAgent
 {
     private static CLS_NAME = 'AccountAgent';
@@ -39,7 +48,7 @@ export default class AccountAgent
                 AccountAgent.encrypt(encryptModel);
 
                 // ストレージに追加して、
-                encryptModel = await Collection.add(encryptModel);
+                encryptModel = await collection().add(encryptModel);
 
                 // 暗号化前のデータにidを設定して、それを返す
                 newModel.id = encryptModel.id;
@@ -68,7 +77,7 @@ export default class AccountAgent
         AccountAgent.encrypt(newModel);
 
         // 更新する
-        return Collection.update(newModel);
+        return collection().update(newModel);
     }
 
     /**
@@ -80,7 +89,7 @@ export default class AccountAgent
      */
     static async remove(accountId : number)
     {
-        return Collection.remove(accountId);
+        return collection().remove(accountId);
     }
 
     /**
@@ -97,7 +106,7 @@ export default class AccountAgent
         {
             try
             {
-                const data = await Collection.findByCondition(fieldName, value);
+                const data = await collection().findByCondition(fieldName, value);
                 const model = AccountAgent.toModel(data);
 
                 if (model)
@@ -247,7 +256,7 @@ export default class AccountAgent
     static async findAuthyId(internationalPhoneNo : string, excludeAccountId? : number)
     {
         internationalPhoneNo = Utils.encrypt(internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-        return Collection.findAuthyId(internationalPhoneNo, excludeAccountId);
+        return collection().findAuthyId(internationalPhoneNo, excludeAccountId);
     }
 
     /**
@@ -265,7 +274,7 @@ export default class AccountAgent
                     cond.internationalPhoneNo = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
                 }
 
-                const data = await Collection.findList(cond);
+                const data = await collection().findList(cond);
                 const models = AccountAgent.toModels(data);
 
                 AccountAgent.decrypts(models);

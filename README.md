@@ -41,7 +41,8 @@ SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し
         "db-user":                 "",
         "db-password":             "",
         "db-name":                 "",
-        "mongo-url":               ""
+        "mongo-url":               "",
+        "select-db":               ""
     }
 }
 ```

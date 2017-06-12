@@ -32,6 +32,7 @@
         "db-user":                 "",
         "db-password":             "",
         "db-name":                 "",
-        "mongo-url":               ""
+        "mongo-url":               "",
+        "select-db":               ""
     }
 }

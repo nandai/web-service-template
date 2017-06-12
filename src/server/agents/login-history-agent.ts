@@ -1,14 +1,24 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import MonboDBCollection from 'server/database/mongodb/login-history-collection';
+import Config            from 'server/config';
+import MongoDBCollection from 'server/database/mongodb/login-history-collection';
 import MySQLCollection   from 'server/database/mysql/login-history-collection';
 import Utils             from 'server/libs/utils';
 import {LoginHistory}    from 'server/models/login-history';
 
-// const Collection = MonboDBCollection;
-const Collection = MySQLCollection;
+function collection()
+{
+    switch (Config.SELECT_DB)
+     {
+        case 'mongodb': return MongoDBCollection;
+        case 'mysql':   return MySQLCollection;
+    }
+}
 
+/**
+ * ログイン履歴エージェント
+ */
 export default class LoginHistoryAgent
 {
     private static CLS_NAME = 'LoginHistoryAgent';
@@ -26,7 +36,7 @@ export default class LoginHistoryAgent
         delete newModel.id;
         newModel.login_at = Utils.now();
 
-        return Collection.add(newModel);
+        return collection().add(newModel);
     }
 
     /**

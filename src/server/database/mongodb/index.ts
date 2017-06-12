@@ -24,8 +24,9 @@ export default class Database
             const log = slog.stepIn('Database', 'init');
             try
             {
-                const url = Config.MONGO_URL;
-                if (url !== '') {
+                if (Config.hasMongoDB())
+                {
+                    const url = Config.MONGO_URL;
                     Database.db = await mongodb.MongoClient.connect(url);
                 }
 

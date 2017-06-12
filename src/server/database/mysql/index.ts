@@ -23,20 +23,16 @@ export default class Database
             const log = slog.stepIn('Database', 'init');
             try
             {
-                const config : mysql.IPoolConfig =
+                if (Config.hasMySQL())
                 {
-                    host:     Config.DB_HOST,
-                    user:     Config.DB_USER,
-                    password: Config.DB_PASSWORD,
-                    database: Config.DB_NAME,
-                    charset:  'utf8mb4'
-                };
-
-                if (config.host     !== ''
-                &&  config.user     !== ''
-                &&  config.password !== ''
-                &&  config.database !== '')
-                {
+                    const config : mysql.IPoolConfig =
+                    {
+                        host:     Config.DB_HOST,
+                        user:     Config.DB_USER,
+                        password: Config.DB_PASSWORD,
+                        database: Config.DB_NAME,
+                        charset:  'utf8mb4'
+                    };
                     Database.pool = mysql.createPool(config);
 
                     const conn = await Database.getConnection();

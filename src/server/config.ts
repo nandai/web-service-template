@@ -65,6 +65,8 @@ export default class Config
 
     static MONGO_URL = '';
 
+    static SELECT_DB = '';
+
     /**
      * コンフィグをJSONファイルからロードする
      */
@@ -129,11 +131,25 @@ export default class Config
         Config.DB_PASSWORD =             Config.get(appData, 'db-password');
         Config.DB_NAME =                 Config.get(appData, 'db-name');
         Config.MONGO_URL =               Config.get(appData, 'mongo-url');
+        Config.SELECT_DB =               Config.get(appData, 'select-db');
 
         Config.TWITTER_CALLBACK =  Utils.generateUrl('auth/twitter/callback');
         Config.FACEBOOK_CALLBACK = Utils.generateUrl('auth/facebook/callback');
         Config.GOOGLE_CALLBACK =   Utils.generateUrl('auth/google/callback');
         Config.GITHUB_CALLBACK =   Utils.generateUrl('auth/github/callback');
+
+        if (Config.hasMySQL() === false && Config.hasMongoDB() === false)
+        {
+            console.log(`データベースの設定がありません。`);
+            process.exit();
+        }
+
+        Config.SELECT_DB = Config.SELECT_DB.toLowerCase();
+        if (Config.SELECT_DB !== 'mysql' && Config.SELECT_DB !== 'mongodb')
+        {
+            console.log('使用するデータベースの指定が正しくありません。');
+            process.exit();
+        }
     }
 
     /**
@@ -230,6 +246,33 @@ export default class Config
         if (Config.TWILIO_ACCOUNT_SID   !== ''
         &&  Config.TWILIO_AUTH_TOKEN    !== ''
         &&  Config.TWILIO_FROM_PHONE_NO !== '')
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * MySQLの設定があるかどうか調べる
+     */
+    static hasMySQL() : boolean
+    {
+        if (Config.DB_HOST     !== ''
+        &&  Config.DB_USER     !== ''
+        &&  Config.DB_PASSWORD !== ''
+        &&  Config.DB_NAME     !== '')
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * MongoDBの設定があるかどうか調べる
+     */
+    static hasMongoDB() : boolean
+    {
+        if (Config.MONGO_URL !== '')
         {
             return true;
         }
