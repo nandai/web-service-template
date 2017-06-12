@@ -3,9 +3,9 @@
  */
 import {Response}         from 'libs/response';
 import AccountAgent       from 'server/agents/account-agent';
+import DeleteAccountAgent from 'server/agents/delete-account-agent';
 import SessionAgent       from 'server/agents/session-agent';
 import Utils              from 'server/libs/utils';
-import DeleteAccountModel from 'server/models/delete-account-model';
 import {Session}          from 'server/models/session-model';
 
 import express = require('express');
@@ -22,9 +22,11 @@ export async function onDeleteAccount(req : express.Request, res : express.Respo
     {
         const session : Session = req.ext.session;
         const accountId = session.account_id;
-        const account = await AccountAgent.find(accountId);
 
-        await DeleteAccountModel.add(account);
+        const account = await AccountAgent.find(accountId);
+        AccountAgent.encrypt(account);
+
+        await DeleteAccountAgent.add(account);
         await AccountAgent.remove( accountId);
         await SessionAgent.logout({accountId});
 

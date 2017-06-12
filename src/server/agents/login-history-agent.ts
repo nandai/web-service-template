@@ -6,8 +6,6 @@ import MySQLCollection   from 'server/database/mysql/login-history-collection';
 import Utils             from 'server/libs/utils';
 import {LoginHistory}    from 'server/models/login-history-model';
 
-import uuid = require('node-uuid');
-
 const Collection = MonboDBCollection;
 // const Collection = MySQLCollection;
 

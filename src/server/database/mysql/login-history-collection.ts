@@ -1,7 +1,6 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Utils          from 'server/libs/utils';
 import {LoginHistory} from 'server/models/login-history-model';
 import DB             from '.';
 

@@ -278,7 +278,7 @@ export default class AccountAgent
     /**
      * 暗号化
      */
-    private static encrypt(model : Account) : void
+    static encrypt(model : Account) : void
     {
         model.crypto_type = 1;
 

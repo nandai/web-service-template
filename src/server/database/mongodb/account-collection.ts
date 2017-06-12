@@ -2,7 +2,6 @@
  * (C) 2016-2017 printf.jp
  */
 import Config    from 'server/config';
-import Utils     from 'server/libs/utils';
 import {Account} from 'server/models/account-model';
 import DB        from '.';
 

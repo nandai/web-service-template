@@ -1,7 +1,6 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Utils     from 'server/libs/utils';
 import {Session} from 'server/models/session-model';
 import DB        from '.';
 
