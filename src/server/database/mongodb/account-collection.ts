@@ -106,7 +106,7 @@ export default class AccountCollection
     static findByCondition(fieldName : string, value)
     {
         const log = slog.stepIn(AccountCollection.CLS_NAME, 'findByCondition');
-        return new Promise(async (resolve : (results) => void, reject) =>
+        return new Promise(async (resolve : (result) => void, reject) =>
         {
             try
             {
@@ -115,10 +115,9 @@ export default class AccountCollection
 
                 const collection = AccountCollection.collection();
                 const result = await collection.findOne(filter);
-                const results = (result ? [result] : []);
 
                 log.stepOut();
-                resolve(results);
+                resolve(result);
             }
             catch (err) {log.stepOut(); reject(err);}
         });

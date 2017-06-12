@@ -2,7 +2,7 @@
  * (C) 2016 printf.jp
  */
 import CommonUtils from 'libs/utils';
-import Config      from '../config';
+import Config      from 'server/config';
 
 import fs = require('fs');
 
@@ -11,7 +11,7 @@ import fs = require('fs');
  */
 export default class R
 {
-    private static path = Config.ROOT_DIR + '/resources';
+    private static path : string;
 
     private static texts =
     {
@@ -85,6 +85,8 @@ export default class R
      */
     static load() : void
     {
+        R.path = Config.ROOT_DIR + '/resources';
+
         const locales = ['en', 'ja'];
         for (const locale of locales)
         {

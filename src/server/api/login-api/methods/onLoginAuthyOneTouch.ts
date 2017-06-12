@@ -2,10 +2,11 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response}                        from 'libs/response';
+import SessionAgent                      from 'server/agents/session-agent';
 import Authy                             from 'server/libs/authy';
 import Utils                             from 'server/libs/utils';
 import LoginHistoryModel, {LoginHistory} from 'server/models/login-history-model';
-import SessionModel, {Session}           from 'server/models/session-model';
+import {Session}                         from 'server/models/session-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -35,7 +36,7 @@ export async function onLoginAuthyOneTouch(req : express.Request, res : express.
                     session.sms_id =     null;
                     session.sms_code =   null;
                     session.authy_uuid = null;
-                    await SessionModel.update(session);
+                    await SessionAgent.update(session);
 
                     // ログイン履歴作成
                     const loginHistory : LoginHistory =

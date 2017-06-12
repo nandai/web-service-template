@@ -1,18 +1,19 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React              from 'react';
-import * as ReactDOM           from 'react-dom/server';
+import * as React    from 'react';
+import * as ReactDOM from 'react-dom/server';
 
-import Root                    from 'client/components/root';
-import TopView                 from 'client/components/views/top-view';
-import {Store}                 from 'client/components/views/top-view/store';
-import ClientR                 from 'client/libs/r';
-import SettingsApi             from '../api/settings-api';
-import R                       from '../libs/r';
-import Utils                   from '../libs/utils';
-import SessionModel, {Session} from '../models/session-model';
-import {view}                  from './view';
+import Root          from 'client/components/root';
+import TopView       from 'client/components/views/top-view';
+import {Store}       from 'client/components/views/top-view/store';
+import ClientR       from 'client/libs/r';
+import SessionAgent  from 'server/agents/session-agent';
+import SettingsApi   from 'server/api/settings-api';
+import R             from 'server/libs/r';
+import Utils         from 'server/libs/utils';
+import {Session}     from 'server/models/session-model';
+import {view}        from './view';
 
 import express = require('express');
 import slog =    require('../slog');
@@ -43,7 +44,7 @@ export default class TopApp
             {
                 message = R.text(messageId, locale);
                 session.message_id = null;
-                await SessionModel.update(session);
+                await SessionAgent.update(session);
             }
 
             const data = await SettingsApi.getAccount(req);

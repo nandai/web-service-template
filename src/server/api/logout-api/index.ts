@@ -1,9 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response}              from 'libs/response';
-import Utils                   from 'server/libs/utils';
-import SessionModel, {Session} from 'server/models/session-model';
+import {Response}   from 'libs/response';
+import SessionAgent from 'server/agents/session-agent';
+import Utils        from 'server/libs/utils';
+import {Session}    from 'server/models/session-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -23,7 +24,7 @@ export default class LogoutApi
         try
         {
             const session : Session = req.ext.session;
-            await SessionModel.logout({sessionId:session.id});
+            await SessionAgent.logout({sessionId:session.id});
 
             const data = {status:Response.Status.OK};
             res.json(data);

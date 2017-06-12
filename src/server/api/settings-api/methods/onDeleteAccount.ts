@@ -1,11 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response}              from 'libs/response';
-import AccountAgent            from 'server/agents/account-agent';
-import Utils                   from 'server/libs/utils';
-import DeleteAccountModel      from 'server/models/delete-account-model';
-import SessionModel, {Session} from 'server/models/session-model';
+import {Response}         from 'libs/response';
+import AccountAgent       from 'server/agents/account-agent';
+import SessionAgent       from 'server/agents/session-agent';
+import Utils              from 'server/libs/utils';
+import DeleteAccountModel from 'server/models/delete-account-model';
+import {Session}          from 'server/models/session-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -25,7 +26,7 @@ export async function onDeleteAccount(req : express.Request, res : express.Respo
 
         await DeleteAccountModel.add(account);
         await AccountAgent.remove( accountId);
-        await SessionModel.logout({accountId});
+        await SessionAgent.logout({accountId});
 
 //      req.logout();
 

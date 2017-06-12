@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import SessionAgent                  from './agents/session-agent';
 import LoginApi                      from './api/login-api';
 import LogoutApi                     from './api/logout-api';
 import ResetApi                      from './api/reset-api';
@@ -28,7 +29,7 @@ import Authy                         from './libs/authy';
 import {expressExtension}            from './libs/express-extension';
 import R                             from './libs/r';
 import Utils                         from './libs/utils';
-import SessionModel, {Session}       from './models/session-model';
+import {Session}                     from './models/session-model';
 import Email                         from './provider/email';
 import Facebook                      from './provider/facebook';
 import Github                        from './provider/github';
@@ -338,7 +339,7 @@ function command(command : string) : express.Handler
         {
             const session : Session = req.ext.session;
             session.command_id = command;
-            await SessionModel.update(session);
+            await SessionAgent.update(session);
 
             log.stepOut();
             next();

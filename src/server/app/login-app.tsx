@@ -8,12 +8,13 @@ import Root                    from 'client/components/root';
 import LoginView               from 'client/components/views/login-view';
 import {Store}                 from 'client/components/views/login-view/store';
 import ClientR                 from 'client/libs/r';
-import SmsApp                  from '../app/sms-app';
-import TopApp                  from '../app/top-app';
-import Cookie                  from '../libs/cookie';
-import R                       from '../libs/r';
-import Utils                   from '../libs/utils';
-import SessionModel, {Session} from '../models/session-model';
+import SessionAgent            from 'server/agents/session-agent';
+import SmsApp                  from 'server/app/sms-app';
+import TopApp                  from 'server/app/top-app';
+import Cookie                  from 'server/libs/cookie';
+import R                       from 'server/libs/r';
+import Utils                   from 'server/libs/utils';
+import {Session}               from 'server/models/session-model';
 import {notFound, view}        from './view';
 
 import express = require('express');
@@ -62,7 +63,7 @@ export default class LoginApp
             {
                 message = R.text(messageId, locale);
                 session.message_id = null;
-                await SessionModel.update(session);
+                await SessionAgent.update(session);
             }
 
             const store : Store =

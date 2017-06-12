@@ -2,6 +2,7 @@
  * (C) 2016 printf.jp
  */
 import AccountAgent                      from 'server/agents/account-agent';
+import SessionAgent                      from 'server/agents/session-agent';
 import Config                            from 'server/config';
 import Authy                             from 'server/libs/authy';
 import {PassportUser}                    from 'server/libs/passport';
@@ -9,7 +10,7 @@ import R                                 from 'server/libs/r';
 import Utils                             from 'server/libs/utils';
 import {Account}                         from 'server/models/account-model';
 import LoginHistoryModel, {LoginHistory} from 'server/models/login-history-model';
-import SessionModel, {Session}           from 'server/models/session-model';
+import {Session}                         from 'server/models/session-model';
 
 import express =  require('express');
 import passport = require('passport');
@@ -161,7 +162,7 @@ export default class Provider
                                 {
                                     // セッション更新
                                     session.account_id = account.id;
-                                    await SessionModel.update(session);
+                                    await SessionAgent.update(session);
 
                                     // ログイン履歴作成
                                     const loginHistory : LoginHistory =
@@ -231,7 +232,7 @@ export default class Provider
                                         session.account_id = findAccount.id;
                                         session.sms_id = Utils.createRandomText(32);
                                         session.sms_code = smsCode;
-                                        await SessionModel.update(session);
+                                        await SessionAgent.update(session);
                                         await AccountAgent.update(findAccount);
                                         await self.sendResponse(req, res, session, '/', null, session.sms_id);
                                     }
@@ -246,7 +247,7 @@ export default class Provider
                                 {
                                     // セッション作成
                                     session.account_id = findAccount.id;
-                                    await SessionModel.update(session);
+                                    await SessionAgent.update(session);
 
                                     // ログイン履歴作成
                                     const loginHistory : LoginHistory =
@@ -382,7 +383,7 @@ export default class Provider
                     if (phrase)
                     {
                         session.message_id = phrase;
-                        await SessionModel.update(session);
+                        await SessionAgent.update(session);
                     }
 
                     if (smsId) {

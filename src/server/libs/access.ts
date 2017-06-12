@@ -1,13 +1,14 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response}              from 'libs/response';
-import CommonUtils             from 'libs/utils';
-import {forbidden, notFound}   from '../app/view';
-import SessionModel, {Session} from '../models/session-model';
-import Cookie                  from './cookie';
-import R                       from './r';
-import Utils                   from './utils';
+import {Response}            from 'libs/response';
+import CommonUtils           from 'libs/utils';
+import SessionAgent          from '../agents/session-agent';
+import {forbidden, notFound} from '../app/view';
+import {Session}             from '../models/session-model';
+import Cookie                from './cookie';
+import R                     from './r';
+import Utils                 from './utils';
 
 import express =    require('express');
 import bodyParser = require('body-parser');
@@ -172,26 +173,26 @@ export default class Access
 
             if (sessionId === undefined)
             {
-                session = await SessionModel.add();
+                session = await SessionAgent.add();
                 log.d('セッションを生成しました。');
             }
             else
             {
-                session = await SessionModel.find(sessionId);
+                session = await SessionAgent.find(sessionId);
                 if (session === null)
                 {
                     // const locale = req.ext.locale;
                     // res.ext.badRequest(locale);
                     // log.stepOut();
                     // return;
-                    session = await SessionModel.add();
+                    session = await SessionAgent.add();
                     log.d('セッションを再生成しました。');
                 }
                 else
                 {
                     req.ext.command = session.command_id;
                     session.command_id = null;
-                    await SessionModel.update(session);
+                    await SessionAgent.update(session);
                 }
             }
 

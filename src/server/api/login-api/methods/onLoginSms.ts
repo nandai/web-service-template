@@ -4,11 +4,12 @@
 import {Request}                         from 'libs/request';
 import {Response}                        from 'libs/response';
 import AccountAgent                      from 'server/agents/account-agent';
+import SessionAgent                      from 'server/agents/session-agent';
 import Authy                             from 'server/libs/authy';
 import R                                 from 'server/libs/r';
 import Utils                             from 'server/libs/utils';
 import LoginHistoryModel, {LoginHistory} from 'server/models/login-history-model';
-import SessionModel, {Session}           from 'server/models/session-model';
+import {Session}                         from 'server/models/session-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -74,7 +75,7 @@ export async function onLoginSms(req : express.Request, res : express.Response)
                 session.sms_id =     null;
                 session.sms_code =   null;
                 session.authy_uuid = null;
-                await SessionModel.update(session);
+                await SessionAgent.update(session);
 
                 // ログイン履歴作成
                 const loginHistory : LoginHistory =
