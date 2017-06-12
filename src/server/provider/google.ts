@@ -11,7 +11,6 @@ import passportGoogle = require('passport-google-oauth');
 import slog =           require('../slog');
 
 const plus = google.plus('v1');
-const oauth2Client = new google.auth.OAuth2(Config.GOOGLE_CLIENT_ID, Config.GOOGLE_CLIENT_SECRET, Config.GOOGLE_CALLBACK);
 
 /**
  * Google
@@ -74,6 +73,7 @@ export default class Google extends Provider
         {
             try
             {
+                const oauth2Client = new google.auth.OAuth2(Config.GOOGLE_CLIENT_ID, Config.GOOGLE_CLIENT_SECRET, Config.GOOGLE_CALLBACK);
                 oauth2Client.setCredentials(
                 {
                     access_token:  accessToken,

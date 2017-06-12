@@ -90,8 +90,7 @@ class Initializer
      */
     twitter() : void
     {
-        if (Config.TWITTER_CONSUMER_KEY    !== ''
-        &&  Config.TWITTER_CONSUMER_SECRET !== '')
+        if (Config.hasTwitter())
         {
             const options : passportTwitter.IStrategyOption =
             {
@@ -113,8 +112,7 @@ class Initializer
      */
     facebook() : void
     {
-        if (Config.FACEBOOK_APPID     !== ''
-        &&  Config.FACEBOOK_APPSECRET !== '')
+        if (Config.hasFacebook())
         {
             const options : passportFacebook.IStrategyOption =
             {
@@ -137,8 +135,7 @@ class Initializer
      */
     google() : void
     {
-        if (Config.GOOGLE_CLIENT_ID     !== ''
-        &&  Config.GOOGLE_CLIENT_SECRET !== '')
+        if (Config.hasGoogle())
         {
             const options : passportGoogle.IOAuth2StrategyOption =
             {
@@ -160,8 +157,7 @@ class Initializer
      */
     github() : void
     {
-        if (Config.GOOGLE_CLIENT_ID     !== ''
-        &&  Config.GOOGLE_CLIENT_SECRET !== '')
+        if (Config.hasGithub())
         {
             const options : passportGithub.StrategyOption =
             {
