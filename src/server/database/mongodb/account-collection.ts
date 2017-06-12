@@ -2,7 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import Config    from 'server/config';
-import {Account} from 'server/models/account-model';
+import {Account} from 'server/models/account';
 import DB        from '.';
 
 import _ =    require('lodash');

@@ -7,7 +7,7 @@ import AccountAgent from 'server/agents/account-agent';
 import Config       from 'server/config';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
-import {Session}    from 'server/models/session-model';
+import {Session}    from 'server/models/session';
 
 import express = require('express');
 import slog =    require('server/slog');

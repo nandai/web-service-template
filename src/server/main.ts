@@ -29,7 +29,7 @@ import Authy                         from './libs/authy';
 import {expressExtension}            from './libs/express-extension';
 import R                             from './libs/r';
 import Utils                         from './libs/utils';
-import {Session}                     from './models/session-model';
+import {Session}                     from './models/session';
 import Email                         from './provider/email';
 import Facebook                      from './provider/facebook';
 import Github                        from './provider/github';

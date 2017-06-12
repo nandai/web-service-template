@@ -4,7 +4,7 @@
 import {Response}   from 'libs/response';
 import AccountAgent from 'server/agents/account-agent';
 import Converter    from 'server/libs/converter';
-import {Session}    from 'server/models/session-model';
+import {Session}    from 'server/models/session';
 
 import express = require('express');
 import slog =    require('server/slog');

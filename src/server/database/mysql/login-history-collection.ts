@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {LoginHistory} from 'server/models/login-history-model';
+import {LoginHistory} from 'server/models/login-history';
 import DB             from '.';
 
 import _ =    require('lodash');

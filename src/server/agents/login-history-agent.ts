@@ -4,10 +4,10 @@
 import MonboDBCollection from 'server/database/mongodb/login-history-collection';
 import MySQLCollection   from 'server/database/mysql/login-history-collection';
 import Utils             from 'server/libs/utils';
-import {LoginHistory}    from 'server/models/login-history-model';
+import {LoginHistory}    from 'server/models/login-history';
 
-const Collection = MonboDBCollection;
-// const Collection = MySQLCollection;
+// const Collection = MonboDBCollection;
+const Collection = MySQLCollection;
 
 export default class LoginHistoryAgent
 {

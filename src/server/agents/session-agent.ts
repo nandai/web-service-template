@@ -4,12 +4,12 @@
 import MonboDBCollection from 'server/database/mongodb/session-collection';
 import MySQLCollection   from 'server/database/mysql/session-collection';
 import Utils             from 'server/libs/utils';
-import {Session}         from 'server/models/session-model';
+import {Session}         from 'server/models/session';
 
 import uuid = require('node-uuid');
 
-const Collection = MonboDBCollection;
-// const Collection = MySQLCollection;
+// const Collection = MonboDBCollection;
+const Collection = MySQLCollection;
 
 export default class SessionAgent
 {

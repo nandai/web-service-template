@@ -9,8 +9,8 @@ import Converter    from 'server/libs/converter';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
 import Validator    from 'server/libs/validator';
-import {Account}    from 'server/models/account-model';
-import {Session}    from 'server/models/session-model';
+import {Account}    from 'server/models/account';
+import {Session}    from 'server/models/session';
 
 import express = require('express');
 import slog =    require('server/slog');

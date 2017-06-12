@@ -3,7 +3,7 @@
  */
 import {Response} from 'libs/response';
 import R          from 'server/libs/r';
-import {Account}  from 'server/models/account-model';
+import {Account}  from 'server/models/account';
 
 export default class Validator
 {

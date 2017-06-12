@@ -9,7 +9,7 @@ import SmsView          from 'client/components/views/sms-view';
 import {Store}          from 'client/components/views/sms-view/store';
 import ClientR          from 'client/libs/r';
 import Utils            from '../libs/utils';
-import {Session}        from '../models/session-model';
+import {Session}        from '../models/session';
 import {notFound, view} from './view';
 
 import express = require('express');

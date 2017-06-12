@@ -5,7 +5,7 @@ import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
 import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
-import {Account}    from 'server/models/account-model';
+import {Account}    from 'server/models/account';
 
 import express = require('express');
 import slog =    require('server/slog');

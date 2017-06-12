@@ -5,7 +5,7 @@ import {Response}            from 'libs/response';
 import CommonUtils           from 'libs/utils';
 import SessionAgent          from '../agents/session-agent';
 import {forbidden, notFound} from '../app/view';
-import {Session}             from '../models/session-model';
+import {Session}             from '../models/session';
 import Cookie                from './cookie';
 import R                     from './r';
 import Utils                 from './utils';

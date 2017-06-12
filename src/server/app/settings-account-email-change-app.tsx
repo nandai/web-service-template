@@ -10,7 +10,7 @@ import {Store}                        from 'client/components/views/settings-acc
 import ClientR                        from 'client/libs/r';
 import AccountAgent                   from 'server/agents/account-agent';
 import Utils                          from 'server/libs/utils';
-import {Account}                      from 'server/models/account-model';
+import {Account}                      from 'server/models/account';
 import {notFound, view}               from './view';
 
 import express = require('express');

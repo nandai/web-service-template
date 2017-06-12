@@ -14,7 +14,7 @@ import TopApp                  from 'server/app/top-app';
 import Cookie                  from 'server/libs/cookie';
 import R                       from 'server/libs/r';
 import Utils                   from 'server/libs/utils';
-import {Session}               from 'server/models/session-model';
+import {Session}               from 'server/models/session';
 import {notFound, view}        from './view';
 
 import express = require('express');

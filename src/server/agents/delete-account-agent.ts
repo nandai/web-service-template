@@ -4,12 +4,12 @@
 import MonboDBCollection from 'server/database/mongodb/delete-account-collection';
 import MySQLCollection   from 'server/database/mysql/delete-account-collection';
 import Utils             from 'server/libs/utils';
-import {Account}         from 'server/models/account-model';
+import {Account}         from 'server/models/account';
 
 import _ = require('lodash');
 
-const Collection = MonboDBCollection;
-// const Collection = MySQLCollection;
+// const Collection = MonboDBCollection;
+const Collection = MySQLCollection;
 
 export default class DeleteAccountAgent
 {

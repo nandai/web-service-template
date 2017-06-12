@@ -6,7 +6,7 @@ import AccountAgent       from 'server/agents/account-agent';
 import DeleteAccountAgent from 'server/agents/delete-account-agent';
 import SessionAgent       from 'server/agents/session-agent';
 import Utils              from 'server/libs/utils';
-import {Session}          from 'server/models/session-model';
+import {Session}          from 'server/models/session';
 
 import express = require('express');
 import slog =    require('server/slog');

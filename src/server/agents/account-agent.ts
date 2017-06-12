@@ -5,12 +5,12 @@ import Config            from 'server/config';
 import MonboDBCollection from 'server/database/mongodb/account-collection';
 import MySQLCollection   from 'server/database/mysql/account-collection';
 import Utils             from 'server/libs/utils';
-import {Account}         from 'server/models/account-model';
+import {Account}         from 'server/models/account';
 
 import slog = require('../slog');
 
-const Collection = MonboDBCollection;
-// const Collection = MySQLCollection;
+// const Collection = MonboDBCollection;
+const Collection = MySQLCollection;
 
 export default class AccountAgent
 {

@@ -9,8 +9,8 @@ import SessionAgent      from 'server/agents/session-agent';
 import Authy             from 'server/libs/authy';
 import R                 from 'server/libs/r';
 import Utils             from 'server/libs/utils';
-import {LoginHistory}    from 'server/models/login-history-model';
-import {Session}         from 'server/models/session-model';
+import {LoginHistory}    from 'server/models/login-history';
+import {Session}         from 'server/models/session';
 
 import express = require('express');
 import slog =    require('server/slog');

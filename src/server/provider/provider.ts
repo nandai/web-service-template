@@ -9,9 +9,9 @@ import Authy             from 'server/libs/authy';
 import {PassportUser}    from 'server/libs/passport';
 import R                 from 'server/libs/r';
 import Utils             from 'server/libs/utils';
-import {Account}         from 'server/models/account-model';
-import {LoginHistory}    from 'server/models/login-history-model';
-import {Session}         from 'server/models/session-model';
+import {Account}         from 'server/models/account';
+import {LoginHistory}    from 'server/models/login-history';
+import {Session}         from 'server/models/session';
 
 import express =  require('express');
 import passport = require('passport');

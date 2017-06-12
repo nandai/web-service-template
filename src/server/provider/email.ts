@@ -6,8 +6,8 @@ import CommonUtils    from 'libs/utils';
 import {PassportUser} from '../libs/passport';
 import R              from '../libs/r';
 import Utils          from '../libs/utils';
-import {Account}      from '../models/account-model';
-import {Session}      from '../models/session-model';
+import {Account}      from '../models/account';
+import {Session}      from '../models/session';
 import Provider       from './provider';
 
 import express =  require('express');
