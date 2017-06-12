@@ -1,16 +1,15 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-// import MonboDBCollection from 'server/database/mongodb/session-collection';
+import MonboDBCollection from 'server/database/mongodb/session-collection';
 import MySQLCollection   from 'server/database/mysql/session-collection';
 import Utils             from 'server/libs/utils';
 import {Session}         from 'server/models/session-model';
 
-import _ =    require('lodash');
 import uuid = require('node-uuid');
 
-// const Collection = MonboDBCollection;
-const Collection = MySQLCollection;
+const Collection = MonboDBCollection;
+// const Collection = MySQLCollection;
 
 export default class SessionAgent
 {
@@ -26,7 +25,7 @@ export default class SessionAgent
             id:         uuid.v4(),
             created_at: Utils.now()
         };
-        return Collection.add(model);
+        return Collection.add(SessionAgent.toModel(model));
     }
 
     /**
@@ -38,7 +37,7 @@ export default class SessionAgent
      */
     static async update(model : Session)
     {
-        const newModel = _.clone(model);
+        const newModel = SessionAgent.toModel(model);
         newModel.updated_at = Utils.now();
 
         return Collection.update(newModel, {sessionId:newModel.id});
@@ -107,15 +106,15 @@ export default class SessionAgent
     {
         const model : Session =
         {
-            id:         data.id,
-            account_id: data.account_id,
-            command_id: data.command_id,
-            message_id: data.message_id,
-            sms_id:     data.sms_id,
-            sms_code:   data.sms_code,
-            authy_uuid: data.authy_uuid,
-            created_at: data.created_at,
-            updated_at: data.updated_at
+            id:         data.id         || null,
+            account_id: data.account_id || null,
+            command_id: data.command_id || null,
+            message_id: data.message_id || null,
+            sms_id:     data.sms_id     || null,
+            sms_code:   data.sms_code   || null,
+            authy_uuid: data.authy_uuid || null,
+            created_at: data.created_at || null,
+            updated_at: data.updated_at || null
         };
         return model;
     }

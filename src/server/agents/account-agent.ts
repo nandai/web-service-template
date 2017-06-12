@@ -7,7 +7,6 @@ import MySQLCollection   from 'server/database/mysql/account-collection';
 import Utils             from 'server/libs/utils';
 import {Account}         from 'server/models/account-model';
 
-import _ =    require('lodash');
 import slog = require('../slog');
 
 const Collection = MonboDBCollection;
@@ -29,13 +28,13 @@ export default class AccountAgent
             try
             {
                 // 追加のデータを設定して、
-                const newModel = _.clone(model);
+                const newModel = AccountAgent.toModel(model);
                 newModel.international_phone_no = AccountAgent.international_phone_no(model);
                 newModel.crypto_type = 1;
                 newModel.created_at = Utils.now();
 
                 // 暗号化して、
-                let encryptModel = _.clone(newModel);
+                let encryptModel = AccountAgent.toModel(newModel);
                 AccountAgent.encrypt(encryptModel);
 
                 // ストレージに追加して、
@@ -59,7 +58,7 @@ export default class AccountAgent
     static async update(model : Account)
     {
         // 追加のデータを設定して、
-        const newModel = _.clone(model);
+        const newModel = AccountAgent.toModel(model);
         newModel.international_phone_no = AccountAgent.international_phone_no(model);
         newModel.crypto_type = 1;
         newModel.updated_at = Utils.now();
@@ -417,29 +416,29 @@ export default class AccountAgent
     {
         const model : Account =
         {
-            id:                     data.id,
-            name:                   data.name,
-            user_name:              data.user_name,
-            twitter:                data.twitter,
-            facebook:               data.facebook,
-            google:                 data.google,
-            github:                 data.github,
-            email:                  data.email,
-            password:               data.password,
-            country_code:           data.country_code,
-            phone_no:               data.phone_no,
-            international_phone_no: data.international_phone_no,
-            authy_id:               data.authy_id,
-            two_factor_auth:        data.two_factor_auth,
-            signup_id:              data.signup_id,
-            invite_id:              data.invite_id,
-            reset_id:               data.reset_id,
-            change_id:              data.change_id,
-            change_email:           data.change_email,
-            crypto_type:            data.crypto_type,
-            created_at:             data.created_at,
-            updated_at:             data.updated_at,
-            deleted_at:             data.deleted_at
+            id:                     data.id                     || null,
+            name:                   data.name                   || null,
+            user_name:              data.user_name              || null,
+            twitter:                data.twitter                || null,
+            facebook:               data.facebook               || null,
+            google:                 data.google                 || null,
+            github:                 data.github                 || null,
+            email:                  data.email                  || null,
+            password:               data.password               || null,
+            country_code:           data.country_code           || null,
+            phone_no:               data.phone_no               || null,
+            international_phone_no: data.international_phone_no || null,
+            authy_id:               data.authy_id               || null,
+            two_factor_auth:        data.two_factor_auth        || null,
+            signup_id:              data.signup_id              || null,
+            invite_id:              data.invite_id              || null,
+            reset_id:               data.reset_id               || null,
+            change_id:              data.change_id              || null,
+            change_email:           data.change_email           || null,
+            crypto_type:            data.crypto_type            || null,
+            created_at:             data.created_at             || null,
+            updated_at:             data.updated_at             || null,
+            deleted_at:             data.deleted_at             || null
         };
         return model;
     }
