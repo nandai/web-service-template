@@ -17,63 +17,6 @@ export namespace Response
         github        : boolean;
     }
 
-    export interface User
-    {
-        id          : number;
-        accountName : string;
-        name        : string;
-    }
-
-    export interface LoginEmail
-    {
-        status   : number;
-        smsId    : string;
-        message? : string;
-    }
-
-    export interface LoginSms
-    {
-        status   : Status;
-        message? : string;
-    }
-
-    export interface LoginAuthyOneTouch
-    {
-        status   : Status;
-        approval : boolean;
-    }
-
-    export interface GetAccount
-    {
-        status  : Status;
-        account : Account;
-    }
-
-    export interface SetAccount
-    {
-        status  : Status;
-        account : Account;
-        message : string;
-    }
-
-    export interface DeleteAccount
-    {
-        status   : Status;
-        message? : string;
-    }
-
-    export interface UnlinkProvider
-    {
-        status   : Status;
-        message? : string;
-    }
-
-    export interface RequestChangeEmail
-    {
-        status  : Status;
-        message : string;
-    }
-
     export interface ChangeEmail
     {
         status  : Status;
@@ -86,19 +29,7 @@ export namespace Response
         message : string;
     }
 
-    export interface RequestResetPassword
-    {
-        status  : Status;
-        message : string;
-    }
-
-    export interface ResetPassword
-    {
-        status  : Status;
-        message : string;
-    }
-
-    export interface SignupEmail
+    export interface CheckUserName
     {
         status  : Status;
         message : string;
@@ -108,6 +39,18 @@ export namespace Response
     {
         status  : Status;
         message : string;
+    }
+
+    export interface DeleteAccount
+    {
+        status   : Status;
+        message? : string;
+    }
+
+    export interface GetAccount
+    {
+        status  : Status;
+        account : Account;
     }
 
     export interface GetUser
@@ -135,10 +78,67 @@ export namespace Response
         message : string;
     }
 
-    export interface CheckUserName
+    export interface LoginAuthyOneTouch
+    {
+        status   : Status;
+        approval : boolean;
+    }
+
+    export interface LoginEmail
+    {
+        status   : number;
+        smsId    : string;
+        message? : string;
+    }
+
+    export interface LoginSms
+    {
+        status   : Status;
+        message? : string;
+    }
+
+    export interface RequestChangeEmail
     {
         status  : Status;
         message : string;
+    }
+
+    export interface SetAccount
+    {
+        status  : Status;
+        account : Account;
+        message : string;
+    }
+
+    export interface UnlinkProvider
+    {
+        status   : Status;
+        message? : string;
+    }
+
+    export interface RequestResetPassword
+    {
+        status  : Status;
+        message : string;
+    }
+
+    export interface ResetPassword
+    {
+        status  : Status;
+        message : string;
+    }
+
+    export interface SignupEmail
+    {
+        status  : Status;
+        message : string;
+    }
+
+    export interface User
+    {
+        id          : number;
+        accountName : string;
+        name        : string;
     }
 
     export enum Status

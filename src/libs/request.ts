@@ -3,15 +3,58 @@
  */
 export namespace Request
 {
-    export interface SignupEmail
+    export interface ChangeEmail
     {
-        email    : string;
+        changeId : string;
         password : string;
+    }
+
+    export interface ChangePassword
+    {
+        oldPassword : string;
+        newPassword : string;
+        confirm     : string;
+    }
+
+    export interface CheckUserName
+    {
+        userName : string;
     }
 
     export interface ConfirmSignupEmail
     {
         signupId : string;
+        password : string;
+    }
+
+    export interface Facebook
+    {
+        accessToken : string;
+    }
+
+    export interface GetUser
+    {
+        id : string;
+    }
+
+    export interface Github
+    {
+        accessToken : string;
+    }
+
+    export interface Google
+    {
+        accessToken : string;
+    }
+
+    export interface Invite
+    {
+        email : string;
+    }
+
+    export interface Join
+    {
+        inviteId : string;
         password : string;
     }
 
@@ -27,30 +70,9 @@ export namespace Request
         smsCode : string;
     }
 
-    export interface UnlinkProvider
+    export interface RequestChangeEmail
     {
-        provider : string;
-    }
-
-    export interface Twitter
-    {
-        accessToken       : string;
-        accessTokenSecret : string;
-    }
-
-    export interface Facebook
-    {
-        accessToken : string;
-    }
-
-    export interface Github
-    {
-        accessToken : string;
-    }
-
-    export interface Google
-    {
-        accessToken : string;
+        email : string;
     }
 
     export interface RequestResetPassword
@@ -74,42 +96,20 @@ export namespace Request
         twoFactorAuth : string;
     }
 
-    export interface RequestChangeEmail
+    export interface SignupEmail
     {
-        email : string;
-    }
-
-    export interface ChangeEmail
-    {
-        changeId : string;
+        email    : string;
         password : string;
     }
 
-    export interface ChangePassword
+    export interface Twitter
     {
-        oldPassword : string;
-        newPassword : string;
-        confirm     : string;
+        accessToken       : string;
+        accessTokenSecret : string;
     }
 
-    export interface GetUser
+    export interface UnlinkProvider
     {
-        id : string;
-    }
-
-    export interface Invite
-    {
-        email : string;
-    }
-
-    export interface Join
-    {
-        inviteId : string;
-        password : string;
-    }
-
-    export interface CheckUserName
-    {
-        userName : string;
+        provider : string;
     }
 }
