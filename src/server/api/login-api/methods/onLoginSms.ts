@@ -1,15 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Request}                         from 'libs/request';
-import {Response}                        from 'libs/response';
-import AccountAgent                      from 'server/agents/account-agent';
-import SessionAgent                      from 'server/agents/session-agent';
-import Authy                             from 'server/libs/authy';
-import R                                 from 'server/libs/r';
-import Utils                             from 'server/libs/utils';
-import LoginHistoryModel, {LoginHistory} from 'server/models/login-history-model';
-import {Session}                         from 'server/models/session-model';
+import {Request}         from 'libs/request';
+import {Response}        from 'libs/response';
+import AccountAgent      from 'server/agents/account-agent';
+import LoginHistoryAgent from 'server/agents/login-history-agent';
+import SessionAgent      from 'server/agents/session-agent';
+import Authy             from 'server/libs/authy';
+import R                 from 'server/libs/r';
+import Utils             from 'server/libs/utils';
+import {LoginHistory}    from 'server/models/login-history-model';
+import {Session}         from 'server/models/session-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -83,7 +84,7 @@ export async function onLoginSms(req : express.Request, res : express.Response)
                     account_id: account.id,
                     device:     req.headers['user-agent']
                 };
-                await LoginHistoryModel.add(loginHistory);
+                await LoginHistoryAgent.add(loginHistory);
             }
 
             const data : Response.LoginSms = {status:Response.Status.OK};

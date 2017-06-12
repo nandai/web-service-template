@@ -1,12 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response}                        from 'libs/response';
-import SessionAgent                      from 'server/agents/session-agent';
-import Authy                             from 'server/libs/authy';
-import Utils                             from 'server/libs/utils';
-import LoginHistoryModel, {LoginHistory} from 'server/models/login-history-model';
-import {Session}                         from 'server/models/session-model';
+import {Response}        from 'libs/response';
+import LoginHistoryAgent from 'server/agents/login-history-agent';
+import SessionAgent      from 'server/agents/session-agent';
+import Authy             from 'server/libs/authy';
+import Utils             from 'server/libs/utils';
+import {LoginHistory}    from 'server/models/login-history-model';
+import {Session}         from 'server/models/session-model';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -44,7 +45,7 @@ export async function onLoginAuthyOneTouch(req : express.Request, res : express.
                         account_id: session.account_id,
                         device:     req.headers['user-agent']
                     };
-                    await LoginHistoryModel.add(loginHistory);
+                    await LoginHistoryAgent.add(loginHistory);
                 }
             }
 

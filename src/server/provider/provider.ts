@@ -1,16 +1,17 @@
 /**
  * (C) 2016 printf.jp
  */
-import AccountAgent                      from 'server/agents/account-agent';
-import SessionAgent                      from 'server/agents/session-agent';
-import Config                            from 'server/config';
-import Authy                             from 'server/libs/authy';
-import {PassportUser}                    from 'server/libs/passport';
-import R                                 from 'server/libs/r';
-import Utils                             from 'server/libs/utils';
-import {Account}                         from 'server/models/account-model';
-import LoginHistoryModel, {LoginHistory} from 'server/models/login-history-model';
-import {Session}                         from 'server/models/session-model';
+import AccountAgent      from 'server/agents/account-agent';
+import LoginHistoryAgent from 'server/agents/login-history-agent';
+import SessionAgent      from 'server/agents/session-agent';
+import Config            from 'server/config';
+import Authy             from 'server/libs/authy';
+import {PassportUser}    from 'server/libs/passport';
+import R                 from 'server/libs/r';
+import Utils             from 'server/libs/utils';
+import {Account}         from 'server/models/account-model';
+import {LoginHistory}    from 'server/models/login-history-model';
+import {Session}         from 'server/models/session-model';
 
 import express =  require('express');
 import passport = require('passport');
@@ -170,7 +171,7 @@ export default class Provider
                                         account_id: account.id,
                                         device:     req.headers['user-agent']
                                     };
-                                    await LoginHistoryModel.add(loginHistory);
+                                    await LoginHistoryAgent.add(loginHistory);
 
                                     // トップ画面へ
                                     await self.sendResponse(req, res, session, '/');
@@ -255,7 +256,7 @@ export default class Provider
                                         account_id: findAccount.id,
                                         device:     req.headers['user-agent']
                                     };
-                                    await LoginHistoryModel.add(loginHistory);
+                                    await LoginHistoryAgent.add(loginHistory);
 
                                     // トップ画面へ
                                     await self.sendResponse(req, res, session, '/', phrase);

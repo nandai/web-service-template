@@ -29,6 +29,7 @@ export default class AccountAgent
             {
                 // 追加のデータを設定して、
                 const newModel = AccountAgent.toModel(model);
+                delete newModel.id;
                 newModel.international_phone_no = AccountAgent.international_phone_no(model);
                 newModel.crypto_type = 1;
                 newModel.created_at = Utils.now();
