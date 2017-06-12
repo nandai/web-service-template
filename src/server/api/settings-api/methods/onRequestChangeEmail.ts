@@ -27,7 +27,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
             const param     : Request.RequestChangeEmail = req.body;
             const condition : Request.RequestChangeEmail =
             {
-                email: ['string', null, true]
+                email: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -36,7 +36,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                 break;
             }
 
-            const changeEmail = <string>param.email;
+            const changeEmail = param.email;
 
             // メールアドレスの重複チェック
             const alreadyExistsAccount = await AccountAgent.findByProviderId('email', changeEmail);

@@ -28,8 +28,8 @@ export async function onLoginSms(req : express.Request, res : express.Response)
             const param     : Request.LoginSms= req.body;
             const condition : Request.LoginSms =
             {
-                smsId:   ['string', null, true],
-                smsCode: ['string', null, true]
+                smsId:   ['string', null, true] as any,
+                smsCode: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -38,10 +38,9 @@ export async function onLoginSms(req : express.Request, res : express.Response)
                 break;
             }
 
-            const smsId =   <string>param.smsId;
-            const smsCode = <string>param.smsCode;
-
+            const {smsId, smsCode} = param;
             const session : Session = req.ext.session;
+
             if (session.sms_id === smsId)
             {
                 const account = await AccountAgent.find(session.account_id);

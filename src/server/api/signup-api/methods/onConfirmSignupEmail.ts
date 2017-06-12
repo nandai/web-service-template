@@ -26,8 +26,8 @@ export async function onConfirmSignupEmail(req : express.Request, res : express.
             const param     : Request.ConfirmSignupEmail = req.body;
             const condition : Request.ConfirmSignupEmail =
             {
-                signupId: ['string', null, true],
-                password: ['string', null, true]
+                signupId: ['string', null, true] as any,
+                password: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -36,10 +36,7 @@ export async function onConfirmSignupEmail(req : express.Request, res : express.
                 break;
             }
 
-            const signupId = <string>param.signupId;
-            const password = <string>param.password;
-
-            const account = await AccountAgent.findBySignupId(signupId);
+            const account = await AccountAgent.findBySignupId(param.signupId);
             if (account === null)
             {
                 // サインアップの確認画面でサインアップを完了させた後、再度サインアップを完了させようとした場合にここに到達する想定。
@@ -49,7 +46,7 @@ export async function onConfirmSignupEmail(req : express.Request, res : express.
                 break;
             }
 
-            const hashPassword = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
+            const hashPassword = Utils.getHashPassword(account.email, param.password, Config.PASSWORD_SALT);
 
             if (account.password !== hashPassword)
             {

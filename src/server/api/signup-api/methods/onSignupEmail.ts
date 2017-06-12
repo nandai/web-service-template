@@ -24,8 +24,8 @@ export function onSignupEmail(req : express.Request, res : express.Response) : v
         const param     : Request.SignupEmail = req.body;
         const condition : Request.SignupEmail =
         {
-            email:    ['string', null, true],
-            password: ['string', null, true]
+            email:    ['string', null, true] as any,
+            password: ['string', null, true] as any
         };
 
         if (Utils.existsParameters(param, condition) === false)
@@ -34,8 +34,7 @@ export function onSignupEmail(req : express.Request, res : express.Response) : v
             break;
         }
 
-        const email =    <string>param.email;
-        const password = <string>param.password;
+        const {email, password} = param;
 
         if (Utils.validatePassword(password) === false)
         {

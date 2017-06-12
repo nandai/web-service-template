@@ -72,8 +72,8 @@ export default class ProviderApi
             const param     : Request.Twitter = req.body;
             const condition : Request.Twitter =
             {
-                accessToken:       ['string', null, true],
-                accessTokenSecret: ['string', null, true]
+                accessToken:       ['string', null, true] as any,
+                accessTokenSecret: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -82,12 +82,9 @@ export default class ProviderApi
                 break;
             }
 
-            const accessToken  =      <string>param.accessToken;
-            const accessTokenSecret = <string>param.accessTokenSecret;
-
             process.nextTick(() =>
             {
-                Twitter.verify(accessToken, accessTokenSecret, undefined, (err, user) =>
+                Twitter.verify(param.accessToken, param.accessTokenSecret, undefined, (err, user) =>
                 {
                     req.ext.command = command;
                     req.user = user;
@@ -116,7 +113,7 @@ export default class ProviderApi
             const param     : Request.Facebook = req.body;
             const condition : Request.Facebook =
             {
-                accessToken: ['string', null, true]
+                accessToken: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -125,10 +122,9 @@ export default class ProviderApi
                 break;
             }
 
-            const accessToken = <string>param.accessToken;
             process.nextTick(() =>
             {
-                Facebook.verify(accessToken, undefined, undefined, (err, user) =>
+                Facebook.verify(param.accessToken, undefined, undefined, (err, user) =>
                 {
                     req.ext.command = command;
                     req.user = user;
@@ -157,7 +153,7 @@ export default class ProviderApi
             const param     : Request.Google = req.body;
             const condition : Request.Google =
             {
-                accessToken: ['string', null, true]
+                accessToken: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -166,10 +162,9 @@ export default class ProviderApi
                 break;
             }
 
-            const accessToken = <string>param.accessToken;
             process.nextTick(() =>
             {
-                Google.verify(accessToken, undefined, undefined, (err, user) =>
+                Google.verify(param.accessToken, undefined, undefined, (err, user) =>
                 {
                     req.ext.command = command;
                     req.user = user;
@@ -198,7 +193,7 @@ export default class ProviderApi
             const param     : Request.Github = req.body;
             const condition : Request.Github =
             {
-                accessToken: ['string', null, true]
+                accessToken: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -207,10 +202,9 @@ export default class ProviderApi
                 break;
             }
 
-            const accessToken = <string>param.accessToken;
             process.nextTick(() =>
             {
-                Github.verify(accessToken, undefined, undefined, (err, user) =>
+                Github.verify(param.accessToken, undefined, undefined, (err, user) =>
                 {
                     req.ext.command = command;
                     req.user = user;

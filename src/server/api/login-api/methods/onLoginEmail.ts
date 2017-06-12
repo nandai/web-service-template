@@ -27,8 +27,8 @@ export async function onLoginEmail(req : express.Request, res : express.Response
             const param     : Request.LoginEmail = req.body;
             const condition : Request.LoginEmail =
             {
-                email:    ['string', null, true],
-                password: ['string', null, true]
+                email:    ['string', null, true] as any,
+                password: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -37,9 +37,7 @@ export async function onLoginEmail(req : express.Request, res : express.Response
                 break;
             }
 
-            const email =    <string>param.email;
-            const password = <string>param.password;
-
+            const {email, password} = param;
             const account = await AccountAgent.findByProviderId('email', email);
             let hashPassword : string;
 

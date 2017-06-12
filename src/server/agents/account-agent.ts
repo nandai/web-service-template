@@ -2,16 +2,16 @@
  * (C) 2016-2017 printf.jp
  */
 import Config            from 'server/config';
-import MonboDBConnection from 'server/database/mongodb/account-collection';
-import MySQLConnection   from 'server/database/mysql/account-collection';
+import MonboDBCollection from 'server/database/mongodb/account-collection';
+import MySQLCollection   from 'server/database/mysql/account-collection';
 import Utils             from 'server/libs/utils';
 import {Account}         from 'server/models/account-model';
 
 import _ =    require('lodash');
 import slog = require('../slog');
 
-const Collection = MonboDBConnection;
-// const Collection = MySQLConnection;
+const Collection = MonboDBCollection;
+// const Collection = MySQLCollection;
 
 export default class AccountAgent
 {

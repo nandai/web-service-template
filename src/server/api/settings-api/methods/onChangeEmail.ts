@@ -26,8 +26,8 @@ export async function onChangeEmail(req : express.Request, res : express.Respons
             const param     : Request.ChangeEmail = req.body;
             const condition : Request.ChangeEmail =
             {
-                changeId: ['string', null, true],
-                password: ['string', null, true]
+                changeId: ['string', null, true] as any,
+                password: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -36,10 +36,9 @@ export async function onChangeEmail(req : express.Request, res : express.Respons
                 break;
             }
 
-            const changeId = <string>param.changeId;
-            const password = <string>param.password;
-
+            const {changeId, password} = param;
             const account = await AccountAgent.findByChangeId(changeId);
+
             if (account)
             {
                 // メールアドレス変更メールを送信してから確認までの間に同じメールアドレスが本登録される可能性があるため、

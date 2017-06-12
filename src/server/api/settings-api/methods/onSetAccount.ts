@@ -32,11 +32,11 @@ export async function onSetAccount(req : express.Request, res : express.Response
             const param     : Request.SetAccount = req.body;
             const condition : Request.SetAccount =
             {
-                name:          ['string', null, true],
-                userName:      ['string', null, true],
-                countryCode:   ['string', null, true],
-                phoneNo:       ['string', null, true],
-                twoFactorAuth: ['string', null, true]
+                name:          ['string', null, true] as any,
+                userName:      ['string', null, true] as any,
+                countryCode:   ['string', null, true] as any,
+                phoneNo:       ['string', null, true] as any,
+                twoFactorAuth: ['string', null, true] as any
             };
 
             log.d(JSON.stringify(param, null, 2));
@@ -47,11 +47,8 @@ export async function onSetAccount(req : express.Request, res : express.Response
                 break;
             }
 
-            const name =          <string>param.name;
-            const userName =      <string>param.userName;
-            const countryCode =   <string>param.countryCode;
-            const phoneNo =       <string>param.phoneNo;
-            let   twoFactorAuth = <string>param.twoFactorAuth;
+            const {name, userName, countryCode, phoneNo} = param;
+            let {twoFactorAuth} = param;
 
             // 検証
             const session : Session = req.ext.session;

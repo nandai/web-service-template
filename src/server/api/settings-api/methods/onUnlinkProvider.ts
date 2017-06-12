@@ -26,7 +26,7 @@ export async function onUnlinkProvider(req : express.Request, res : express.Resp
             const param     : Request.UnlinkProvider = req.body;
             const condition : Request.UnlinkProvider =
             {
-                provider: ['string', null, true]
+                provider: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -36,7 +36,7 @@ export async function onUnlinkProvider(req : express.Request, res : express.Resp
             }
 
             // プロバイダ名チェック
-            const provider = <string>param.provider;
+            const {provider} = param;
             log.d(`${provider}`);
 
             if (provider !== 'twitter'

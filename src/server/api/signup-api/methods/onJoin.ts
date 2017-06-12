@@ -26,8 +26,8 @@ export async function onJoin(req : express.Request, res : express.Response)
             const param     : Request.Join = req.body;
             const condition : Request.Join =
             {
-                inviteId: ['string', null, true],
-                password: ['string', null, true]
+                inviteId: ['string', null, true] as any,
+                password: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -36,8 +36,7 @@ export async function onJoin(req : express.Request, res : express.Response)
                 break;
             }
 
-            const inviteId = <string>param.inviteId;
-            const password = <string>param.password;
+            const {inviteId, password} = param;
 
             if (Utils.validatePassword(password) === false)
             {

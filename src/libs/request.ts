@@ -5,111 +5,111 @@ export namespace Request
 {
     export interface SignupEmail
     {
-        email    : string | any[];
-        password : string | any[];
+        email    : string;
+        password : string;
     }
 
     export interface ConfirmSignupEmail
     {
-        signupId : string | any[];
-        password : string | any[];
+        signupId : string;
+        password : string;
     }
 
     export interface LoginEmail
     {
-        email    : string | any[];
-        password : string | any[];
+        email    : string;
+        password : string;
     }
 
     export interface LoginSms
     {
-        smsId   : string | any[];
-        smsCode : string | any[];
+        smsId   : string;
+        smsCode : string;
     }
 
     export interface UnlinkProvider
     {
-        provider : string | any[];
+        provider : string;
     }
 
     export interface Twitter
     {
-        accessToken       : string | any[];
-        accessTokenSecret : string | any[];
+        accessToken       : string;
+        accessTokenSecret : string;
     }
 
     export interface Facebook
     {
-        accessToken : string | any[];
+        accessToken : string;
     }
 
     export interface Github
     {
-        accessToken : string | any[];
+        accessToken : string;
     }
 
     export interface Google
     {
-        accessToken : string | any[];
+        accessToken : string;
     }
 
     export interface RequestResetPassword
     {
-        email : string | any[];
+        email : string;
     }
 
     export interface ResetPassword
     {
-        resetId  : string | any[];
-        password : string | any[];
-        confirm  : string | any[];
+        resetId  : string;
+        password : string;
+        confirm  : string;
     }
 
     export interface SetAccount
     {
-        name          : string | any[];
-        userName      : string | any[];
-        countryCode   : string | any[];
-        phoneNo       : string | any[];
-        twoFactorAuth : string | any[];
+        name          : string;
+        userName      : string;
+        countryCode   : string;
+        phoneNo       : string;
+        twoFactorAuth : string;
     }
 
     export interface RequestChangeEmail
     {
-        email : string | any[];
+        email : string;
     }
 
     export interface ChangeEmail
     {
-        changeId : string | any[];
-        password : string | any[];
+        changeId : string;
+        password : string;
     }
 
     export interface ChangePassword
     {
-        oldPassword : string | any[];
-        newPassword : string | any[];
-        confirm     : string | any[];
+        oldPassword : string;
+        newPassword : string;
+        confirm     : string;
     }
 
     export interface GetUser
     {
-        id : string | any[];
+        id : string;
     }
 
     export interface Invite
     {
-        email : string | any[];
+        email : string;
     }
 
     export interface Join
     {
-        inviteId : string | any[];
-        password : string | any[];
+        inviteId : string;
+        password : string;
     }
 
     export interface CheckUserName
     {
-        userName : string | any[];
+        userName : string;
     }
 }

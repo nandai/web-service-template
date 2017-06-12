@@ -26,7 +26,7 @@ export async function onInvite(req : express.Request, res : express.Response)
             const param     : Request.Invite = req.body;
             const condition : Request.Invite =
             {
-                email: ['string', null, true]
+                email: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -35,7 +35,7 @@ export async function onInvite(req : express.Request, res : express.Response)
                 break;
             }
 
-            const email = <string>param.email;
+            const {email} = param;
 
             let account = await AccountAgent.findByProviderId('email', email);
             let status = Response.Status.FAILED;

@@ -26,20 +26,18 @@ export async function onResetPassword(req : express.Request, res : express.Respo
             const param     : Request.ResetPassword = req.body;
             const condition : Request.ResetPassword =
             {
-                resetId:  ['string', null, true],
-                password: ['string', null, true],
-                confirm:  ['string', null, true]
+                resetId:  ['string', null, true] as any,
+                password: ['string', null, true] as any,
+                confirm:  ['string', null, true] as any
             };
-
-            const resetId =  <string>param.resetId;
-            const password = <string>param.password;
-            const confirm =  <string>param.confirm;
 
             if (Utils.existsParameters(param, condition) === false)
             {
                 res.ext.badRequest(locale);
                 break;
             }
+
+            const {resetId, password, confirm} = param;
 
             if (Utils.validatePassword(password) === false)
             {

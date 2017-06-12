@@ -27,7 +27,7 @@ export async function onCheckUserName(req : express.Request, res : express.Respo
             const param     : Request.CheckUserName = req.query;
             const condition : Request.CheckUserName =
             {
-                userName: ['string', null, true]
+                userName: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -36,7 +36,7 @@ export async function onCheckUserName(req : express.Request, res : express.Respo
                 break;
             }
 
-            const userName = <string>param.userName;
+            const {userName} = param;
 
             // 検証
             const session : Session = req.ext.session;

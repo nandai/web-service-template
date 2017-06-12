@@ -26,7 +26,7 @@ export async function onRequestResetPassword(req : express.Request, res : expres
             const param     : Request.RequestResetPassword = req.body;
             const condition : Request.RequestResetPassword =
             {
-                email: ['string', null, true]
+                email: ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -35,9 +35,7 @@ export async function onRequestResetPassword(req : express.Request, res : expres
                 break;
             }
 
-            const email = <string>param.email;
-
-            const account = await AccountAgent.findByProviderId('email', email);
+            const account = await AccountAgent.findByProviderId('email', param.email);
             if (account === null || account.signup_id)
             {
                 res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL, locale));

@@ -27,9 +27,9 @@ export async function onChangePassword(req : express.Request, res : express.Resp
             const param     : Request.ChangePassword = req.body;
             const condition : Request.ChangePassword =
             {
-                oldPassword: ['string', null, true],
-                newPassword: ['string', null, true],
-                confirm:     ['string', null, true]
+                oldPassword: ['string', null, true] as any,
+                newPassword: ['string', null, true] as any,
+                confirm:     ['string', null, true] as any
             };
 
             if (Utils.existsParameters(param, condition) === false)
@@ -38,10 +38,7 @@ export async function onChangePassword(req : express.Request, res : express.Resp
                 break;
             }
 
-            const oldPassword = <string>param.oldPassword;
-            const newPassword = <string>param.newPassword;
-            const confirm =     <string>param.confirm;
-
+            const {oldPassword, newPassword, confirm} = param;
             const session : Session = req.ext.session;
             const account = await AccountAgent.find(session.account_id);
 
@@ -51,7 +48,7 @@ export async function onChangePassword(req : express.Request, res : express.Resp
                 break;
             }
 
-            if (account.password !== null || param.oldPassword !== '')
+            if (account.password !== null || oldPassword !== '')
             {
                 const hashPassword = Utils.getHashPassword(account.email, oldPassword, Config.PASSWORD_SALT);
 
@@ -68,13 +65,13 @@ export async function onChangePassword(req : express.Request, res : express.Resp
                 break;
             }
 
-            if (param.newPassword !== confirm)
+            if (newPassword !== confirm)
             {
                 res.ext.error(Response.Status.FAILED, R.text(R.MISMATCH_PASSWORD, locale));
                 break;
             }
 
-            account.password = Utils.getHashPassword(account.email, param.newPassword, Config.PASSWORD_SALT);
+            account.password = Utils.getHashPassword(account.email, newPassword, Config.PASSWORD_SALT);
             await AccountAgent.update(account);
 
             const data : Response.ChangePassword =
