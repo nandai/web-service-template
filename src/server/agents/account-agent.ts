@@ -401,18 +401,7 @@ export default class AccountAgent
      */
     static toModel(data) : Account
     {
-        if (! data) {
-            return null;
-        }
-
-        if (Array.isArray(data))
-        {
-            if (data.length !== 1) {
-                return null;
-            }
-            data = data[0];
-        }
-
+        data = Utils.getOne(data);
         return AccountAgent.to_model(data);
     }
 
@@ -424,6 +413,10 @@ export default class AccountAgent
 
     private static to_model(data) : Account
     {
+        if (! data) {
+            return null;
+        }
+
         const model : Account =
         {
             id:                     data.id                     || null,

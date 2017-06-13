@@ -97,23 +97,16 @@ export default class SessionAgent
      */
     static toModel(data) : Session
     {
-        if (! data) {
-            return null;
-        }
-
-        if (Array.isArray(data))
-        {
-            if (data.length !== 1) {
-                return null;
-            }
-            data = data[0];
-        }
-
+        data = Utils.getOne(data);
         return SessionAgent.to_model(data);
     }
 
     private static to_model(data) : Session
     {
+        if (! data) {
+            return null;
+        }
+
         const model : Session =
         {
             id:         data.id         || null,

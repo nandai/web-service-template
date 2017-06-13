@@ -377,4 +377,24 @@ export default class Utils
     {
         return moment().utc().format('YYYY/MM/DD HH:mm:ss');
     }
+
+    /**
+     * １つのオブジェクトを取得する
+     */
+    static getOne(data) : any
+    {
+        if (! data) {
+            return null;
+        }
+
+        if (Array.isArray(data))
+        {
+            if (data.length !== 1) {
+                return null;
+            }
+            data = data[0];
+        }
+
+        return data;
+    }
 }

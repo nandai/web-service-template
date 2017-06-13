@@ -40,27 +40,20 @@ export default class LoginHistoryAgent
     }
 
     /**
-     * Accountに変換
+     * LoginHistoryに変換
      */
     static toModel(data) : LoginHistory
     {
-        if (! data) {
-            return null;
-        }
-
-        if (Array.isArray(data))
-        {
-            if (data.length !== 1) {
-                return null;
-            }
-            data = data[0];
-        }
-
+        data = Utils.getOne(data);
         return LoginHistoryAgent.to_model(data);
     }
 
     private static to_model(data) : LoginHistory
     {
+        if (! data) {
+            return null;
+        }
+
         const model : LoginHistory =
         {
             id:         data.id         || null,

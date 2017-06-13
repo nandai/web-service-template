@@ -252,6 +252,9 @@ export default class Config
         return false;
     }
 
+    /**
+     * Authyの設定があるかどうか調べる
+     */
     static hasAuthy() : boolean
     {
         if (Config.AUTHY_API_KEY !== '')
