@@ -4,6 +4,7 @@
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
 import AccountAgent from 'server/agents/account-agent';
+import Config       from 'server/config';
 import Authy        from 'server/libs/authy';
 import Converter    from 'server/libs/converter';
 import R            from 'server/libs/r';
@@ -67,44 +68,48 @@ export async function onSetAccount(req : express.Request, res : express.Response
             const account = await AccountAgent.find(session.account_id);
             const newCountryCode = (countryCode && countryCode.length > 0 ? countryCode : null);
             const newPhoneNo =     (phoneNo     && phoneNo    .length > 0 ? phoneNo     : null);
-            const prevInternationalPhoneNo = AccountAgent.internationalPhoneNo(account.country_code, account.phone_no);
-            const newInternationalPhoneNo =  AccountAgent.internationalPhoneNo(newCountryCode, newPhoneNo);
 
-            if (shouldAuthyUserDelete(account, prevInternationalPhoneNo, newInternationalPhoneNo))
+            if (Config.hasAuthy())
             {
-                const authyId = await AccountAgent.findAuthyId(prevInternationalPhoneNo, account.id);
-                if (authyId === null)
-                {
-                    log.d('現在のアカウントの他には同じ電話番号がないのでAuthyからユーザーを削除します。');
-                    await Authy.deleteUser(account.authy_id);
-                }
-                else
-                {
-                    log.d('現在のアカウントの他に同じ電話番号があるのでAuthyからユーザー削除はしません。');
-                }
-                account.authy_id = null;
-            }
+                const prevInternationalPhoneNo = AccountAgent.internationalPhoneNo(account.country_code, account.phone_no);
+                const newInternationalPhoneNo =  AccountAgent.internationalPhoneNo(newCountryCode, newPhoneNo);
 
-            // Authyにユーザーを登録する／しない
-            if (shouldAuthyUserRegister(twoFactorAuth, account, prevInternationalPhoneNo, newInternationalPhoneNo))
-            {
-                if (account.email === null)
+                if (shouldAuthyUserDelete(account, prevInternationalPhoneNo, newInternationalPhoneNo))
                 {
-                    twoFactorAuth = account.two_factor_auth;
-                    phrase = R.CANNOT_PERFORMED_WITH_AUTHY;
-                }
-                else
-                {
-                    const authyId = await AccountAgent.findAuthyId(newInternationalPhoneNo);
+                    const authyId = await AccountAgent.findAuthyId(prevInternationalPhoneNo, account.id);
                     if (authyId === null)
                     {
-                        log.d('現在のアカウントの他に同じ電話番号がないのでAuthyにユーザーを登録します。');
-                        account.authy_id = await Authy.registerUser(account.email, newCountryCode.substr(1), newPhoneNo);
+                        log.d('現在のアカウントの他には同じ電話番号がないのでAuthyからユーザーを削除します。');
+                        await Authy.deleteUser(account.authy_id);
                     }
                     else
                     {
-                        log.d('現在のアカウントの他にも同じ電話番号があるのでAuthyにユーザー登録はしません。');
-                        account.authy_id = authyId;
+                        log.d('現在のアカウントの他に同じ電話番号があるのでAuthyからユーザー削除はしません。');
+                    }
+                    account.authy_id = null;
+                }
+
+                // Authyにユーザーを登録する／しない
+                if (shouldAuthyUserRegister(twoFactorAuth, account, prevInternationalPhoneNo, newInternationalPhoneNo))
+                {
+                    if (account.email === null)
+                    {
+                        twoFactorAuth = account.two_factor_auth;
+                        phrase = R.CANNOT_PERFORMED_WITH_AUTHY;
+                    }
+                    else
+                    {
+                        const authyId = await AccountAgent.findAuthyId(newInternationalPhoneNo);
+                        if (authyId === null)
+                        {
+                            log.d('現在のアカウントの他に同じ電話番号がないのでAuthyにユーザーを登録します。');
+                            account.authy_id = await Authy.registerUser(account.email, newCountryCode.substr(1), newPhoneNo);
+                        }
+                        else
+                        {
+                            log.d('現在のアカウントの他にも同じ電話番号があるのでAuthyにユーザー登録はしません。');
+                            account.authy_id = authyId;
+                        }
                     }
                 }
             }

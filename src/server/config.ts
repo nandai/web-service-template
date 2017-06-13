@@ -252,6 +252,15 @@ export default class Config
         return false;
     }
 
+    static hasAuthy() : boolean
+    {
+        if (Config.AUTHY_API_KEY !== '')
+        {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * MySQLの設定があるかどうか調べる
      */

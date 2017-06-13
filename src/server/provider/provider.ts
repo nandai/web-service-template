@@ -223,8 +223,11 @@ export default class Provider
                                             break;
 
                                         case 'Authy':
-                                            success = true;
-                                            session.authy_uuid = await Authy.sendApprovalRequest(findAccount.authy_id);
+                                            if (findAccount.authy_id)
+                                            {
+                                                session.authy_uuid = await Authy.sendApprovalRequest(findAccount.authy_id);
+                                                success = (session.authy_uuid !== null);
+                                            }
                                             break;
                                     }
 

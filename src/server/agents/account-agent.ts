@@ -389,7 +389,7 @@ export default class AccountAgent
                     break;
 
                 case 'Authy':
-                    possible = (Config.AUTHY_API_KEY !== '');
+                    possible = Config.hasAuthy();
                     break;
             }
         }
