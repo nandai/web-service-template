@@ -84,7 +84,7 @@ export default class SessionCollection
     static find(sessionId : string)
     {
         const log = slog.stepIn(SessionCollection.CLS_NAME, 'find');
-        return new Promise(async (resolve : (model : Session) => void, reject) =>
+        return new Promise(async (resolve : (results) => void, reject) =>
         {
             try
             {

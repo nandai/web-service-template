@@ -41,7 +41,7 @@ export default class SessionCollection
     }
 
     /**
-     * ログアウトする
+     * セッションを更新する
      *
      * @param   model   セッション
      * @param   cond    検索条件
@@ -85,17 +85,17 @@ export default class SessionCollection
     static find(sessionId : string)
     {
         const log = slog.stepIn(SessionCollection.CLS_NAME, 'find');
-        return new Promise(async (resolve : (model : Session) => void, reject) =>
+        return new Promise(async (resolve : (results) => void, reject) =>
         {
             try
             {
                 const filter : Session = {id:sessionId};
 
                 const collection = SessionCollection.collection();
-                const result = await collection.findOne(filter);
+                const results = await collection.find(filter);
 
                 log.stepOut();
-                resolve(result);
+                resolve(results);
             }
             catch (err) {log.stepOut(); reject(err);}
         });

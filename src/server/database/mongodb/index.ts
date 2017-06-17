@@ -46,9 +46,10 @@ export default class Database
         });
     }
 
-    static collection(name : string) : mongodb.Collection
+    static collection(name : string) : Collection
     {
-        return Database.db.collection(name);
+        const collection = Database.db.collection(name);
+        return new Collection(collection, name);
     }
 
     static insertId(name : string)
@@ -60,6 +61,66 @@ export default class Database
                 if (err) {reject(err);}
                 else     {resolve(autoIndex);}
             });
+        });
+    }
+}
+
+/**
+ * コレクション
+ */
+class Collection
+{
+    private collection : mongodb.Collection;
+    private name       : string;
+
+    /**
+     * @constructor
+     */
+    constructor(collection : mongodb.Collection, name : string)
+    {
+        this.collection = collection;
+        this.name = name;
+    }
+
+    insert(obj:object)
+    {
+        const log = slog.stepIn('Collection', 'insert');
+        log.d(`${this.name}:${JSON.stringify(obj, null, 2)}`);
+        log.stepOut();
+        return this.collection.insert(obj);
+    }
+
+    update(filter:object, obj:object)
+    {
+        const log = slog.stepIn('Collection', 'update');
+        log.d(`${this.name}:${JSON.stringify(filter, null, 2)}\n${JSON.stringify(obj, null, 2)}`);
+        log.stepOut();
+        return this.collection.update(filter, obj);
+    }
+
+    deleteOne(filter:object)
+    {
+        const log = slog.stepIn('Collection', 'deleteOne');
+        log.d(`${this.name}:${JSON.stringify(filter, null, 2)}`);
+        log.stepOut();
+        return this.collection.deleteOne(filter);
+    }
+
+    find(filter:object)
+    {
+        return new Promise(async (resolve : (results : any[]) => void, reject) =>
+        {
+            const log = slog.stepIn('Collection', 'find');
+            try
+            {
+                log.d(`${this.name}:${JSON.stringify(filter, null, 2)}`);
+                const results = await this.collection.find(filter).toArray();
+
+                log.d(`取得件数：${results.length} 件`);
+                log.stepOut();
+                resolve(results);
+            }
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 }

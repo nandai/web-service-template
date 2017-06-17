@@ -141,7 +141,7 @@ export default class AccountCollection
                 }
 
                 const results = await DB.query(sql, values);
-                const authyId = (results ? results[0].authy_id : null);
+                const authyId = (results.length === 1 ? results[0].authy_id : null);
 
                 log.stepOut();
                 resolve(authyId);
