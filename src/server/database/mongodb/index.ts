@@ -82,7 +82,7 @@ class Collection
         this.name = name;
     }
 
-    insert(obj:object)
+    insert(obj : object)
     {
         const log = slog.stepIn('Collection', 'insert');
         log.d(`${this.name}:${JSON.stringify(obj, null, 2)}`);
@@ -90,7 +90,7 @@ class Collection
         return this.collection.insert(obj);
     }
 
-    update(filter:object, obj:object)
+    update(filter : object, obj : object)
     {
         const log = slog.stepIn('Collection', 'update');
         log.d(`${this.name}:${JSON.stringify(filter, null, 2)}\n${JSON.stringify(obj, null, 2)}`);
@@ -98,7 +98,7 @@ class Collection
         return this.collection.update(filter, obj);
     }
 
-    deleteOne(filter:object)
+    deleteOne(filter : object)
     {
         const log = slog.stepIn('Collection', 'deleteOne');
         log.d(`${this.name}:${JSON.stringify(filter, null, 2)}`);
@@ -106,7 +106,7 @@ class Collection
         return this.collection.deleteOne(filter);
     }
 
-    find(filter:object)
+    find(filter : object, orderBy? : object, pos : {offset? : number, limit? : number} = {})
     {
         return new Promise(async (resolve : (results : any[]) => void, reject) =>
         {
@@ -114,7 +114,21 @@ class Collection
             try
             {
                 log.d(`${this.name}:${JSON.stringify(filter, null, 2)}`);
-                const results = await this.collection.find(filter).toArray();
+                let cursor = await this.collection.find(filter);
+
+                if (orderBy) {
+                    cursor = cursor.sort(orderBy);
+                }
+
+                if (pos.offset) {
+                    cursor = cursor.skip(pos.offset);
+                }
+
+                if (pos.limit) {
+                    cursor = cursor.limit(pos.limit);
+                }
+
+                const results = await cursor.toArray();
 
                 log.d(`取得件数：${results.length} 件`);
                 log.stepOut();

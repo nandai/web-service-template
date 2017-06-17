@@ -17,7 +17,7 @@ SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し
         "ssl-ca":                  "",
         "ssl-passphrase":          "",
         "session-secret":          "web service template",
-        "password-salt":           "webservicetemplate",
+        "password-salt":           "web service template",
         "crypto-key":              "oQ7u6nWdkSACD5GlBaa5",
         "crypto-iv":               "S2z3LCDO3r9uDKYzrhlA",
         "smtp-host":               "smtp.example.com",
@@ -42,7 +42,7 @@ SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し
         "db-password":             "",
         "db-name":                 "",
         "mongo-url":               "",
-        "select-db":               ""
+        "select-db":               "[mysql|mongodb]"
     }
 }
 ```

@@ -1,10 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response}   from 'libs/response';
-import AccountAgent from 'server/agents/account-agent';
-import Converter    from 'server/libs/converter';
-import {Session}    from 'server/models/session';
+import {Response}        from 'libs/response';
+import AccountAgent      from 'server/agents/account-agent';
+import LoginHistoryAgent from 'server/agents/login-history-agent';
+import Converter         from 'server/libs/converter';
+import {Session}         from 'server/models/session';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -20,12 +21,14 @@ export function getAccount(req : express.Request)
         try
         {
             const session : Session = req.ext.session;
-            const account = await AccountAgent.find(session.account_id);
+            const {account_id} = session;
+            const account =      await AccountAgent.find(account_id);
+            const loginHistory = await LoginHistoryAgent.findLatest(account_id);
 
             const data : Response.GetAccount =
             {
                 status:  Response.Status.OK,
-                account: Converter.accountToResponse(account)
+                account: Converter.accountToResponse(account, loginHistory)
             };
 
             log.stepOut();

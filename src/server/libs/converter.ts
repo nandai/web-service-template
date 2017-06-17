@@ -1,15 +1,25 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response} from 'libs/response';
-import {Account}  from 'server/models/account';
+import {Response}     from 'libs/response';
+import {Account}      from 'server/models/account';
+import {LoginHistory} from 'server/models/login-history';
+
+import moment = require('moment');
 
 export default class Converter
 {
-    static accountToResponse(account : Account) : Response.Account
+    static accountToResponse(account : Account, loginHistory? : LoginHistory) : Response.Account
     {
         if (account === null) {
             return null;
+        }
+
+        let loginDt : string = null;
+        if (loginHistory)
+        {
+            const m = moment.utc(loginHistory.login_at);
+            loginDt = m.toISOString();
         }
 
         const response : Response.Account =
@@ -23,7 +33,8 @@ export default class Converter
             twitter:      (account.twitter  !== null),
             facebook:     (account.facebook !== null),
             google:       (account.google   !== null),
-            github:       (account.github   !== null)
+            github:       (account.github   !== null),
+            loginDt
         };
         return response;
     }

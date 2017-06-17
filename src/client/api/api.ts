@@ -7,7 +7,6 @@ import R          from '../libs/r';
 import Utils      from '../libs/utils';
 
 import request = require('superagent');
-const slog = window['slog'];
 
 export default class Api
 {

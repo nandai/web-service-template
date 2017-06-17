@@ -31,7 +31,8 @@ export default class Database
                         user:     Config.DB_USER,
                         password: Config.DB_PASSWORD,
                         database: Config.DB_NAME,
-                        charset:  'utf8mb4'
+                        charset:  'utf8mb4',
+                        timezone: 'utc'
                     };
                     Database.pool = mysql.createPool(config);
 

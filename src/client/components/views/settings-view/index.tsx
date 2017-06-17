@@ -12,6 +12,8 @@ import R             from 'client/libs/r';
 import CommonUtils   from 'libs/utils';
 import {Store}       from './store';
 
+import moment = require('moment');
+
 interface SettingsViewProps
 {
     store : Store;
@@ -34,6 +36,16 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
 
         const passwordDisabled = (account.email === null);
 
+        let loginDt = '';
+        if (account.loginDt)
+        {
+            // UTCからローカルタイムに変換
+            const dt = moment(account.loginDt).toDate();
+            const m =  moment(dt);
+
+            loginDt = R.text(R.LOGIN_DT, locale) + m.format('YYYY/MM/DD HH:mm:ss');
+        }
+
         return (
             <ViewContainer>
                 <Header />
@@ -47,7 +59,7 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
                     <Button onClick={store.onAccount}  url="/settings/account">{R.text(R.GO_ACCOUNT_SETTINGS, locale)}</Button>
                     <Button onClick={store.onLeave}   >{R.text(R.DELETE_ACCOUNT, locale)}</Button>
                     <Button onClick={store.onBack}    >{R.text(R.BACK, locale)}</Button>
-                    <Text>{account.name}</Text>
+                    <Text>{account.name}　{loginDt}</Text>
                     <Text>{store.message}</Text>
                 </ViewContents>
             </ViewContainer>

@@ -40,6 +40,26 @@ export default class LoginHistoryAgent
     }
 
     /**
+     * 最終ログイン履歴を取得する
+     *
+     * @param   account_id  アカウントID
+     */
+    static findLatest(account_id : number)
+    {
+        return new Promise(async (resolve : (model : LoginHistory) => void, reject) =>
+        {
+            try
+            {
+                const data = await collection().findLatest(account_id);
+                const model = LoginHistoryAgent.toModel(data);
+
+                resolve(model);
+            }
+            catch (err) {reject(err);}
+        });
+    }
+
+    /**
      * LoginHistoryに変換
      */
     static toModel(data) : LoginHistory

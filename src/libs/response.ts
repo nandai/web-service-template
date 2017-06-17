@@ -15,6 +15,7 @@ export namespace Response
         facebook      : boolean;
         google        : boolean;
         github        : boolean;
+        loginDt       : string;
     }
 
     export interface ChangeEmail

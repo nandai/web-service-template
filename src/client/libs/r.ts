@@ -34,6 +34,7 @@ export default class R
             'linkProvider':               'Link ${provider}',
             'login':                      'Log in',
             'loginCode':                  'Login code',
+            'loginDt':                    'Last login : ',
             'loginWithFacebook':          'Log in with Facebook',
             'loginWithGithub':            'Log in with Github',
             'loginWithGoogle':            'Log in with Google',
@@ -95,6 +96,7 @@ export default class R
             'linkProvider':               '${provider}を紐づける',
             'login':                      'ログイン',
             'loginCode':                  'ログインコード',
+            'loginDt':                    '最終ログイン日時：',
             'loginWithFacebook':          'Facebookでログインする',
             'loginWithGithub':            'Githubでログインする',
             'loginWithGoogle':            'Googleでログインする',
@@ -155,6 +157,7 @@ export default class R
     static LINK_PROVIDER =                 'linkProvider';
     static LOGIN =                         'login';
     static LOGIN_CODE =                    'loginCode';
+    static LOGIN_DT =                      'loginDt';
     static LOGIN_WITH_FACEBOOK =           'loginWithFacebook';
     static LOGIN_WITH_GITHUB =             'loginWithGithub';
     static LOGIN_WITH_GOOGLE =             'loginWithGoogle';

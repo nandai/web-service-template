@@ -41,4 +41,27 @@ export default class LoginHistoryCollection
             catch (err) {log.stepOut(); reject(err);}
         });
     }
+
+    /**
+     * 最終ログイン履歴を取得する
+     *
+     * @param   account_id  アカウントID
+     */
+    static findLatest(account_id : number)
+    {
+        const log = slog.stepIn(LoginHistoryCollection.CLS_NAME, 'findLatest');
+        return new Promise(async (resolve : (results) => void, reject) =>
+        {
+            try
+            {
+                const sql = 'SELECT * FROM login_history WHERE ? ORDER BY id DESC LIMIT 1 OFFSET 1';
+                const values = {account_id};
+                const results = await DB.query(sql, values);
+
+                log.stepOut();
+                resolve(results);
+            }
+            catch (err) {log.stepOut(); reject(err);}
+        });
+    }
 }
