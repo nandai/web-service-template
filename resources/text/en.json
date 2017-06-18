@@ -1,5 +1,6 @@
 {
     "accountNameTooShortOrTooLong": "The account name must be between ${min} and ${max} letters.",
+    "accountNotFound": "Account not found.",
     "alreadyEmailChanged": "E-mail address is already changed.",
     "alreadyExistsEmail": "The e-mail address is already registered.",
     "alreadyLoginAnotherAccount": "You are already logged in with a different account.",
@@ -12,6 +13,7 @@
     "cannotEnterAccountNameBeforeAfterSpace": "You can not enter only blank spaces or spaces before or after the account name.",
     "cannotEnterUserNameOnlyNumbers": "You can not enter a user name with only numbers.",
     "cannotEnterUserNameBeforeAfterSpace": "You can not enter only blank spaces or spaces before or after the user name.",
+    "cannotNoSetPassword": "It can not be set not to set a password.",
     "cannotLink": "It can not be correlated string.",
     "cannotPerformedWithAuthy": "Since mail address is not set, two-factor authentication can not be performed with Authy.",
     "cannotSetPassword": "I can not set a password.",

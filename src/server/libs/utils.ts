@@ -150,17 +150,20 @@ export default class Utils
     static getHashPassword(name : string, password : string, salt : string) : string
     {
         const log = slog.stepIn(Utils.CLS_NAME, 'getHashPassword');
-
-        const stretchingCount = 10000;
-        let hash : crypto.Hash;
         let p = password;
 
-        for (let i = 0; i < stretchingCount; i++)
+        if (p)
         {
-            hash = crypto.createHash('sha256');
-            hash.update(name + salt + p);
+            const stretchingCount = 10000;
+            let hash : crypto.Hash;
 
-            p = hash.digest(i < stretchingCount - 1 ? 'hex' : 'base64');
+            for (let i = 0; i < stretchingCount; i++)
+            {
+                hash = crypto.createHash('sha256');
+                hash.update(name + salt + p);
+
+                p = hash.digest(i < stretchingCount - 1 ? 'hex' : 'base64');
+            }
         }
 
         log.stepOut();

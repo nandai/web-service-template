@@ -39,10 +39,8 @@ export async function onResetPassword(req : express.Request, res : express.Respo
                 break;
             }
 
-            const {resetId, password, confirm} = param;
-
             // 検証
-            const result = await isResetPasswordValid(resetId, password, confirm, locale);
+            const result = await isResetPasswordValid(param, locale);
 
             if (result.status !== Response.Status.OK)
             {
@@ -52,11 +50,12 @@ export async function onResetPassword(req : express.Request, res : express.Respo
 
             // 更新
             const {account} = result;
-            account.password = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
+            account.password = Utils.getHashPassword(account.email, param.password, Config.PASSWORD_SALT);
             account.reset_id = null;
             account.two_factor_auth = null;
             await AccountAgent.update(account);
 
+            // 送信
             const data : Response.ResetPassword =
             {
                 status:  Response.Status.OK,
@@ -73,7 +72,7 @@ export async function onResetPassword(req : express.Request, res : express.Respo
 /**
  * 検証
  */
-export function isResetPasswordValid(resetId : string, password : string, confirm : string, locale : string)
+export function isResetPasswordValid(param : Request.ResetPassword, locale : string)
 {
     return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
     {
@@ -81,6 +80,7 @@ export function isResetPasswordValid(resetId : string, password : string, confir
         try
         {
             const result : ValidationResult = {status:Response.Status.OK};
+            const {resetId, password, confirm} = param;
 
             do
             {
@@ -104,6 +104,7 @@ export function isResetPasswordValid(resetId : string, password : string, confir
 
                 // アカウント存在検証
                 const account = await AccountAgent.findByResetId(resetId);
+
                 if (account === null)
                 {
                     // パスワードリセットの画面でパスワードリセットを完了させた後、再度パスワードリセットを完了させようとした場合にここに到達する想定。
@@ -113,11 +114,15 @@ export function isResetPasswordValid(resetId : string, password : string, confir
                     result.message = R.text(R.ALREADY_PASSWORD_RESET, locale);
                     break;
                 }
+
                 result.account = account;
             }
             while (false);
 
-            log.d(JSON.stringify(result, null, 2));
+            if (result.status !== Response.Status.OK) {
+                log.w(JSON.stringify(result, null, 2));
+            }
+
             log.stepOut();
             resolve(result);
         }

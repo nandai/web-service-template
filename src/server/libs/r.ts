@@ -20,6 +20,7 @@ export default class R
     };
 
     static ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG =           'accountNameTooShortOrTooLong';
+    static ACCOUNT_NOT_FOUND =                            'accountNotFound';
     static ALREADY_EMAIL_CHANGED =                        'alreadyEmailChanged';
     static ALREADY_EXISTS_EMAIL =                         'alreadyExistsEmail';
     static ALREADY_LOGIN_ANOTHER_ACCOUNT =                'alreadyLoginAnotherAccount';
@@ -32,6 +33,7 @@ export default class R
     static CANNOT_ENTER_ACCOUNT_NAME_BEFORE_AFTER_SPACE = 'cannotEnterAccountNameBeforeAfterSpace';
     static CANNOT_ENTER_USER_NAME_ONLY_NUMBERS =          'cannotEnterUserNameOnlyNumbers';
     static CANNOT_ENTER_USER_NAME_BEFORE_AFTER_SPACE =    'cannotEnterUserNameBeforeAfterSpace';
+    static CANNOT_NO_SET_PASSWORD =                       'cannotNoSetPassword';
     static CANNOT_LINK =                                  'cannotLink';
     static CANNOT_PERFORMED_WITH_AUTHY =                  'cannotPerformedWithAuthy';
     static CANNOT_SET_PASSWORD =                          'cannotSetPassword';

@@ -1,5 +1,6 @@
 {
     "accountNameTooShortOrTooLong": "アカウント名は${min}～${max}文字で入力してください。",
+    "accountNotFound": "アカウントが存在しません。",
     "alreadyEmailChanged": "メールアドレスは変更済みです。",
     "alreadyExistsEmail": "そのメールアドレスは既に登録されています。",
     "alreadyLoginAnotherAccount": "既に別のアカウントでログインしています。",
@@ -12,6 +13,7 @@
     "cannotEnterAccountNameBeforeAfterSpace": "アカウント名に空白のみ、または前後に空白は入力できません。",
     "cannotEnterUserNameOnlyNumbers": "数字のみのユーザー名は入力できません。",
     "cannotEnterUserNameBeforeAfterSpace": "ユーザー名に空白のみ、または前後に空白は入力できません。",
+    "cannotNoSetPassword": "パスワードを未設定にはできません。",
     "cannotLink": "紐づけできません。",
     "cannotPerformedWithAuthy": "メールアドレスが設定されていないのでAuthyで二段階認証を行えません。",
     "cannotSetPassword": "パスワードを設定できません。",
