@@ -23,6 +23,7 @@
     "@types/react-dom": "^15.5.0",
     "@types/superagent": "^3.5.0",
     "authy": "^1.2.0",
+    "ava": "^0.19.1",
     "babel-preset-latest": "^6.24.1",
     "bind-decorator": "^1.0.10",
     "body-parser": "^1.17.2",
@@ -70,7 +71,7 @@
     "websocket": "^1.0.24"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ava build/test --verbose",
     "start": "node build/server/main"
   },
   "author": "",

@@ -7,6 +7,9 @@ import {Account}  from 'server/models/account';
 
 export default class Validator
 {
+    /**
+     * ユーザー名検証
+     */
     static userName(userName : string, accountId : number, alreadyExistsAccount : Account, locale : string)
     {
         let status = Response.Status.OK;
@@ -51,6 +54,40 @@ export default class Validator
             {
                 status = Response.Status.FAILED;
                 message = R.text(R.ALREADY_USE_USER_NAME, locale);
+                break;
+            }
+        }
+        while (false);
+        return ({status, message});
+    }
+
+    /**
+     * パスワード検証
+     *
+     * @param   password    パスワード
+     */
+    static password(password : string, locale : string)
+    {
+        let status = Response.Status.OK;
+        let message : string;
+
+        do
+        {
+            const min = 8;
+            const max = 16;
+
+            if (! password)
+            {
+                status = Response.Status.FAILED;
+                message = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale);
+                break;
+            }
+
+            const len = password.length;
+            if (len < min || max < len)
+            {
+                status = Response.Status.FAILED;
+                message = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale);
                 break;
             }
         }

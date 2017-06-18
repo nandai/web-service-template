@@ -20,7 +20,7 @@ export default class Database
     {
         return new Promise(async (resolve : () => void) =>
         {
-            const log = slog.stepIn('Database', 'init');
+            const log = slog.stepIn('MySQL', 'init');
             try
             {
                 if (Config.hasMySQL())
