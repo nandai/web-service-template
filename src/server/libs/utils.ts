@@ -120,25 +120,6 @@ export default class Utils
     }
 
     /**
-     * パスワード検証
-     *
-     * @param   password    パスワード
-     */
-    static validatePassword(password : string) : boolean
-    {
-        if (typeof password !== 'string') {
-            return false;
-        }
-
-        const len = password.length;
-        if (len < 8 || 16 < len) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * ハッシュ化パスワード取得
      *
      * @param   name        ユーザー名

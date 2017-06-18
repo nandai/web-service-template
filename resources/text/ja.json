@@ -42,7 +42,7 @@
     "notFound": "存在しませんでした。",
     "passwordChanged": "パスワードを変更しました。",
     "passwordReset": "パスワードをリセットしました。二段階認証を有効にしていた場合は再設定してください。",
-    "passwordTooShortOrTooLong": "パスワードが短い、または長すぎます。",
+    "passwordTooShortOrTooLong": "パスワードは${min}～${max}文字で入力してください。",
     "requireCountryCodeAndPhoneNo": "国コードと電話番号が必要です。",
     "resetMailSended": "パスワードリセットのメールを送信しました。",
     "settingsCompleted": "設定を完了しました。",

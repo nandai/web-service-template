@@ -42,7 +42,7 @@
     "notFound": "It did not exist.",
     "passwordChanged": "Password changed.",
     "passwordReset": "I reset the password.　Please re-configure if two-factor authentication was enabled.",
-    "passwordTooShortOrTooLong": "Password is short, or too long.",
+    "passwordTooShortOrTooLong": "Password must be between ${min} and ${max} letters.",
     "requireCountryCodeAndPhoneNo": "Country code and phone number are required.",
     "resetMailSended": "I sent a password reset e-mail.",
     "settingsCompleted": "We have completed the setting.",

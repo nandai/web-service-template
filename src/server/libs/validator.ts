@@ -66,7 +66,7 @@ export default class Validator
      *
      * @param   password    パスワード
      */
-    static password(password : string, locale : string)
+    static password(password : string, confirm : string, locale : string)
     {
         let status = Response.Status.OK;
         let message : string;
@@ -79,7 +79,7 @@ export default class Validator
             if (! password)
             {
                 status = Response.Status.FAILED;
-                message = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale);
+                message = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale, {min, max});
                 break;
             }
 
@@ -87,14 +87,22 @@ export default class Validator
             if (len < min || max < len)
             {
                 status = Response.Status.FAILED;
-                message = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale);
+                message = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale, {min, max});
                 break;
             }
 
-            if (password.match(/^[0-9a-zA-Z]+$/) === null)
+            if (password.match(/^[0-9a-zA-Z@]+$/) === null)
             {
                 status = Response.Status.FAILED;
                 message = R.text(R.ENTER_ALPHABETICAL_NUMBER, locale);
+                break;
+            }
+
+            // パスワード確認検証
+            if (confirm !== null && password !== confirm)
+            {
+                status = Response.Status.FAILED;
+                message = R.text(R.MISMATCH_PASSWORD, locale);
                 break;
             }
         }

@@ -85,20 +85,12 @@ export function isResetPasswordValid(param : Request.ResetPassword, locale : str
             do
             {
                 // パスワード検証
-                const passwordResult = Validator.password(password, locale);
+                const passwordResult = Validator.password(password, confirm, locale);
 
                 if (passwordResult.status !== Response.Status.OK)
                 {
                     result.status =  passwordResult.status;
                     result.message = passwordResult.message;
-                    break;
-                }
-
-                // パスワード確認検証
-                if (password !== confirm)
-                {
-                    result.status = Response.Status.FAILED;
-                    result.message = R.text(R.MISMATCH_PASSWORD, locale);
                     break;
                 }
 

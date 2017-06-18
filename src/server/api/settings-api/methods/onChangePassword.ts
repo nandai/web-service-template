@@ -87,7 +87,7 @@ export function isChangePasswordValid(param : Request.ChangePassword, myAccountI
                 // パスワード検証
                 if (newPassword !== null)
                 {
-                    const passwordResult = Validator.password(newPassword, locale);
+                    const passwordResult = Validator.password(newPassword, confirm, locale);
 
                     if (passwordResult.status !== Response.Status.OK)
                     {
@@ -95,14 +95,6 @@ export function isChangePasswordValid(param : Request.ChangePassword, myAccountI
                         result.message = passwordResult.message;
                         break;
                     }
-                }
-
-                // パスワード確認検証
-                if (newPassword !== confirm)
-                {
-                    result.status = Response.Status.FAILED;
-                    result.message = R.text(R.MISMATCH_PASSWORD, locale);
-                    break;
                 }
 
                 // アカウント存在検証
