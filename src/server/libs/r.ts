@@ -49,6 +49,7 @@ export default class R
     static COULD_NOT_SEND_SMS =                           'couldNotSendSms';
     static EMAIL_CHANGED =                                'emailChanged';
     static ENTER_ALPHABETICAL_NUMBER =                    'enterAlphabeticalNumber';
+    static ENTER_ALPHABETICAL_NUMBER_BAR =                'enterAlphabeticalNumberBar';
     static INCORRECT_ACCOUNT =                            'incorrectAccount';
     static INVALID_COUNTRY_CODE =                         'invalidCountryCode';
     static INVALID_EMAIL =                                'invalidEmail';

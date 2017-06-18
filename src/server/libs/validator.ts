@@ -46,7 +46,7 @@ export default class Validator
             if (userName.match(/^[0-9a-zA-Z-_]+$/) === null)
             {
                 status = Response.Status.FAILED;
-                message = R.text(R.ENTER_ALPHABETICAL_NUMBER, locale);
+                message = R.text(R.ENTER_ALPHABETICAL_NUMBER_BAR, locale);
                 break;
             }
 
@@ -88,6 +88,13 @@ export default class Validator
             {
                 status = Response.Status.FAILED;
                 message = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale);
+                break;
+            }
+
+            if (password.match(/^[0-9a-zA-Z]+$/) === null)
+            {
+                status = Response.Status.FAILED;
+                message = R.text(R.ENTER_ALPHABETICAL_NUMBER, locale);
                 break;
             }
         }
