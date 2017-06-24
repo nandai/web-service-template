@@ -8,6 +8,7 @@ import MySQL                       from 'server/database/mysql';
 import R                           from 'server/libs/r';
 import {testIsChangePasswordValid} from './_testIsChangePasswordValid';
 import {testPasswordValid}         from './_testPasswordValid';
+import {testUserNameValid}         from './_testUserNameValid';
 
 import slog = require('server/slog');
 
@@ -39,5 +40,6 @@ test.after.always((t) =>
     });
 });
 
-testPasswordValid();
 testIsChangePasswordValid();
+testPasswordValid();
+testUserNameValid();
