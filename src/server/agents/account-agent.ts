@@ -106,13 +106,17 @@ export default class AccountAgent
         {
             try
             {
-                const data = await collection().findByCondition(fieldName, value);
-                const model = AccountAgent.toModel(data);
-
-                if (model)
+                let model : Account = null;
+                if (value !== null)
                 {
-                    AccountAgent.decrypt(model);
-                    model.international_phone_no = AccountAgent.international_phone_no(model);
+                    const data = await collection().findByCondition(fieldName, value);
+                    model = AccountAgent.toModel(data);
+
+                    if (model)
+                    {
+                        AccountAgent.decrypt(model);
+                        model.international_phone_no = AccountAgent.international_phone_no(model);
+                    }
                 }
                 resolve(model);
             }

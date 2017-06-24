@@ -53,8 +53,7 @@ export async function onSetAccount(req : express.Request, res : express.Response
 
             // 検証
             const session : Session = req.ext.session;
-            const alreadyExistsAccount = await AccountAgent.findByUserName(userName);
-            const result = isValid(name, userName, countryCode, phoneNo, twoFactorAuth, session.account_id, alreadyExistsAccount, locale);
+            const result = await isSetAccountValid(param, session.account_id, locale);
 
             if (result.status !== Response.Status.OK)
             {
@@ -139,80 +138,88 @@ export async function onSetAccount(req : express.Request, res : express.Response
 /**
  * 検証
  */
-function isValid(
-    name                 : string,
-    userName             : string,
-    countryCode          : string,
-    phoneNo              : string,
-    twoFactorAuth        : string,
-    accountId            : number,
-    alreadyExistsAccount : Account,
-    locale               : string)
+export function isSetAccountValid(param : Request.SetAccount, myAccountId : number, locale : string)
 {
-    let status = Response.Status.OK;
-    let message : string;
-
-    do
+    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
     {
-        // アカウント名チェック
-        name = name || '';
-        if (name !== name.trim())
+        const log = slog.stepIn('SettingsApi', 'isSetAccountValid');
+        try
         {
-            status = Response.Status.FAILED;
-            message = R.text(R.CANNOT_ENTER_ACCOUNT_NAME_BEFORE_AFTER_SPACE, locale);
-            break;
-        }
+            const result : ValidationResult = {status:Response.Status.OK};
+            const {userName, countryCode, phoneNo, twoFactorAuth} = param;
+            const name = param.name || '';
 
-        const len = name.length;
-        if (len < 1 || 20 < len)
-        {
-            status = Response.Status.FAILED;
-            message = R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale, {min:1, max:20});
-            break;
-        }
-
-        // ユーザー名チェック
-        const result = Validator.userName(userName, accountId, alreadyExistsAccount, locale);
-        if (result.status !== Response.Status.OK)
-        {
-            status =  result.status;
-            message = result.message;
-            break;
-        }
-
-        // 国コードチェック
-        if (countryCode)
-        {
-            const countries : any[] = lookup.countries({countryCallingCodes:countryCode});
-            if (countries.length === 0)
+            do
             {
-                status = Response.Status.FAILED;
-                message = R.text(R.INVALID_COUNTRY_CODE, locale);
-                break;
-            }
-        }
+                // アカウント名チェック
+                if (name !== name.trim())
+                {
+                    result.status = Response.Status.FAILED;
+                    result.message = R.text(R.CANNOT_ENTER_ACCOUNT_NAME_BEFORE_AFTER_SPACE, locale);
+                    break;
+                }
 
-        // 二段階認証方式チェック
-        if (twoFactorAuth === 'SMS'
-        ||  twoFactorAuth === 'Authy')
-        {
-            if (countryCode === null || phoneNo === null)
-            {
-                status = Response.Status.FAILED;
-                message = R.text(R.REQUIRE_COUNTRY_CODE_AND_PHONE_NO, locale);
-                break;
-            }
-        }
+                const len = name.length;
+                if (len < 1 || 20 < len)
+                {
+                    result.status = Response.Status.FAILED;
+                    result.message = R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale, {min:1, max:20});
+                    break;
+                }
 
-        else if (twoFactorAuth !== null)
-        {
-            status = Response.Status.BAD_REQUEST;
-            message = R.text(R.BAD_REQUEST, locale);
-            break;
+                // ユーザー名チェック
+                const alreadyExistsAccount = await AccountAgent.findByUserName(userName);
+                const userNameResult = Validator.userName(userName, myAccountId, alreadyExistsAccount, locale);
+
+                if (userNameResult.status !== Response.Status.OK)
+                {
+                    result.status =  userNameResult.status;
+                    result.message = userNameResult.message;
+                    break;
+                }
+
+                // 国コードチェック
+                if (countryCode)
+                {
+                    const countries : any[] = lookup.countries({countryCallingCodes:countryCode});
+                    if (countries.length === 0)
+                    {
+                        result.status = Response.Status.FAILED;
+                        result.message = R.text(R.INVALID_COUNTRY_CODE, locale);
+                        break;
+                    }
+                }
+
+                // 二段階認証方式チェック
+                if (twoFactorAuth === 'SMS'
+                ||  twoFactorAuth === 'Authy')
+                {
+                    if (countryCode === null || phoneNo === null)
+                    {
+                        result.status = Response.Status.FAILED;
+                        result.message = R.text(R.REQUIRE_COUNTRY_CODE_AND_PHONE_NO, locale);
+                        break;
+                    }
+                }
+
+                else if (twoFactorAuth !== null)
+                {
+                    result.status = Response.Status.BAD_REQUEST;
+                    result.message = R.text(R.BAD_REQUEST, locale);
+                    break;
+                }
+            }
+            while (false);
+
+            if (result.status !== Response.Status.OK) {
+                log.w(JSON.stringify(result, null, 2));
+            }
+
+            log.stepOut();
+            resolve(result);
         }
-    }
-    while (false);
-    return ({status, message});
+        catch (err) {log.stepOut(); reject(err);}
+    });
 }
 
 /**
@@ -295,4 +302,10 @@ function shouldAuthyUserRegister(
 
     log.stepOut();
     return result;
+}
+
+interface ValidationResult
+{
+    status   : Response.Status;
+    message? : string;
 }

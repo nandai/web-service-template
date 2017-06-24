@@ -15,41 +15,7 @@ const locale = 'ja';
 
 export function testIsChangePasswordValid()
 {
-    test.serial('パスワード変更の入力値検証 No.1', async (t) =>
-    {
-        const log = slog.stepIn('test', t['_test'].title);
-        const param : Request.ChangePassword =
-        {
-            oldPassword: null,
-            newPassword: '1234567890123456',
-            confirm:     null
-        };
-        const accountId = 0;
-        const result = await isChangePasswordValid(param, accountId, locale);
-        const {status} = result;
-
-        t.is(status, Response.Status.FAILED);
-        log.stepOut();
-    });
-
-    test.serial('パスワード変更の入力値検証 No.2', async (t) =>
-    {
-        const log = slog.stepIn('test', t['_test'].title);
-        const param : Request.ChangePassword =
-        {
-            oldPassword: null,
-            newPassword: '1234567890123456',
-            confirm:     '1234567890123456'
-        };
-        const accountId = 0;
-        const result = await isChangePasswordValid(param, accountId, locale);
-        const {status} = result;
-
-        t.is(status, Response.Status.FAILED);
-        log.stepOut();
-    });
-
-    test.serial('パスワード変更の入力値検証 No.3', async (t) =>
+    test.serial('パスワード変更の入力値検証 - メールアドレスが未設定の時は設定できないこと', async (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         let account : Account =
@@ -73,7 +39,7 @@ export function testIsChangePasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード変更の入力値検証 No.4', async (t) =>
+    test.serial('パスワード変更の入力値検証 - メールアドレス以外に認証手段がない時はパスワードなしに変更できないこと', async (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         let account : Account =
@@ -98,7 +64,7 @@ export function testIsChangePasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード変更の入力値検証 No.5', async (t) =>
+    test.serial('パスワード変更の入力値検証 - メールアドレス以外に認証手段がある時はパスワードなしに変更できること', async (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         let account : Account =
@@ -124,7 +90,7 @@ export function testIsChangePasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード変更の入力値検証 No.6', async (t) =>
+    test.serial('パスワード変更の入力値検証 - 現在のパスワードと現在のパスワードとして入力されたパスワードが一致しない時は変更できないこと', async (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         let account : Account =
@@ -149,7 +115,7 @@ export function testIsChangePasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード変更の入力値検証 No.7', async (t) =>
+    test.serial('パスワード変更の入力値検証 - 現在のパスワードと現在のパスワードとして入力されたパスワードが一致する時は変更できること', async (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         let account : Account =

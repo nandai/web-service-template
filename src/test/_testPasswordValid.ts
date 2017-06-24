@@ -10,7 +10,7 @@ const locale = 'ja';
 
 export function testPasswordValid()
 {
-    test.serial('パスワード検証 No.1', (t) =>
+    test.serial('パスワード検証 - nullの時は失敗すること', (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         const password = null;
@@ -22,7 +22,7 @@ export function testPasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード検証 No.2', (t) =>
+    test.serial('パスワード検証 - 短すぎる時は失敗すること', (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         const password = '1234567';
@@ -34,7 +34,7 @@ export function testPasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード検証 No.3', (t) =>
+    test.serial('パスワード検証 - 有効な最小文字数の時は成功すること', (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         const password = '12345678';
@@ -46,7 +46,7 @@ export function testPasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード検証 No.4', (t) =>
+    test.serial('パスワード検証 - 有効な最大文字数の時は成功すること', (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         const password = '1234567890123456';
@@ -58,7 +58,7 @@ export function testPasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード検証 No.5', (t) =>
+    test.serial('パスワード検証 - 長すぎる時は失敗すること', (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         const password = '12345678901234567';
@@ -70,7 +70,7 @@ export function testPasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード検証 No.6', (t) =>
+    test.serial('パスワード検証 - 英数以外の時は失敗すること', (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         const password = 'あいうえおかきくけこ';
@@ -82,7 +82,7 @@ export function testPasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード検証 No.7', (t) =>
+    test.serial('パスワード検証 - 確認用パスワードと一致しない時は失敗すること', (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         const password = '1234567890123456';
@@ -95,7 +95,7 @@ export function testPasswordValid()
         log.stepOut();
     });
 
-    test.serial('パスワード検証 No.8', (t) =>
+    test.serial('パスワード検証 - 確認用パスワードと一致する時は成功すること', (t) =>
     {
         const log = slog.stepIn('test', t['_test'].title);
         const password = '1234567890123456';

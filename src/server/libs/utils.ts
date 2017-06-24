@@ -1,9 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response}   from 'libs/response';
-import Config       from 'server/config';
-import R            from 'server/libs/r';
+import {Response} from 'libs/response';
+import Config     from 'server/config';
+import R          from 'server/libs/r';
 
 import crypto =  require('crypto');
 import express = require('express');

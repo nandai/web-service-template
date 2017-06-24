@@ -12,50 +12,52 @@ export default class Validator
      */
     static userName(userName : string, accountId : number, alreadyExistsAccount : Account, locale : string)
     {
-        let status = Response.Status.OK;
+        let status = Response.Status.FAILED;
         let message : string;
 
         do
         {
-            if (! userName) {
+            const min = 0;
+            const max = 20;
+
+            if (! userName)
+            {
+                status = Response.Status.OK;
                 break;
             }
 
             if (userName !== userName.trim())
             {
-                status = Response.Status.FAILED;
                 message = R.text(R.CANNOT_ENTER_USER_NAME_BEFORE_AFTER_SPACE, locale);
                 break;
             }
 
             const len = userName.length;
-            if (len < 0 || 20 < len)
+            if (len < min || max < len)
             {
-                status = Response.Status.FAILED;
-                message = R.text(R.USER_NAME_TOO_LONG, locale, {min:0, max:20});
+                message = R.text(R.USER_NAME_TOO_LONG, locale, {min, max});
                 break;
             }
 
             if (userName && isNaN(Number(userName)) === false)
             {
-                status = Response.Status.FAILED;
                 message = R.text(R.CANNOT_ENTER_USER_NAME_ONLY_NUMBERS, locale);
                 break;
             }
 
             if (userName.match(/^[0-9a-zA-Z-_]+$/) === null)
             {
-                status = Response.Status.FAILED;
                 message = R.text(R.ENTER_ALPHABETICAL_NUMBER_BAR, locale);
                 break;
             }
 
             if (alreadyExistsAccount && alreadyExistsAccount.id !== accountId)
             {
-                status = Response.Status.FAILED;
                 message = R.text(R.ALREADY_USE_USER_NAME, locale);
                 break;
             }
+
+            status = Response.Status.OK;
         }
         while (false);
         return ({status, message});
@@ -68,32 +70,24 @@ export default class Validator
      */
     static password(password : string, confirm : string, locale : string)
     {
-        let status = Response.Status.OK;
+        let status = Response.Status.FAILED;
         let message : string;
+        password = password || '';
 
         do
         {
             const min = 8;
             const max = 16;
 
-            if (! password)
-            {
-                status = Response.Status.FAILED;
-                message = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale, {min, max});
-                break;
-            }
-
             const len = password.length;
             if (len < min || max < len)
             {
-                status = Response.Status.FAILED;
                 message = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale, {min, max});
                 break;
             }
 
             if (password.match(/^[0-9a-zA-Z@]+$/) === null)
             {
-                status = Response.Status.FAILED;
                 message = R.text(R.ENTER_ALPHABETICAL_NUMBER, locale);
                 break;
             }
@@ -101,10 +95,11 @@ export default class Validator
             // パスワード確認検証
             if (confirm !== null && password !== confirm)
             {
-                status = Response.Status.FAILED;
                 message = R.text(R.MISMATCH_PASSWORD, locale);
                 break;
             }
+
+            status = Response.Status.OK;
         }
         while (false);
         return ({status, message});

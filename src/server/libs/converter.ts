@@ -18,7 +18,12 @@ export default class Converter
         let loginDt : string = null;
         if (loginHistory)
         {
-            const m = moment.utc(loginHistory.login_at);
+            let format : string;
+            if (typeof loginHistory.login_at === 'string') {
+                format = 'YYYY/MM/DD HH:mm:ss';
+            }
+
+            const m = moment.utc(loginHistory.login_at, format);
             loginDt = m.toISOString();
         }
 
