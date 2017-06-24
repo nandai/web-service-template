@@ -8,6 +8,39 @@ import {Account}  from 'server/models/account';
 export default class Validator
 {
     /**
+     * アカウント名検証
+     */
+    static accountName(accountName : string, locale : string)
+    {
+        let status = Response.Status.FAILED;
+        let message : string;
+        accountName = accountName || '';
+
+        do
+        {
+            const min = 1;
+            const max = 20;
+
+            if (accountName !== accountName.trim())
+            {
+                message = R.text(R.CANNOT_ENTER_ACCOUNT_NAME_BEFORE_AFTER_SPACE, locale);
+                break;
+            }
+
+            const len = accountName.length;
+            if (len < min || max < len)
+            {
+                message = R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale, {min, max});
+                break;
+            }
+
+            status = Response.Status.OK;
+        }
+        while (false);
+        return ({status, message});
+    }
+
+    /**
      * ユーザー名検証
      */
     static userName(userName : string, accountId : number, alreadyExistsAccount : Account, locale : string)

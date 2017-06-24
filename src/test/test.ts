@@ -6,6 +6,7 @@ import Config                      from 'server/config';
 import MongoDB                     from 'server/database/mongodb';
 import MySQL                       from 'server/database/mysql';
 import R                           from 'server/libs/r';
+import {testAccountNameValid}      from './_testAccountNameValid';
 import {testIsChangePasswordValid} from './_testIsChangePasswordValid';
 import {testPasswordValid}         from './_testPasswordValid';
 import {testUserNameValid}         from './_testUserNameValid';
@@ -40,6 +41,7 @@ test.after.always((t) =>
     });
 });
 
+testAccountNameValid();
 testIsChangePasswordValid();
 testPasswordValid();
 testUserNameValid();

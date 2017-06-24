@@ -146,24 +146,16 @@ export function isSetAccountValid(param : Request.SetAccount, myAccountId : numb
         try
         {
             const result : ValidationResult = {status:Response.Status.OK};
-            const {userName, countryCode, phoneNo, twoFactorAuth} = param;
-            const name = param.name || '';
+            const {name, userName, countryCode, phoneNo, twoFactorAuth} = param;
 
             do
             {
                 // アカウント名チェック
-                if (name !== name.trim())
+                const accountNameResult = Validator.accountName(name, locale);
+                if (accountNameResult.status !== Response.Status.OK)
                 {
-                    result.status = Response.Status.FAILED;
-                    result.message = R.text(R.CANNOT_ENTER_ACCOUNT_NAME_BEFORE_AFTER_SPACE, locale);
-                    break;
-                }
-
-                const len = name.length;
-                if (len < 1 || 20 < len)
-                {
-                    result.status = Response.Status.FAILED;
-                    result.message = R.text(R.ACCOUNT_NAME_TOO_SHORT_OR_TOO_LONG, locale, {min:1, max:20});
+                    result.status =  accountNameResult.status;
+                    result.message = accountNameResult.message;
                     break;
                 }
 
