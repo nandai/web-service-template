@@ -62,6 +62,7 @@ export default class R
     static NOT_FOUND =                                    'notFound';
     static PASSWORD_CHANGED =                             'passwordChanged';
     static PASSWORD_RESET =                               'passwordReset';
+    static PASSWORD_SETTING_CENCELED =                    'passwordSettingCanceled';
     static PASSWORD_TOO_SHORT_OR_TOO_LONG =               'passwordTooShortOrTooLong';
     static REQUIRE_COUNTRY_CODE_AND_PHONE_NO =            'requireCountryCodeAndPhoneNo';
     static RESET_MAIL_SENDED =                            'resetMailSended';

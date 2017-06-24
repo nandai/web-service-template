@@ -1,13 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Request}  from 'libs/request';
-import {Response} from 'libs/response';
-import Config     from 'server/config';
-import R          from 'server/libs/r';
-import Utils      from 'server/libs/utils';
-import Validator  from 'server/libs/validator';
-import Email      from 'server/provider/email';
+import {Request}    from 'libs/request';
+import {Response}   from 'libs/response';
+import AccountAgent from 'server/agents/account-agent';
+import Config       from 'server/config';
+import R            from 'server/libs/r';
+import Utils        from 'server/libs/utils';
+import Validator    from 'server/libs/validator';
+import {Account}    from 'server/models/account';
+import {Session}    from 'server/models/session';
+import Email        from 'server/provider/email';
 
 import express = require('express');
 import slog =    require('server/slog');
@@ -35,8 +38,12 @@ export async function onSignupEmail(req : express.Request, res : express.Respons
             break;
         }
 
+        const {email, password} = param;
+
         // 検証
-        const result = await isSignupEmailValid(param, locale);
+        const session : Session = req.ext.session;
+        const alreadyExistsAccount = await AccountAgent.findByProviderId('email', param.email);
+        const result = await isSignupEmailValid(param, session.account_id, alreadyExistsAccount, locale);
 
         if (result.status !== Response.Status.OK)
         {
@@ -44,11 +51,9 @@ export async function onSignupEmail(req : express.Request, res : express.Respons
             break;
         }
 
-        const {email, password} = param;
-        const hashPassword = Utils.getHashPassword(email, password, Config.PASSWORD_SALT);
-
         process.nextTick(() =>
         {
+            const hashPassword = Utils.getHashPassword(email, password, Config.PASSWORD_SALT);
             Email.verify(email, hashPassword, (err, user) =>
             {
                 req.ext.command = 'signup';
@@ -64,7 +69,7 @@ export async function onSignupEmail(req : express.Request, res : express.Respons
 /**
  * 検証
  */
-export function isSignupEmailValid(param : Request.SignupEmail, locale : string)
+export function isSignupEmailValid(param : Request.SignupEmail, accoundId : number, alreadyExistsAccount : Account, locale : string)
 {
     return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
     {
@@ -77,10 +82,12 @@ export function isSignupEmailValid(param : Request.SignupEmail, locale : string)
             do
             {
                 // メールアドレス検証
-                if (email === null)
+                const resultEmail = await Validator.email(email, accoundId, alreadyExistsAccount, locale);
+
+                if (resultEmail.status !== Response.Status.OK)
                 {
-                    result.status = Response.Status.FAILED;
-                    result.message = R.text(R.INVALID_EMAIL, locale);
+                    result.status =  resultEmail.status;
+                    result.message = resultEmail.message;
                     break;
                 }
 

@@ -41,20 +41,17 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
 
             // メールアドレスの重複チェック
             const session : Session = req.ext.session;
-            const alreadyExistsAccount = await AccountAgent.findByProviderId('email', changeEmail);
-            const resultEmail = Validator.email(changeEmail, session.account_id, alreadyExistsAccount, locale);
 
-            if (resultEmail.status !== Response.Status.OK)
+            if (changeEmail)
             {
-                res.ext.error(resultEmail.status, resultEmail.message);
-                break;
-            }
+                const alreadyExistsAccount = await AccountAgent.findByProviderId('email', changeEmail);
+                const resultEmail = await Validator.email(changeEmail, session.account_id, alreadyExistsAccount, locale);
 
-            const hostname = changeEmail.split('@')[1];
-            if (await Utils.existsHost(hostname) === false)
-            {
-                res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL, locale));
-                break;
+                if (resultEmail.status !== Response.Status.OK)
+                {
+                    res.ext.error(resultEmail.status, resultEmail.message);
+                    break;
+                }
             }
 
             const account = await AccountAgent.find(session.account_id);
@@ -81,7 +78,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                     const data : Response.RequestChangeEmail =
                     {
                         status:  Response.Status.OK,
-                        message: R.text(R.EMAIL_CHANGED, locale)
+                        message: R.text(R.PASSWORD_SETTING_CENCELED, locale)
                     };
                     res.json(data);
                 }

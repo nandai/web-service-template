@@ -3,6 +3,7 @@
  */
 import {Response} from 'libs/response';
 import R          from 'server/libs/r';
+import Utils      from 'server/libs/utils';
 import {Account}  from 'server/models/account';
 
 import nodeValidator = require('validator');
@@ -12,7 +13,7 @@ export default class Validator
     /**
      * アカウント名検証
      */
-    static accountName(accountName : string, locale : string)
+    static accountName(accountName : string, locale : string) : ValidationResult
     {
         let status = Response.Status.FAILED;
         let message : string;
@@ -45,7 +46,7 @@ export default class Validator
     /**
      * ユーザー名検証
      */
-    static userName(userName : string, accountId : number, alreadyExistsAccount : Account, locale : string)
+    static userName(userName : string, accountId : number, alreadyExistsAccount : Account, locale : string) : ValidationResult
     {
         let status = Response.Status.FAILED;
         let message : string;
@@ -103,27 +104,37 @@ export default class Validator
      */
     static email(email : string, accountId : number, alreadyExistsAccount : Account, locale : string)
     {
-        let status = Response.Status.FAILED;
-        let message : string;
-
-        do
+        return new Promise(async (resolve : (result : ValidationResult) => void) =>
         {
-            if (nodeValidator.isEmail(email) === false)
-            {
-                message = R.text(R.INVALID_EMAIL, locale);
-                break;
-            }
+            let status = Response.Status.FAILED;
+            let message : string;
 
-            if (alreadyExistsAccount && alreadyExistsAccount.id !== accountId)
+            do
             {
-                message = R.text(R.ALREADY_EXISTS_EMAIL, locale);
-                break;
-            }
+                if (! email || nodeValidator.isEmail(email) === false)
+                {
+                    message = R.text(R.INVALID_EMAIL, locale);
+                    break;
+                }
 
-            status = Response.Status.OK;
-        }
-        while (false);
-        return ({status, message});
+                if (alreadyExistsAccount && alreadyExistsAccount.id !== accountId)
+                {
+                    message = R.text(R.ALREADY_EXISTS_EMAIL, locale);
+                    break;
+                }
+
+                const hostname = email.split('@')[1];
+                if (await Utils.existsHost(hostname) === false)
+                {
+                    message = R.text(R.INVALID_EMAIL, locale);
+                    break;
+                }
+
+                status = Response.Status.OK;
+            }
+            while (false);
+            resolve({status, message});
+        });
     }
 
     /**
@@ -131,7 +142,7 @@ export default class Validator
      *
      * @param   password    パスワード
      */
-    static password(password : string, confirm : string, locale : string)
+    static password(password : string, confirm : string, locale : string) : ValidationResult
     {
         let status = Response.Status.FAILED;
         let message : string;
@@ -167,4 +178,10 @@ export default class Validator
         while (false);
         return ({status, message});
     }
+}
+
+interface ValidationResult
+{
+    status   : Response.Status;
+    message? : string;
 }
