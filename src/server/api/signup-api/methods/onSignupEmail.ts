@@ -9,7 +9,6 @@ import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
 import Validator    from 'server/libs/validator';
 import {Account}    from 'server/models/account';
-import {Session}    from 'server/models/session';
 import Email        from 'server/provider/email';
 
 import express = require('express');
@@ -41,9 +40,8 @@ export async function onSignupEmail(req : express.Request, res : express.Respons
         const {email, password} = param;
 
         // 検証
-        const session : Session = req.ext.session;
         const alreadyExistsAccount = await AccountAgent.findByProviderId('email', param.email);
-        const result = await isSignupEmailValid(param, session.account_id, alreadyExistsAccount, locale);
+        const result = await isSignupEmailValid(param, alreadyExistsAccount, locale);
 
         if (result.status !== Response.Status.OK)
         {
@@ -69,7 +67,7 @@ export async function onSignupEmail(req : express.Request, res : express.Respons
 /**
  * 検証
  */
-export function isSignupEmailValid(param : Request.SignupEmail, accoundId : number, alreadyExistsAccount : Account, locale : string)
+export function isSignupEmailValid(param : Request.SignupEmail, alreadyExistsAccount : Account, locale : string)
 {
     return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
     {
@@ -82,7 +80,7 @@ export function isSignupEmailValid(param : Request.SignupEmail, accoundId : numb
             do
             {
                 // メールアドレス検証
-                const resultEmail = await Validator.email(email, accoundId, alreadyExistsAccount, locale);
+                const resultEmail = await Validator.email(email, 0, alreadyExistsAccount, locale);
 
                 if (resultEmail.status !== Response.Status.OK)
                 {
