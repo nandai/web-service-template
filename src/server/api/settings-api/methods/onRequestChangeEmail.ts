@@ -7,6 +7,7 @@ import CommonUtils  from 'libs/utils';
 import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
+import Validator    from 'server/libs/validator';
 import {Session}    from 'server/models/session';
 
 import express = require('express');
@@ -39,20 +40,36 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
             const changeEmail = param.email;
 
             // メールアドレスの重複チェック
+            const session : Session = req.ext.session;
             const alreadyExistsAccount = await AccountAgent.findByProviderId('email', changeEmail);
+            const resultEmail = Validator.email(changeEmail, session.account_id, alreadyExistsAccount, locale);
 
-//          if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
-            if (alreadyExistsAccount !== null)
+            if (resultEmail.status !== Response.Status.OK)
             {
-                res.ext.error(Response.Status.FAILED, R.text(R.ALREADY_EXISTS_EMAIL, locale));
+                res.ext.error(resultEmail.status, resultEmail.message);
                 break;
             }
 
-            // パスワードがなければメールアドレスを設定し、あれば変更メールを送信する
-            const session : Session = req.ext.session;
-            const account = await AccountAgent.find(session.account_id);
+            const hostname = changeEmail.split('@')[1];
+            if (await Utils.existsHost(hostname) === false)
+            {
+                res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL, locale));
+                break;
+            }
 
-            if (changeEmail === null || changeEmail === '')
+            const account = await AccountAgent.find(session.account_id);
+            if (account.email === changeEmail)
+            {
+                const data : Response.RequestChangeEmail =
+                {
+                    status:  Response.Status.OK,
+                    message: R.text(R.EMAIL_CHANGED, locale)
+                };
+                res.json(data);
+                break;
+            }
+
+            if (changeEmail === null)
             {
                 // メールアドレスを削除する場合
                 if (AccountAgent.canUnlink(account, 'email'))

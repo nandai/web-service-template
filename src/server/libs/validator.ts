@@ -5,6 +5,8 @@ import {Response} from 'libs/response';
 import R          from 'server/libs/r';
 import {Account}  from 'server/models/account';
 
+import nodeValidator = require('validator');
+
 export default class Validator
 {
     /**
@@ -87,6 +89,34 @@ export default class Validator
             if (alreadyExistsAccount && alreadyExistsAccount.id !== accountId)
             {
                 message = R.text(R.ALREADY_USE_USER_NAME, locale);
+                break;
+            }
+
+            status = Response.Status.OK;
+        }
+        while (false);
+        return ({status, message});
+    }
+
+    /**
+     * メールアドレス検証
+     */
+    static email(email : string, accountId : number, alreadyExistsAccount : Account, locale : string)
+    {
+        let status = Response.Status.FAILED;
+        let message : string;
+
+        do
+        {
+            if (nodeValidator.isEmail(email) === false)
+            {
+                message = R.text(R.INVALID_EMAIL, locale);
+                break;
+            }
+
+            if (alreadyExistsAccount && alreadyExistsAccount.id !== accountId)
+            {
+                message = R.text(R.ALREADY_EXISTS_EMAIL, locale);
                 break;
             }
 

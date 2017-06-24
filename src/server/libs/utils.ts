@@ -6,6 +6,7 @@ import Config     from 'server/config';
 import R          from 'server/libs/r';
 
 import crypto =  require('crypto');
+import dns =     require('dns');
 import express = require('express');
 import moment =  require('moment');
 import mailer =  require('nodemailer');
@@ -380,5 +381,28 @@ export default class Utils
         }
 
         return data;
+    }
+
+    /**
+     * 存在するホスト名かどうか調べる
+     */
+    static existsHost(hostname : string)
+    {
+        return new Promise((resolve : (exists : boolean) => void) =>
+        {
+            const log = slog.stepIn(Utils.CLS_NAME, 'existsHost');
+            dns.lookup(hostname, (err : Error, address : string, family : number) =>
+            {
+                let exists = true;
+                if (err)
+                {
+                    log.w(err.message);
+                    exists = false;
+                }
+
+                log.stepOut();
+                resolve(exists);
+            });
+        });
     }
 }
