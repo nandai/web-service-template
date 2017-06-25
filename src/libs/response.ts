@@ -18,6 +18,13 @@ export namespace Response
         loginDt       : string;
     }
 
+    export interface User
+    {
+        id          : number;
+        accountName : string;
+        name        : string;
+    }
+
     export interface ChangeEmail
     {
         status  : Status;
@@ -110,6 +117,21 @@ export namespace Response
         };
     }
 
+    export interface RequestResetPassword
+    {
+        status  : Status;
+        message : {
+            email?   : string;
+            success? : string;
+        };
+    }
+
+    export interface ResetPassword
+    {
+        status  : Status;
+        message : string;
+    }
+
     export interface SetAccount
     {
         status   : Status;
@@ -123,24 +145,6 @@ export namespace Response
         };
     }
 
-    export interface UnlinkProvider
-    {
-        status   : Status;
-        message? : string;
-    }
-
-    export interface RequestResetPassword
-    {
-        status  : Status;
-        message : string;
-    }
-
-    export interface ResetPassword
-    {
-        status  : Status;
-        message : string;
-    }
-
     export interface SignupEmail
     {
         status  : Status;
@@ -151,11 +155,10 @@ export namespace Response
         };
     }
 
-    export interface User
+    export interface UnlinkProvider
     {
-        id          : number;
-        accountName : string;
-        name        : string;
+        status   : Status;
+        message? : string;
     }
 
     export enum Status

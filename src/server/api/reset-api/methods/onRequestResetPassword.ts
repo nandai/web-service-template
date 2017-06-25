@@ -35,10 +35,12 @@ export async function onRequestResetPassword(req : express.Request, res : expres
                 break;
             }
 
+            const response : Response.RequestResetPassword = {status:Response.Status.FAILED, message:{}};
             const account = await AccountAgent.findByProviderId('email', param.email);
             if (account === null || account.signup_id)
             {
-                res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL, locale));
+                response.message.email = R.text(R.INVALID_EMAIL, locale);
+                res.json(response);
                 break;
             }
 
@@ -50,9 +52,17 @@ export async function onRequestResetPassword(req : express.Request, res : expres
             const contents = CommonUtils.formatString(template.contents, {url});
             const result = await Utils.sendMail(template.subject, account.email, contents);
 
-            const data : Response.RequestResetPassword =
-                Utils.createMessageResponse(result, R.RESET_MAIL_SENDED, R.COULD_NOT_SEND_RESET_MAIL, locale);
-            res.json(data);
+            if (result)
+            {
+                response.status = Response.Status.OK;
+                response.message.success = R.text(R.RESET_MAIL_SENDED, locale);
+            }
+            else
+            {
+                response.message.email = R.text(R.COULD_NOT_SEND_RESET_MAIL, locale);
+            }
+
+            res.json(response);
         }
         while (false);
         log.stepOut();

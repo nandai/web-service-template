@@ -187,7 +187,6 @@ export function isSetAccountValid(param : Request.SetAccount, myAccountId : numb
                     {
                         response.status = Response.Status.FAILED;
                         response.message.phoneNo = R.text(R.REQUIRE_COUNTRY_CODE_AND_PHONE_NO, locale);
-                        break;
                     }
                 }
 
@@ -195,7 +194,6 @@ export function isSetAccountValid(param : Request.SetAccount, myAccountId : numb
                 {
                     response.status = Response.Status.BAD_REQUEST;
                     response.message = R.text(R.BAD_REQUEST, locale);
-                    break;
                 }
             }
             while (false);

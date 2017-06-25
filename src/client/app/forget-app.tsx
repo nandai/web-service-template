@@ -12,6 +12,7 @@ import Utils      from '../libs/utils';
 import {App}      from './app';
 
 const slog = window['slog'];
+const ssrStore = Utils.getSsrStore<Store>();
 
 /**
  * forget app
@@ -29,10 +30,11 @@ export default class ForgetApp extends App
         super();
         this.store =
         {
-            locale:        Utils.getLocale(),
-            onEmailChange: this.onEmailChange,
-            onSend:        this.onSend,
-            onBack:        this.onBack,
+            locale:                     Utils.getLocale(),
+            requestResetPasswordResult: ssrStore.requestResetPasswordResult,
+            onEmailChange:              this.onEmailChange,
+            onSend:                     this.onSend,
+            onBack:                     this.onBack,
         };
     }
 
@@ -43,6 +45,7 @@ export default class ForgetApp extends App
     {
         const {store} = this;
         store.email =   '';
+        store.requestResetPasswordResult = {status:Response.Status.OK, message:{}};
         store.message = '';
         return super.init(params);
     }
@@ -77,7 +80,7 @@ export default class ForgetApp extends App
         try
         {
             const res : Response.RequestResetPassword = await ResetApi.requestResetPassword({email:this.store.email});
-            store.message = res.message;
+            store.requestResetPasswordResult = res;
             this.render();
             log.stepOut();
         }

@@ -8,6 +8,7 @@ import Root          from 'client/components/root';
 import ForgetView    from 'client/components/views/forget-view';
 import {Store}       from 'client/components/views/forget-view/store';
 import ClientR       from 'client/libs/r';
+import {Response}    from 'libs/response';
 import {view}        from './view';
 
 import express = require('express');
@@ -35,13 +36,14 @@ export default class ForgetApp
         {
             locale,
             email:    '',
+            requestResetPasswordResult: {status:Response.Status.OK, message:{}},
             message:  ''
         };
 
         const title = ClientR.text(ClientR.GO_FORGET, locale);
         const el = <ForgetView store={store}/>;
         const contents = ReactDOM.renderToString(<Root view={el} />);
-        res.send(view(title, 'wst.js', contents));
+        res.send(view(title, 'wst.js', contents, store));
         log.stepOut();
     }
 }
