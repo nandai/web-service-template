@@ -5,10 +5,11 @@ import {Response} from 'libs/response';
 
 export interface Store
 {
-    locale         : string;
-    account        : Response.Account;
-    message?       : string;
-    onEmailChange? : (value : string) => void;
-    onChange?      : () => void;
-    onBack?        : () => void;
+    locale                     : string;
+    account                    : Response.Account;
+    requestChangeEmailResponse : Response.RequestChangeEmail;
+    message?                   : string;
+    onEmailChange?             : (value : string) => void;
+    onChange?                  : () => void;
+    onBack?                    : () => void;
 }

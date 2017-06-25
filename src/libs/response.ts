@@ -104,7 +104,10 @@ export namespace Response
     export interface RequestChangeEmail
     {
         status  : Status;
-        message : string;
+        message : {
+            email?   : string;
+            success? : string;
+        };
     }
 
     export interface SetAccount

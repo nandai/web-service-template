@@ -30,11 +30,12 @@ export default class SettingsAccountEmailApp extends App
         super();
         this.store =
         {
-            locale:          Utils.getLocale(),
-            account:         ssrStore.account,
-            onEmailChange:   this.onEmailChange,
-            onChange:        this.onChange,
-            onBack:          this.onBack,
+            locale:                     Utils.getLocale(),
+            account:                    ssrStore.account,
+            requestChangeEmailResponse: ssrStore.requestChangeEmailResponse,
+            onEmailChange:              this.onEmailChange,
+            onChange:                   this.onChange,
+            onBack:                     this.onBack,
         };
     }
 
@@ -44,6 +45,7 @@ export default class SettingsAccountEmailApp extends App
     init(params, message? : string)
     {
         const {store} = this;
+        store.requestChangeEmailResponse = {status:Response.Status.OK, message:{}};
         store.message = '';
         return super.init(params);
     }
@@ -81,7 +83,7 @@ export default class SettingsAccountEmailApp extends App
             const {email} = account;
 
             const res : Response.RequestChangeEmail = await SettingsApi.requestChangeEmail({email});
-            store.message = res.message;
+            store.requestChangeEmailResponse = res;
             this.render();
             log.stepOut();
         }

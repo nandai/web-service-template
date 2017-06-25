@@ -39,7 +39,7 @@ export async function onInvite(req : express.Request, res : express.Response)
 
             // 検証
             const account = await AccountAgent.findByProviderId('email', param.email);
-            const result = await isInviteValid(param, account, locale);
+            const result =  await isInviteValid(param, account, locale);
 
             if (result.response.status !== Response.Status.OK)
             {

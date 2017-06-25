@@ -8,6 +8,7 @@ import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
 import Utils        from 'server/libs/utils';
 import Validator    from 'server/libs/validator';
+import {Account}    from 'server/models/account';
 import {Session}    from 'server/models/session';
 
 import express = require('express');
@@ -39,70 +40,72 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
 
             const changeEmail = param.email;
 
-            // メールアドレスの重複チェック
+            // 検証
             const session : Session = req.ext.session;
-
-            if (changeEmail)
-            {
-                const alreadyExistsAccount = await AccountAgent.findByProviderId('email', changeEmail);
-                const resultEmail = await Validator.email(changeEmail, session.account_id, alreadyExistsAccount, locale);
-
-                if (resultEmail.status !== Response.Status.OK)
-                {
-                    res.ext.error(resultEmail.status, resultEmail.message);
-                    break;
-                }
-            }
-
             const account = await AccountAgent.find(session.account_id);
-            if (account.email === changeEmail)
+            const result =  await isRequestChangeEmailValid(param, account, locale);
+
+            if (result.response.status !== Response.Status.OK)
             {
-                const data : Response.RequestChangeEmail =
-                {
-                    status:  Response.Status.OK,
-                    message: R.text(R.EMAIL_CHANGED, locale)
-                };
-                res.json(data);
+                res.json(result.response);
                 break;
             }
 
-            if (changeEmail === null)
+            //
+            let response : Response.RequestChangeEmail;
+
+            if (account.email === changeEmail)
+            {
+                response =
+                {
+                    status:  Response.Status.OK,
+                    message: {success:R.text(R.EMAIL_CHANGED, locale)}
+                };
+                res.json(response);
+            }
+
+            else if (changeEmail === null)
             {
                 // メールアドレスを削除する場合
-                if (AccountAgent.canUnlink(account, 'email'))
-                {
-                    account.email = null;
-                    account.password = null;
-                    await AccountAgent.update(account);
+                account.email = null;
+                account.password = null;
+                await AccountAgent.update(account);
 
-                    const data : Response.RequestChangeEmail =
-                    {
-                        status:  Response.Status.OK,
-                        message: R.text(R.PASSWORD_SETTING_CENCELED, locale)
-                    };
-                    res.json(data);
-                }
-                else
+                response =
                 {
-                    res.ext.error(Response.Status.FAILED, R.text(R.CANNOT_EMPTY_EMAIL, locale));
-                }
+                    status:  Response.Status.OK,
+                    message: {success:R.text(R.PASSWORD_SETTING_CENCELED, locale)}
+                };
+                res.json(response);
             }
 
             else if (account.password === null)
             {
                 // パスワードが設定されていない場合
                 const template = R.mail(R.NOTICE_SET_MAIL_ADDRESS, locale);
-                const result = await Utils.sendMail(template.subject, changeEmail, template.contents);
+                const resultSendMail = await Utils.sendMail(template.subject, changeEmail, template.contents);
 
-                if (result)
+                if (resultSendMail)
                 {
                     account.email = changeEmail;
                     await AccountAgent.update(account);
+
+                    response =
+                    {
+                        status:  Response.Status.OK,
+                        message: {success:R.text(R.EMAIL_CHANGED, locale)}
+                    };
+                }
+                else
+                {
+                    response =
+                    {
+                        status:  Response.Status.FAILED,
+                        message: {email:R.text(R.COULD_NOT_CHANGE_EMAIL, locale)}
+                    };
                 }
 
-                const data : Response.RequestChangeEmail =
-                    Utils.createMessageResponse(result, R.EMAIL_CHANGED, R.COULD_NOT_CHANGE_EMAIL, locale);
-                res.json(data);
+                res.json(response);
             }
 
             else
@@ -112,22 +115,87 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                 const url = Utils.generateUrl('settings/account/email/change', changeId);
                 const template = R.mail(R.NOTICE_CHANGE_MAIL_ADDRESS, locale);
                 const contents = CommonUtils.formatString(template.contents, {url});
-                const result = await Utils.sendMail(template.subject, changeEmail, contents);
+                const resultSendMail = await Utils.sendMail(template.subject, changeEmail, contents);
 
-                if (result)
+                if (resultSendMail)
                 {
                     account.change_id = changeId;
                     account.change_email = changeEmail;
                     await AccountAgent.update(account);
+
+                    response =
+                    {
+                        status:  Response.Status.OK,
+                        message: {success:R.text(R.CHANGE_MAIL_SENDED, locale)}
+                    };
+                }
+                else
+                {
+                    response =
+                    {
+                        status:  Response.Status.FAILED,
+                        message: {email:R.text(R.COULD_NOT_SEND_CHANGE_MAIL, locale)}
+                    };
                 }
 
-                const data : Response.RequestChangeEmail =
-                    Utils.createMessageResponse(result, R.CHANGE_MAIL_SENDED, R.COULD_NOT_SEND_CHANGE_MAIL, locale);
-                res.json(data);
+                res.json(response);
             }
         }
         while (false);
         log.stepOut();
     }
     catch (err) {Utils.internalServerError(err, res, log);}
+}
+
+/**
+ * 検証
+ */
+export function isRequestChangeEmailValid(param : Request.RequestChangeEmail, myAccount : Account, locale : string)
+{
+    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
+    {
+        const log = slog.stepIn('SettingsApi', 'isRequestChangeEmailValid');
+        try
+        {
+            const response : Response.RequestChangeEmail = {status:Response.Status.OK, message:{}};
+            const {email} = param;
+
+            do
+            {
+                if (email)
+                {
+                    const alreadyExistsAccount = await AccountAgent.findByProviderId('email', email);
+                    const resultEmail = await Validator.email(email, myAccount.id, alreadyExistsAccount, locale);
+
+                    if (resultEmail.status !== Response.Status.OK)
+                    {
+                        response.status =        resultEmail.status;
+                        response.message.email = resultEmail.message;
+                    }
+                }
+                else
+                {
+                    if (AccountAgent.canUnlink(myAccount, 'email') === false)
+                    {
+                        response.status = Response.Status.FAILED;
+                        response.message.email = R.text(R.CANNOT_EMPTY_EMAIL, locale);
+                    }
+                }
+            }
+            while (false);
+
+            if (response.status !== Response.Status.OK) {
+                log.w(JSON.stringify(response, null, 2));
+            }
+
+            log.stepOut();
+            resolve({response});
+        }
+        catch (err) {log.stepOut(); reject(err);}
+    });
+}
+
+interface ValidationResult
+{
+    response : Response.RequestChangeEmail;
 }

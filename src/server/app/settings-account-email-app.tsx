@@ -8,6 +8,7 @@ import Root                     from 'client/components/root';
 import SettingsAccountEmailView from 'client/components/views/settings-account-email-view';
 import {Store}                  from 'client/components/views/settings-account-email-view/store';
 import ClientR                  from 'client/libs/r';
+import {Response}               from 'libs/response';
 import SettingsApi              from '../api/settings-api';
 import Utils                    from '../libs/utils';
 import {view}                   from './view';
@@ -41,6 +42,7 @@ export default class SettingsAccountEmailApp
             {
                 locale,
                 account: data.account,
+                requestChangeEmailResponse: {status:Response.Status.OK, message:{}},
                 message: ''
             };
 
