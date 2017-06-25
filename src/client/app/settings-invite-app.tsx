@@ -30,12 +30,13 @@ export default class SettingsInviteApp extends App
         super();
         this.store =
         {
-            locale:          Utils.getLocale(),
-            account:         ssrStore.account,
-            email:           ssrStore.email,
-            onEmailChange:   this.onEmailChange,
-            onInvite:        this.onInvite,
-            onBack:          this.onBack,
+            locale:         Utils.getLocale(),
+            account:        ssrStore.account,
+            email:          ssrStore.email,
+            inviteResponse: ssrStore.inviteResponse,
+            onEmailChange:  this.onEmailChange,
+            onInvite:       this.onInvite,
+            onBack:         this.onBack,
         };
     }
 
@@ -47,6 +48,7 @@ export default class SettingsInviteApp extends App
         const {store} = this;
         store.email =   '';
         store.message = '';
+        store.inviteResponse = {status:Response.Status.OK, message:{}};
         return super.init(params);
     }
 
@@ -82,7 +84,8 @@ export default class SettingsInviteApp extends App
             const {email} = store;
 
             const res : Response.Invite = await SettingsApi.invite({email});
-            store.message = res.message;
+            store.inviteResponse = res;
+
             this.render();
             log.stepOut();
         }

@@ -8,6 +8,7 @@ import Root               from 'client/components/root';
 import SettingsInviteView from 'client/components/views/settings-invite-view';
 import {Store}            from 'client/components/views/settings-invite-view/store';
 import ClientR            from 'client/libs/r';
+import {Response}         from 'libs/response';
 import SettingsApi        from '../api/settings-api';
 import Utils              from '../libs/utils';
 import {view}             from './view';
@@ -42,7 +43,7 @@ export default class SettingsInviteApp
                 locale,
                 account: data.account,
                 email:   '',
-                message: ''
+                inviteResponse: {status:Response.Status.OK, message:{}}
             };
 
             const title = ClientR.text(ClientR.SETTINGS_INVITE, locale);

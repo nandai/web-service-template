@@ -37,44 +37,19 @@ export async function onInvite(req : express.Request, res : express.Response)
                 break;
             }
 
-            const {email} = param;
-
             // 検証
-            let account = await AccountAgent.findByProviderId('email', email);
+            const account = await AccountAgent.findByProviderId('email', param.email);
             const result = await isInviteValid(param, account, locale);
 
-            if (result.status !== Response.Status.OK)
+            if (result.response.status !== Response.Status.OK)
             {
-                res.ext.error(result.status, result.message);
+                res.json(result.response);
                 break;
             }
 
-            let status = Response.Status.FAILED;
-            let resource : string;
-
-            const invite_id = Utils.createRandomText(32);
-            const url = Utils.generateUrl('join', invite_id);
-            const template = R.mail(R.NOTICE_INVITE, locale);
-            const contents = CommonUtils.formatString(template.contents, {url});
-            const sendEmailResult = await Utils.sendMail(template.subject, email, contents);
-
-            if (sendEmailResult)
-            {
-                status = Response.Status.OK;
-                resource = R.INVITE_MAIL_SENDED;
-
-                const name = email.substr(0, email.indexOf('@'));
-                account = {name, email, invite_id};
-                account = await AccountAgent.add(account);
-            }
-            else
-            {
-                resource = R.COULD_NOT_SEND_INVITE_MAIL;
-            }
-
-            const message = R.text(resource, locale);
-            const data : Response.Invite = {status, message};
-            res.json(data);
+            // 実行
+            const response = await execInvite(param, locale);
+            res.json(response);
         }
         while (false);
         log.stepOut();
@@ -89,10 +64,10 @@ export function isInviteValid(param : Request.Invite, alreadyExistsAccount : Acc
 {
     return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
     {
-        const log = slog.stepIn('SignupApi', 'isSignupEmailValid');
+        const log = slog.stepIn('SettingsApi', 'isInviteValid');
         try
         {
-            const result : ValidationResult = {status:Response.Status.OK};
+            const response : Response.Invite = {status:Response.Status.FAILED, message:{}};
             const {email} = param;
 
             do
@@ -102,19 +77,61 @@ export function isInviteValid(param : Request.Invite, alreadyExistsAccount : Acc
 
                 if (resultEmail.status !== Response.Status.OK)
                 {
-                    result.status =  resultEmail.status;
-                    result.message = resultEmail.message;
+                    response.status =        resultEmail.status;
+                    response.message.email = resultEmail.message;
                     break;
                 }
+
+                response.status = Response.Status.OK;
             }
             while (false);
 
-            if (result.status !== Response.Status.OK) {
-                log.w(JSON.stringify(result, null, 2));
+            if (response.status !== Response.Status.OK) {
+                log.w(JSON.stringify(response, null, 2));
             }
 
             log.stepOut();
-            resolve(result);
+            resolve({response});
+        }
+        catch (err) {log.stepOut(); reject(err);}
+    });
+}
+
+/**
+ * 実行
+ */
+function execInvite(param : Request.Invite, locale : string)
+{
+    return new Promise(async (resolve : (response : Response.Invite) => void, reject) =>
+    {
+        const log = slog.stepIn('SettingsApi', 'execInvite');
+        try
+        {
+            const response : Response.Invite = {status:Response.Status.FAILED, message:{}};
+            const {email} = param;
+
+            const invite_id = Utils.createRandomText(32);
+            const url = Utils.generateUrl('join', invite_id);
+            const template = R.mail(R.NOTICE_INVITE, locale);
+            const contents = CommonUtils.formatString(template.contents, {url});
+            const result = await Utils.sendMail(template.subject, email, contents);
+
+            if (result)
+            {
+                response.status = Response.Status.OK;
+                response.message.success = R.text(R.INVITE_MAIL_SENDED, locale);
+
+                const name = email.substr(0, email.indexOf('@'));
+                const account : Account = {name, email, invite_id};
+                await AccountAgent.add(account);
+            }
+            else
+            {
+                response.message.email = R.text(R.COULD_NOT_SEND_INVITE_MAIL, locale);
+            }
+
+            log.stepOut();
+            resolve(response);
         }
         catch (err) {log.stepOut(); reject(err);}
     });
@@ -122,6 +139,5 @@ export function isInviteValid(param : Request.Invite, alreadyExistsAccount : Acc
 
 interface ValidationResult
 {
-    status   : Response.Status;
-    message? : string;
+    response : Response.Invite;
 }

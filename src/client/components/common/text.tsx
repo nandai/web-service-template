@@ -3,13 +3,25 @@
  */
 import * as React from 'react';
 
-export default class Text extends React.Component<{}, {}>
+interface TextProps
+{
+    className? : string;
+}
+
+export default class Text extends React.Component<TextProps, {}>
 {
     render() : JSX.Element
     {
+        const {props} = this;
+
+        let className = 'wst-text';
+        if (props.className) {
+            className += ` ${props.className}`;
+        }
+
         return (
-            <span className="wst-text">
-                {this.props.children}
+            <span className={className}>
+                {props.children}
             </span>
         );
     }

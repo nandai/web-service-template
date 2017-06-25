@@ -70,7 +70,10 @@ export namespace Response
     export interface Invite
     {
         status  : Status;
-        message : string;
+        message : {
+            email?   : string;
+            success? : string;
+        };
     }
 
     export interface Join
