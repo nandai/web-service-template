@@ -47,8 +47,8 @@ export default class SettingsInviteApp extends App
     {
         const {store} = this;
         store.email =   '';
-        store.message = '';
         store.inviteResponse = {status:Response.Status.OK, message:{}};
+        store.message = '';
         return super.init(params);
     }
 

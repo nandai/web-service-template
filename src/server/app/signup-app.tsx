@@ -8,6 +8,7 @@ import Root             from 'client/components/root';
 import SignupView       from 'client/components/views/signup-view';
 import {Store}          from 'client/components/views/signup-view/store';
 import ClientR          from 'client/libs/r';
+import {Response}        from 'libs/response';
 import SessionAgent     from 'server/agents/session-agent';
 import SignupConfirmApp from 'server/app/signup-confirm-app';
 import R                from 'server/libs/r';
@@ -59,13 +60,14 @@ export default class SignupApp
                 locale,
                 email:    '',
                 password: '',
+                signupEmailResponse: {status:Response.Status.OK, message:{}},
                 message
             };
 
             const title = ClientR.text(ClientR.SIGNUP, locale);
             const el = <SignupView store={store} />;
             const contents = ReactDOM.renderToString(<Root view={el} />);
-            res.send(view(title, 'wst.js', contents, {message}));
+            res.send(view(title, 'wst.js', contents, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

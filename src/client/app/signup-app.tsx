@@ -32,18 +32,19 @@ export default class SignupApp extends App
         super();
         this.store =
         {
-            locale:           Utils.getLocale(),
-            email:            '',
-            password:         '',
-            message:          ssrStore.message,
-            onTwitter:        this.onTwitter,
-            onFacebook:       this.onFacebook,
-            onGoogle:         this.onGoogle,
-            onGithub:         this.onGithub,
-            onEmailChange:    this.onEmailChange,
-            onPasswordChange: this.onPasswordChange,
-            onSignup:         this.onSignup,
-            onTop:            this.onTop,
+            locale:              Utils.getLocale(),
+            email:               '',
+            password:            '',
+            signupEmailResponse: ssrStore.signupEmailResponse,
+            message:             ssrStore.message,
+            onTwitter:           this.onTwitter,
+            onFacebook:          this.onFacebook,
+            onGoogle:            this.onGoogle,
+            onGithub:            this.onGithub,
+            onEmailChange:       this.onEmailChange,
+            onPasswordChange:    this.onPasswordChange,
+            onSignup:            this.onSignup,
+            onTop:               this.onTop,
         };
     }
 
@@ -55,6 +56,7 @@ export default class SignupApp extends App
         const {store} = this;
         store.email =    '',
         store.password = '',
+        store.signupEmailResponse = {status:Response.Status.OK, message:{}};
         store.message =  '';
         return super.init(params);
     }
@@ -178,7 +180,7 @@ export default class SignupApp extends App
             try
             {
                 const res : Response.SignupEmail = await SignupApi.signupEmail(param);
-                store.message = res.message;
+                store.signupEmailResponse = res;
                 this.render();
                 log.stepOut();
                 resolve();

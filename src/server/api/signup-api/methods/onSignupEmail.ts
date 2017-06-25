@@ -43,9 +43,9 @@ export async function onSignupEmail(req : express.Request, res : express.Respons
         const alreadyExistsAccount = await AccountAgent.findByProviderId('email', param.email);
         const result = await isSignupEmailValid(param, alreadyExistsAccount, locale);
 
-        if (result.status !== Response.Status.OK)
+        if (result.response.status !== Response.Status.OK)
         {
-            res.ext.error(result.status, result.message);
+            res.json(result.response);
             break;
         }
 
@@ -74,7 +74,7 @@ export function isSignupEmailValid(param : Request.SignupEmail, alreadyExistsAcc
         const log = slog.stepIn('SignupApi', 'isSignupEmailValid');
         try
         {
-            const result : ValidationResult = {status:Response.Status.OK};
+            const response : Response.SignupEmail = {status:Response.Status.OK, message:{}};
             const {email, password} = param;
 
             do
@@ -84,9 +84,8 @@ export function isSignupEmailValid(param : Request.SignupEmail, alreadyExistsAcc
 
                 if (resultEmail.status !== Response.Status.OK)
                 {
-                    result.status =  resultEmail.status;
-                    result.message = resultEmail.message;
-                    break;
+                    response.status =        resultEmail.status;
+                    response.message.email = resultEmail.message;
                 }
 
                 // パスワード検証
@@ -94,19 +93,18 @@ export function isSignupEmailValid(param : Request.SignupEmail, alreadyExistsAcc
 
                 if (passwordResult.status !== Response.Status.OK)
                 {
-                    result.status =  passwordResult.status;
-                    result.message = passwordResult.message;
-                    break;
+                    response.status =           passwordResult.status;
+                    response.message.password = passwordResult.message;
                 }
             }
             while (false);
 
-            if (result.status !== Response.Status.OK) {
-                log.w(JSON.stringify(result, null, 2));
+            if (response.status !== Response.Status.OK) {
+                log.w(JSON.stringify(response, null, 2));
             }
 
             log.stepOut();
-            resolve(result);
+            resolve({response});
         }
         catch (err) {log.stepOut(); reject(err);}
     });
@@ -114,6 +112,5 @@ export function isSignupEmailValid(param : Request.SignupEmail, alreadyExistsAcc
 
 interface ValidationResult
 {
-    status   : Response.Status;
-    message? : string;
+    response : Response.SignupEmail;
 }

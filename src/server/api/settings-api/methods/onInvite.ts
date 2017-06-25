@@ -67,7 +67,7 @@ export function isInviteValid(param : Request.Invite, alreadyExistsAccount : Acc
         const log = slog.stepIn('SettingsApi', 'isInviteValid');
         try
         {
-            const response : Response.Invite = {status:Response.Status.FAILED, message:{}};
+            const response : Response.Invite = {status:Response.Status.OK, message:{}};
             const {email} = param;
 
             do
@@ -79,10 +79,7 @@ export function isInviteValid(param : Request.Invite, alreadyExistsAccount : Acc
                 {
                     response.status =        resultEmail.status;
                     response.message.email = resultEmail.message;
-                    break;
                 }
-
-                response.status = Response.Status.OK;
             }
             while (false);
 

@@ -135,7 +135,11 @@ export namespace Response
     export interface SignupEmail
     {
         status  : Status;
-        message : string;
+        message : {
+            email?    : string;
+            password? : string;
+            success?  : string;
+        };
     }
 
     export interface User
