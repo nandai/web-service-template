@@ -31,9 +31,10 @@ export default class SettingsAccountApp extends App
         super();
         this.store =
         {
-            locale:   Utils.getLocale(),
-            account:  ssrStore.account,
-            message:  '',
+            locale:              Utils.getLocale(),
+            account:             ssrStore.account,
+            setAccountResponse:  ssrStore.setAccountResponse,
+            message:             '',
             onNameChange:        this.onNameChange,
             onUserNameChange:    this.onUserNameChange,
             onPhoneNoChange:     this.onPhoneNoChange,
@@ -50,6 +51,7 @@ export default class SettingsAccountApp extends App
     init(params, message? : string)
     {
         const {store} = this;
+        store.setAccountResponse = {status:Response.Status.OK, message:{}};
         store.message = '';
         return super.init(params);
     }
@@ -133,7 +135,7 @@ export default class SettingsAccountApp extends App
             const {name, userName, countryCode, phoneNo, twoFactorAuth} = account;
 
             const res : Response.SetAccount = await SettingsApi.setAccount({name, userName, countryCode, phoneNo, twoFactorAuth});
-            store.message = res.message;
+            store.setAccountResponse = res;
 
             if (res.status === Response.Status.OK) {
                 store.account = res.account;
@@ -159,7 +161,7 @@ export default class SettingsAccountApp extends App
         const {store} = this;
         const userName = store.account.userName;
         const res : Response.CheckUserName = await SettingsApi.checkUserName({userName});
-        store.message = res.message;
+        store.setAccountResponse.message.userName = res.message;
         this.render();
         this.checkUserNameTimerId = 0;
     }

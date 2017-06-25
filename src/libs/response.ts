@@ -112,9 +112,15 @@ export namespace Response
 
     export interface SetAccount
     {
-        status  : Status;
-        account : Account;
-        message : string;
+        status   : Status;
+        account? : Account;
+        message  : {
+            name?        : string;
+            userName?    : string;
+            countryCode? : string;
+            phoneNo?     : string;
+            success?     : string;
+        };
     }
 
     export interface UnlinkProvider

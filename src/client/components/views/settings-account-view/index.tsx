@@ -40,14 +40,14 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
                 <Header />
                 <ViewContents>
                     <form>
-                        <Input type="text" placeholder={R.text(R.ACCOUNT_NAME, locale)} value={account.name}        onChange={store.onNameChange} />
-                        <Input type="text" placeholder={R.text(R.USER_NAME,    locale)} value={account.userName}    onChange={store.onUserNameChange} />
-                        <Input type="text" placeholder={R.text(R.PHONE_NO,     locale)} value={account.phoneNo}     onChange={store.onPhoneNoChange} />
-                        <Input type="text" placeholder={R.text(R.COUNTRY_CODE, locale)} value={account.countryCode} onChange={store.onCountryCodeChange} />
+                        <Input type="text" placeholder={R.text(R.ACCOUNT_NAME, locale)} value={account.name}        message={store.setAccountResponse.message.name}        onChange={store.onNameChange} />
+                        <Input type="text" placeholder={R.text(R.USER_NAME,    locale)} value={account.userName}    message={store.setAccountResponse.message.userName}    onChange={store.onUserNameChange} />
+                        <Input type="text" placeholder={R.text(R.PHONE_NO,     locale)} value={account.phoneNo}     message={store.setAccountResponse.message.phoneNo}     onChange={store.onPhoneNoChange} />
+                        <Input type="text" placeholder={R.text(R.COUNTRY_CODE, locale)} value={account.countryCode} message={store.setAccountResponse.message.countryCode} onChange={store.onCountryCodeChange} />
                         <RadioButtons name="two-factor-auth" items={items} value={account.twoFactorAuth} onClick={store.onTwoFactorAuth} />
                         <Button submit={true} onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
                         <Button               onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
-                        <Text>{store.message}</Text>
+                        <Text>{store.message || store.setAccountResponse.message.success}</Text>
                     </form>
                 </ViewContents>
             </ViewContainer>

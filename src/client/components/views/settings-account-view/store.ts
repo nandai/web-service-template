@@ -7,6 +7,7 @@ export interface Store
 {
     locale               : string;
     account              : Response.Account;
+    setAccountResponse   : Response.SetAccount;
     message              : string;
     onNameChange?        : (value : string) => void;
     onUserNameChange?    : (value : string) => void;

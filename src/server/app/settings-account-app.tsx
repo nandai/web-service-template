@@ -8,6 +8,7 @@ import Root                from 'client/components/root';
 import SettingsAccountView from 'client/components/views/settings-account-view';
 import {Store}             from 'client/components/views/settings-account-view/store';
 import ClientR             from 'client/libs/r';
+import {Response}          from 'libs/response';
 import SettingsApi         from '../api/settings-api';
 import Utils               from '../libs/utils';
 import {view}              from './view';
@@ -41,6 +42,7 @@ export default class SettingsAccountApp
             {
                 locale,
                 account:  data.account,
+                setAccountResponse: {status:Response.Status.OK, message:{}},
                 message:  ''
             };
 

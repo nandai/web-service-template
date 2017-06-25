@@ -55,9 +55,9 @@ export async function onSetAccount(req : express.Request, res : express.Response
             const session : Session = req.ext.session;
             const result = await isSetAccountValid(param, session.account_id, locale);
 
-            if (result.status !== Response.Status.OK)
+            if (result.response.status !== Response.Status.OK)
             {
-                res.ext.error(result.status, result.message);
+                res.json(result.response);
                 break;
             }
 
@@ -145,7 +145,7 @@ export function isSetAccountValid(param : Request.SetAccount, myAccountId : numb
         const log = slog.stepIn('SettingsApi', 'isSetAccountValid');
         try
         {
-            const result : ValidationResult = {status:Response.Status.OK};
+            const response : Response.SetAccount = {status:Response.Status.OK, message:{}};
             const {name, userName, countryCode, phoneNo, twoFactorAuth} = param;
 
             do
@@ -154,9 +154,8 @@ export function isSetAccountValid(param : Request.SetAccount, myAccountId : numb
                 const accountNameResult = Validator.accountName(name, locale);
                 if (accountNameResult.status !== Response.Status.OK)
                 {
-                    result.status =  accountNameResult.status;
-                    result.message = accountNameResult.message;
-                    break;
+                    response.status =       accountNameResult.status;
+                    response.message.name = accountNameResult.message;
                 }
 
                 // ユーザー名チェック
@@ -165,9 +164,8 @@ export function isSetAccountValid(param : Request.SetAccount, myAccountId : numb
 
                 if (userNameResult.status !== Response.Status.OK)
                 {
-                    result.status =  userNameResult.status;
-                    result.message = userNameResult.message;
-                    break;
+                    response.status =           userNameResult.status;
+                    response.message.userName = userNameResult.message;
                 }
 
                 // 国コードチェック
@@ -176,9 +174,8 @@ export function isSetAccountValid(param : Request.SetAccount, myAccountId : numb
                     const countries : any[] = lookup.countries({countryCallingCodes:countryCode});
                     if (countries.length === 0)
                     {
-                        result.status = Response.Status.FAILED;
-                        result.message = R.text(R.INVALID_COUNTRY_CODE, locale);
-                        break;
+                        response.status = Response.Status.FAILED;
+                        response.message.countryCode = R.text(R.INVALID_COUNTRY_CODE, locale);
                     }
                 }
 
@@ -188,27 +185,27 @@ export function isSetAccountValid(param : Request.SetAccount, myAccountId : numb
                 {
                     if (countryCode === null || phoneNo === null)
                     {
-                        result.status = Response.Status.FAILED;
-                        result.message = R.text(R.REQUIRE_COUNTRY_CODE_AND_PHONE_NO, locale);
+                        response.status = Response.Status.FAILED;
+                        response.message.phoneNo = R.text(R.REQUIRE_COUNTRY_CODE_AND_PHONE_NO, locale);
                         break;
                     }
                 }
 
                 else if (twoFactorAuth !== null)
                 {
-                    result.status = Response.Status.BAD_REQUEST;
-                    result.message = R.text(R.BAD_REQUEST, locale);
+                    response.status = Response.Status.BAD_REQUEST;
+                    response.message = R.text(R.BAD_REQUEST, locale);
                     break;
                 }
             }
             while (false);
 
-            if (result.status !== Response.Status.OK) {
-                log.w(JSON.stringify(result, null, 2));
+            if (response.status !== Response.Status.OK) {
+                log.w(JSON.stringify(response, null, 2));
             }
 
             log.stepOut();
-            resolve(result);
+            resolve({response});
         }
         catch (err) {log.stepOut(); reject(err);}
     });
@@ -298,6 +295,5 @@ function shouldAuthyUserRegister(
 
 interface ValidationResult
 {
-    status   : Response.Status;
-    message? : string;
+    response : Response.SetAccount;
 }
