@@ -28,7 +28,10 @@ export namespace Response
     export interface ChangeEmail
     {
         status  : Status;
-        message : string;
+        message : {
+            password? : string;
+            success?  : string;
+        };
     }
 
     export interface ChangePassword

@@ -32,9 +32,9 @@ export default class SettingsAccountChangeView extends React.Component<SettingsA
                 <Header />
                 <ViewContents>
                     <form>
-                        <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} onChange={store.onPasswordChange} />
+                        <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} message={store.changeEmailResponse.message.password} onChange={store.onPasswordChange} />
                         <Button submit={true} onClick={store.onChange}>{R.text(R.SEND, locale)}</Button>
-                        <Text>{store.message}</Text>
+                        <Text>{store.message || store.changeEmailResponse.message.success}</Text>
                     </form>
                 </ViewContents>
             </ViewContainer>

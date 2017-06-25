@@ -13,6 +13,7 @@ import Utils                          from '../libs/utils';
 import {App}                          from './app';
 
 const slog = window['slog'];
+const ssrStore = Utils.getSsrStore<Store>();
 
 /**
  * settings account email change app
@@ -32,6 +33,7 @@ export default class SettingsAccountEmailChangeApp extends App
         {
             locale:   Utils.getLocale(),
             password: '',
+            changeEmailResponse: ssrStore.changeEmailResponse,
             message:  '',
             onPasswordChange: this.onPasswordChange,
             onChange:         this.onChange,
@@ -72,7 +74,7 @@ export default class SettingsAccountEmailChangeApp extends App
             const {password} = store;
 
             const res : Response.ChangeEmail = await SettingsApi.changeEmail({changeId, password});
-            store.message = res.message;
+            store.changeEmailResponse = res;
             this.render();
             log.stepOut();
         }

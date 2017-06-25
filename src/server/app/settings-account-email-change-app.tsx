@@ -8,6 +8,7 @@ import Root                           from 'client/components/root';
 import SettingsAccountEmailChangeView from 'client/components/views/settings-account-email-change-view';
 import {Store}                        from 'client/components/views/settings-account-email-change-view/store';
 import ClientR                        from 'client/libs/r';
+import {Response}                     from 'libs/response';
 import AccountAgent                   from 'server/agents/account-agent';
 import Utils                          from 'server/libs/utils';
 import {Account}                      from 'server/models/account';
@@ -64,13 +65,14 @@ export default class SettingsAccountEmailChangeApp
                 {
                     locale,
                     password: '',
+                    changeEmailResponse: {status:Response.Status.OK, message:{}},
                     message:  ''
                 };
 
                 const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL_CHANGE, locale);
                 const el = <SettingsAccountEmailChangeView store={store} />;
                 const contents = ReactDOM.renderToString(<Root view={el} />);
-                res.send(view(title, 'wst.js', contents));
+                res.send(view(title, 'wst.js', contents, store));
             }
             while (false);
             log.stepOut();
