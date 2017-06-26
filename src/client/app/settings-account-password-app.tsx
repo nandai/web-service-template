@@ -30,13 +30,17 @@ export default class SettingsAccountPasswordApp extends App
         super();
         this.store =
         {
-            locale:              Utils.getLocale(),
-            account:             ssrStore.account,
-            onOldPasswordChange: this.onOldPasswordChange,
-            onNewPasswordChange: this.onNewPasswordChange,
-            onConfirmChange:     this.onConfirmChange,
-            onChange:            this.onChange,
-            onBack:              this.onBack,
+            locale:                 Utils.getLocale(),
+            account:                ssrStore.account,
+            oldPassword:            '',
+            newPassword:            '',
+            confirm:                '',
+            changePasswordResponse: ssrStore.changePasswordResponse,
+            onOldPasswordChange:    this.onOldPasswordChange,
+            onNewPasswordChange:    this.onNewPasswordChange,
+            onConfirmChange:        this.onConfirmChange,
+            onChange:               this.onChange,
+            onBack:                 this.onBack,
         };
     }
 
@@ -49,6 +53,7 @@ export default class SettingsAccountPasswordApp extends App
         store.oldPassword = '',
         store.newPassword = '',
         store.confirm =     '',
+        store.changePasswordResponse = {status:Response.Status.OK, message:{}};
         store.message =     '';
         return super.init(params);
     }
@@ -105,7 +110,7 @@ export default class SettingsAccountPasswordApp extends App
             const {oldPassword, newPassword, confirm} = store;
 
             const res : Response.ChangePassword = await SettingsApi.changePassword({oldPassword, newPassword, confirm});
-            store.message = res.message;
+            store.changePasswordResponse = res;
             this.render();
             log.stepOut();
         }

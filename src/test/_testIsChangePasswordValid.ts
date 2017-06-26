@@ -32,7 +32,7 @@ export function testIsChangePasswordValid()
             confirm:     null
         };
         const result = await isChangePasswordValid(param, account.id, locale);
-        const {status} = result;
+        const {status} = result.response;
 
         t.is(status, Response.Status.FAILED);
         await AccountAgent.remove(account.id);
@@ -57,7 +57,7 @@ export function testIsChangePasswordValid()
             confirm:     null
         };
         const result = await isChangePasswordValid(param, account.id, locale);
-        const {status} = result;
+        const {status} = result.response;
 
         t.is(status, Response.Status.FAILED);
         await AccountAgent.remove(account.id);
@@ -83,7 +83,7 @@ export function testIsChangePasswordValid()
             confirm:     null,
         };
         const result = await isChangePasswordValid(param, account.id, locale);
-        const {status} = result;
+        const {status} = result.response;
 
         t.is(status, Response.Status.OK);
         await AccountAgent.remove(account.id);
@@ -108,7 +108,7 @@ export function testIsChangePasswordValid()
             confirm:     '1234567890123456'
         };
         const result = await isChangePasswordValid(param, account.id, locale);
-        const {status} = result;
+        const {status} = result.response;
 
         t.is(status, Response.Status.FAILED);
         await AccountAgent.remove(account.id);
@@ -133,7 +133,7 @@ export function testIsChangePasswordValid()
             confirm:     '1234567890123456'
         };
         const result = await isChangePasswordValid(param, account.id, locale);
-        const {status} = result;
+        const {status} = result.response;
 
         t.is(status, Response.Status.OK);
         await AccountAgent.remove(account.id);

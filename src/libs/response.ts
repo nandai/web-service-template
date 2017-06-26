@@ -37,7 +37,11 @@ export namespace Response
     export interface ChangePassword
     {
         status  : Status;
-        message : string;
+        message : {
+            oldPassword? : string;
+            newPassword? : string;
+            general?     : string;
+        };
     }
 
     export interface CheckUserName

@@ -8,6 +8,7 @@ import Root                        from 'client/components/root';
 import SettingsAccountPasswordView from 'client/components/views/settings-account-password-view';
 import {Store}                     from 'client/components/views/settings-account-password-view/store';
 import ClientR                     from 'client/libs/r';
+import {Response}                  from 'libs/response';
 import SettingsApi                 from '../api/settings-api';
 import Utils                       from '../libs/utils';
 import {notFound, view}            from './view';
@@ -46,6 +47,7 @@ export default class SettingsAccountPasswordApp
                     oldPassword: '',
                     newPassword: '',
                     confirm:     '',
+                    changePasswordResponse: {status:Response.Status.OK, message:{}},
                     message:     ''
                 };
 

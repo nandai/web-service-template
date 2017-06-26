@@ -34,6 +34,8 @@ export async function onChangePassword(req : express.Request, res : express.Resp
                 confirm:     ['string', null, true] as any
             };
 
+            // log.d(JSON.stringify(param, null, 2));
+
             if (Utils.existsParameters(param, condition) === false)
             {
                 res.ext.badRequest(locale);
@@ -44,9 +46,9 @@ export async function onChangePassword(req : express.Request, res : express.Resp
             const session : Session = req.ext.session;
             const result = await isChangePasswordValid(param, session.account_id, locale);
 
-            if (result.status !== Response.Status.OK)
+            if (result.response.status !== Response.Status.OK)
             {
-                res.ext.error(result.status, result.message);
+                res.json(result.response);
                 break;
             }
 
@@ -59,7 +61,7 @@ export async function onChangePassword(req : express.Request, res : express.Resp
             const data : Response.ChangePassword =
             {
                 status:  Response.Status.OK,
-                message: R.text(R.PASSWORD_CHANGED, locale)
+                message: {general:R.text(R.PASSWORD_CHANGED, locale)}
             };
             res.json(data);
         }
@@ -79,40 +81,40 @@ export function isChangePasswordValid(param : Request.ChangePassword, myAccountI
         const log = slog.stepIn('SettingsApi', 'isChangePasswordValid');
         try
         {
-            const result : ValidationResult = {status:Response.Status.OK};
+            const response : Response.ChangePassword = {status:Response.Status.OK, message:{}};
             const {oldPassword, newPassword, confirm} = param;
+
+            let account : Account = null;
 
             do
             {
                 // パスワード検証
                 if (newPassword !== null)
                 {
-                    const passwordResult = Validator.password(newPassword, confirm, locale);
+                    const passwordResult = Validator.password(newPassword, confirm || '', locale);
 
                     if (passwordResult.status !== Response.Status.OK)
                     {
-                        result.status =  passwordResult.status;
-                        result.message = passwordResult.message;
-                        break;
+                        response.status =              passwordResult.status;
+                        response.message.newPassword = passwordResult.message;
                     }
                 }
 
                 // アカウント存在検証
-                const account = await AccountAgent.find(myAccountId);
+                account = await AccountAgent.find(myAccountId);
 
                 if (account === null)
                 {
-                    result.status = Response.Status.FAILED;
-                    result.message = R.text(R.ACCOUNT_NOT_FOUND, locale);
+                    response.status = Response.Status.FAILED;
+                    response.message.general = R.text(R.ACCOUNT_NOT_FOUND, locale);
                     break;
                 }
 
                 // メールアドレスが設定されているかどうか
                 if (account.email === null)
                 {
-                    result.status = Response.Status.FAILED;
-                    result.message = R.text(R.CANNOT_SET_PASSWORD, locale);
-                    break;
+                    response.status = Response.Status.FAILED;
+                    response.message.general = R.text(R.CANNOT_SET_PASSWORD, locale);
                 }
 
                 // パスワードを未設定にする場合は他に認証手段があるかどうか
@@ -120,9 +122,8 @@ export function isChangePasswordValid(param : Request.ChangePassword, myAccountI
                 {
                     if (AccountAgent.canUnlink(account, 'email') === false)
                     {
-                        result.status = Response.Status.FAILED;
-                        result.message = R.text(R.CANNOT_NO_SET_PASSWORD, locale);
-                        break;
+                        response.status = Response.Status.FAILED;
+                        response.message.newPassword = R.text(R.CANNOT_NO_SET_PASSWORD, locale);
                     }
                 }
 
@@ -133,22 +134,19 @@ export function isChangePasswordValid(param : Request.ChangePassword, myAccountI
 
                     if (hashPassword !== account.password)
                     {
-                        result.status = Response.Status.FAILED;
-                        result.message = R.text(R.INVALID_PASSWORD, locale);
-                        break;
+                        response.status = Response.Status.FAILED;
+                        response.message.oldPassword = R.text(R.INVALID_PASSWORD, locale);
                     }
                 }
-
-                result.account = account;
             }
             while (false);
 
-            if (result.status !== Response.Status.OK) {
-                log.w(JSON.stringify(result, null, 2));
+            if (response.status !== Response.Status.OK) {
+                log.w(JSON.stringify(response, null, 2));
             }
 
             log.stepOut();
-            resolve(result);
+            resolve({response, account});
         }
         catch (err) {log.stepOut(); reject(err);}
     });
@@ -156,7 +154,6 @@ export function isChangePasswordValid(param : Request.ChangePassword, myAccountI
 
 interface ValidationResult
 {
-    status   : Response.Status;
-    message? : string;
+    response : Response.ChangePassword;
     account? : Account;
 }
