@@ -84,12 +84,12 @@ export function isJoinValid(param : Request.Join, locale : string)
             do
             {
                 // パスワード検証
-                const passwordResult = Validator.password(password, null, locale);
+                const passwordResult = Validator.password({password}, locale);
 
                 if (passwordResult.status !== Response.Status.OK)
                 {
                     result.status =  passwordResult.status;
-                    result.message = passwordResult.message;
+                    result.message = passwordResult.password;
                     break;
                 }
 

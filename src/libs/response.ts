@@ -40,6 +40,7 @@ export namespace Response
         message : {
             oldPassword? : string;
             newPassword? : string;
+            confirm?     : string;
             general?     : string;
         };
     }

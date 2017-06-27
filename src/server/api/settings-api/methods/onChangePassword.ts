@@ -89,15 +89,13 @@ export function isChangePasswordValid(param : Request.ChangePassword, myAccountI
             do
             {
                 // パスワード検証
-                if (newPassword !== null)
-                {
-                    const passwordResult = Validator.password(newPassword, confirm || '', locale);
+                const passwordResult = Validator.password({password:newPassword, confirm, canNull:true}, locale);
 
-                    if (passwordResult.status !== Response.Status.OK)
-                    {
-                        response.status =              passwordResult.status;
-                        response.message.newPassword = passwordResult.message;
-                    }
+                if (passwordResult.status !== Response.Status.OK)
+                {
+                    response.status =              passwordResult.status;
+                    response.message.newPassword = passwordResult.password;
+                    response.message.confirm =     passwordResult.confirm;
                 }
 
                 // アカウント存在検証

@@ -89,12 +89,12 @@ export function isSignupEmailValid(param : Request.SignupEmail, alreadyExistsAcc
                 }
 
                 // パスワード検証
-                const passwordResult = Validator.password(password, null, locale);
+                const passwordResult = Validator.password({password}, locale);
 
                 if (passwordResult.status !== Response.Status.OK)
                 {
                     response.status =           passwordResult.status;
-                    response.message.password = passwordResult.message;
+                    response.message.password = passwordResult.password;
                 }
             }
             while (false);
