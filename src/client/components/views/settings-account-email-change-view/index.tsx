@@ -10,6 +10,7 @@ import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
+import {Response}    from 'libs/response';
 import {Store}       from './store';
 
 interface SettingsAccountEmailChangeViewProps
@@ -17,7 +18,7 @@ interface SettingsAccountEmailChangeViewProps
     store : Store;
 }
 
-export default class SettingsAccountChangeView extends React.Component<SettingsAccountEmailChangeViewProps, {}>
+export default class SettingsAccountEmailChangeView extends React.Component<SettingsAccountEmailChangeViewProps, {}>
 {
     /**
      * render
@@ -26,15 +27,17 @@ export default class SettingsAccountChangeView extends React.Component<SettingsA
     {
         const {store} = this.props;
         const {locale} = store;
+        const response = store.changeEmailResponse;
+        const {message} = response;
 
         return (
             <ViewContainer>
                 <Header />
                 <ViewContents>
                     <form>
-                        <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} message={store.changeEmailResponse.message.password} onChange={store.onPasswordChange} />
+                        <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} message={message.password} onChange={store.onPasswordChange} />
                         <Button submit={true} onClick={store.onChange}>{R.text(R.SEND, locale)}</Button>
-                        <Text>{store.message || store.changeEmailResponse.message.success}</Text>
+                        <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
                     </form>
                 </ViewContents>
             </ViewContainer>

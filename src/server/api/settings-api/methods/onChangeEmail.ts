@@ -57,7 +57,7 @@ export async function onChangeEmail(req : express.Request, res : express.Respons
             const response : Response.ChangeEmail =
             {
                 status:  Response.Status.OK,
-                message: {success:R.text(R.EMAIL_CHANGED, locale)}
+                message: {general:R.text(R.EMAIL_CHANGED, locale)}
             };
             res.json(response);
         }
@@ -92,7 +92,7 @@ export function isChangeEmailValid(param : Request.ChangeEmail, account : Accoun
                     if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
                     {
                         response.status = Response.Status.FAILED;
-                        response.message.password = R.text(R.ALREADY_EXISTS_EMAIL, locale);
+                        response.message.general = R.text(R.ALREADY_EXISTS_EMAIL, locale);
                         break;
                     }
 
@@ -111,7 +111,7 @@ export function isChangeEmailValid(param : Request.ChangeEmail, account : Accoun
                     // 変更IDで該当するアカウントがないということが必ずしもメールアドレスの設定済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので変更済みというメッセージでOK。
                     response.status = Response.Status.FAILED;
-                    response.message.password = R.text(R.ALREADY_EMAIL_CHANGED, locale);
+                    response.message.general = R.text(R.ALREADY_EMAIL_CHANGED, locale);
                 }
             }
             while (false);

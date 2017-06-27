@@ -10,6 +10,7 @@ import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
+import {Response}    from 'libs/response';
 import {Store}       from './store';
 
 interface SettingsAccountPasswordViewProps
@@ -26,18 +27,20 @@ export default class SettingsAccountPasswordView extends React.Component<Setting
     {
         const {store} = this.props;
         const {locale} = store;
+        const response = store.changePasswordResponse;
+        const {message} = response;
 
         return (
             <ViewContainer>
                 <Header />
                 <ViewContents>
                     <form>
-                        <Input type="password" placeholder={R.text(R.CURRENT_PASSWORD,   locale)} value={store.oldPassword} message={store.changePasswordResponse.message.oldPassword} onChange={store.onOldPasswordChange} />
-                        <Input type="password" placeholder={R.text(R.NEW_PASSWORD,       locale)} value={store.newPassword} message={store.changePasswordResponse.message.newPassword} onChange={store.onNewPasswordChange} />
-                        <Input type="password" placeholder={R.text(R.NEW_PASSWORD_AGAIN, locale)} value={store.confirm}     message={store.changePasswordResponse.message.confirm}     onChange={store.onConfirmChange} />
+                        <Input type="password" placeholder={R.text(R.CURRENT_PASSWORD,   locale)} value={store.oldPassword} message={message.oldPassword} onChange={store.onOldPasswordChange} />
+                        <Input type="password" placeholder={R.text(R.NEW_PASSWORD,       locale)} value={store.newPassword} message={message.newPassword} onChange={store.onNewPasswordChange} />
+                        <Input type="password" placeholder={R.text(R.NEW_PASSWORD_AGAIN, locale)} value={store.confirm}     message={message.confirm}     onChange={store.onConfirmChange} />
                         <Button submit={true} onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
                         <Button               onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
-                        <Text>{store.message || store.changePasswordResponse.message.general}</Text>
+                        <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
                     </form>
                 </ViewContents>
             </ViewContainer>

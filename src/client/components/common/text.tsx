@@ -6,6 +6,7 @@ import * as React from 'react';
 interface TextProps
 {
     className? : string;
+    error?     : boolean;
 }
 
 export default class Text extends React.Component<TextProps, {}>
@@ -15,9 +16,8 @@ export default class Text extends React.Component<TextProps, {}>
         const {props} = this;
 
         let className = 'wst-text';
-        if (props.className) {
-            className += ` ${props.className}`;
-        }
+        if (props.error)     {className += ' wst-text-error';}
+        if (props.className) {className += ` ${props.className}`;}
 
         return (
             <span className={className}>

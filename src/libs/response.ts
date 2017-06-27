@@ -30,7 +30,7 @@ export namespace Response
         status  : Status;
         message : {
             password? : string;
-            success?  : string;
+            general?  : string;
         };
     }
 

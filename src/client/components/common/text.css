@@ -3,4 +3,9 @@
     display: block;
     width:   100%;
     height:  48px;
+
+    &.wst-text-error
+    {
+        color: #f44;
+    }
 }
