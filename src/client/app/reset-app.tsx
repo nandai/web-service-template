@@ -31,13 +31,14 @@ export default class ResetApp extends App
         super();
         this.store =
         {
-            locale:   Utils.getLocale(),
-            password: '',
-            confirm:  '',
-            message:  '',
-            onPasswordChange: this.onPasswordChange,
-            onConfirmChange:  this.onConfirmChange,
-            onChange:         this.onChange,
+            locale:                Utils.getLocale(),
+            password:              '',
+            confirm:               '',
+            resetPasswordResponse: ssrStore.resetPasswordResponse,
+            message:               '',
+            onPasswordChange:      this.onPasswordChange,
+            onConfirmChange:       this.onConfirmChange,
+            onChange:              this.onChange,
         };
     }
 
@@ -84,7 +85,7 @@ export default class ResetApp extends App
             const resetId : string = params.id;
             const {password, confirm} = store;
             const res : Response.ResetPassword = await ResetApi.resetPassword({resetId, password, confirm});
-            store.message = res.message;
+            store.resetPasswordResponse = res;
             this.render();
             log.stepOut();
         }

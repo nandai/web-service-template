@@ -40,16 +40,16 @@ export async function onResetPassword(req : express.Request, res : express.Respo
             }
 
             // 検証
-            const result = await isResetPasswordValid(param, locale);
+            const account = await AccountAgent.findByResetId(param.resetId);
+            const result =  await isResetPasswordValid(param, account, locale);
 
-            if (result.status !== Response.Status.OK)
+            if (result.response.status !== Response.Status.OK)
             {
-                res.ext.error(result.status, result.message);
+                res.json(result.response);
                 break;
             }
 
             // 更新
-            const {account} = result;
             account.password = Utils.getHashPassword(account.email, param.password, Config.PASSWORD_SALT);
             account.reset_id = null;
             account.two_factor_auth = null;
@@ -59,7 +59,7 @@ export async function onResetPassword(req : express.Request, res : express.Respo
             const data : Response.ResetPassword =
             {
                 status:  Response.Status.OK,
-                message: R.text(R.PASSWORD_RESET, locale)
+                message: {general:R.text(R.PASSWORD_RESET, locale)}
             };
             res.json(data);
         }
@@ -72,51 +72,47 @@ export async function onResetPassword(req : express.Request, res : express.Respo
 /**
  * 検証
  */
-export function isResetPasswordValid(param : Request.ResetPassword, locale : string)
+export function isResetPasswordValid(param : Request.ResetPassword, account : Account, locale : string)
 {
     return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
     {
         const log = slog.stepIn('ResetApi', 'isResetPasswordValid');
         try
         {
-            const result : ValidationResult = {status:Response.Status.OK};
-            const {resetId, password, confirm} = param;
+            const response : Response.ResetPassword = {status:Response.Status.OK, message:{}};
+            const {password, confirm} = param;
 
             do
             {
-                // パスワード検証
-                const passwordResult = Validator.password({password, confirm}, locale);
-
-                if (passwordResult.status !== Response.Status.OK)
-                {
-                    result.status =  passwordResult.status;
-                    result.message = passwordResult.password || passwordResult.confirm;
-                    break;
-                }
-
                 // アカウント存在検証
-                const account = await AccountAgent.findByResetId(resetId);
-
                 if (account === null)
                 {
                     // パスワードリセットの画面でパスワードリセットを完了させた後、再度パスワードリセットを完了させようとした場合にここに到達する想定。
                     // リセットIDで該当するアカウントがないということが必ずしもパスワードリセット済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、パスワードリセット済みというメッセージでOK。
-                    result.status = Response.Status.FAILED;
-                    result.message = R.text(R.ALREADY_PASSWORD_RESET, locale);
+                    response.status = Response.Status.FAILED;
+                    response.message.general = R.text(R.ALREADY_PASSWORD_RESET, locale);
                     break;
                 }
 
-                result.account = account;
+                // パスワード検証
+                const passwordResult = Validator.password({password, confirm}, locale);
+
+                if (passwordResult.status !== Response.Status.OK)
+                {
+                    response.status =           passwordResult.status;
+                    response.message.password = passwordResult.password;
+                    response.message.confirm =  passwordResult.confirm;
+                }
             }
             while (false);
 
-            if (result.status !== Response.Status.OK) {
-                log.w(JSON.stringify(result, null, 2));
+            if (response.status !== Response.Status.OK) {
+                log.w(JSON.stringify(response, null, 2));
             }
 
             log.stepOut();
-            resolve(result);
+            resolve({response});
         }
         catch (err) {log.stepOut(); reject(err);}
     });
@@ -124,7 +120,5 @@ export function isResetPasswordValid(param : Request.ResetPassword, locale : str
 
 interface ValidationResult
 {
-    status   : Response.Status;
-    message? : string;
-    account? : Account;
+    response : Response.ResetPassword;
 }

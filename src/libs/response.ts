@@ -137,7 +137,11 @@ export namespace Response
     export interface ResetPassword
     {
         status  : Status;
-        message : string;
+        message : {
+            password? : string;
+            confirm?  : string;
+            general?  : string;
+        };
     }
 
     export interface SetAccount
