@@ -8,6 +8,7 @@ import Root             from 'client/components/root';
 import JoinView         from 'client/components/views/join-view';
 import {Store}          from 'client/components/views/join-view/store';
 import ClientR          from 'client/libs/r';
+import {Response}       from 'libs/response';
 import AccountAgent     from 'server/agents/account-agent';
 import Utils            from 'server/libs/utils';
 import {notFound, view} from './view';
@@ -62,13 +63,14 @@ export default class JoinApp
                 {
                     locale,
                     password: '',
+                    joinResponse: {status:Response.Status.OK, message:{}},
                     message:  ''
                 };
 
                 const title = ClientR.text(ClientR.JOIN, locale);
                 const el = <JoinView store={store} />;
                 const contents = ReactDOM.renderToString(<Root view={el} />);
-                res.send(view(title, 'wst.js', contents));
+                res.send(view(title, 'wst.js', contents, store));
             }
             while (false);
             log.stepOut();

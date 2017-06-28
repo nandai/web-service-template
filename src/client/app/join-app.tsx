@@ -14,6 +14,7 @@ import Utils       from '../libs/utils';
 import {App}       from './app';
 
 const slog = window['slog'];
+const ssrStore = Utils.getSsrStore<Store>();
 
 /**
  * join app
@@ -31,9 +32,10 @@ export default class JoinApp extends App
         super();
         this.store =
         {
-            locale:   Utils.getLocale(),
-            password: '',
-            message:  '',
+            locale:           Utils.getLocale(),
+            password:         '',
+            joinResponse:     ssrStore.joinResponse,
+            message:          '',
             onPasswordChange: this.onPasswordChange,
             onJoin:           this.onJoin,
         };
@@ -72,7 +74,7 @@ export default class JoinApp extends App
             const inviteId : string = params.id;
             const password = store.password;
             const res : Response.Join = await SignupApi.join({inviteId, password});
-            store.message = res.message;
+            store.joinResponse = res;
             this.render();
             log.stepOut();
         }

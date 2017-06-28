@@ -39,16 +39,16 @@ export async function onJoin(req : express.Request, res : express.Response)
             }
 
             // 検証
-            const result = await isJoinValid(param, locale);
+            const account = await AccountAgent.findByInviteId(param.inviteId);
+            const result = await isJoinValid(param, account, locale);
 
-            if (result.status !== Response.Status.OK)
+            if (result.response.status !== Response.Status.OK)
             {
-                res.ext.error(result.status, result.message);
+                res.json(result.response);
                 break;
             }
 
             // 更新
-            const {account} = result;
             account.password =  Utils.getHashPassword(account.email, param.password, Config.PASSWORD_SALT);
             account.signup_id = null;
             account.invite_id = null;
@@ -58,7 +58,7 @@ export async function onJoin(req : express.Request, res : express.Response)
             const data : Response.Join =
             {
                 status:  Response.Status.OK,
-                message: R.text(R.SIGNUP_COMPLETED, locale)
+                message: {general:R.text(R.SIGNUP_COMPLETED, locale)}
             };
             res.json(data);
         }
@@ -71,51 +71,46 @@ export async function onJoin(req : express.Request, res : express.Response)
 /**
  * 検証
  */
-export function isJoinValid(param : Request.Join, locale : string)
+export function isJoinValid(param : Request.Join, account : Account, locale : string)
 {
     return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
     {
         const log = slog.stepIn('SignupApi', 'isJoinValid');
         try
         {
-            const result : ValidationResult = {status:Response.Status.OK};
-            const {inviteId, password} = param;
+            const response : Response.Join = {status:Response.Status.OK, message:{}};
+            const {password} = param;
 
             do
             {
-                // パスワード検証
-                const passwordResult = Validator.password({password}, locale);
-
-                if (passwordResult.status !== Response.Status.OK)
-                {
-                    result.status =  passwordResult.status;
-                    result.message = passwordResult.password;
-                    break;
-                }
-
                 // アカウント存在検証
-                const account = await AccountAgent.findByInviteId(inviteId);
-
                 if (account === null)
                 {
                     // 参加画面で参加を完了させた後、再度参加を完了させようとした場合にここに到達する想定。
                     // 招待IDで該当するアカウントがないということが必ずしも参加済みを意味するわけではないが、
                     // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、登録済みというメッセージでOK。
-                    result.status = Response.Status.FAILED;
-                    result.message = R.text(R.ALREADY_JOIN, locale);
+                    response.status = Response.Status.FAILED;
+                    response.message.general = R.text(R.ALREADY_JOIN, locale);
                     break;
                 }
 
-                result.account = account;
+                // パスワード検証
+                const passwordResult = Validator.password({password}, locale);
+
+                if (passwordResult.status !== Response.Status.OK)
+                {
+                    response.status =           passwordResult.status;
+                    response.message.password = passwordResult.password;
+                }
             }
             while (false);
 
-            if (result.status !== Response.Status.OK) {
-                log.w(JSON.stringify(result, null, 2));
+            if (response.status !== Response.Status.OK) {
+                log.w(JSON.stringify(response, null, 2));
             }
 
             log.stepOut();
-            resolve(result);
+            resolve({response});
         }
         catch (err) {log.stepOut(); reject(err);}
     });
@@ -123,7 +118,5 @@ export function isJoinValid(param : Request.Join, locale : string)
 
 interface ValidationResult
 {
-    status   : Response.Status;
-    message? : string;
-    account? : Account;
+    response : Response.Join;
 }

@@ -94,7 +94,10 @@ export namespace Response
     export interface Join
     {
         status  : Status;
-        message : string;
+        message : {
+            password? : string;
+            general?  : string;
+        };
     }
 
     export interface LoginAuthyOneTouch
