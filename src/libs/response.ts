@@ -171,7 +171,7 @@ export namespace Response
         message : {
             email?    : string;
             password? : string;
-            success?  : string;
+            general?  : string;
         };
     }
 

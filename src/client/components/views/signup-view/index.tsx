@@ -10,6 +10,7 @@ import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
+import {Response}    from 'libs/response';
 import {Store}       from './store';
 
 interface SignupViewProps
@@ -26,6 +27,8 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
     {
         const {store} = this.props;
         const {locale} = store;
+        const response = store.signupEmailResponse;
+        const {message} = response;
 
         return (
             <ViewContainer>
@@ -36,11 +39,11 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
                         <Button onClick={store.onFacebook}>{R.text(R.SIGNUP_WITH_FACEBOOK, locale)}</Button>
                         <Button onClick={store.onGoogle}  >{R.text(R.SIGNUP_WITH_GOOGLE,   locale)}</Button>
                         <Button onClick={store.onGithub}  >{R.text(R.SIGNUP_WITH_GITHUB,   locale)}</Button>
-                        <Input type="text"     placeholder={R.text(R.EMAIL,    locale)} value={store.email}    message={store.signupEmailResponse.message.email}    onChange={store.onEmailChange} />
-                        <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} message={store.signupEmailResponse.message.password} onChange={store.onPasswordChange} />
+                        <Input type="text"     placeholder={R.text(R.EMAIL,    locale)} value={store.email}    message={message.email}    onChange={store.onEmailChange} />
+                        <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} message={message.password} onChange={store.onPasswordChange} />
                         <Button submit={true} onClick={store.onSignup}>{R.text(R.SIGNUP, locale)}</Button>
                         <Button               onClick={store.onTop}   >{R.text(R.GO_TOP, locale)}</Button>
-                        <Text>{store.message || store.signupEmailResponse.message.success}</Text>
+                        <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
                     </form>
                 </ViewContents>
             </ViewContainer>

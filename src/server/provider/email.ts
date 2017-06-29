@@ -53,9 +53,25 @@ export default class Email extends Provider
                     const template = R.mail(R.NOTICE_SIGNUP, locale);
                     const contents = CommonUtils.formatString(template.contents, {url});
                     const result = await Utils.sendMail(template.subject, account.email, contents);
+                    let data : Response.SignupEmail;
 
-                    const data : Response.SignupEmail =
-                        Utils.createMessageResponse(result, R.SIGNUP_MAIL_SENDED, R.COULD_NOT_SEND_SIGNUP_MAIL, locale);
+                    if (result)
+                    {
+                        data =
+                        {
+                            status:  Response.Status.OK,
+                            message: {general:R.text(R.SIGNUP_MAIL_SENDED, locale)}
+                        };
+                    }
+                    else
+                    {
+                        data =
+                        {
+                            status:  Response.Status.FAILED,
+                            message: {general:R.text(R.COULD_NOT_SEND_SIGNUP_MAIL, locale)}
+                        };
+                    }
+
                     res.json(data);
                     resolve(result);
                 });

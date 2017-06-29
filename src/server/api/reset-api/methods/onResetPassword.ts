@@ -41,7 +41,7 @@ export async function onResetPassword(req : express.Request, res : express.Respo
 
             // 検証
             const account = await AccountAgent.findByResetId(param.resetId);
-            const result =  await isResetPasswordValid(param, account, locale);
+            const result = isResetPasswordValid(param, account, locale);
 
             if (result.response.status !== Response.Status.OK)
             {

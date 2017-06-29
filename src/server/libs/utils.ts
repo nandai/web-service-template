@@ -327,35 +327,6 @@ export default class Utils
     }
 
     /**
-     * メッセージレスポンスを作成する
-     */
-    static createMessageResponse(
-        ok           : boolean,
-        okPhrase     : string,
-        failedPhrase : string,
-        locale       : string)
-    {
-        let data : {status : number, message : string};
-        if (ok)
-        {
-            data =
-            {
-                status:  Response.Status.OK,
-                message: R.text(okPhrase, locale)
-            };
-        }
-        else
-        {
-            data =
-            {
-                status:  Response.Status.FAILED,
-                message: R.text(failedPhrase, locale)
-            };
-        }
-        return data;
-    }
-
-    /**
      * 現在日時（UTC）を取得
      */
     static now() : string
