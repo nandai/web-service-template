@@ -56,7 +56,10 @@ export namespace Response
     export interface ConfirmSignupEmail
     {
         status  : Status;
-        message : string;
+        message : {
+            password? : string;
+            general?  : string;
+        };
     }
 
     export interface DeleteAccount

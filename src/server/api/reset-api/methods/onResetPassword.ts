@@ -72,50 +72,43 @@ export async function onResetPassword(req : express.Request, res : express.Respo
 /**
  * 検証
  */
-export function isResetPasswordValid(param : Request.ResetPassword, account : Account, locale : string)
+export function isResetPasswordValid(param : Request.ResetPassword, account : Account, locale : string) : ValidationResult
 {
-    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
+    const log = slog.stepIn('ResetApi', 'isResetPasswordValid');
+    const response : Response.ResetPassword = {status:Response.Status.OK, message:{}};
+    const {password, confirm} = param;
+
+    do
     {
-        const log = slog.stepIn('ResetApi', 'isResetPasswordValid');
-        try
+        // アカウント存在検証
+        if (account === null)
         {
-            const response : Response.ResetPassword = {status:Response.Status.OK, message:{}};
-            const {password, confirm} = param;
-
-            do
-            {
-                // アカウント存在検証
-                if (account === null)
-                {
-                    // パスワードリセットの画面でパスワードリセットを完了させた後、再度パスワードリセットを完了させようとした場合にここに到達する想定。
-                    // リセットIDで該当するアカウントがないということが必ずしもパスワードリセット済みを意味するわけではないが、
-                    // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、パスワードリセット済みというメッセージでOK。
-                    response.status = Response.Status.FAILED;
-                    response.message.general = R.text(R.ALREADY_PASSWORD_RESET, locale);
-                    break;
-                }
-
-                // パスワード検証
-                const passwordResult = Validator.password({password, confirm}, locale);
-
-                if (passwordResult.status !== Response.Status.OK)
-                {
-                    response.status =           passwordResult.status;
-                    response.message.password = passwordResult.password;
-                    response.message.confirm =  passwordResult.confirm;
-                }
-            }
-            while (false);
-
-            if (response.status !== Response.Status.OK) {
-                log.w(JSON.stringify(response, null, 2));
-            }
-
-            log.stepOut();
-            resolve({response});
+            // パスワードリセットの画面でパスワードリセットを完了させた後、再度パスワードリセットを完了させようとした場合にここに到達する想定。
+            // リセットIDで該当するアカウントがないということが必ずしもパスワードリセット済みを意味するわけではないが、
+            // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、パスワードリセット済みというメッセージでOK。
+            response.status = Response.Status.FAILED;
+            response.message.general = R.text(R.ALREADY_PASSWORD_RESET, locale);
+            break;
         }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+
+        // パスワード検証
+        const passwordResult = Validator.password({password, confirm}, locale);
+
+        if (passwordResult.status !== Response.Status.OK)
+        {
+            response.status =           passwordResult.status;
+            response.message.password = passwordResult.password;
+            response.message.confirm =  passwordResult.confirm;
+        }
+    }
+    while (false);
+
+    if (response.status !== Response.Status.OK) {
+        log.w(JSON.stringify(response, null, 2));
+    }
+
+    log.stepOut();
+    return {response};
 }
 
 interface ValidationResult

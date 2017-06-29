@@ -14,6 +14,7 @@ import Utils             from '../libs/utils';
 import {App}             from './app';
 
 const slog = window['slog'];
+const ssrStore = Utils.getSsrStore<Store>();
 
 /**
  * signup confirm app
@@ -33,6 +34,7 @@ export default class SignupConfirmApp extends App
         {
             locale:   Utils.getLocale(),
             password: '',
+            confirmSignupEmailResponse: ssrStore.confirmSignupEmailResponse,
             message:  '',
             onPasswordChange: this.onPasswordChange,
             onConfirm:        this.onConfirm,
@@ -72,7 +74,7 @@ export default class SignupConfirmApp extends App
             const signupId : string = params.id;
             const password = store.password;
             const res : Response.ConfirmSignupEmail = await SignupApi.confirmSignupEmail({signupId, password});
-            store.message = res.message;
+            store.confirmSignupEmailResponse = res;
             this.render();
             log.stepOut();
         }
