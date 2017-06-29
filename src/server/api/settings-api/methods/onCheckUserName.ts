@@ -45,7 +45,12 @@ export async function onCheckUserName(req : express.Request, res : express.Respo
 
             if (result.status !== Response.Status.OK)
             {
-                res.ext.error(result.status, result.message);
+                const data : Response.CheckUserName =
+                {
+                    status: result.status,
+                    message: {userName:result.message}
+                };
+                res.json(data);
                 break;
             }
 
@@ -53,7 +58,7 @@ export async function onCheckUserName(req : express.Request, res : express.Respo
             const data : Response.CheckUserName =
             {
                 status: Response.Status.OK,
-                message
+                message: {userName:message}
             };
             res.json(data);
         }

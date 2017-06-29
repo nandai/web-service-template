@@ -161,7 +161,7 @@ export default class SettingsAccountApp extends App
         const {store} = this;
         const userName = store.account.userName;
         const res : Response.CheckUserName = await SettingsApi.checkUserName({userName});
-        store.setAccountResponse.message.userName = res.message;
+        store.setAccountResponse.message.userName = res.message.userName;
         this.render();
         this.checkUserNameTimerId = 0;
     }

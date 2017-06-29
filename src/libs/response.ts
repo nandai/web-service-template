@@ -48,7 +48,9 @@ export namespace Response
     export interface CheckUserName
     {
         status  : Status;
-        message : string;
+        message : {
+            userName? : string;
+        };
     }
 
     export interface ConfirmSignupEmail
