@@ -125,7 +125,7 @@ export async function onSetAccount(req : express.Request, res : express.Response
             {
                 status:  Response.Status.OK,
                 account: Converter.accountToResponse(account),
-                message: R.text(phrase, locale)
+                message: {general:R.text(phrase, locale)}
             };
             res.json(data);
         }
@@ -193,7 +193,7 @@ export function isSetAccountValid(param : Request.SetAccount, myAccountId : numb
                 else if (twoFactorAuth !== null)
                 {
                     response.status = Response.Status.BAD_REQUEST;
-                    response.message = R.text(R.BAD_REQUEST, locale);
+                    response.message.general = R.text(R.BAD_REQUEST, locale);
                 }
             }
             while (false);

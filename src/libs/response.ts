@@ -161,7 +161,7 @@ export namespace Response
             userName?    : string;
             countryCode? : string;
             phoneNo?     : string;
-            success?     : string;
+            general?     : string;
         };
     }
 
