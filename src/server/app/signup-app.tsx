@@ -60,8 +60,8 @@ export default class SignupApp
                 locale,
                 email:    '',
                 password: '',
-                signupEmailResponse: {status:Response.Status.OK, message:{}},
-                message
+                message,
+                signupEmailResponse: {status:Response.Status.OK, message:{}}
             };
 
             const title = ClientR.text(ClientR.SIGNUP, locale);

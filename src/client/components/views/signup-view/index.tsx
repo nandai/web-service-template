@@ -5,6 +5,7 @@ import * as React    from 'react';
 
 import Button        from 'client/components/common/button';
 import Input         from 'client/components/common/input';
+import Loading       from 'client/components/common/loading';
 import Text          from 'client/components/common/text';
 import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
@@ -30,6 +31,11 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
         const response = store.signupEmailResponse;
         const {message} = response;
 
+        const messageEl = (store.loading
+            ? <Loading />
+            : <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
+        );
+
         return (
             <ViewContainer>
                 <Header />
@@ -43,7 +49,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
                         <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} message={message.password} onChange={store.onPasswordChange} />
                         <Button submit={true} onClick={store.onSignup}>{R.text(R.SIGNUP, locale)}</Button>
                         <Button               onClick={store.onTop}   >{R.text(R.GO_TOP, locale)}</Button>
-                        <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
+                        {messageEl}
                     </form>
                 </ViewContents>
             </ViewContainer>

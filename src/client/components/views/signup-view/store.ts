@@ -10,6 +10,7 @@ export interface Store
     password?           : string;
     message?            : string;
     signupEmailResponse : Response.SignupEmail;
+    loading?            : boolean;
     onTwitter?          : () => void;
     onFacebook?         : () => void;
     onGoogle?           : () => void;

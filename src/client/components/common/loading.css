@@ -1,0 +1,49 @@
+/**
+ * (C) 2016-2017 printf.jp
+ */
+.loaders
+{
+    text-align: center;
+}
+
+.loader
+{
+    display:  inline-block;
+    position: relative;
+    width:  48px;
+    height: 48px;
+    vertical-align: middle;
+
+    border-radius: 50%;
+    border: 6px solid rgba(49, 182, 162, 0.4);
+    box-sizing: border-box;
+}
+
+.loader:after
+{
+    content: '';
+    position: absolute;
+    top:    -6px;
+    right:  -6px;
+    bottom: -6px;
+    left:   -6px;
+    border-radius: 50%;
+    border: 6px solid transparent;
+    border-top-color: rgb(49, 182, 162);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin
+{
+    0%
+    {
+        tranform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+    }
+
+    100%
+    {
+        tranform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+    }
+}

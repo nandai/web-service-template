@@ -35,8 +35,9 @@ export default class SignupApp extends App
             locale:              Utils.getLocale(),
             email:               '',
             password:            '',
-            signupEmailResponse: ssrStore.signupEmailResponse,
             message:             ssrStore.message,
+            signupEmailResponse: ssrStore.signupEmailResponse,
+            loading:             false,
             onTwitter:           this.onTwitter,
             onFacebook:          this.onFacebook,
             onGoogle:            this.onGoogle,
@@ -175,12 +176,15 @@ export default class SignupApp extends App
             const {store} = this;
 
             store.message = '';
+            store.signupEmailResponse.message = {};
+            store.loading = true;
             this.render();
 
             try
             {
                 const res : Response.SignupEmail = await SignupApi.signupEmail(param);
                 store.signupEmailResponse = res;
+                store.loading = false;
                 this.render();
                 log.stepOut();
                 resolve();
@@ -188,6 +192,7 @@ export default class SignupApp extends App
             catch (err)
             {
                 store.message = err.message;
+                store.loading = false;
                 this.render();
                 log.stepOut();
                 reject();
