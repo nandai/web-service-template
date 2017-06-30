@@ -11,8 +11,8 @@ export default class Loading extends React.Component<{}, {}>
     render() : JSX.Element
     {
         return (
-            <div className="loaders">
-                <span className="loader" />
+            <div className="wst-loading">
+                <span />
             </div>
         );
     }
