@@ -64,8 +64,7 @@ export namespace Response
 
     export interface DeleteAccount
     {
-        status   : Status;
-        message? : string;
+        status : Status;
     }
 
     export interface GetAccount

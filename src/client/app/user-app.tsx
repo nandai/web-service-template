@@ -46,8 +46,16 @@ export default class UserApp extends App
             {
                 const {store} = this;
                 const res : Response.GetUser = await UserApi.getUser({id:params.id});
-                store.user = res.user;
-                resolve();
+
+                if (res.status !== Response.Status.OK)
+                {
+                    reject(new Error(res.message));
+                }
+                else
+                {
+                    store.user = res.user;
+                    resolve();
+                }
             }
             catch (err) {reject(err);}
         });

@@ -77,11 +77,7 @@ class WstApp
             {url:'404',                            app:notFoundApp,                         title:R.text(R.NOT_FOUND,                      locale), effect:'fade', query:true}
         ];
 
-        const render = this.render;
-        this.routes.forEach((route) =>
-        {
-            const store = route.app.render = render;
-        });
+        this.routes.forEach((route) => route.app.render = this.render);
 
         this.setAccount(ssrStore.account);
         History.setCallback(this.onHistory);
@@ -112,48 +108,30 @@ class WstApp
         const log = slog.stepIn('WstApp', 'updateCurrentRoute');
         return new Promise(async (resolve : () => void) =>
         {
-            let route : Route;
-            let params;
-
-            for (const _route of this.routes)
-            {
-                params = Utils.getParamsFromUrl(url, _route.url);
-
-                if (params === null) {
-                    continue;
-                }
-
-                if (_route.auth && this.account === null) {
-                    continue;
-                }
-
-                if (_route.query !== true && location.search === '')
-                {
-                    route = _route;
-                    break;
-                }
-
-                if (_route.query === true && location.search !== '')
-                {
-                    route = _route;
-                    break;
-                }
-            }
+            let routeResult = this.getRoute(url);
+            let route =    routeResult.route;
+            const params = routeResult.params;
 
             if (this.currentRoute !== route)
             {
-                this.currentRoute = route;
-
                 if (isInit)
                 {
                     try
                     {
-                        await this.currentRoute.app.init(params, message);
+                        await route.app.init(params, message);
+                        this.currentRoute = route;
                     }
                     catch (err)
                     {
                         console.warn(err.message);
+                        routeResult = this.getRoute('404');
+                        route = routeResult.route;
+                        this.currentRoute = route;
                     }
+                }
+                else
+                {
+                    this.currentRoute = route;
                 }
             }
 
@@ -161,6 +139,42 @@ class WstApp
             log.stepOut();
             resolve();
         });
+    }
+
+    /**
+     * route取得
+     */
+    private getRoute(url : string)
+    {
+        let route : Route = null;
+        let params;
+
+        for (const _route of this.routes)
+        {
+            params = Utils.getParamsFromUrl(url, _route.url);
+
+            if (params === null) {
+                continue;
+            }
+
+            if (_route.auth && this.account === null) {
+                continue;
+            }
+
+            if (_route.query !== true && location.search === '')
+            {
+                route = _route;
+                break;
+            }
+
+            if (_route.query === true && location.search !== '')
+            {
+                route = _route;
+                break;
+            }
+        }
+
+        return {route, params};
     }
 
     /**

@@ -190,14 +190,8 @@ export default class SettingsApp extends App
         {
             const res : Response.DeleteAccount = await SettingsApi.deleteAccount();
 
-            if (res.status === Response.Status.OK)
-            {
+            if (res.status === Response.Status.OK) {
                 History.back();
-            }
-            else
-            {
-                store.message = res.message;
-                this.render();
             }
 
             log.stepOut();
