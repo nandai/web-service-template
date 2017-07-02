@@ -120,8 +120,10 @@ export namespace Response
 
     export interface LoginSms
     {
-        status   : Status;
-        message? : string;
+        status  : Status;
+        message : {
+            smsCode? : string;
+        };
     }
 
     export interface RequestChangeEmail

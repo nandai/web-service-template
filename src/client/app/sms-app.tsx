@@ -14,6 +14,7 @@ import Utils       from '../libs/utils';
 import {App}       from './app';
 
 const slog = window['slog'];
+const ssrStore = Utils.getSsrStore<Store>();
 
 /**
  * sms app
@@ -32,9 +33,11 @@ export default class SmsApp extends App
         super();
         this.store =
         {
-            locale:          Utils.getLocale(),
-            onSmsCodeChange: this.onSmsCodeChange,
-            onSend:          this.onSend,
+            locale:           Utils.getLocale(),
+            smsCode:          ssrStore.smsCode,
+            loginSmsResponse: ssrStore.loginSmsResponse,
+            onSmsCodeChange:  this.onSmsCodeChange,
+            onSend:           this.onSend,
         };
     }
 
@@ -94,7 +97,7 @@ export default class SmsApp extends App
             }
             else
             {
-                store.message = res.message;
+                store.loginSmsResponse = res;
                 this.render();
             }
 

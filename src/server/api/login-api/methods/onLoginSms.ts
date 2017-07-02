@@ -68,7 +68,12 @@ export async function onLoginSms(req : express.Request, res : express.Response)
 
                 if (success === false)
                 {
-                    res.ext.error(Response.Status.FAILED, R.text(R.MISMATCH_SMS_CODE, locale));
+                    const response : Response.LoginSms =
+                    {
+                        status: Response.Status.FAILED,
+                        message: {smsCode:R.text(R.MISMATCH_SMS_CODE, locale)}
+                    };
+                    res.json(response);
                     break;
                 }
 
@@ -87,8 +92,8 @@ export async function onLoginSms(req : express.Request, res : express.Response)
                 await LoginHistoryAgent.add(loginHistory);
             }
 
-            const data : Response.LoginSms = {status:Response.Status.OK};
-            res.json(data);
+            const response : Response.LoginSms = {status:Response.Status.OK, message:{}};
+            res.json(response);
         }
         while (false);
         log.stepOut();

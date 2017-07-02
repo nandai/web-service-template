@@ -8,6 +8,7 @@ import Root             from 'client/components/root';
 import SmsView          from 'client/components/views/sms-view';
 import {Store}          from 'client/components/views/sms-view/store';
 import ClientR          from 'client/libs/r';
+import {Response}       from 'libs/response';
 import Utils            from '../libs/utils';
 import {Session}        from '../models/session';
 import {notFound, view} from './view';
@@ -60,13 +61,14 @@ export default class SmsApp
                 {
                     locale,
                     smsCode: '',
+                    loginSmsResponse: {status:Response.Status.OK, message:{}},
                     message: ''
                 };
 
                 const title = ClientR.text(ClientR.AUTH_SMS, locale);
                 const el = <SmsView store={store} />;
                 const contents = ReactDOM.renderToString(<Root view={el} />);
-                res.send(view(title, 'wst.js', contents));
+                res.send(view(title, 'wst.js', contents, store));
             }
             while (false);
             log.stepOut();

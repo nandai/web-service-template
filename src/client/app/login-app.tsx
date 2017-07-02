@@ -62,6 +62,7 @@ export default class LoginApp extends App
 
         const {store} = this;
         store.name = (location.pathname === '/' ? 'home' : 'about');
+        store.loginEmailResponse = {status:Response.Status.OK, message:{}};
         store.message =  '';
         return super.init(params);
     }
