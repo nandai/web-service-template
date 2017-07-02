@@ -36,6 +36,8 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
             : <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
         );
 
+        const disabled = (store.loading === true);
+
         return (
             <ViewContainer>
                 <Header />
@@ -47,8 +49,8 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
                         <Button onClick={store.onGithub}  >{R.text(R.SIGNUP_WITH_GITHUB,   locale)}</Button>
                         <Input type="text"     placeholder={R.text(R.EMAIL,    locale)} value={store.email}    message={message.email}    onChange={store.onEmailChange} />
                         <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} message={message.password} onChange={store.onPasswordChange} />
-                        <Button submit={true} onClick={store.onSignup}>{R.text(R.SIGNUP, locale)}</Button>
-                        <Button               onClick={store.onTop}   >{R.text(R.GO_TOP, locale)}</Button>
+                        <Button submit={true} disabled={disabled} onClick={store.onSignup}>{R.text(R.SIGNUP, locale)}</Button>
+                        <Button               disabled={disabled} onClick={store.onTop}   >{R.text(R.GO_TOP, locale)}</Button>
                         {messageEl}
                     </form>
                 </ViewContents>

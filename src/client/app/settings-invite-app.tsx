@@ -34,6 +34,7 @@ export default class SettingsInviteApp extends App
             account:        ssrStore.account,
             email:          ssrStore.email,
             inviteResponse: ssrStore.inviteResponse,
+            loading:        false,
             onEmailChange:  this.onEmailChange,
             onInvite:       this.onInvite,
             onBack:         this.onBack,
@@ -79,19 +80,25 @@ export default class SettingsInviteApp extends App
         const log = slog.stepIn(SettingsInviteApp.CLS_NAME, 'onInvite');
         const {store} = this;
 
+        store.message = '';
+        store.inviteResponse.message = {};
+        store.loading = true;
+        this.render();
+
         try
         {
             const {email} = store;
 
             const res : Response.Invite = await SettingsApi.invite({email});
             store.inviteResponse = res;
-
+            store.loading = false;
             this.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
+            store.loading = false;
             this.render();
             log.stepOut();
         }

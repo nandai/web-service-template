@@ -8,8 +8,9 @@ export interface Store
     locale         : string;
     account        : Response.Account;
     email          : string;
-    inviteResponse : Response.Invite;
     message?       : string;
+    inviteResponse : Response.Invite;
+    loading?       : boolean;
     onEmailChange? : (value : string) => void;
     onInvite?      : () => void;
     onBack?        : () => void;

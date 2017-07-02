@@ -36,14 +36,16 @@ export default class SettingsAccountEmailView extends React.Component<SettingsAc
             : <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
         );
 
+        const disabled = (store.loading === true);
+
         return (
             <ViewContainer>
                 <Header />
                 <ViewContents>
                     <form>
                         <Input type="email" placeholder={R.text(R.EMAIL, locale)} value={account.email} message={message.email} onChange={store.onEmailChange} />
-                        <Button submit={true} onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
-                        <Button               onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
+                        <Button submit={true} disabled={disabled} onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
+                        <Button               disabled={disabled} onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
                         {messageEl}
                     </form>
                 </ViewContents>
