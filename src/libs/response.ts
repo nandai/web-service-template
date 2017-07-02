@@ -92,7 +92,7 @@ export namespace Response
         status  : Status;
         message : {
             email?   : string;
-            success? : string;
+            general? : string;
         };
     }
 
@@ -129,7 +129,7 @@ export namespace Response
         status  : Status;
         message : {
             email?   : string;
-            success? : string;
+            general? : string;
         };
     }
 
@@ -138,7 +138,7 @@ export namespace Response
         status  : Status;
         message : {
             email?   : string;
-            success? : string;
+            general? : string;
         };
     }
 

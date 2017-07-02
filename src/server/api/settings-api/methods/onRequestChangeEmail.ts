@@ -59,7 +59,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                 response =
                 {
                     status:  Response.Status.OK,
-                    message: {success:R.text(R.EMAIL_CHANGED, locale)}
+                    message: {general:R.text(R.EMAIL_CHANGED, locale)}
                 };
                 res.json(response);
             }
@@ -74,7 +74,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                 response =
                 {
                     status:  Response.Status.OK,
-                    message: {success:R.text(R.PASSWORD_SETTING_CENCELED, locale)}
+                    message: {general:R.text(R.PASSWORD_SETTING_CENCELED, locale)}
                 };
                 res.json(response);
             }
@@ -93,7 +93,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                     response =
                     {
                         status:  Response.Status.OK,
-                        message: {success:R.text(R.EMAIL_CHANGED, locale)}
+                        message: {general:R.text(R.EMAIL_CHANGED, locale)}
                     };
                 }
                 else
@@ -126,7 +126,7 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
                     response =
                     {
                         status:  Response.Status.OK,
-                        message: {success:R.text(R.CHANGE_MAIL_SENDED, locale)}
+                        message: {general:R.text(R.CHANGE_MAIL_SENDED, locale)}
                     };
                 }
                 else

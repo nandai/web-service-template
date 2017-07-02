@@ -116,7 +116,7 @@ function execInvite(param : Request.Invite, locale : string)
             if (result)
             {
                 response.status = Response.Status.OK;
-                response.message.success = R.text(R.INVITE_MAIL_SENDED, locale);
+                response.message.general = R.text(R.INVITE_MAIL_SENDED, locale);
 
                 const name = email.substr(0, email.indexOf('@'));
                 const account : Account = {name, email, invite_id};

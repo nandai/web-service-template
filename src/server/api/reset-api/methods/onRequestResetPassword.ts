@@ -55,7 +55,7 @@ export async function onRequestResetPassword(req : express.Request, res : expres
             if (result)
             {
                 response.status = Response.Status.OK;
-                response.message.success = R.text(R.RESET_MAIL_SENDED, locale);
+                response.message.general = R.text(R.RESET_MAIL_SENDED, locale);
             }
             else
             {

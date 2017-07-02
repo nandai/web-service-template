@@ -10,6 +10,7 @@ import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
+import {Response}    from 'libs/response';
 import {Store}       from './store';
 
 interface ForgetViewProps
@@ -26,16 +27,18 @@ export default class ForgetView extends React.Component<ForgetViewProps, {}>
     {
         const {store} = this.props;
         const {locale} = store;
+        const response = store.requestResetPasswordResult;
+        const {message} = response;
 
         return (
             <ViewContainer>
                 <Header />
                 <ViewContents>
                     <form>
-                        <Input type="text" placeholder={R.text(R.EMAIL, locale)} value={store.email} message={store.requestResetPasswordResult.message.email} onChange={store.onEmailChange} />
+                        <Input type="text" placeholder={R.text(R.EMAIL, locale)} value={store.email} message={message.email} onChange={store.onEmailChange} />
                         <Button submit={true} onClick={store.onSend}>{R.text(R.SEND_MAIL, locale)}</Button>
                         <Button               onClick={store.onBack}>{R.text(R.BACK,      locale)}</Button>
-                        <Text>{store.message || store.requestResetPasswordResult.message.success}</Text>
+                        <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
                     </form>
                 </ViewContents>
             </ViewContainer>

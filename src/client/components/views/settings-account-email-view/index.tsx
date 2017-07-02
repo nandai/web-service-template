@@ -10,6 +10,7 @@ import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
+import {Response}    from 'libs/response';
 import {Store}       from './store';
 
 interface SettingsAccountEmailViewProps
@@ -37,7 +38,7 @@ export default class SettingsAccountEmailView extends React.Component<SettingsAc
                         <Input type="email" placeholder={R.text(R.EMAIL, locale)} value={account.email} message={message.email} onChange={store.onEmailChange} />
                         <Button submit={true} onClick={store.onChange}>{R.text(R.CHANGE, locale)}</Button>
                         <Button               onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
-                        <Text>{store.message || message.success}</Text>
+                        <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
                     </form>
                 </ViewContents>
             </ViewContainer>
