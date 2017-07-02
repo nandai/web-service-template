@@ -8,6 +8,7 @@ export interface Store
     locale                     : string;
     account                    : Response.Account;
     requestChangeEmailResponse : Response.RequestChangeEmail;
+    loading?                   : boolean;
     message?                   : string;
     onEmailChange?             : (value : string) => void;
     onChange?                  : () => void;

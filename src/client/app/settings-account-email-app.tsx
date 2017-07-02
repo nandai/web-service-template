@@ -33,6 +33,7 @@ export default class SettingsAccountEmailApp extends App
             locale:                     Utils.getLocale(),
             account:                    ssrStore.account,
             requestChangeEmailResponse: ssrStore.requestChangeEmailResponse,
+            loading:                    false,
             onEmailChange:              this.onEmailChange,
             onChange:                   this.onChange,
             onBack:                     this.onBack,
@@ -77,6 +78,11 @@ export default class SettingsAccountEmailApp extends App
         const log = slog.stepIn(SettingsAccountEmailApp.CLS_NAME, 'onChange');
         const {store} = this;
 
+        store.message = '';
+        store.requestChangeEmailResponse.message = {};
+        store.loading = true;
+        this.render();
+
         try
         {
             const {account} = store;
@@ -84,12 +90,14 @@ export default class SettingsAccountEmailApp extends App
 
             const res : Response.RequestChangeEmail = await SettingsApi.requestChangeEmail({email});
             store.requestChangeEmailResponse = res;
+            store.loading = false;
             this.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
+            store.loading = false;
             this.render();
             log.stepOut();
         }
