@@ -8,6 +8,7 @@ import Root          from 'client/components/root';
 import SettingsView  from 'client/components/views/settings-view';
 import {Store}       from 'client/components/views/settings-view/store';
 import ClientR       from 'client/libs/r';
+import {Response}    from 'libs/response';
 import SessionAgent  from 'server/agents/session-agent';
 import SettingsApi   from 'server/api/settings-api';
 import Cookie        from 'server/libs/cookie';
@@ -58,6 +59,7 @@ export default class SettingsApp
             {
                 locale,
                 account: data.account,
+                unlinkProviderResponse: {status:Response.Status.OK, message:{}},
                 message
             };
 

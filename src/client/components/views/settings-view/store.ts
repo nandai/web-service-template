@@ -5,16 +5,17 @@ import {Response} from 'libs/response';
 
 export interface Store
 {
-    locale      : string;
-    account     : Response.Account;
-    message?    : string;
-    onTwitter?  : () => void;
-    onFacebook? : () => void;
-    onGoogle?   : () => void;
-    onGithub?   : () => void;
-    onEmail?    : () => void;
-    onPassword? : () => void;
-    onAccount?  : () => void;
-    onLeave?    : () => void;
-    onBack?     : () => void;
+    locale                 : string;
+    account                : Response.Account;
+    unlinkProviderResponse : Response.UnlinkProvider;
+    message?               : string;
+    onTwitter?             : () => void;
+    onFacebook?            : () => void;
+    onGoogle?              : () => void;
+    onGithub?              : () => void;
+    onEmail?               : () => void;
+    onPassword?            : () => void;
+    onAccount?             : () => void;
+    onLeave?               : () => void;
+    onBack?                : () => void;
 }

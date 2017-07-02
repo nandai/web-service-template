@@ -9,6 +9,7 @@ import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
+import {Response}    from 'libs/response';
 import CommonUtils   from 'libs/utils';
 import {Store}       from './store';
 
@@ -28,6 +29,8 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
     {
         const {store} = this.props;
         const {locale, account} = store;
+        const response = store.unlinkProviderResponse;
+        const {message} = response;
 
         const twitterLabel =  this.getLinkLabel('Twitter',  'twitter');
         const facebookLabel = this.getLinkLabel('Facebook', 'facebook');
@@ -60,7 +63,7 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
                     <Button onClick={store.onLeave}   >{R.text(R.DELETE_ACCOUNT, locale)}</Button>
                     <Button onClick={store.onBack}    >{R.text(R.BACK, locale)}</Button>
                     <Text>{account.name}　{loginDt}</Text>
-                    <Text>{store.message}</Text>
+                    <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
                 </ViewContents>
             </ViewContainer>
         );

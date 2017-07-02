@@ -179,8 +179,10 @@ export namespace Response
 
     export interface UnlinkProvider
     {
-        status   : Status;
-        message? : string;
+        status  : Status;
+        message : {
+            general? : string;
+        };
     }
 
     export enum Status

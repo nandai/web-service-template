@@ -31,18 +31,19 @@ export default class SettingsApp extends App
         super();
         this.store =
         {
-            locale:     Utils.getLocale(),
-            account:    ssrStore.account,
-            message:    ssrStore.message,
-            onTwitter:  this.onTwitter,
-            onFacebook: this.onFacebook,
-            onGoogle:   this.onGoogle,
-            onGithub:   this.onGithub,
-            onEmail:    this.onEmail,
-            onPassword: this.onPassword,
-            onAccount:  this.onAccount,
-            onLeave:    this.onLeave,
-            onBack:     this.onBack,
+            locale:                 Utils.getLocale(),
+            account:                ssrStore.account,
+            unlinkProviderResponse: ssrStore.unlinkProviderResponse,
+            message:                ssrStore.message,
+            onTwitter:              this.onTwitter,
+            onFacebook:             this.onFacebook,
+            onGoogle:               this.onGoogle,
+            onGithub:               this.onGithub,
+            onEmail:                this.onEmail,
+            onPassword:             this.onPassword,
+            onAccount:              this.onAccount,
+            onLeave:                this.onLeave,
+            onBack:                 this.onBack,
         };
     }
 
@@ -52,6 +53,7 @@ export default class SettingsApp extends App
     init(params, message? : string)
     {
         const {store} = this;
+        store.unlinkProviderResponse = {status:Response.Status.OK, message:{}};
         store.message = '';
         return super.init(params);
     }
@@ -224,7 +226,7 @@ export default class SettingsApp extends App
                 }
                 else
                 {
-                    store.message = res.message;
+                    store.unlinkProviderResponse = res;
                 }
 
                 this.render();

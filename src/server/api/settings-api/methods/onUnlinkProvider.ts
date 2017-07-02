@@ -57,12 +57,17 @@ export async function onUnlinkProvider(req : express.Request, res : express.Resp
                 account[provider] = null;
                 await AccountAgent.update(account);
 
-                const data : Response.UnlinkProvider = {status:Response.Status.OK};
-                res.json(data);
+                const response : Response.UnlinkProvider = {status:Response.Status.OK, message:{}};
+                res.json(response);
             }
             else
             {
-                res.ext.error(Response.Status.FAILED, R.text(R.CANNOT_UNLINK, locale));
+                const response : Response.UnlinkProvider =
+                {
+                    status: Response.Status.FAILED,
+                    message: {general:R.text(R.CANNOT_UNLINK, locale)}
+                };
+                res.json(response);
             }
         }
         while (false);
