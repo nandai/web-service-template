@@ -21,7 +21,7 @@ export function getUser(param : Request.GetUser, req : express.Request)
         try
         {
             const locale = req.ext.locale;
-            const data  : Response.GetUser = {};
+            const data  : Response.GetUser = {status:Response.Status.FAILED, user:null};
             let account : Account = null;
             const id = <string>param.id;
 
@@ -34,12 +34,7 @@ export function getUser(param : Request.GetUser, req : express.Request)
                 }
             }
 
-            if (account === null)
-            {
-                data.status =  Response.Status.FAILED;
-                data.message = R.text(R.NOT_FOUND, locale);
-            }
-            else
+            if (account)
             {
                 data.status = Response.Status.OK;
                 data.user =

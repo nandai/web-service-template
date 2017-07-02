@@ -49,7 +49,7 @@ export default class UserApp extends App
 
                 if (res.status !== Response.Status.OK)
                 {
-                    reject(new Error(res.message));
+                    reject(new Error('user not found.'));
                 }
                 else
                 {
