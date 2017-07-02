@@ -8,6 +8,7 @@ import Root                    from 'client/components/root';
 import LoginView               from 'client/components/views/login-view';
 import {Store}                 from 'client/components/views/login-view/store';
 import ClientR                 from 'client/libs/r';
+import {Response}              from 'libs/response';
 import SessionAgent            from 'server/agents/session-agent';
 import SmsApp                  from 'server/app/sms-app';
 import TopApp                  from 'server/app/top-app';
@@ -72,6 +73,7 @@ export default class LoginApp
                 name:     'home',
                 email:    '',
                 password: '',
+                loginEmailResponse: {status:Response.Status.OK, message:{}},
                 message
             };
 
@@ -103,6 +105,7 @@ export default class LoginApp
                 name:     'about',
                 email:    '',
                 password: '',
+                loginEmailResponse: {status:Response.Status.OK, message:{}},
                 message:  ''
             };
 

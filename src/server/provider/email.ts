@@ -136,10 +136,10 @@ export default class Email extends Provider
             }
             else
             {
-                const data : Response.LoginEmail = {status:Response.Status.OK, smsId};
+                const data : Response.LoginEmail = {status:Response.Status.OK, smsId, message:{}};
 
                 if (phrase) {
-                    data.message = R.text(phrase, locale);
+                    data.message.general = R.text(phrase, locale);
                 }
 
                 res.json(data);

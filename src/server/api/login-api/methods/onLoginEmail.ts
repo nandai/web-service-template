@@ -47,7 +47,12 @@ export async function onLoginEmail(req : express.Request, res : express.Response
 
             if (account === null || account.password !== hashPassword || account.signup_id)
             {
-                res.ext.error(Response.Status.FAILED, R.text(R.INVALID_EMAIL_AUTH, locale));
+                const response : Response.LoginEmail =
+                {
+                    status: Response.Status.FAILED,
+                    message: {general:R.text(R.INVALID_EMAIL_AUTH, locale)}
+                };
+                res.json(response);
                 break;
             }
 

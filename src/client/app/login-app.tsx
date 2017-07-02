@@ -32,23 +32,24 @@ export default class LoginApp extends App
         super();
         this.store =
         {
-            locale:           Utils.getLocale(),
-            name:             ssrStore.name,
-            email:            '',
-            password:         '',
-            message:          ssrStore.message,
-            onTwitter:        this.onTwitter,
-            onFacebook:       this.onFacebook,
-            onGoogle:         this.onGoogle,
-            onGithub:         this.onGithub,
-            onEmailChange:    this.onEmailChange,
-            onPasswordChange: this.onPasswordChange,
-            onLogin:          this.onLogin,
-            onSignup:         this.onSignup,
-            onForget:         this.onForget,
-            onUsers:          this.onUsers,
-            onHome:           this.onHome,
-            onAbout:          this.onAbout,
+            locale:             Utils.getLocale(),
+            name:               ssrStore.name,
+            email:              '',
+            password:           '',
+            loginEmailResponse: ssrStore.loginEmailResponse,
+            message:            ssrStore.message,
+            onTwitter:          this.onTwitter,
+            onFacebook:         this.onFacebook,
+            onGoogle:           this.onGoogle,
+            onGithub:           this.onGithub,
+            onEmailChange:      this.onEmailChange,
+            onPasswordChange:   this.onPasswordChange,
+            onLogin:            this.onLogin,
+            onSignup:           this.onSignup,
+            onForget:           this.onForget,
+            onUsers:            this.onUsers,
+            onHome:             this.onHome,
+            onAbout:            this.onAbout,
         };
     }
 
@@ -219,17 +220,17 @@ export default class LoginApp extends App
             try
             {
                 const res : Response.LoginEmail = await LoginApi.loginEmail(param);
+                this.store.loginEmailResponse = res;
 
                 if (res.status !== Response.Status.OK)
                 {
-                    this.store.message = res.message;
                     this.render();
                 }
                 else
                 {
                     if (res.smsId === undefined)
                     {
-                        History.pushState('/', res.message);
+                        History.pushState('/', res.message.general);
                     }
                     else
                     {

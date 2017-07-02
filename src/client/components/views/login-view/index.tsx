@@ -12,6 +12,7 @@ import Header          from 'client/components/designated/header';
 import ViewContainer   from 'client/components/views/view-container';
 import ViewContents    from 'client/components/views/view-contents';
 import R               from 'client/libs/r';
+import {Response}      from 'libs/response';
 import {Store}         from './store';
 
 interface LoginViewProps
@@ -28,6 +29,8 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
     {
         const {store} = this.props;
         const {locale} = store;
+        const response = store.loginEmailResponse;
+        const {message} = response;
 
         const items : TabItem[] =
         [
@@ -49,7 +52,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
                         <Button url="/signup" onClick={store.onSignup}>{R.text(R.GO_SIGNUP, locale)}</Button>
                         <Button url="/forget" onClick={store.onForget}>{R.text(R.GO_FORGET, locale)}</Button>
                         <Button url="/users"  onClick={store.onUsers} >{R.text(R.USER_LIST, locale)}</Button>
-                        <Text>{store.message}</Text>
+                        <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
                     </form>
                 </ViewContents>
             </div>

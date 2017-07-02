@@ -113,9 +113,11 @@ export namespace Response
 
     export interface LoginEmail
     {
-        status   : number;
-        smsId    : string;
-        message? : string;
+        status  : number;
+        smsId?  : string;
+        message : {
+            general? : string;
+        };
     }
 
     export interface LoginSms
