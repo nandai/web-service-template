@@ -212,7 +212,7 @@ class Initializer
         const authGoogle =   passport.authenticate('google', {scope:['https://www.googleapis.com/auth/plus.login']});
         const authGithub =   passport.authenticate('github');
 
-        const provider = ':provider(twitter|facebook|google)';
+        // const provider = ':provider(twitter|facebook|google)';   // TODO:delete
 
         this.app.get('/',       LoginApp .index);
         this.app.get('/about',  LoginApp .about);
@@ -260,11 +260,11 @@ class Initializer
         this.app.get('/users',     UsersApp.index);
 
         // APIs
-        this.app.post(  `/api/signup/${provider}`,   SignupApi.onSignupProvider);
+//      this.app.post(  `/api/signup/${provider}`,   SignupApi.onSignupProvider);   // TODO:delete
         this.app.post(  '/api/signup/email',         SignupApi.onSignupEmail);
         this.app.post(  '/api/signup/email/confirm', SignupApi.onConfirmSignupEmail);
         this.app.post(  '/api/join',                 SignupApi.onJoin);
-        this.app.post(  `/api/login/${provider}`,    LoginApi .onLoginProvider);
+//      this.app.post(  `/api/login/${provider}`,    LoginApi .onLoginProvider);    // TODO:delete
         this.app.post(  '/api/login/email',          LoginApi .onLoginEmail);
         this.app.post(  '/api/login/sms',            LoginApi .onLoginSms);
         this.app.get(   '/api/login/authy/onetouch', LoginApi .onLoginAuthyOneTouch);
@@ -284,10 +284,10 @@ class Initializer
         this.app.post(  '/api/settings/invite',               Access.auth, SettingsApi.onInvite);
         this.app.post(  '/api/logout',                        Access.auth, LogoutApi  .onLogout);
 
-        this.app.get('/auth/twitter/callback',  Twitter. customCallback, Twitter .callback);
+        this.app.get('/auth/twitter/callback',  Twitter .customCallback, Twitter .callback);
         this.app.get('/auth/facebook/callback', Facebook.customCallback, Facebook.callback);
-        this.app.get('/auth/google/callback',   Google.  customCallback, Google  .callback);
-        this.app.get('/auth/github/callback',   Github.  customCallback, Github  .callback);
+        this.app.get('/auth/google/callback',   Google  .customCallback, Google  .callback);
+        this.app.get('/auth/github/callback',   Github  .customCallback, Github  .callback);
 
         this.app.use(Access.notFound);
     }
