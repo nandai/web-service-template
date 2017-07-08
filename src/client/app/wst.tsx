@@ -10,6 +10,7 @@ import SettingsApi                   from '../api/settings-api';
 import Root                          from '../components/root';
 import History                       from '../libs/history';
 import R                             from '../libs/r';
+import {slog}                        from '../libs/slog';
 import Utils                         from '../libs/utils';
 import {App}                         from './app';
 import ForbiddenApp                  from './forbidden-app';
@@ -31,7 +32,6 @@ import TopApp                        from './top-app';
 import UserApp                       from './user-app';
 import UsersApp                      from './users-app';
 
-const slog =     window['slog'];
 const ssrStore = window['ssrStore'];
 
 /**
@@ -259,6 +259,10 @@ interface Route
  */
 window.addEventListener('DOMContentLoaded', async () =>
 {
+//  const serviceAddr = (('https:' === document.location.protocol) ? 'wss://localhost:8443' : 'ws://localhost:8080');
+    const serviceAddr = 'ws://localhost:8080';
+    slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL');
+
     const log = slog.stepIn('window', 'DOMContentLoaded');
     const locale = Utils.getLocale();
     let url = location.pathname;

@@ -4,14 +4,14 @@
 import bind                        from 'bind-decorator';
 import * as React                  from 'react';
 
+import SettingsApi                 from 'client/api/settings-api';
+import {App}                       from 'client/app/app';
+import SettingsAccountPasswordView from 'client/components/views/settings-account-password-view';
+import {Store}                     from 'client/components/views/settings-account-password-view/store';
+import {slog}                      from 'client/libs/slog';
+import Utils                       from 'client/libs/utils';
 import {Response}                  from 'libs/response';
-import SettingsApi                 from '../api/settings-api';
-import SettingsAccountPasswordView from '../components/views/settings-account-password-view';
-import {Store}                     from '../components/views/settings-account-password-view/store';
-import Utils                       from '../libs/utils';
-import {App}                       from './app';
 
-const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
 
 /**

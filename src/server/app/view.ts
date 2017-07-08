@@ -16,12 +16,7 @@ export function view(title : string, js : string, contents = '', store = {}) : s
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>${title}</title>
 
-    <!-- デバッグログ -->
-    <script src="/components/slog.js"></script>
     <script>
-//      var serviceAddr = (('https:' === document.location.protocol) ? 'wss://localhost:8443' : 'ws://localhost:8080');
-        var serviceAddr = 'ws://localhost:8080';
-        slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL');
         var ssrStore = ${JSON.stringify(store)};
     </script>
 

@@ -1,9 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Api from './api';
-
-const slog = window['slog'];
+import {slog} from 'client/libs/slog';
+import Api    from './api';
 
 export default class LogoutApi extends Api
 {

@@ -2,9 +2,9 @@
  * (C) 2016-2017 printf.jp
  */
 import bind    from 'bind-decorator';
-import History from '../libs/history';
 
-const slog = window['slog'];
+import History from 'client/libs/history';
+import {slog}  from 'client/libs/slog';
 
 export abstract class App
 {

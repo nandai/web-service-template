@@ -4,14 +4,14 @@
 import bind       from 'bind-decorator';
 import * as React from 'react';
 
-import LogoutApi  from '../api/logout-api';
-import TopView    from '../components/views/top-view';
-import {Store}    from '../components/views/top-view/store';
-import History    from '../libs/history';
-import Utils      from '../libs/utils';
-import {App}      from './app';
+import LogoutApi  from 'client/api/logout-api';
+import {App}      from 'client/app/app';
+import TopView    from 'client/components/views/top-view';
+import {Store}    from 'client/components/views/top-view/store';
+import History    from 'client/libs/history';
+import {slog}     from 'client/libs/slog';
+import Utils      from 'client/libs/utils';
 
-const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
 
 /**

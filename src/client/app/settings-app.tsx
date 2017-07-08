@@ -4,15 +4,15 @@
 import bind         from 'bind-decorator';
 import * as React   from 'react';
 
+import SettingsApi  from 'client/api/settings-api';
+import {App}        from 'client/app/app';
+import SettingsView from 'client/components/views/settings-view';
+import {Store}      from 'client/components/views/settings-view/store';
+import History      from 'client/libs/history';
+import {slog}       from 'client/libs/slog';
+import Utils        from 'client/libs/utils';
 import {Response}   from 'libs/response';
-import SettingsApi  from '../api/settings-api';
-import SettingsView from '../components/views/settings-view';
-import {Store}      from '../components/views/settings-view/store';
-import History      from '../libs/history';
-import Utils        from '../libs/utils';
-import {App}        from './app';
 
-const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
 
 /**

@@ -2,8 +2,9 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React    from 'react';
-import ForbiddenView from '../components/views/forbidden-view';
-import {App}         from './app';
+
+import {App}         from 'client/app/app';
+import ForbiddenView from 'client/components/views/forbidden-view';
 
 /**
  * forbidden app

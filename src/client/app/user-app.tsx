@@ -3,14 +3,14 @@
  */
 import * as React from 'react';
 
+import UserApi    from 'client/api/user-api';
+import {App}      from 'client/app/app';
+import UserView   from 'client/components/views/user-view';
+import {Store}    from 'client/components/views/user-view/store';
+import {slog}     from 'client/libs/slog';
+import Utils      from 'client/libs/utils';
 import {Response} from 'libs/response';
-import UserApi    from '../api/user-api';
-import UserView   from '../components/views/user-view';
-import {Store}    from '../components/views/user-view/store';
-import Utils      from '../libs/utils';
-import {App}      from './app';
 
-const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
 
 /**

@@ -2,8 +2,9 @@
  * (C) 2016-2017 printf.jp
  */
 import * as React   from 'react';
-import NotFoundView from '../components/views/not-found-view';
-import {App}        from './app';
+
+import {App}        from 'client/app/app';
+import NotFoundView from 'client/components/views/not-found-view';
 
 /**
  * not found app

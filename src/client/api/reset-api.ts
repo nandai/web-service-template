@@ -1,11 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog}     from 'client/libs/slog';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 import Api        from './api';
-
-const slog = window['slog'];
 
 export default class ResetApi extends Api
 {

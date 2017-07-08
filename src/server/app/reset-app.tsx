@@ -1,17 +1,17 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React              from 'react';
-import * as ReactDOM           from 'react-dom/server';
+import * as React       from 'react';
+import * as ReactDOM    from 'react-dom/server';
 
-import Root                    from 'client/components/root';
-import ResetView               from 'client/components/views/reset-view';
-import {Store}                 from 'client/components/views/reset-view/store';
-import ClientR                 from 'client/libs/r';
-import {Response}              from 'libs/response';
-import AccountAgent            from 'server/agents/account-agent';
-import Utils                   from 'server/libs/utils';
-import {notFound, view}        from './view';
+import Root             from 'client/components/root';
+import ResetView        from 'client/components/views/reset-view';
+import {Store}          from 'client/components/views/reset-view/store';
+import ClientR          from 'client/libs/r';
+import {Response}       from 'libs/response';
+import AccountAgent     from 'server/agents/account-agent';
+import Utils            from 'server/libs/utils';
+import {notFound, view} from './view';
 
 import express = require('express');
 import slog =    require('../slog');

@@ -52,6 +52,8 @@ export async function onLoginEmail(req : express.Request, res : express.Response
                     status: Response.Status.FAILED,
                     message: {general:R.text(R.INVALID_EMAIL_AUTH, locale)}
                 };
+
+                log.w(JSON.stringify(response, null, 2));
                 res.json(response);
                 break;
             }

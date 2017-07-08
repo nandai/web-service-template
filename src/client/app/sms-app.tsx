@@ -4,16 +4,16 @@
 import bind        from 'bind-decorator';
 import * as React  from 'react';
 
+import LoginApi    from 'client/api/login-api';
+import {App}       from 'client/app/app';
+import SmsView     from 'client/components/views/sms-view';
+import {Store}     from 'client/components/views/sms-view/store';
+import History     from 'client/libs/history';
+import {slog}      from 'client/libs/slog';
+import Utils       from 'client/libs/utils';
 import {Response}  from 'libs/response';
 import CommonUtils from 'libs/utils';
-import LoginApi    from '../api/login-api';
-import SmsView     from '../components/views/sms-view';
-import {Store}     from '../components/views/sms-view/store';
-import History     from '../libs/history';
-import Utils       from '../libs/utils';
-import {App}       from './app';
 
-const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
 
 /**

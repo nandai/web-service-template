@@ -4,16 +4,16 @@
 import bind              from 'bind-decorator';
 import * as React        from 'react';
 
+import SignupApi         from 'client/api/signup-api';
+import {App}             from 'client/app/app';
+import SignupConfirmView from 'client/components/views/signup-confirm-view';
+import {Store}           from 'client/components/views/signup-confirm-view/store';
+import {slog}            from 'client/libs/slog';
+import Utils             from 'client/libs/utils';
 import {Request}         from 'libs/request';
 import {Response}        from 'libs/response';
 import CommonUtils       from 'libs/utils';
-import SignupApi         from '../api/signup-api';
-import SignupConfirmView from '../components/views/signup-confirm-view';
-import {Store}           from '../components/views/signup-confirm-view/store';
-import Utils             from '../libs/utils';
-import {App}             from './app';
 
-const slog = window['slog'];
 const ssrStore = Utils.getSsrStore<Store>();
 
 /**
