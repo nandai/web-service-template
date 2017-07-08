@@ -3,16 +3,16 @@
  */
 import {Response}     from 'libs/response';
 import CommonUtils    from 'libs/utils';
-import {PassportUser} from '../libs/passport';
-import R              from '../libs/r';
-import Utils          from '../libs/utils';
-import {Account}      from '../models/account';
-import {Session}      from '../models/session';
+import {PassportUser} from 'server/libs/passport';
+import R              from 'server/libs/r';
+import {slog}         from 'server/libs/slog';
+import Utils          from 'server/libs/utils';
+import {Account}      from 'server/models/account';
+import {Session}      from 'server/models/session';
 import Provider       from './provider';
 
 import express =  require('express');
 import passport = require('passport');
-import slog =     require('../slog');
 
 /**
  * Email

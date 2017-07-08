@@ -1,10 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog}    from 'server/libs/slog';
 import {Account} from 'server/models/account';
 import DB        from '.';
-
-import slog = require('server/slog');
 
 /**
  * 削除アカウントモデル

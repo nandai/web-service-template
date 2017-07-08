@@ -8,16 +8,16 @@ import Root             from 'client/components/root';
 import SignupView       from 'client/components/views/signup-view';
 import {Store}          from 'client/components/views/signup-view/store';
 import ClientR          from 'client/libs/r';
-import {Response}        from 'libs/response';
+import {Response}       from 'libs/response';
 import SessionAgent     from 'server/agents/session-agent';
 import SignupConfirmApp from 'server/app/signup-confirm-app';
 import R                from 'server/libs/r';
+import {slog}           from 'server/libs/slog';
 import Utils            from 'server/libs/utils';
 import {Session}        from 'server/models/session';
 import {view}           from './view';
 
 import express = require('express');
-import slog =    require('../slog');
 
 /**
  * signup app

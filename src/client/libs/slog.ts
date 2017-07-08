@@ -741,14 +741,8 @@ export namespace slog
          */
         assert(assertName : string, result : boolean) : void
         {
-            if (result === true)
-            {
-                this.i(assertName + ':PASSED');
-            }
-            else
-            {
-                this.e(assertName + ':FAILED');
-            }
+            if (result) {this.i(assertName + ':PASSED');}
+            else        {this.e(assertName + ':FAILED');}
         }
     }
 

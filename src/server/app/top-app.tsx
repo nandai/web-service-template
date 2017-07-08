@@ -11,12 +11,12 @@ import ClientR       from 'client/libs/r';
 import SessionAgent  from 'server/agents/session-agent';
 import SettingsApi   from 'server/api/settings-api';
 import R             from 'server/libs/r';
+import {slog}        from 'server/libs/slog';
 import Utils         from 'server/libs/utils';
 import {Session}     from 'server/models/session';
 import {view}        from './view';
 
 import express = require('express');
-import slog =    require('../slog');
 
 /**
  * top App

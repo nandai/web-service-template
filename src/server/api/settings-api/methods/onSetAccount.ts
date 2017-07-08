@@ -8,13 +8,13 @@ import Config       from 'server/config';
 import Authy        from 'server/libs/authy';
 import Converter    from 'server/libs/converter';
 import R            from 'server/libs/r';
+import {slog}       from 'server/libs/slog';
 import Utils        from 'server/libs/utils';
 import Validator    from 'server/libs/validator';
 import {Account}    from 'server/models/account';
 import {Session}    from 'server/models/session';
 
 import express = require('express');
-import slog =    require('server/slog');
 
 const lookup = require('country-data').lookup;
 

@@ -8,6 +8,7 @@ import Config            from 'server/config';
 import Authy             from 'server/libs/authy';
 import {PassportUser}    from 'server/libs/passport';
 import R                 from 'server/libs/r';
+import {slog}            from 'server/libs/slog';
 import Utils             from 'server/libs/utils';
 import {Account}         from 'server/models/account';
 import {LoginHistory}    from 'server/models/login-history';
@@ -16,7 +17,6 @@ import {Session}         from 'server/models/session';
 import express =  require('express');
 import passport = require('passport');
 import twilio =   require('twilio');
-import slog =     require('../slog');
 
 /**
  * プロバイダ

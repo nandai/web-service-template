@@ -1,11 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog}        from 'server/libs/slog';
 import Utils         from 'server/libs/utils';
 import {getUserList} from './getUserList';
 
 import express = require('express');
-import slog =    require('server/slog');
 
 /**
  * ユーザー一覧取得<br>

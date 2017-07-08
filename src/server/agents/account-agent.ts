@@ -4,10 +4,9 @@
 import Config            from 'server/config';
 import MongoDBCollection from 'server/database/mongodb/account-collection';
 import MySQLCollection   from 'server/database/mysql/account-collection';
+import {slog}            from 'server/libs/slog';
 import Utils             from 'server/libs/utils';
 import {Account}         from 'server/models/account';
-
-import slog = require('../slog');
 
 function collection()
 {

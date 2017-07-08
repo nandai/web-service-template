@@ -3,8 +3,7 @@
  */
 import {Response}   from 'libs/response';
 import AccountAgent from 'server/agents/account-agent';
-
-import slog = require('server/slog');
+import {slog}       from 'server/libs/slog';
 
 /**
  * ユーザー一覧取得

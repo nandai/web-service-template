@@ -6,13 +6,13 @@ import {Response}   from 'libs/response';
 import CommonUtils  from 'libs/utils';
 import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
+import {slog}       from 'server/libs/slog';
 import Utils        from 'server/libs/utils';
 import Validator    from 'server/libs/validator';
 import {Account}    from 'server/models/account';
 import {Session}    from 'server/models/session';
 
 import express = require('express');
-import slog =    require('server/slog');
 
 /**
  * メールアドレスの変更を要求する<br>

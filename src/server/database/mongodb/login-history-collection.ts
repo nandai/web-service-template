@@ -1,11 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog}         from 'server/libs/slog';
 import {LoginHistory} from 'server/models/login-history';
 import DB             from '.';
 
 import _ =    require('lodash');
-import slog = require('server/slog');
 
 /**
  * ログイン履歴モデル

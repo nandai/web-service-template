@@ -5,12 +5,12 @@ import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
 import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
+import {slog}       from 'server/libs/slog';
 import Utils        from 'server/libs/utils';
 import Validator    from 'server/libs/validator';
 import {Session}    from 'server/models/session';
 
 import express = require('express');
-import slog =    require('server/slog');
 
 /**
  * ユーザー名チェック<br>

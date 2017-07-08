@@ -8,11 +8,11 @@ import Root          from 'client/components/root';
 import UsersView     from 'client/components/views/users-view';
 import {Store}       from 'client/components/views/users-view/store';
 import ClientR       from 'client/libs/r';
-import UserApi       from '../api/user-api';
+import UserApi       from 'server/api/user-api';
+import {slog}        from 'server/libs/slog';
 import {view}        from './view';
 
 import express = require('express');
-import slog =    require('../slog');
 
 /**
  * users app

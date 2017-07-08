@@ -3,16 +3,16 @@
  */
 import {Response}            from 'libs/response';
 import CommonUtils           from 'libs/utils';
-import SessionAgent          from '../agents/session-agent';
-import {forbidden, notFound} from '../app/view';
-import {Session}             from '../models/session';
+import SessionAgent          from 'server/agents/session-agent';
+import {forbidden, notFound} from 'server/app/view';
+import {slog}                from 'server/libs/slog';
+import {Session}             from 'server/models/session';
 import Cookie                from './cookie';
 import R                     from './r';
 import Utils                 from './utils';
 
 import express =    require('express');
 import bodyParser = require('body-parser');
-import slog =       require('../slog');
 
 /**
  * Access

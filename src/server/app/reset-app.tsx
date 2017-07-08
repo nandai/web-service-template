@@ -10,11 +10,11 @@ import {Store}          from 'client/components/views/reset-view/store';
 import ClientR          from 'client/libs/r';
 import {Response}       from 'libs/response';
 import AccountAgent     from 'server/agents/account-agent';
+import {slog}           from 'server/libs/slog';
 import Utils            from 'server/libs/utils';
 import {notFound, view} from './view';
 
 import express = require('express');
-import slog =    require('../slog');
 
 /**
  * reset app

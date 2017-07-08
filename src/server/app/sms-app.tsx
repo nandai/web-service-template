@@ -9,12 +9,12 @@ import SmsView          from 'client/components/views/sms-view';
 import {Store}          from 'client/components/views/sms-view/store';
 import ClientR          from 'client/libs/r';
 import {Response}       from 'libs/response';
-import Utils            from '../libs/utils';
-import {Session}        from '../models/session';
+import {slog}           from 'server/libs/slog';
+import Utils            from 'server/libs/utils';
+import {Session}        from 'server/models/session';
 import {notFound, view} from './view';
 
 import express = require('express');
-import slog =    require('../slog');
 
 /**
  * sms App

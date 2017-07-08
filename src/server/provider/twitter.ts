@@ -1,14 +1,14 @@
 /**
  * (C) 2016 printf.jp
  */
-import Config   from '../config';
-import Utils    from '../libs/utils';
+import Config   from 'server/config';
+import {slog}   from 'server/libs/slog';
+import Utils    from 'server/libs/utils';
 import Provider from './provider';
 
 import express =         require('express');
 import passportTwitter = require('passport-twitter');
 import twit =            require('twit');
-import slog =            require('../slog');
 
 /**
  * Twitter

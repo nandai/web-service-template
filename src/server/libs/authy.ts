@@ -1,9 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Config from '../config';
-
-import slog = require('../slog');
+import Config from 'server/config';
+import {slog} from 'server/libs/slog';
 
 /**
  * Authy

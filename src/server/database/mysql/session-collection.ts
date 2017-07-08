@@ -1,11 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog}    from 'server/libs/slog';
 import {Session} from 'server/models/session';
 import DB        from '.';
 
-import _ =    require('lodash');
-import slog = require('server/slog');
+import _ = require('lodash');
 
 /**
  * セッションモデル

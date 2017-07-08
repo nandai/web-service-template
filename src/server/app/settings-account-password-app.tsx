@@ -9,12 +9,12 @@ import SettingsAccountPasswordView from 'client/components/views/settings-accoun
 import {Store}                     from 'client/components/views/settings-account-password-view/store';
 import ClientR                     from 'client/libs/r';
 import {Response}                  from 'libs/response';
-import SettingsApi                 from '../api/settings-api';
-import Utils                       from '../libs/utils';
+import SettingsApi                 from 'server/api/settings-api';
+import {slog}                      from 'server/libs/slog';
+import Utils                       from 'server/libs/utils';
 import {notFound, view}            from './view';
 
 import express = require('express');
-import slog =    require('../slog');
 
 /**
  * settings account password app

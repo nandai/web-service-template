@@ -5,10 +5,10 @@ import {Response}        from 'libs/response';
 import AccountAgent      from 'server/agents/account-agent';
 import LoginHistoryAgent from 'server/agents/login-history-agent';
 import Converter         from 'server/libs/converter';
+import {slog}            from 'server/libs/slog';
 import {Session}         from 'server/models/session';
 
 import express = require('express');
-import slog =    require('server/slog');
 
 /**
  * アカウント取得

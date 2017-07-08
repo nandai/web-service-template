@@ -9,10 +9,10 @@ import ForgetView    from 'client/components/views/forget-view';
 import {Store}       from 'client/components/views/forget-view/store';
 import ClientR       from 'client/libs/r';
 import {Response}    from 'libs/response';
+import {slog}        from 'server/libs/slog';
 import {view}        from './view';
 
 import express = require('express');
-import slog =    require('../slog');
 
 /**
  * forget app

@@ -5,11 +5,11 @@ import {Response}         from 'libs/response';
 import AccountAgent       from 'server/agents/account-agent';
 import DeleteAccountAgent from 'server/agents/delete-account-agent';
 import SessionAgent       from 'server/agents/session-agent';
+import {slog}             from 'server/libs/slog';
 import Utils              from 'server/libs/utils';
 import {Session}          from 'server/models/session';
 
 import express = require('express');
-import slog =    require('server/slog');
 
 /**
  * アカウント削除<br>

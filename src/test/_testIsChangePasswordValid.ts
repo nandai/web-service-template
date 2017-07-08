@@ -7,10 +7,10 @@ import {Response}              from 'libs/response';
 import AccountAgent            from 'server/agents/account-agent';
 import {isChangePasswordValid} from 'server/api/settings-api/methods/onChangePassword';
 import Config                  from 'server/config';
+import {slog}                  from 'server/libs/slog';
 import Utils                   from 'server/libs/utils';
 import {Account}               from 'server/models/account';
 
-import slog = require('server/slog');
 const locale = 'ja';
 
 export function testIsChangePasswordValid()

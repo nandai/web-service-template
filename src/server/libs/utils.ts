@@ -4,6 +4,7 @@
 import {Response} from 'libs/response';
 import Config     from 'server/config';
 import R          from 'server/libs/r';
+import {slog}     from 'server/libs/slog';
 
 import crypto =  require('crypto');
 import dns =     require('dns');
@@ -12,7 +13,6 @@ import moment =  require('moment');
 import mailer =  require('nodemailer');
 import smtp =    require('nodemailer-smtp-transport');
 import Random =  require("random-js");
-import slog =    require('../slog');
 
 const random = new Random(Random.engines.mt19937().autoSeed());
 

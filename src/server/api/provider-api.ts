@@ -5,6 +5,7 @@
 // import {Request}  from 'libs/request';
 // import {Response} from 'libs/response';
 // import R          from '../libs/r';
+// import {slog}     from '../libs/slog';
 // import Utils      from '../libs/utils';
 // import Facebook   from '../provider/facebook';
 // import Github     from '../provider/github';
@@ -12,7 +13,6 @@
 // import Twitter    from '../provider/twitter';
 
 // import express = require('express');
-// import slog =    require('../slog');
 
 /**
  * ログインAPI

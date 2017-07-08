@@ -28,6 +28,7 @@ import Access                        from './libs/access';
 import Authy                         from './libs/authy';
 import {expressExtension}            from './libs/express-extension';
 import R                             from './libs/r';
+import {slog}                        from './libs/slog';
 import Utils                         from './libs/utils';
 import {Session}                     from './models/session';
 import Email                         from './provider/email';
@@ -48,7 +49,6 @@ import passportFacebook = require('passport-facebook');
 import passportGithub =   require('passport-github');
 import passportGoogle =   require('passport-google-oauth');
 import passportTwitter =  require('passport-twitter');
-import slog =             require('./slog');
 
 /**
  * イニシャライザ

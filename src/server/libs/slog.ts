@@ -17,21 +17,21 @@
 /**
  * @namespace slog
  */
-// module slog
-// {
-    const STEP_IN    : number = 0;
-    const STEP_OUT   : number = 1;
-    const MESSAGE    : number = 2;
+export namespace slog
+{
+    const STEP_IN =  0;
+    const STEP_OUT = 1;
+    const MESSAGE =  2;
 
-    const DEBUG      : number = 0;    // デバッグ
-    const INFO       : number = 1;    // 情報
-    const WARN       : number = 2;    // 警告
-    const ERROR      : number = 3;    // エラー
+    const DEBUG = 0;    // デバッグ
+    const INFO =  1;    // 情報
+    const WARN =  2;    // 警告
+    const ERROR = 3;    // エラー
 
-    const INIT       : number = -1;
-    const CONNECTING : number =  0;
-    const OPEN       : number =  1;
-    const CLOSED     : number =  3;
+    const INIT =       -1;
+    const CONNECTING =  0;
+    const OPEN =        1;
+    const CLOSED =      3;
 
     /**
      * シーケンスログクライアント（singleton）
@@ -43,7 +43,7 @@
         /**
          * WebSocketの状態
          */
-        readyState : number = INIT;
+        readyState = INIT;
 
         /**
          * WebSocket
@@ -58,12 +58,12 @@
         /**
          * シーケンスNo
          */
-        seqNo : number = 0;
+        seqNo = 0;
 
         /**
          * 擬似スレッドID
          */
-        tid : number = process.pid;
+        tid = process.pid;
 
         /**
          * シーケンスログリスト
@@ -73,7 +73,7 @@
         /**
          * sequenceLogListの現在位置
          */
-        sequenceLogListPos : number = 0;
+        sequenceLogListPos = 0;
 
         /**
          * 接続が完了する前に出力されたログを貯めておくリスト
@@ -83,7 +83,7 @@
         /**
          * itemListの現在位置
          */
-        itemListPos : number = 0;
+        itemListPos = 0;
 
         /**
          * 送信バッファ
@@ -142,17 +142,17 @@
                 self.ws = connection;
                 self.readyState = OPEN;
 
-                const fileNameLen : number = self.getStringBytes(fileName) + 1;
-                const userNameLen : number = self.getStringBytes(userName) + 1;
-                const passwdLen   : number = self.getStringBytes(passwd)   + 1;
+                const fileNameLen = self.getStringBytes(fileName) + 1;
+                const userNameLen = self.getStringBytes(userName) + 1;
+                const passwdLen =   self.getStringBytes(passwd)   + 1;
 
-                const array : Uint8Array = new Uint8Array(
+                const array = new Uint8Array(
                     4 +
                     4 + userNameLen +
                     4 + passwdLen +
                     4 + fileNameLen +
                     4);
-                let pos : number = 0;
+                let pos = 0;
 
                 // プロセスID
                 const pid = process.pid;
@@ -246,14 +246,14 @@
          *
          * @return  文字列のバイト数
          */
-        getStringBytes(str) : number
+        getStringBytes(str : string) : number
         {
-            const len : number = str.length;
-            let bytes : number = 0;
+            const len = str.length;
+            let bytes = 0;
 
             for (let i = 0; i < len; i++)
             {
-                const c : number = str.charCodeAt(i);
+                const c = str.charCodeAt(i);
 
                 if (c <= 0x7F)
                 {
@@ -289,12 +289,12 @@
          */
         setStringToUint8Array(array : Uint8Array, offset : number, str : string) : number
         {
-            const len : number = str.length;
-            let pos   : number = offset;
+            const len = str.length;
+            let pos = offset;
 
             for (let i = 0; i < len; i++)
             {
-                const c : number = str.charCodeAt(i);
+                const c = str.charCodeAt(i);
 
                 if (c <= 0x7F)
                 {
@@ -360,8 +360,8 @@
                 return false;
             }
 
-            if (this.readyState !== CONNECTING &&
-                this.readyState !== OPEN)
+            if (this.readyState !== CONNECTING
+            &&  this.readyState !== OPEN)
             {
                 return false;
             }
@@ -380,8 +380,8 @@
          */
         getItemBytes(item : SequenceLogItem) : number
         {
-            let pos : number = 0;
-            let len : number = 0;
+            let pos = 0;
+            let len = 0;
 
             // レコード長
             pos += 2;
@@ -447,9 +447,9 @@
          */
         itemToUint8Array(array : Uint8Array, offset : number, item : SequenceLogItem) : number
         {
-            let pos     : number = offset;
-            let posSave : number = 0;
-            let len     : number = 0;
+            let pos = offset;
+            let posSave = 0;
+            let len = 0;
 
             // レコード長
             pos += 2;
@@ -578,12 +578,12 @@
          */
         sendAllItems() : void
         {
-            const itemList : SequenceLogItem[] = this.itemList;
-            const count : number = itemList.length;
+            const itemList = this.itemList;
+            const count = itemList.length;
 
             for (let i = 0; i < count; i++)
             {
-                const item : SequenceLogItem = itemList[i];
+                const item = itemList[i];
                 this.sendItem(item);
             }
 
@@ -603,14 +603,14 @@
                 this.itemListPos = 0;
             }
 
-            const itemList : SequenceLogItem[] = this.itemList;
-            const count : number = itemList.length;
+            const itemList = this.itemList;
+            const count = itemList.length;
 
-            const pos : number = this.itemListPos++;
+            const pos = this.itemListPos++;
 
             if (pos === count)
             {
-                const item : SequenceLogItem = new SequenceLogItem();
+                const item = new SequenceLogItem();
                 itemList[count] = item;
             }
 
@@ -626,14 +626,14 @@
          */
         getSequenceLog() : SequenceLog
         {
-            const sequenceLogList : SequenceLog[] = this.sequenceLogList;
-            const count : number = sequenceLogList.length;
+            const sequenceLogList = this.sequenceLogList;
+            const count = sequenceLogList.length;
 
-            const pos : number = this.sequenceLogListPos++;
+            const pos = this.sequenceLogListPos++;
 
             if (pos === count)
             {
-                const sequenceLog : SequenceLog = new SequenceLog();
+                const sequenceLog = new SequenceLog();
                 sequenceLogList[count] = sequenceLog;
             }
 
@@ -651,7 +651,7 @@
         /**
          * シーケンスNo
          */
-        seqNo : number = 0;
+        seqNo = 0;
 
         /**
          * タイプ
@@ -676,7 +676,7 @@
         /**
          * ログレベル
          */
-        level : number = 0;
+        level = 0;
 
         /**
          * メッセージID
@@ -686,17 +686,17 @@
         /**
          * クラス名
          */
-        className : string = '';
+        className = '';
 
         /**
          * メソッド名
          */
-        funcName : string = '';
+        funcName = '';
 
         /**
          * メッセージ
          */
-        message : string = '';
+        message = '';
     }
 
     /**
@@ -726,7 +726,7 @@
 
             this.seqNo = client.getSequenceNo();
 
-            const item : SequenceLogItem = client.getItem();
+            const item = client.getItem();
             item.seqNo = this.seqNo;
             item.type = STEP_IN;
             item.className = className;
@@ -748,7 +748,7 @@
                 return;
             }
 
-            const item : SequenceLogItem = client.getItem();
+            const item = client.getItem();
             item.seqNo = this.seqNo;
             item.type = STEP_OUT;
 
@@ -788,7 +788,7 @@
             return;
         }
 
-        const item : SequenceLogItem = client.getItem();
+        const item = client.getItem();
         item.seqNo = log.seqNo;
         item.type = MESSAGE;
         item.level = level;
@@ -808,7 +808,7 @@
      *
      * @return  なし
      */
-    export function setConfig(address, fileName, logLevel, userName : string, passwd : string) : void
+    export function setConfig(address : string, fileName : string, logLevel : string, userName : string, passwd : string) : void
     {
         client.setConfig(address, fileName, logLevel, userName, passwd);
     }
@@ -832,7 +832,5 @@
     }
 
     // シーケンスログクライアント生成
-    const client : SequenceLogClient = new SequenceLogClient();
-// }
-
-// module.exports = slog;
+    const client = new SequenceLogClient();
+}
