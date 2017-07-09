@@ -5,7 +5,7 @@ import {slog}    from 'server/libs/slog';
 import {Account} from 'server/models/account';
 import DB        from '.';
 
-import _ =    require('lodash');
+import _ = require('lodash');
 
 /**
  * 削除アカウントモデル

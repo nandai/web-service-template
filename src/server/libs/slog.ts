@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2014 printf.jp
+ * Copyright (C) 2011-2017 printf.jp
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import WebSocket = require('websocket');
+const  WebSocketClient = WebSocket.client;
 
 /**
  * @namespace slog
@@ -28,10 +30,95 @@ export namespace slog
     const WARN =  2;    // 警告
     const ERROR = 3;    // エラー
 
-    const INIT =       -1;
-    const CONNECTING =  0;
-    const OPEN =        1;
-    const CLOSED =      3;
+    class WS
+    {
+        static readonly INIT =       -1;
+        static readonly CONNECTING =  0;
+        static readonly OPEN =        1;
+        static readonly CLOSED =      3;
+
+        readyState = WS.INIT;
+        private client = new WebSocketClient();
+        private ws : WebSocket.connection;
+        private errorCallback : () => void;
+        private closeCallback : () => void;
+
+        connect(url : string) : void
+        {
+            this.client.connect(url);
+            this.readyState = WS.CONNECTING;
+        }
+
+        onConnect(callback : () => void) : void
+        {
+            const self = this;
+            this.client.on('connect', (connection) =>
+            {
+                self.ws = connection;
+                self.ws.on('error', callback);
+                self.ws.on('close', callback);
+
+                self.readyState = WS.OPEN;
+                callback();
+            });
+        }
+
+        onError(callback : () => void) : void
+        {
+            const self = this;
+            this.errorCallback = () =>
+            {
+                self.readyState = WS.CLOSED;
+                callback();
+            };
+        }
+
+        onClose(callback : () => void) : void
+        {
+            const self = this;
+            this.closeCallback = () =>
+            {
+                self.readyState = WS.CLOSED;
+                callback();
+            };
+        }
+
+        onConnectFailed(callback : () => void)
+        {
+            const self = this;
+            this.client.on('connectFailed', () =>
+            {
+                self.readyState = WS.CLOSED;
+                callback();
+            });
+        }
+
+        send(array : Uint8Array) : void
+        {
+            this.ws.sendBytes(this.toBuffer(array));
+        }
+
+        /**
+         * Uint8ArrayをBufferに変換します。
+         *
+         * @method  toBuffer
+         *
+         * @param   array   変換元
+         *
+         * @return  Buffer
+         */
+        private toBuffer(array : Uint8Array) : Buffer
+        {
+            const len = array.byteLength;
+            const buffer = new Buffer(len);
+
+            for (let i = 0; i < len; ++i) {
+                buffer[i] = array[i];
+            }
+
+            return buffer;
+        }
+    }
 
     /**
      * シーケンスログクライアント（singleton）
@@ -41,14 +128,9 @@ export namespace slog
     class SequenceLogClient
     {
         /**
-         * WebSocketの状態
-         */
-        readyState = INIT;
-
-        /**
          * WebSocket
          */
-        ws : any;
+        ws = new WS();
 
         /**
          * ログレベル
@@ -131,17 +213,11 @@ export namespace slog
             }
 
             // 接続
-            const self : SequenceLogClient = this;
-            const WebSocketClient = require('websocket').client;
-            const client = new WebSocketClient();
-            this.readyState = CONNECTING;
+            const self = this;
+            this.ws.connect(address + '/outputLog');
 
-            client.connect(address + '/outputLog');
-            client.on('connect', (connection) =>
+            this.ws.onConnect(() =>
             {
-                self.ws = connection;
-                self.readyState = OPEN;
-
                 const fileNameLen = self.getStringBytes(fileName) + 1;
                 const userNameLen = self.getStringBytes(userName) + 1;
                 const passwdLen =   self.getStringBytes(passwd)   + 1;
@@ -195,31 +271,28 @@ export namespace slog
                 array[pos++] =  self.logLevel        & 0xFF;
 
                 // 送信
-                self.ws.sendBytes(self.toBuffer(array));
+                self.ws.send(array);
                 self.sendAllItems();
-
-                self.ws.on('message', (e) =>
-                {
-//                  const array = new DataView(e.data);
-//                  const seqNo = array.getInt32(0);
-                });
-
-                self.ws.on('error', (error) =>
-                {
-                    self.readyState = CLOSED;
-                    console.error('error slog WebSocket');
-                });
-
-                self.ws.on('close', () =>
-                {
-                    self.readyState = CLOSED;
-                    console.info('close slog WebSocket');
-                });
             });
 
-            client.on('connectFailed', (error) =>
+//          this.ws.onMessage((e) =>
+//          {
+//              const array = new DataView(e.data);
+//              const seqNo = array.getInt32(0);
+//          });
+
+            this.ws.onError(() =>
             {
-                self.readyState = CLOSED;
+                console.error('error slog WebSocket');
+            });
+
+            this.ws.onClose(() =>
+            {
+                console.info('close slog WebSocket');
+            });
+
+            this.ws.onConnectFailed(() =>
+            {
                 console.error('connect failed slog WebSocket');
             });
         }
@@ -327,27 +400,6 @@ export namespace slog
         }
 
         /**
-         * Uint8ArrayをBufferに変換します。
-         *
-         * @method  toBuffer
-         *
-         * @param   array   変換元
-         *
-         * @return  Buffer
-         */
-        toBuffer(array : Uint8Array) : Buffer
-        {
-            const len = array.byteLength;
-            const buffer = new Buffer(len);
-
-            for (let i = 0; i < len; ++i) {
-                buffer[i] = array[i];
-            }
-
-            return buffer;
-        }
-
-        /**
          * ログ出力可能かどうか調べます。
          *
          * @method  canOutput
@@ -360,8 +412,8 @@ export namespace slog
                 return false;
             }
 
-            if (this.readyState !== CONNECTING
-            &&  this.readyState !== OPEN)
+            if (this.ws.readyState !== WS.CONNECTING
+            &&  this.ws.readyState !== WS.OPEN)
             {
                 return false;
             }
@@ -549,11 +601,11 @@ export namespace slog
          */
         sendItem(item : SequenceLogItem) : void
         {
-            if (this.readyState === CONNECTING) {
+            if (this.ws.readyState === WS.CONNECTING) {
                 return;
             }
 
-            const size : number = this.getItemBytes(item);
+            const size = this.getItemBytes(item);
             let array : Uint8Array;
 
             if (size < this.arrayList.length)
@@ -566,7 +618,7 @@ export namespace slog
             }
 
             this.itemToUint8Array(array, 0, item);
-            this.ws.sendBytes(this.toBuffer(array));
+            this.ws.send(array);
         }
 
         /**
@@ -599,7 +651,7 @@ export namespace slog
          */
         getItem() : SequenceLogItem
         {
-            if (this.readyState === OPEN) {
+            if (this.ws.readyState === WS.OPEN) {
                 this.itemListPos = 0;
             }
 

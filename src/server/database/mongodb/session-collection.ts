@@ -5,7 +5,7 @@ import {slog}    from 'server/libs/slog';
 import {Session} from 'server/models/session';
 import DB        from '.';
 
-import _ =    require('lodash');
+import _ = require('lodash');
 
 /**
  * セッションモデル

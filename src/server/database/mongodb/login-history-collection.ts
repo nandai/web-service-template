@@ -5,7 +5,7 @@ import {slog}         from 'server/libs/slog';
 import {LoginHistory} from 'server/models/login-history';
 import DB             from '.';
 
-import _ =    require('lodash');
+import _ = require('lodash');
 
 /**
  * ログイン履歴モデル

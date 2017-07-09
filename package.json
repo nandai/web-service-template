@@ -23,6 +23,7 @@
     "@types/react-dom": "^15.5.1",
     "@types/superagent": "^3.5.2",
     "@types/validator": "^6.2.0",
+    "@types/websocket": "0.0.34",
     "authy": "^1.2.0",
     "ava": "^0.20.0",
     "babel-preset-latest": "^6.24.1",

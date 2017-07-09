@@ -28,10 +28,58 @@ export namespace slog
     const WARN =  2;    // 警告
     const ERROR = 3;    // エラー
 
-    const INIT =       -1;
-    const CONNECTING =  0;
-    const OPEN =        1;
-    const CLOSED =      3;
+    class WS
+    {
+        static readonly INIT =       -1;
+        static readonly CONNECTING =  0;
+        static readonly OPEN =        1;
+        static readonly CLOSED =      3;
+
+        readyState = WS.INIT;
+        private ws : WebSocket;
+
+        connect(url : string) : void
+        {
+            this.ws = new WebSocket(url);
+            this.ws.binaryType = 'arraybuffer';
+            this.readyState = WS.CONNECTING;
+        }
+
+        onConnect(callback : () => void) : void
+        {
+            const self = this;
+            this.ws.onopen = () =>
+            {
+                self.readyState = WS.OPEN;
+                callback();
+            };
+        }
+
+        onError(callback : () => void) : void
+        {
+            const self = this;
+            this.ws.onerror = () =>
+            {
+                self.readyState = WS.CLOSED;
+                callback();
+            };
+        }
+
+        onClose(callback : () => void) : void
+        {
+            const self = this;
+            this.ws.onclose = () =>
+            {
+                self.readyState = WS.CLOSED;
+                callback();
+            };
+        }
+
+        send(array : Uint8Array) : void
+        {
+            this.ws.send(array.buffer);
+        }
+    }
 
     /**
      * シーケンスログクライアント（singleton）
@@ -41,14 +89,9 @@ export namespace slog
     class SequenceLogClient
     {
         /**
-         * WebSocketの状態
-         */
-        readyState = INIT;
-
-        /**
          * WebSocket
          */
-        ws : WebSocket;
+        ws = new WS();
 
         /**
          * ログレベル
@@ -132,14 +175,10 @@ export namespace slog
 
             // 接続
             const self = this;
-            this.ws = new WebSocket(address + '/outputLog');
-            this.ws.binaryType = 'arraybuffer';
-            this.readyState = CONNECTING;
+            this.ws.connect(address + '/outputLog');
 
-            this.ws.onopen = () =>
+            this.ws.onConnect(() =>
             {
-                self.readyState = OPEN;
-
                 const fileNameLen = self.getStringBytes(fileName) + 1;
                 const userNameLen = self.getStringBytes(userName) + 1;
                 const passwdLen =   self.getStringBytes(passwd)   + 1;
@@ -193,27 +232,25 @@ export namespace slog
                 array[pos++] =  self.logLevel        & 0xFF;
 
                 // 送信
-                self.ws.send(array.buffer);
+                self.ws.send(array);
                 self.sendAllItems();
-            };
+            });
 
-            this.ws.onmessage = (e) =>
-            {
+//          this.ws.onMessage((e) =>
+//          {
 //              const array = new DataView(e.data);
 //              const seqNo = array.getInt32(0);
-            };
+//          });
 
-            this.ws.onerror = () =>
+            this.ws.onError(() =>
             {
-                self.readyState = CLOSED;
                 console.error('error slog WebSocket');
-            };
+            });
 
-            this.ws.onclose = () =>
+            this.ws.onClose(() =>
             {
-                self.readyState = CLOSED;
                 console.info('close slog WebSocket');
-            };
+            });
         }
 
         /**
@@ -331,8 +368,8 @@ export namespace slog
                 return false;
             }
 
-            if (this.readyState !== CONNECTING
-            &&  this.readyState !== OPEN)
+            if (this.ws.readyState !== WS.CONNECTING
+            &&  this.ws.readyState !== WS.OPEN)
             {
                 return false;
             }
@@ -520,7 +557,7 @@ export namespace slog
          */
         sendItem(item : SequenceLogItem) : void
         {
-            if (this.readyState === CONNECTING) {
+            if (this.ws.readyState === WS.CONNECTING) {
                 return;
             }
 
@@ -537,7 +574,7 @@ export namespace slog
             }
 
             this.itemToUint8Array(array, 0, item);
-            this.ws.send(array.buffer);
+            this.ws.send(array);
         }
 
         /**
@@ -570,7 +607,7 @@ export namespace slog
          */
         getItem() : SequenceLogItem
         {
-            if (this.readyState === OPEN) {
+            if (this.ws.readyState === WS.OPEN) {
                 this.itemListPos = 0;
             }
 
