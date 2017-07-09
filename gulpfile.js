@@ -1,20 +1,21 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+const browserify =  require('browserify');
+const cssnano =     require('cssnano');
 const gulp =        require('gulp');
 const abspath =     require('gulp-absolute-path');
-const typescript =  require('gulp-typescript');
 const babel =       require('gulp-babel');
 const gulpif =      require('gulp-if');
-const uglify =      require('gulp-uglify');
-const browserify =  require('browserify');
-const source =      require('vinyl-source-stream');
-const buffer =      require('vinyl-buffer');
-const runSequence = require('run-sequence');
 const postcss =     require('gulp-postcss');
-const cssImport =   require('postcss-import');
+const typescript =  require('gulp-typescript');
+const uglify =      require('gulp-uglify');
+const runSequence = require('run-sequence');
 const cssNext =     require('postcss-cssnext');
+const cssImport =   require('postcss-import');
 const cssMixins =   require('postcss-mixins');
+const buffer =      require('vinyl-buffer');
+const source =      require('vinyl-source-stream');
 
 const tsOptions =
 {
@@ -80,9 +81,10 @@ gulp.task('javascript', function (callback)
 gulp.task('css', function()
 {
     return gulp
-      .src('./src/client/css/wst.css')
-      .pipe(postcss([cssImport, cssNext, cssMixins]))
-      .pipe(gulp.dest('./www/static/components'));
+        .src('./src/client/css/wst.css')
+        .pipe(postcss([cssImport, cssNext, cssMixins]))
+        .pipe(gulpif(condition, postcss([cssnano])))
+        .pipe(gulp.dest('./www/static/components'));
 });
 
 gulp.task('default', ['javascript', 'css']);
