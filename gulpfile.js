@@ -5,8 +5,11 @@ const gulp =        require('gulp');
 const abspath =     require('gulp-absolute-path');
 const typescript =  require('gulp-typescript');
 const babel =       require('gulp-babel');
+const gulpif =      require('gulp-if');
+const uglify =      require('gulp-uglify');
 const browserify =  require('browserify');
 const source =      require('vinyl-source-stream');
+const buffer =      require('vinyl-buffer');
 const runSequence = require('run-sequence');
 const postcss =     require('gulp-postcss');
 const cssImport =   require('postcss-import');
@@ -21,13 +24,15 @@ const tsOptions =
     experimentalDecorators: true
 };
 
-// const babelOptions =
-// {
-//   presets: ['latest']
-// };
+const babelOptions =
+{
+  presets: ['latest']
+};
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 console.log('NODE_ENV ... ' + process.env.NODE_ENV + '\n');
+
+const condition = (process.env.NODE_ENV === 'production');
 
 /**
  * TypeScript
@@ -44,7 +49,7 @@ gulp.task('typescript', function ()
     return gulp.src(src)
         .pipe(abspath({rootDir:'./src'}))
         .pipe(typescript(tsOptions))
-//      .pipe(babel(babelOptions))
+        .pipe(gulpif(condition, babel(babelOptions)))   // uglifyのためにやむなくbabel
         .pipe(gulp.dest('./build'));
 });
 
@@ -58,6 +63,8 @@ function buildClient(fileName)
     browserify({entries: ['./build/client/app/' + fileName]})
         .bundle()
         .pipe(source('./www/static/js/' + fileName))
+        .pipe(buffer())
+        .pipe(gulpif(condition, uglify()))
         .pipe(gulp.dest('.'));
 }
 

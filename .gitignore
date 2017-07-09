@@ -1,6 +1,7 @@
 /build/
 /build-client/
 /config/development/*
+/config/production/*
 /doc/
 /node_modules/
 /ssl/*
