@@ -169,7 +169,7 @@ export default class Provider
                                     const loginHistory : LoginHistory =
                                     {
                                         account_id: account.id,
-                                        device:     req.headers['user-agent']
+                                        device:     req.headers['user-agent'] as string
                                     };
                                     await LoginHistoryAgent.add(loginHistory);
 
@@ -257,7 +257,7 @@ export default class Provider
                                     const loginHistory : LoginHistory =
                                     {
                                         account_id: findAccount.id,
-                                        device:     req.headers['user-agent']
+                                        device:     req.headers['user-agent'] as string
                                     };
                                     await LoginHistoryAgent.add(loginHistory);
 

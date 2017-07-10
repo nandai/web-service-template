@@ -87,7 +87,7 @@ export async function onLoginSms(req : express.Request, res : express.Response)
                 const loginHistory : LoginHistory =
                 {
                     account_id: account.id,
-                    device:     req.headers['user-agent']
+                    device:     req.headers['user-agent'] as string
                 };
                 await LoginHistoryAgent.add(loginHistory);
             }

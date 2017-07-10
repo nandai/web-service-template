@@ -315,8 +315,10 @@ export default class Utils
         const {headers} = req;
         let locale = 'en';
 
-        if ('accept-language' in headers) {
-            locale = headers['accept-language'].substr(0, 2);
+        if ('accept-language' in headers)
+        {
+            const acceptLanguage = headers['accept-language'] as string;
+            locale = acceptLanguage.substr(0, 2);
         }
 
         if (locale !== 'ja') {

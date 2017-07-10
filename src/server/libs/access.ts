@@ -121,7 +121,7 @@ export default class Access
 
         if (req.headers['x-forwarded-for'])
         {
-            address = req.headers['x-forwarded-for'];
+            address = req.headers['x-forwarded-for'] as string;
             src = 'a';
         }
 
@@ -168,9 +168,11 @@ export default class Access
         {
             const headers = req.headers;
             const cookie = new Cookie(req, res);
-            const sessionId = ('x-session-id' in headers ? headers['x-session-id'] : cookie.sessionId);
-            let   session : Session = null;
+            const sessionId = ('x-session-id' in headers
+                ? headers['x-session-id'] as string
+                : cookie.sessionId);
 
+            let session : Session = null;
             if (sessionId === undefined)
             {
                 session = await SessionAgent.add();

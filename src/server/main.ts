@@ -28,6 +28,7 @@ import Access                        from './libs/access';
 import Authy                         from './libs/authy';
 import {expressExtension}            from './libs/express-extension';
 import R                             from './libs/r';
+import {SessionStore}                from './libs/session-store';
 import {slog}                        from './libs/slog';
 import Utils                         from './libs/utils';
 import {Session}                     from './models/session';
@@ -183,7 +184,8 @@ class Initializer
         {
             secret: Config.SESSION_SECRET,
             resave: false,
-            saveUninitialized: false
+            saveUninitialized: false,
+            store: new SessionStore()
         };
 
         this.app.use(session(options));
