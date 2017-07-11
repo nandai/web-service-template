@@ -31,6 +31,8 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
         const {locale, account} = store;
         const response = store.setAccountResponse;
         const {message} = response;
+        const userNameError =  (store.checkUserNameResponse.status !== Response.Status.OK);
+        const userNameMessage = store.checkUserNameResponse.message.userName;
         const items : RadioButtonItem[] =
         [
             {label:R.text(R.TWO_FACTOR_AUTH_SMS,   locale), value:'SMS'  },
@@ -44,7 +46,7 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
                 <ViewContents>
                     <form>
                         <Input type="text" placeholder={R.text(R.ACCOUNT_NAME, locale)} value={account.name}        message={message.name}        onChange={store.onNameChange} />
-                        <Input type="text" placeholder={R.text(R.USER_NAME,    locale)} value={account.userName}    message={message.userName}    onChange={store.onUserNameChange} />
+                        <Input type="text" placeholder={R.text(R.USER_NAME,    locale)} value={account.userName}    message={userNameMessage}     onChange={store.onUserNameChange} error={userNameError} />
                         <Input type="text" placeholder={R.text(R.PHONE_NO,     locale)} value={account.phoneNo}     message={message.phoneNo}     onChange={store.onPhoneNoChange} />
                         <Input type="text" placeholder={R.text(R.COUNTRY_CODE, locale)} value={account.countryCode} message={message.countryCode} onChange={store.onCountryCodeChange} />
                         <RadioButtons name="two-factor-auth" items={items} value={account.twoFactorAuth} onClick={store.onTwoFactorAuth} />

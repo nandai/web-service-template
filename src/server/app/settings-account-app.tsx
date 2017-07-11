@@ -42,7 +42,8 @@ export default class SettingsAccountApp
             {
                 locale,
                 account:  data.account,
-                setAccountResponse: {status:Response.Status.OK, message:{}},
+                setAccountResponse:    {status:Response.Status.OK, message:{}},
+                checkUserNameResponse: {status:Response.Status.OK, message:{}},
                 message:  ''
             };
 

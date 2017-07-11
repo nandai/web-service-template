@@ -11,6 +11,7 @@ interface InputProps
     placeholder? : string;
     value        : string;
     message?     : string;
+    error?       : boolean;
     onChange     : (value : string) => void;
 }
 
@@ -21,6 +22,7 @@ export default class Input extends React.Component<InputProps, {}>
         placeholder: '',
         value:       '',
         message:     '',
+        error:       true,
         onChange:    () => {}
     };
 
@@ -30,6 +32,9 @@ export default class Input extends React.Component<InputProps, {}>
     render() : JSX.Element
     {
         const {props} = this;
+        const textClassName = (props.error
+            ? 'wst-input-error'
+            : 'wst-input-ok');
 
         return (
             <div>
@@ -38,7 +43,7 @@ export default class Input extends React.Component<InputProps, {}>
                        placeholder = {props.placeholder}
                        value =       {props.value || ''}
                        onChange =    {(e) => props.onChange(e.target.value)} />
-                <Text className="wst-input-error">{props.message}</Text>
+                <Text className={textClassName}>{props.message}</Text>
             </div>
         );
     }

@@ -31,17 +31,18 @@ export default class SettingsAccountApp extends App
         super();
         this.store =
         {
-            locale:              Utils.getLocale(),
-            account:             ssrStore.account,
-            setAccountResponse:  ssrStore.setAccountResponse,
-            message:             '',
-            onNameChange:        this.onNameChange,
-            onUserNameChange:    this.onUserNameChange,
-            onPhoneNoChange:     this.onPhoneNoChange,
-            onTwoFactorAuth:     this.onTwoFactorAuth,
-            onCountryCodeChange: this.onCountryCodeChange,
-            onChange:            this.onChange,
-            onBack:              this.onBack,
+            locale:                 Utils.getLocale(),
+            account:                ssrStore.account,
+            setAccountResponse:     ssrStore.setAccountResponse,
+            checkUserNameResponse:  ssrStore.checkUserNameResponse,
+            message:                '',
+            onNameChange:           this.onNameChange,
+            onUserNameChange:       this.onUserNameChange,
+            onPhoneNoChange:        this.onPhoneNoChange,
+            onTwoFactorAuth:        this.onTwoFactorAuth,
+            onCountryCodeChange:    this.onCountryCodeChange,
+            onChange:               this.onChange,
+            onBack:                 this.onBack,
         };
     }
 
@@ -51,7 +52,8 @@ export default class SettingsAccountApp extends App
     init(params, message? : string)
     {
         const {store} = this;
-        store.setAccountResponse = {status:Response.Status.OK, message:{}};
+        store.setAccountResponse =    {status:Response.Status.OK, message:{}};
+        store.checkUserNameResponse = {status:Response.Status.OK, message:{}};
         store.message = '';
         return super.init(params);
     }
@@ -161,7 +163,7 @@ export default class SettingsAccountApp extends App
         const {store} = this;
         const userName = store.account.userName;
         const res : Response.CheckUserName = await SettingsApi.checkUserName({userName});
-        store.setAccountResponse.message.userName = res.message.userName;
+        store.checkUserNameResponse = res;
         this.render();
         this.checkUserNameTimerId = 0;
     }
