@@ -28,6 +28,18 @@ class Clients
         log.stepOut();
     }
 
+    notifyUpdateUser(user : Response.User) : void
+    {
+        const log = slog.stepIn('Clients', 'notifyUpdateUser');
+        log.d(`ソケット数: ${this.sockets.length}`);
+
+        this.sockets.forEach((socket) =>
+        {
+            socket.emit('notifyUpdateUser', user);
+        });
+        log.stepOut();
+    }
+
     notifyLogout() : void
     {
         const log = slog.stepIn('Clients', 'notifyLogout');
@@ -174,6 +186,23 @@ export default class SocketManager
             if (clients.accountId === accountId) {
                 clients.notifyUpdateAccount(account);
             }
+        }
+
+        log.stepOut();
+    }
+
+    /**
+     * ユーザー更新通知
+     */
+    static notifyUpdateUser(user : Response.User) : void
+    {
+        const log = slog.stepIn(SocketManager.CLS_NAME, 'notifyUpdateUser');
+        const {clientsManager} = SocketManager;
+
+        for (const key in clientsManager)
+        {
+            const clients = clientsManager[key];
+            clients.notifyUpdateUser(user);
         }
 
         log.stepOut();

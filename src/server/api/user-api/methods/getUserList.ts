@@ -3,6 +3,7 @@
  */
 import {Response}   from 'libs/response';
 import AccountAgent from 'server/agents/account-agent';
+import Converter    from 'server/libs/converter';
 import {slog}       from 'server/libs/slog';
 
 /**
@@ -18,12 +19,7 @@ export function getUserList()
             const accountList = await AccountAgent.findList({registered:true});
             const userList = accountList.map((account) =>
             {
-                const  user : Response.User =
-                {
-                    id:          account.id,
-                    accountName: account.name,
-                    name:        account.user_name
-                };
+                const  user = Converter.accountToUserResponse(account);
                 return user;
             });
 

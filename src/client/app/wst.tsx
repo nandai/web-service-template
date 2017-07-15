@@ -11,6 +11,7 @@ import Root                          from '../components/root';
 import History                       from '../libs/history';
 import R                             from '../libs/r';
 import {slog}                        from '../libs/slog';
+import {SocketEventData}             from '../libs/socket-event-data';
 import Utils                         from '../libs/utils';
 import {App}                         from './app';
 import ForbiddenApp                  from './forbidden-app';
@@ -245,6 +246,17 @@ class WstApp
     }
 
     /**
+     * ソケットイベント通知
+     */
+    private notifySocketEvent(data : SocketEventData) : void
+    {
+        this.routes.forEach((route) =>
+        {
+            route.app.notifySocketEvent(data);
+        });
+    }
+
+    /**
      * ソケットに接続する
      */
     @bind
@@ -253,6 +265,7 @@ class WstApp
         const io = socketIO.connect();
         io.on('connect',             this.onConnect);
         io.on('notifyUpdateAccount', this.onNotifyUpdateAccount);
+        io.on('notifyUpdateUser',    this.onNotifyUpdateUser);
         io.on('notifyLogout',        this.onNotifyLogout);
     }
 
@@ -275,7 +288,31 @@ class WstApp
         const log = slog.stepIn('WstApp', 'onNotifyUpdateAccount');
         log.d(JSON.stringify(account, null, 2));
 
+        const isLogin = (this.account === null && account);
         this.setAccount(account);
+
+        if (isLogin && this.currentRoute.url === '/')
+        {
+            History.pushState('/');
+        }
+        else
+        {
+            this.render();
+        }
+
+        log.stepOut();
+    }
+
+    /**
+     * ユーザー更新通知
+     */
+    @bind
+    onNotifyUpdateUser(user : Response.User)
+    {
+        const log = slog.stepIn('WstApp', 'onNotifyUpdateUser');
+        log.d(JSON.stringify(user, null, 2));
+
+        this.notifySocketEvent({notifyUpdateUser:user});
         this.render();
         log.stepOut();
     }

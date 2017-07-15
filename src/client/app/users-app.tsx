@@ -1,17 +1,18 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import bind       from 'bind-decorator';
-import * as React from 'react';
+import bind              from 'bind-decorator';
+import * as React        from 'react';
 
-import UserApi    from 'client/api/user-api';
-import {App}      from 'client/app/app';
-import UsersView  from 'client/components/views/users-view';
-import {Store}    from 'client/components/views/users-view/store';
-import History    from 'client/libs/history';
-import {slog}     from 'client/libs/slog';
-import Utils      from 'client/libs/utils';
-import {Response} from 'libs/response';
+import UserApi           from 'client/api/user-api';
+import {App}             from 'client/app/app';
+import UsersView         from 'client/components/views/users-view';
+import {Store}           from 'client/components/views/users-view/store';
+import History           from 'client/libs/history';
+import {slog}            from 'client/libs/slog';
+import {SocketEventData} from 'client/libs/socket-event-data';
+import Utils             from 'client/libs/utils';
+import {Response}        from 'libs/response';
 
 const ssrStore = Utils.getSsrStore<Store>();
 
@@ -62,6 +63,26 @@ export default class UsersApp extends App
     view() : JSX.Element
     {
         return <UsersView store={this.store} />;
+    }
+
+    /**
+     * ソケットイベント通知
+     */
+    notifySocketEvent(data : SocketEventData) : void
+    {
+        const user = data.notifyUpdateUser;
+        if (user)
+        {
+            const {userList} = this.store;
+            for (const i in userList)
+            {
+                if (userList[i].id === user.id)
+                {
+                    userList[i] = user;
+                    break;
+                }
+            }
+        }
     }
 
     /**

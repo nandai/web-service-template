@@ -43,4 +43,15 @@ export default class Converter
         };
         return response;
     }
+
+    static accountToUserResponse(account : Account) : Response.User
+    {
+        const response : Response.User =
+        {
+            id:          account.id,
+            accountName: account.name,
+            name:        account.user_name
+        };
+        return response;
+    }
 }

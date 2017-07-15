@@ -1,10 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import bind    from 'bind-decorator';
+import bind              from 'bind-decorator';
 
-import History from 'client/libs/history';
-import {slog}  from 'client/libs/slog';
+import History           from 'client/libs/history';
+import {slog}            from 'client/libs/slog';
+import {SocketEventData} from 'client/libs/socket-event-data';
 
 export abstract class App
 {
@@ -24,7 +25,17 @@ export abstract class App
         });
     }
 
+    /**
+     * view
+     */
     abstract view() : JSX.Element;
+
+    /**
+     * ソケットイベント通知
+     */
+    notifySocketEvent(data : SocketEventData) : void
+    {
+    }
 
     /**
      * onBack

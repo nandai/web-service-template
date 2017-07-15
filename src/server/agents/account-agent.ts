@@ -90,6 +90,9 @@ export default class AccountAgent
                 const loginHistory = await LoginHistoryAgent.findLatest(accountId);
                 SocketManager.notifyUpdateAccount(accountId, Converter.accountToResponse(model, loginHistory));
 
+                const user = Converter.accountToUserResponse(model);
+                SocketManager.notifyUpdateUser(user);
+
                 resolve();
             }
             catch (err) {reject(err);}

@@ -1,15 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React from 'react';
+import * as React        from 'react';
 
-import UserApi    from 'client/api/user-api';
-import {App}      from 'client/app/app';
-import UserView   from 'client/components/views/user-view';
-import {Store}    from 'client/components/views/user-view/store';
-import {slog}     from 'client/libs/slog';
-import Utils      from 'client/libs/utils';
-import {Response} from 'libs/response';
+import UserApi           from 'client/api/user-api';
+import {App}             from 'client/app/app';
+import UserView          from 'client/components/views/user-view';
+import {Store}           from 'client/components/views/user-view/store';
+import {slog}            from 'client/libs/slog';
+import {SocketEventData} from 'client/libs/socket-event-data';
+import Utils             from 'client/libs/utils';
+import {Response}        from 'libs/response';
 
 const ssrStore = Utils.getSsrStore<Store>();
 
@@ -67,5 +68,16 @@ export default class UserApp extends App
     view() : JSX.Element
     {
         return <UserView store={this.store} />;
+    }
+
+    /**
+     * ソケットイベント通知
+     */
+    notifySocketEvent(data : SocketEventData) : void
+    {
+        const user = data.notifyUpdateUser;
+        if (user) {
+            this.store.user = user;
+        }
     }
 }

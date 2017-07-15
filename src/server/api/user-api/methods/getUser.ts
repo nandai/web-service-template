@@ -4,6 +4,7 @@
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
 import AccountAgent from 'server/agents/account-agent';
+import Converter    from 'server/libs/converter';
 import R            from 'server/libs/r';
 import {slog}       from 'server/libs/slog';
 import {Account}    from 'server/models/account';
@@ -23,7 +24,7 @@ export function getUser(param : Request.GetUser, req : express.Request)
             const locale = req.ext.locale;
             const data  : Response.GetUser = {status:Response.Status.OK, user:null};
             let account : Account = null;
-            const id = <string>param.id;
+            const {id} = param;
 
             if (id)
             {
@@ -34,14 +35,8 @@ export function getUser(param : Request.GetUser, req : express.Request)
                 }
             }
 
-            if (account)
-            {
-                data.user =
-                {
-                    id:          account.id,
-                    accountName: account.name,
-                    name:        account.user_name
-                };
+            if (account) {
+                data.user = Converter.accountToUserResponse(account);
             }
 
             log.stepOut();
