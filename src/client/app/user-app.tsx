@@ -7,6 +7,7 @@ import UserApi           from 'client/api/user-api';
 import {App}             from 'client/app/app';
 import UserView          from 'client/components/views/user-view';
 import {Store}           from 'client/components/views/user-view/store';
+import History           from 'client/libs/history';
 import {slog}            from 'client/libs/slog';
 import {SocketEventData} from 'client/libs/socket-event-data';
 import Utils             from 'client/libs/utils';
@@ -76,8 +77,15 @@ export default class UserApp extends App
     notifySocketEvent(data : SocketEventData) : void
     {
         const user = data.notifyUpdateUser;
-        if (user) {
-            this.store.user = user;
+        if (user)
+        {
+            const {store} = this;
+            if (store.user.name !== user.name)
+            {
+                const id = (user.name ? user.name : user.id.toString());
+                History.replaceState(`/users/${id}`);
+            }
+            store.user = user;
         }
     }
 }
