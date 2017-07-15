@@ -9,6 +9,7 @@ import {SocketEventData} from 'client/libs/socket-event-data';
 
 export abstract class App
 {
+    active = false;
     render : () => void;
 
     /**

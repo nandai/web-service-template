@@ -124,19 +124,19 @@ class WstApp
                     try
                     {
                         await route.app.init(params, message);
-                        this.currentRoute = route;
+                        this.setCurrentRoute(route);
                     }
                     catch (err)
                     {
                         console.warn(err.message);
                         routeResult = this.getRoute('404');
                         route = routeResult.route;
-                        this.currentRoute = route;
+                        this.setCurrentRoute(route);
                     }
                 }
                 else
                 {
-                    this.currentRoute = route;
+                    this.setCurrentRoute(route);
                 }
             }
 
@@ -144,6 +144,19 @@ class WstApp
             log.stepOut();
             resolve();
         });
+    }
+
+    /**
+     * カレントRoute設定
+     */
+    private setCurrentRoute(route : Route) : void
+    {
+        if (this.currentRoute) {
+            this.currentRoute.app.active = false;
+        }
+
+        this.currentRoute = route;
+        this.currentRoute.app.active = true;
     }
 
     /**

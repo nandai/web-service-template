@@ -80,7 +80,7 @@ export default class UserApp extends App
         if (user)
         {
             const {store} = this;
-            if (store.user.name !== user.name)
+            if (this.active && store.user.name !== user.name)
             {
                 const id = (user.name ? user.name : user.id.toString());
                 History.replaceState(`/users/${id}`);
