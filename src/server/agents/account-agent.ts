@@ -1,10 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import LoginHistoryAgent from 'server/agents/login-history-agent';
 import Config            from 'server/config';
 import MongoDBCollection from 'server/database/mongodb/account-collection';
 import MySQLCollection   from 'server/database/mysql/account-collection';
+import Converter         from 'server/libs/converter';
 import {slog}            from 'server/libs/slog';
+import SocketManager     from 'server/libs/socket-manager';
 import Utils             from 'server/libs/utils';
 import {Account}         from 'server/models/account';
 
@@ -66,17 +69,31 @@ export default class AccountAgent
      */
     static async update(model : Account)
     {
-        // 追加のデータを設定して、
-        const newModel = AccountAgent.toModel(model);
-        newModel.international_phone_no = AccountAgent.international_phone_no(model);
-        newModel.crypto_type = 1;
-        newModel.updated_at = Utils.now();
+        return new Promise(async (resolve : () => void, reject) =>
+        {
+            try
+            {
+                // 追加のデータを設定して、
+                const newModel = AccountAgent.toModel(model);
+                newModel.international_phone_no = AccountAgent.international_phone_no(model);
+                newModel.crypto_type = 1;
+                newModel.updated_at = Utils.now();
 
-        // 暗号化して、
-        AccountAgent.encrypt(newModel);
+                // 暗号化して、
+                AccountAgent.encrypt(newModel);
 
-        // 更新する
-        return collection().update(newModel);
+                // 更新する
+                await collection().update(newModel);
+
+                // クライアントに通知
+                const accountId = newModel.id;
+                const loginHistory = await LoginHistoryAgent.findLatest(accountId);
+                SocketManager.notifyUpdateAccount(accountId, Converter.accountToResponse(model, loginHistory));
+
+                resolve();
+            }
+            catch (err) {reject(err);}
+        });
     }
 
     /**

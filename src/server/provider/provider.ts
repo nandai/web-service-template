@@ -171,7 +171,7 @@ export default class Provider
                                         account_id: account.id,
                                         device:     req.headers['user-agent'] as string
                                     };
-                                    await LoginHistoryAgent.add(loginHistory);
+                                    await LoginHistoryAgent.add(loginHistory, session.id);
 
                                     // トップ画面へ
                                     await self.sendResponse(req, res, session, '/');
@@ -259,7 +259,7 @@ export default class Provider
                                         account_id: findAccount.id,
                                         device:     req.headers['user-agent'] as string
                                     };
-                                    await LoginHistoryAgent.add(loginHistory);
+                                    await LoginHistoryAgent.add(loginHistory, session.id);
 
                                     // トップ画面へ
                                     await self.sendResponse(req, res, session, '/', phrase);

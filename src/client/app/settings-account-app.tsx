@@ -31,18 +31,18 @@ export default class SettingsAccountApp extends App
         super();
         this.store =
         {
-            locale:                 Utils.getLocale(),
-            account:                ssrStore.account,
-            setAccountResponse:     ssrStore.setAccountResponse,
-            checkUserNameResponse:  ssrStore.checkUserNameResponse,
-            message:                '',
-            onNameChange:           this.onNameChange,
-            onUserNameChange:       this.onUserNameChange,
-            onPhoneNoChange:        this.onPhoneNoChange,
-            onTwoFactorAuth:        this.onTwoFactorAuth,
-            onCountryCodeChange:    this.onCountryCodeChange,
-            onChange:               this.onChange,
-            onBack:                 this.onBack,
+            locale:                Utils.getLocale(),
+            account:               ssrStore.account,
+            setAccountResponse:    ssrStore.setAccountResponse,
+            checkUserNameResponse: ssrStore.checkUserNameResponse,
+            message:               '',
+            onNameChange:          this.onNameChange,
+            onUserNameChange:      this.onUserNameChange,
+            onPhoneNoChange:       this.onPhoneNoChange,
+            onTwoFactorAuth:       this.onTwoFactorAuth,
+            onCountryCodeChange:   this.onCountryCodeChange,
+            onChange:              this.onChange,
+            onBack:                this.onBack,
         };
     }
 
@@ -138,10 +138,6 @@ export default class SettingsAccountApp extends App
 
             const res : Response.SetAccount = await SettingsApi.setAccount({name, userName, countryCode, phoneNo, twoFactorAuth});
             store.setAccountResponse = res;
-
-            if (res.status === Response.Status.OK) {
-                store.account = res.account;
-            }
 
             this.render();
             log.stepOut();

@@ -156,9 +156,8 @@ export namespace Response
 
     export interface SetAccount
     {
-        status   : Status;
-        account? : Account;
-        message  : {
+        status  : Status;
+        message : {
             name?        : string;
             userName?    : string;
             countryCode? : string;

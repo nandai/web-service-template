@@ -30,6 +30,7 @@ import {expressExtension}            from './libs/express-extension';
 import R                             from './libs/r';
 import {SessionStore}                from './libs/session-store';
 import {slog}                        from './libs/slog';
+import SocketManager                 from './libs/socket-manager';
 import Utils                         from './libs/utils';
 import {Session}                     from './models/session';
 import Email                         from './provider/email';
@@ -396,11 +397,17 @@ function listen(app : express.Express) : void
     }
 
     console.log('URL ........ ' + Utils.generateUrl(''));
-    log.stepOut();
 
-    if (server === null) {
+    if (server === null)
+    {
         setTimeout(() => process.exit(), 3000);
     }
+    else
+    {
+        SocketManager.listen(server);
+    }
+
+    log.stepOut();
 }
 
 main();

@@ -6,7 +6,6 @@ import {Response}   from 'libs/response';
 import AccountAgent from 'server/agents/account-agent';
 import Config       from 'server/config';
 import Authy        from 'server/libs/authy';
-import Converter    from 'server/libs/converter';
 import R            from 'server/libs/r';
 import {slog}       from 'server/libs/slog';
 import Utils        from 'server/libs/utils';
@@ -124,7 +123,6 @@ export async function onSetAccount(req : express.Request, res : express.Response
             const data : Response.SetAccount =
             {
                 status:  Response.Status.OK,
-                account: Converter.accountToResponse(account),
                 message: {general:R.text(phrase, locale)}
             };
             res.json(data);

@@ -1,9 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import AccountAgent      from 'server/agents/account-agent';
 import Config            from 'server/config';
 import MongoDBCollection from 'server/database/mongodb/login-history-collection';
 import MySQLCollection   from 'server/database/mysql/login-history-collection';
+import Converter         from 'server/libs/converter';
+import SocketManager     from 'server/libs/socket-manager';
 import Utils             from 'server/libs/utils';
 import {LoginHistory}    from 'server/models/login-history';
 
@@ -30,13 +33,29 @@ export default class LoginHistoryAgent
      *
      * @return  なし
      */
-    static async add(model : LoginHistory)
+    static async add(model : LoginHistory, sessionId : string)
     {
-        const newModel = LoginHistoryAgent.toModel(model);
-        delete newModel.id;
-        newModel.login_at = Utils.now();
+        return new Promise(async (resolve : () => void, reject) =>
+        {
+            try
+            {
+                const newModel = LoginHistoryAgent.toModel(model);
+                delete newModel.id;
+                newModel.login_at = Utils.now();
 
-        return collection().add(newModel);
+                await collection().add(newModel);
+
+                // クライアントに通知
+                const accountId = newModel.account_id;
+                const account = await AccountAgent.find(accountId);
+
+                SocketManager.setAccountId(sessionId, accountId);
+                SocketManager.notifyUpdateAccount(accountId, Converter.accountToResponse(account, newModel));
+
+                resolve();
+            }
+            catch (err) {reject(err);}
+        });
     }
 
     /**

@@ -45,7 +45,7 @@ export async function onLoginAuthyOneTouch(req : express.Request, res : express.
                         account_id: session.account_id,
                         device:     req.headers['user-agent'] as string
                     };
-                    await LoginHistoryAgent.add(loginHistory);
+                    await LoginHistoryAgent.add(loginHistory, session.id);
                 }
             }
 

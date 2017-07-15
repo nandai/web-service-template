@@ -4,6 +4,7 @@
 import Config            from 'server/config';
 import MongoDBCollection from 'server/database/mongodb/session-collection';
 import MySQLCollection   from 'server/database/mysql/session-collection';
+import SocketManager     from 'server/libs/socket-manager';
 import Utils             from 'server/libs/utils';
 import {Session}         from 'server/models/session';
 
@@ -62,12 +63,22 @@ export default class SessionAgent
      */
     static async logout(cond : {sessionId? : string, accountId? : number})
     {
-        const model : Session =
+        return new Promise(async (resolve : () => void, reject) =>
         {
-            account_id: null,
-            updated_at: Utils.now()
-        };
-        return collection().update(model, cond);
+            try
+            {
+                const model : Session =
+                {
+                    account_id: null,
+                    updated_at: Utils.now()
+                };
+                await collection().update(model, cond);
+
+                // クライアントに通知
+                SocketManager.notifyLogout(cond);
+            }
+            catch (err) {reject(err);}
+        });
     }
 
     /**

@@ -32,6 +32,8 @@ import TopApp                        from './top-app';
 import UserApp                       from './user-app';
 import UsersApp                      from './users-app';
 
+import socketIO = require('socket.io-client');
+
 const ssrStore = window['ssrStore'];
 
 /**
@@ -80,6 +82,8 @@ class WstApp
         this.routes.forEach((route) => route.app.render = this.render);
 
         this.setAccount(ssrStore.account);
+        this.connectSocket();
+
         History.setCallback(this.onHistory);
     }
 
@@ -239,6 +243,60 @@ class WstApp
             }
         });
     }
+
+    /**
+     * ソケットに接続する
+     */
+    @bind
+    private connectSocket()
+    {
+        const io = socketIO.connect();
+        io.on('connect',             this.onConnect);
+        io.on('notifyUpdateAccount', this.onNotifyUpdateAccount);
+        io.on('notifyLogout',        this.onNotifyLogout);
+    }
+
+    /**
+     * connect event
+     */
+    @bind
+    onConnect()
+    {
+        const log = slog.stepIn('WstApp', 'onConnect');
+        log.stepOut();
+    }
+
+    /**
+     * アカウント更新通知
+     */
+    @bind
+    onNotifyUpdateAccount(account : Response.Account)
+    {
+        const log = slog.stepIn('WstApp', 'onNotifyUpdateAccount');
+        log.d(JSON.stringify(account, null, 2));
+
+        this.setAccount(account);
+        this.render();
+        log.stepOut();
+    }
+
+    /**
+     * ログアウト通知
+     */
+    @bind
+    onNotifyLogout()
+    {
+        const log = slog.stepIn('WstApp', 'onNotifyLogout');
+        const route = this.currentRoute;
+
+        this.setAccount(null);
+
+        if (route.auth) {
+            History.pushState('/');
+        }
+
+        log.stepOut();
+    }
 }
 
 /**
@@ -272,6 +330,7 @@ window.addEventListener('DOMContentLoaded', async () =>
 
     const app = new WstApp();
     app.init();
+
     await app.updateCurrentRoute(url, false);
     app.render();
     log.stepOut();

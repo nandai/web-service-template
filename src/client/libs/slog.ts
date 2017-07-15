@@ -712,7 +712,7 @@ export namespace slog
      *
      * @class   SequenceLog
      */
-    export class SequenceLog
+    class SequenceLog
     {
         /**
          * シーケンスNo
