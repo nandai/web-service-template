@@ -33,6 +33,7 @@ import TopApp                        from './top-app';
 import UserApp                       from './user-app';
 import UsersApp                      from './users-app';
 
+import _ =        require('lodash');
 import socketIO = require('socket.io-client');
 
 const ssrStore = window['ssrStore'];
@@ -204,20 +205,7 @@ class WstApp
         const log = slog.stepIn('WstApp', 'onHistory');
         return new Promise(async (resolve) =>
         {
-            // アカウント情報の再取得と再設定
-            let account : Response.Account = null;
-
-            try
-            {
-                const res : Response.GetAccount = await SettingsApi.getAccount();
-                account = res.account;
-            }
-            catch (err)
-            {
-                console.warn(err.message);
-            }
-
-            this.setAccount(account);
+            this.setAccount(this.account);
 
             // 画面遷移時のエフェクト設定
             if (direction === 'back')
@@ -253,7 +241,7 @@ class WstApp
             const store = route.app['store'];
             if (store && 'account' in store)
             {
-                store.account = account;
+                store.account = _.clone(account);
             }
         });
     }

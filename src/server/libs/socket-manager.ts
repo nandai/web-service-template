@@ -257,15 +257,13 @@ export default class SocketManager
             if (cond.sessionId) {room = sessionRoom(cond.sessionId);}
             if (cond.accountId) {room = accountRoom(cond.accountId);}
 
-            const ns = SocketManager.io.to(room);
+            let ns = SocketManager.io.to(room);
             log.d(`送信数: ${ns.adapter.rooms[room].length}`);
+            ns.emit('notifyLogout');
 
-//          ns.emit('notifyLogout');    ここだとns.clients()のコールバックでなぜか
-//                                      clientsがおかしな結果になってしまう
-            ns.clients((err, clients : string[]) =>
+            ns = SocketManager.io.to(room);         // emit後のnsを続けて使うとns.clients()のコールバックで
+            ns.clients((err, clients : string[]) => // なぜかclientsがおかしな結果になってしまう
             {
-                ns.emit('notifyLogout');
-
                 clients.forEach((socketId) => SocketManager.leaveAccountRoom(socketId));
                 log.stepOut();
                 resolve();
