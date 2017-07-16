@@ -6,70 +6,16 @@ import CommonUtils  from 'libs/utils';
 import SessionAgent from 'server/agents/session-agent';
 import {slog}       from './slog';
 
+import _ =        require('lodash');
 import socketIO = require('socket.io');
 
 /**
  * クライアント
  */
-class Clients
+interface Client
 {
-    accountId : number = null;
-    sockets   : SocketIO.Socket[] = [];
-
-    notifyUpdateAccount(account : Response.Account) : void
-    {
-        const log = slog.stepIn('Clients', 'notifyUpdateAccount');
-        log.d(`ソケット数: ${this.sockets.length}`);
-
-        this.sockets.forEach((socket) =>
-        {
-            socket.emit('notifyUpdateAccount', account);
-        });
-        log.stepOut();
-    }
-
-    notifyUpdateUser(user : Response.User) : void
-    {
-        const log = slog.stepIn('Clients', 'notifyUpdateUser');
-        log.d(`ソケット数: ${this.sockets.length}`);
-
-        this.sockets.forEach((socket) =>
-        {
-            socket.emit('notifyUpdateUser', user);
-        });
-        log.stepOut();
-    }
-
-    notifyLogout() : void
-    {
-        const log = slog.stepIn('Clients', 'notifyLogout');
-        log.d(`ソケット数: ${this.sockets.length}`);
-
-        this.accountId = 0;
-        this.sockets.forEach((socket) =>
-        {
-            socket.emit('notifyLogout');
-        });
-
-        log.stepOut();
-    }
-
-    removeSocket(socket : SocketIO.Socket) : void
-    {
-        for (const i in this.sockets)
-        {
-            if (this.sockets[i].id === socket.id)
-            {
-                this.sockets.splice(Number(i), 1);
-                break;
-            }
-        }
-    }
-
-    isEmpty() : boolean
-    {
-        return (this.sockets.length === 0);
-    }
+    sessionId : string;
+    accountId : number;
 }
 
 /**
@@ -78,7 +24,9 @@ class Clients
 export default class SocketManager
 {
     private static CLS_NAME = 'SocketManager';
-    private static clientsManager : {[sessionId : string] : Clients} = {};
+    private static clients      : {[socketId  : string] : Client} = {};
+    private static sessionRooms : {[sessionId : string] : SocketIO.Socket[]} = {};
+    private static accountRooms : {[accountId : number] : SocketIO.Socket[]} = {};
 
     /**
      * listen
@@ -88,16 +36,118 @@ export default class SocketManager
         const log = slog.stepIn(SocketManager.CLS_NAME, 'listen');
         const io = socketIO(server);
 
-        io.on('connection', SocketManager.onConnection);
+        io.on('connect', SocketManager.onConnect);
+        log.stepOut();
+    }
+
+    private static joinSessionRoom(socket : SocketIO.Socket, sessionId : string) : void
+    {
+        const log = slog.stepIn(SocketManager.CLS_NAME, 'joinSessionRoom');
+
+        if (sessionId)
+        {
+            const {sessionRooms} = SocketManager;
+            const client = SocketManager.clients[socket.id];
+
+            if ((sessionId in sessionRooms) === false) {
+                sessionRooms[sessionId] = [];
+            }
+
+            sessionRooms[sessionId].push(socket);
+            client.sessionId = sessionId;
+        }
+
+        log.stepOut();
+    }
+
+    private static joinAccountRoom(socket : SocketIO.Socket, accountId : number) : void
+    {
+        const log = slog.stepIn(SocketManager.CLS_NAME, 'joinAccountRoom');
+
+        if (accountId)
+        {
+            const {accountRooms} = SocketManager;
+            const client = SocketManager.clients[socket.id];
+
+            if ((accountId in accountRooms) === false) {
+                accountRooms[accountId] = [];
+            }
+
+            accountRooms[accountId].push(socket);
+            client.accountId = accountId;
+        }
+
+        log.stepOut();
+    }
+
+    private static leaveSessionRoom(socket : SocketIO.Socket) : void
+    {
+        const log = slog.stepIn(SocketManager.CLS_NAME, 'leaveSessionRoom');
+        const client = SocketManager.clients[socket.id];
+        const {sessionId} = client;
+
+        if (sessionId)
+        {
+            const {sessionRooms} = SocketManager;
+            const sessionRoom = sessionRooms[sessionId];
+
+            for (const i in sessionRoom)
+            {
+                if (sessionRoom[i].id === socket.id)
+                {
+                    sessionRoom.splice(Number(i), 1);
+                    client.sessionId = null;
+                    break;
+                }
+            }
+
+            if (sessionRoom.length === 0)
+            {
+                log.d(`セッション ${sessionId} のルームが空室になりました。`);
+                delete sessionRooms[sessionId];
+            }
+        }
+
+        log.stepOut();
+    }
+
+    private static leaveAccountRoom(socket : SocketIO.Socket) : void
+    {
+        const log = slog.stepIn(SocketManager.CLS_NAME, 'leaveAccountRoom');
+        const client = SocketManager.clients[socket.id];
+        const {accountId} = client;
+
+        if (accountId)
+        {
+            const {accountRooms} = SocketManager;
+            const accountRoom = accountRooms[accountId];
+
+            for (const i in accountRoom)
+            {
+                if (accountRoom[i].id === socket.id)
+                {
+                    accountRoom.splice(Number(i), 1);
+                    client.accountId = null;
+                    break;
+                }
+            }
+
+            if (accountRoom.length === 0)
+            {
+                log.d(`アカウント ${accountId} のルームが空室になりました。`);
+                delete accountRooms[accountId];
+            }
+        }
+
         log.stepOut();
     }
 
     /**
-     * connection event
+     * connect event
      */
-    private static async onConnection(socket : SocketIO.Socket)
+    private static async onConnect(socket : SocketIO.Socket)
     {
-        const log = slog.stepIn(SocketManager.CLS_NAME, 'onConnection');
+        const log = slog.stepIn(SocketManager.CLS_NAME, 'onConnect');
         let ok = false;
 
         log.d('socket.id:' + socket.id);
@@ -118,16 +168,14 @@ export default class SocketManager
                 break;
             }
 
-            const {clientsManager} = SocketManager;
-            if ((sessionId in clientsManager) === false) {
-                clientsManager[sessionId] = new Clients();
-            }
+            const accountId = session.account_id;
+            SocketManager.clients[socket.id] = {sessionId, accountId};
+            SocketManager.joinSessionRoom(socket, sessionId);
+            SocketManager.joinAccountRoom(socket, accountId);
 
-            const clients = clientsManager[sessionId];
-            clients.accountId = session.account_id;
-            clients.sockets.push(socket);
+            socket.on('disconnect', (reason) => SocketManager.onDisconnect(socket, reason));
+            socket.on('error', (err : Error) => SocketManager.onError(sessionId, err));
 
-            socket.on('disconnect', (reason) => {console.log(JSON.stringify(reason, null, 2));SocketManager.onDisconnect(socket, sessionId);});
             ok = true;
             break;
         }
@@ -145,21 +193,26 @@ export default class SocketManager
     /**
      * disconnect event
      */
-    private static onDisconnect(socket : SocketIO.Socket, sessionId : string) : void
+    private static onDisconnect(socket : SocketIO.Socket, reason : string) : void
     {
         const log = slog.stepIn(SocketManager.CLS_NAME, 'onDisconnect');
-        log.d('ssessionId:' + sessionId);
+        log.d(`reason: ${reason}`);
 
-        const clients = SocketManager.clientsManager[sessionId];
-        clients.removeSocket(socket);
+        SocketManager.leaveSessionRoom(socket);
+        SocketManager.leaveAccountRoom(socket);
 
-        if (clients.isEmpty())
-        {
-            log.d(`${sessionId}の接続が完全になくなりました。`);
-            delete SocketManager.clientsManager[sessionId];
-        }
-
+        delete SocketManager.clients[socket.id];
         log.stepOut();
+    }
+
+    /**
+     * error event
+     */
+    private static onError(sessionId : string, err : Error) : void
+    {
+        console.log('onError');
+        console.log(sessionId);
+        console.log(err.message);
     }
 
     /**
@@ -167,8 +220,14 @@ export default class SocketManager
      */
     static setAccountId(sessionId : string, accountId : number)
     {
-        const {clientsManager} = SocketManager;
-        clientsManager[sessionId].accountId = accountId;
+        const {sessionRooms, accountRooms} = SocketManager;
+        const sessionRoom = sessionRooms[sessionId];
+
+        for (const i in sessionRoom)
+        {
+            const socket = sessionRoom[i];
+            SocketManager.joinAccountRoom(socket, accountId);
+        }
     }
 
     /**
@@ -177,16 +236,11 @@ export default class SocketManager
     static notifyUpdateAccount(accountId : number, account : Response.Account) : void
     {
         const log = slog.stepIn(SocketManager.CLS_NAME, 'notifyUpdateAccount');
-        const {clientsManager} = SocketManager;
+        const {accountRooms} = SocketManager;
+        const accountRoom = accountRooms[accountId];
 
-        for (const key in clientsManager)
-        {
-            const clients = clientsManager[key];
-
-            if (clients.accountId === accountId) {
-                clients.notifyUpdateAccount(account);
-            }
-        }
+        log.d(`送信数: ${accountRoom.length}`);
+        accountRoom.forEach((socket) => socket.emit('notifyUpdateAccount', account));
 
         log.stepOut();
     }
@@ -197,12 +251,14 @@ export default class SocketManager
     static notifyUpdateUser(user : Response.User) : void
     {
         const log = slog.stepIn(SocketManager.CLS_NAME, 'notifyUpdateUser');
-        const {clientsManager} = SocketManager;
+        const {sessionRooms} = SocketManager;
 
-        for (const key in clientsManager)
+        for (const key in sessionRooms)
         {
-            const clients = clientsManager[key];
-            clients.notifyUpdateUser(user);
+            const sessionRoom = sessionRooms[key];
+
+            log.d(`送信数: ${sessionRoom.length}`);
+            sessionRoom.forEach((socket) => socket.emit('notifyUpdateUser', user));
         }
 
         log.stepOut();
@@ -214,24 +270,35 @@ export default class SocketManager
     static notifyLogout(cond : {sessionId? : string, accountId? : number}) : void
     {
         const log = slog.stepIn(SocketManager.CLS_NAME, 'notifyLogout');
-        const {clientsManager} = SocketManager;
 
         if (cond.sessionId)
         {
-            const clients = clientsManager[cond.sessionId];
-            clients.notifyLogout();
+            const {sessionRooms} = SocketManager;
+            const sessionRoom = sessionRooms[cond.sessionId];
+            log.d(`送信数: ${sessionRoom.length}`);
+
+            sessionRoom.forEach((socket) => socket.emit('notifyLogout'));
+
+            const sockets = _.clone(sessionRoom);
+            sockets.forEach((socket) =>
+            {
+                SocketManager.leaveAccountRoom(socket);
+            });
         }
 
         if (cond.accountId)
         {
-            for (const key in clientsManager)
-            {
-                const clients = clientsManager[key];
+            const {accountRooms} = SocketManager;
+            const accountRoom = accountRooms[cond.accountId];
+            log.d(`送信数: ${accountRoom.length}`);
 
-                if (clients.accountId === cond.accountId) {
-                    clients.notifyLogout();
-                }
-            }
+            accountRoom.forEach((socket) => socket.emit('notifyLogout'));
+
+            const sockets = _.clone(accountRoom);
+            sockets.forEach((socket) =>
+            {
+                SocketManager.leaveAccountRoom(socket);
+            });
         }
 
         log.stepOut();
