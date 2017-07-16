@@ -327,18 +327,18 @@ async function main()
  *
  * @param   command コマンド
  */
-function command(command : string) : express.Handler
+function command(command_id : string) : express.Handler
 {
     const handler = async (req : express.Request, res : express.Response, next : express.NextFunction) =>
     {
         const log = slog.stepIn('app.ts', 'command');
-        log.d(command);
+        log.d(command_id);
 
         try
         {
-            const session : Session = req.ext.session;
-            session.command_id = command;
-            await SessionAgent.update(session);
+            const _session : Session = req.ext.session;
+            _session.command_id = command_id;
+            await SessionAgent.update(_session);
 
             log.stepOut();
             next();

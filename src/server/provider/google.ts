@@ -51,8 +51,8 @@ export default class Google extends Provider
         const log = slog.stepIn(Google.CLS_NAME_2, 'callback');
         try
         {
-            const google = new Google();
-            await google.signupOrLogin(req, res);
+            const _google = new Google();
+            await _google.signupOrLogin(req, res);
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

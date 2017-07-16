@@ -52,13 +52,13 @@ SessionStore.prototype.get = function get(sessionId, callback)
     log.stepOut();
 };
 
-SessionStore.prototype.set = function set(sessionId, session, callback)
+SessionStore.prototype.set = function set(sessionId, aSession, callback)
 {
     const log = slog.stepIn('SessionStore', 'set');
     log.d(`sessionId: ${sessionId}`);
-    log.d(JSON.stringify(session, null, 2));
+    log.d(JSON.stringify(aSession, null, 2));
 
-    this.session = session;
+    this.session = aSession;
     if (callback) {
         callback(null);
     }

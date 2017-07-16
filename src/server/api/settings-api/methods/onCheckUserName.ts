@@ -42,25 +42,26 @@ export async function onCheckUserName(req : express.Request, res : express.Respo
             const session : Session = req.ext.session;
             const alreadyExistsAccount = await AccountAgent.findByUserName(userName);
             const result = Validator.userName(userName, session.account_id, alreadyExistsAccount, locale);
+            let response : Response.CheckUserName;
 
             if (result.status !== Response.Status.OK)
             {
-                const data : Response.CheckUserName =
+                response =
                 {
                     status: result.status,
                     message: {userName:result.message}
                 };
-                res.json(data);
+                res.json(response);
                 break;
             }
 
             const message = (userName ? R.text(R.CAN_USE_USER_NAME, locale) : '');
-            const data : Response.CheckUserName =
+            response =
             {
                 status: Response.Status.OK,
                 message: {userName:message}
             };
-            res.json(data);
+            res.json(response);
         }
         while (false);
         log.stepOut();

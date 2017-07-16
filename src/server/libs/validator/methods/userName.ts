@@ -8,7 +8,7 @@ import {Account}  from 'server/models/account';
 /**
  * ユーザー名検証
  */
-export function userName(userName : string, accountId : number, alreadyExistsAccount : Account, locale : string) : ValidationResult
+export function userName(aUserName : string, accountId : number, alreadyExistsAccount : Account, locale : string) : ValidationResult
 {
     let status = Response.Status.FAILED;
     let message : string;
@@ -18,32 +18,32 @@ export function userName(userName : string, accountId : number, alreadyExistsAcc
         const min = 0;
         const max = 20;
 
-        if (! userName)
+        if (! aUserName)
         {
             status = Response.Status.OK;
             break;
         }
 
-        if (userName !== userName.trim())
+        if (aUserName !== aUserName.trim())
         {
             message = R.text(R.CANNOT_ENTER_USER_NAME_BEFORE_AFTER_SPACE, locale);
             break;
         }
 
-        const len = userName.length;
+        const len = aUserName.length;
         if (len < min || max < len)
         {
             message = R.text(R.USER_NAME_TOO_LONG, locale, {min, max});
             break;
         }
 
-        if (userName && isNaN(Number(userName)) === false)
+        if (aUserName && isNaN(Number(aUserName)) === false)
         {
             message = R.text(R.CANNOT_ENTER_USER_NAME_ONLY_NUMBERS, locale);
             break;
         }
 
-        if (userName.match(/^[0-9a-zA-Z-_]+$/) === null)
+        if (aUserName.match(/^[0-9a-zA-Z-_]+$/) === null)
         {
             message = R.text(R.ENTER_ALPHABETICAL_NUMBER_BAR, locale);
             break;

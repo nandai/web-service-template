@@ -55,8 +55,8 @@ export default class Github extends Provider
         const log = slog.stepIn(Github.CLS_NAME_2, 'callback');
         try
         {
-            const github = new Github();
-            await github.signupOrLogin(req, res);
+            const _github = new Github();
+            await _github.signupOrLogin(req, res);
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

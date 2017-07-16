@@ -12,7 +12,8 @@ import R          from 'server/libs/r';
  */
 export function password(args : {password : string, confirm? : string, canNull? : boolean}, locale : string)
 {
-    const {password, confirm, canNull} = args;
+    const {confirm, canNull} = args;
+    const _password = args.password;
     const result =
     {
         status:   Response.Status.OK,
@@ -25,7 +26,7 @@ export function password(args : {password : string, confirm? : string, canNull? 
         const min = 8;
         const max = 16;
 
-        if (password === null)
+        if (_password === null)
         {
             if (confirm === undefined || canNull !== true)
             {
@@ -35,13 +36,13 @@ export function password(args : {password : string, confirm? : string, canNull? 
         }
         else
         {
-            const len = password.length;
+            const len = _password.length;
             if (len < min || max < len)
             {
                 result.status = Response.Status.FAILED;
                 result.password = R.text(R.PASSWORD_TOO_SHORT_OR_TOO_LONG, locale, {min, max});
             }
-            else if (password.match(/^[0-9a-zA-Z@]+$/) === null)
+            else if (_password.match(/^[0-9a-zA-Z@]+$/) === null)
             {
                 result.status = Response.Status.FAILED;
                 result.password = R.text(R.ENTER_ALPHABETICAL_NUMBER, locale);
@@ -49,7 +50,7 @@ export function password(args : {password : string, confirm? : string, canNull? 
         }
 
         // 確認用パスワードが一致するか
-        if (confirm !== undefined && password !== confirm)
+        if (confirm !== undefined && _password !== confirm)
         {
             result.status = Response.Status.FAILED;
             result.confirm = R.text(R.MISMATCH_PASSWORD, locale);

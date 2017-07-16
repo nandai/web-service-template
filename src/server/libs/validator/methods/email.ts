@@ -11,7 +11,7 @@ import nodeValidator = require('validator');
 /**
  * メールアドレス検証
  */
-export function email(email : string, accountId : number, alreadyExistsAccount : Account, locale : string)
+export function email(aEmail : string, accountId : number, alreadyExistsAccount : Account, locale : string)
 {
     return new Promise(async (resolve : (result : ValidationResult) => void) =>
     {
@@ -20,7 +20,7 @@ export function email(email : string, accountId : number, alreadyExistsAccount :
 
         do
         {
-            if (! email || nodeValidator.isEmail(email) === false)
+            if (! aEmail || nodeValidator.isEmail(aEmail) === false)
             {
                 message = R.text(R.INVALID_EMAIL, locale);
                 break;
@@ -32,7 +32,7 @@ export function email(email : string, accountId : number, alreadyExistsAccount :
                 break;
             }
 
-            const hostname = email.split('@')[1];
+            const hostname = aEmail.split('@')[1];
             if (await Utils.existsHost(hostname) === false)
             {
                 message = R.text(R.INVALID_EMAIL, locale);

@@ -42,6 +42,7 @@ export async function onLoginSms(req : express.Request, res : express.Response)
 
             const {smsId, smsCode} = param;
             const session : Session = req.ext.session;
+            let response  : Response.LoginSms;
 
             if (session.sms_id === smsId)
             {
@@ -68,7 +69,7 @@ export async function onLoginSms(req : express.Request, res : express.Response)
 
                 if (success === false)
                 {
-                    const response : Response.LoginSms =
+                    response =
                     {
                         status: Response.Status.FAILED,
                         message: {smsCode:R.text(R.MISMATCH_SMS_CODE, locale)}
@@ -92,7 +93,7 @@ export async function onLoginSms(req : express.Request, res : express.Response)
                 await LoginHistoryAgent.add(loginHistory, session.id);
             }
 
-            const response : Response.LoginSms = {status:Response.Status.OK, message:{}};
+            response = {status:Response.Status.OK, message:{}};
             res.json(response);
         }
         while (false);

@@ -8,7 +8,7 @@ import express = require('express');
 export function view(title : string, js : string, contents = '', store = {}) : string
 {
     // NOTE:<body ontouchstart="">はスマホでタッチした時に:activeを効かせるための設定
-    const view = `
+    const html = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +30,7 @@ export function view(title : string, js : string, contents = '', store = {}) : s
 </html>
     `;
 
-    return view;
+    return html;
 }
 
 export function forbidden(req : express.Request, res : express.Response) : void

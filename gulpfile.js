@@ -8,6 +8,7 @@ const abspath =     require('gulp-absolute-path');
 const babel =       require('gulp-babel');
 const gulpif =      require('gulp-if');
 const postcss =     require('gulp-postcss');
+const tslint =      require('gulp-tslint');
 const typescript =  require('gulp-typescript');
 const uglify =      require('gulp-uglify');
 const runSequence = require('run-sequence');
@@ -42,12 +43,12 @@ gulp.task('typescript', function ()
 {
     const src =
     [
-//      '!./node_modules/**',
         './src/**/*.ts',
         './src/**/*.tsx'
     ];
 
-    return gulp.src(src)
+    return gulp
+        .src(src)
         .pipe(abspath({rootDir:'./src'}))
         .pipe(typescript(tsOptions))
         .pipe(gulpif(condition, babel(babelOptions)))   // uglifyのためにやむなくbabel
@@ -85,6 +86,20 @@ gulp.task('css', function()
         .pipe(postcss([cssImport, cssNext, cssMixins]))
         .pipe(gulpif(condition, postcss([cssnano])))
         .pipe(gulp.dest('./www/static/components'));
+});
+
+gulp.task('tslint', function ()
+{
+    const src =
+    [
+        './src/**/*.ts',
+        './src/**/*.tsx'
+    ];
+
+    return gulp
+        .src(src)
+        .pipe(tslint())
+        .pipe(tslint.report({emitError:false}));
 });
 
 gulp.task('default', ['javascript', 'css']);
