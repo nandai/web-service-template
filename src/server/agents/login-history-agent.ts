@@ -49,7 +49,7 @@ export default class LoginHistoryAgent
                 const accountId = newModel.account_id;
                 const account = await AccountAgent.find(accountId);
 
-                SocketManager.setAccountId(sessionId, accountId);
+                await SocketManager.setAccountId(sessionId, accountId);
                 SocketManager.notifyUpdateAccount(accountId, Converter.accountToResponse(account, newModel));
 
                 resolve();
