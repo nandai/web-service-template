@@ -42,7 +42,8 @@ SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し
         "db-password":             "",
         "db-name":                 "",
         "mongo-url":               "",
-        "select-db":               "[mysql|mongodb]"
+        "select-db":               "[mysql|mongodb]",
+        "redis-url":               "localhost:6379"
     }
 }
 ```

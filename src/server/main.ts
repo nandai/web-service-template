@@ -354,6 +354,7 @@ function command(command_id : string) : express.Handler
 function listen(app : express.Express) : void
 {
     const log = slog.stepIn('app.ts', 'listen');
+    const appPort = process.env.APP_PORT || Config.APP_PORT;
     let server = null;
 
     if (Config.hasSSL())
@@ -383,7 +384,7 @@ function listen(app : express.Express) : void
 
         try
         {
-            server = https.createServer(options, app).listen(Config.APP_PORT);
+            server = https.createServer(options, app).listen(appPort);
         }
         catch (err)
         {
@@ -393,7 +394,7 @@ function listen(app : express.Express) : void
     }
     else
     {
-        server = app.listen(Config.APP_PORT);
+        server = app.listen(appPort);
     }
 
     console.log('URL ........ ' + Utils.generateUrl(''));

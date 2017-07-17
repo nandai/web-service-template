@@ -33,6 +33,7 @@
         "db-password":             "",
         "db-name":                 "",
         "mongo-url":               "",
-        "select-db":               ""
+        "select-db":               "",
+        "redis-url":               "localhost:6379"
     }
 }

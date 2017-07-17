@@ -230,7 +230,7 @@ export default class Utils
 
         const protocol = (Config.hasSSL() ? 'https' : 'http');
         const host = Config.APP_HOST;
-        const port = Config.APP_PORT;
+        const port = process.env.APP_PORT || Config.APP_PORT;
         const isDefaultPort = (port === 80 || port === 443);
 
         if (isDefaultPort) {url = `${protocol}://${host}/${path}`;}

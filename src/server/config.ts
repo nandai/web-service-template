@@ -67,6 +67,8 @@ export default class Config
 
     static SELECT_DB = '';
 
+    static REDIS_URL = '';
+
     /**
      * コンフィグをJSONファイルからロードする
      */
@@ -132,6 +134,7 @@ export default class Config
         Config.DB_NAME =                 Config.get(appData, 'db-name');
         Config.MONGO_URL =               Config.get(appData, 'mongo-url');
         Config.SELECT_DB =               Config.get(appData, 'select-db');
+        Config.REDIS_URL =               Config.get(appData, 'redis-url');
 
         Config.TWITTER_CALLBACK =  Utils.generateUrl('auth/twitter/callback');
         Config.FACEBOOK_CALLBACK = Utils.generateUrl('auth/facebook/callback');

@@ -4,10 +4,12 @@
 import {Response}   from 'libs/response';
 import CommonUtils  from 'libs/utils';
 import SessionAgent from 'server/agents/session-agent';
+import Config       from 'server/config';
 import {slog}       from './slog';
 
 import _ =        require('lodash');
 import socketIO = require('socket.io');
+import redis =    require('socket.io-redis');
 
 /**
  * クライアント
@@ -36,6 +38,20 @@ export default class SocketManager
         const log = slog.stepIn(SocketManager.CLS_NAME, 'listen');
         const io = socketIO(server);
         SocketManager.io = io;
+
+        if (Config.REDIS_URL)
+        {
+            const arr = Config.REDIS_URL.split(':');
+            if (arr.length === 2)
+            {
+                const opts =
+                {
+                    host: arr[0],
+                    port: Number(arr[1])
+                };
+                io.adapter(redis(opts));
+            }
+        }
 
         io.on('connect', SocketManager.onConnect);
         log.stepOut();
@@ -183,8 +199,8 @@ export default class SocketManager
         const log = slog.stepIn(SocketManager.CLS_NAME, 'onDisconnect');
         log.d(`reason: ${reason}`);
 
-        SocketManager.leaveSessionRoom(socket.id);
         SocketManager.leaveAccountRoom(socket.id);
+        SocketManager.leaveSessionRoom(socket.id);
 
         delete SocketManager.clients[socket.id];
         log.stepOut();
