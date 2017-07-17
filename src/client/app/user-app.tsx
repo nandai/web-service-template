@@ -76,16 +76,36 @@ export default class UserApp extends App
      */
     notifySocketEvent(data : SocketEventData) : void
     {
-        const user = data.notifyUpdateUser;
-        if (user)
+        const {store} = this;
+        do
         {
-            const {store} = this;
-            if (this.active && store.user.name !== user.name)
-            {
-                const id = (user.name ? user.name : user.id.toString());
-                History.replaceState(`/users/${id}`);
+            if (! store.user) {
+                break;
             }
-            store.user = user;
+
+            if (data.notifyUpdateUser)
+            {
+                const user = data.notifyUpdateUser;
+                if (store.user.id !== user.id) {
+                    break;
+                }
+
+                if (this.active && store.user.name !== user.name)
+                {
+                    const id = (user.name ? user.name : user.id.toString());
+                    History.replaceState(`/users/${id}`);
+                }
+                store.user = user;
+            }
+
+            if (data.notifyDeleteUser)
+            {
+                const user = data.notifyDeleteUser;
+                if (store.user.id === user.id) {
+                    store.user.id = 0;
+                }
+            }
         }
+        while (false);
     }
 }

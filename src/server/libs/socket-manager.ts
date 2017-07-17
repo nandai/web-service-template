@@ -257,6 +257,16 @@ export default class SocketManager
     }
 
     /**
+     * ユーザー削除通知
+     */
+    static notifyDeleteUser(userId : number) : void
+    {
+        const log = slog.stepIn(SocketManager.CLS_NAME, 'notifyDeleteUser');
+        SocketManager.io.emit('notifyDeleteUser', userId);
+        log.stepOut();
+    }
+
+    /**
      * ログアウト通知
      */
     static notifyLogout(cond : {sessionId? : string, accountId? : number})

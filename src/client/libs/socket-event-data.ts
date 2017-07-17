@@ -6,4 +6,5 @@ import {Response} from 'libs/response';
 export interface SocketEventData
 {
     notifyUpdateUser? : Response.User;
+    notifyDeleteUser? : {id : number};
 }

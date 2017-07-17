@@ -191,11 +191,6 @@ export default class SettingsApp extends App
         try
         {
             const res : Response.DeleteAccount = await SettingsApi.deleteAccount();
-
-            if (res.status === Response.Status.OK) {
-                History.back();
-            }
-
             log.stepOut();
         }
         catch (err)

@@ -279,6 +279,7 @@ class WstApp
         io.on('connect',             this.onConnect);
         io.on('notifyUpdateAccount', this.onNotifyUpdateAccount);
         io.on('notifyUpdateUser',    this.onNotifyUpdateUser);
+        io.on('notifyDeleteUser',    this.onNotifyDeleteUser);
         io.on('notifyLogout',        this.onNotifyLogout);
     }
 
@@ -323,9 +324,19 @@ class WstApp
     onNotifyUpdateUser(user : Response.User)
     {
         const log = slog.stepIn('WstApp', 'onNotifyUpdateUser');
-        log.d(JSON.stringify(user, null, 2));
-
         this.notifySocketEvent({notifyUpdateUser:user});
+        this.render();
+        log.stepOut();
+    }
+
+    /**
+     * ユーザー削除通知
+     */
+    @bind
+    onNotifyDeleteUser(userId : number)
+    {
+        const log = slog.stepIn('WstApp', 'onNotifyDeleteUser');
+        this.notifySocketEvent({notifyDeleteUser:{id:userId}});
         this.render();
         log.stepOut();
     }

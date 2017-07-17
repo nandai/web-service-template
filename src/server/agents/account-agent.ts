@@ -110,7 +110,21 @@ export default class AccountAgent
      */
     static async remove(accountId : number)
     {
-        return collection().remove(accountId);
+        const log = slog.stepIn(AccountAgent.CLS_NAME, 'logout');
+        return new Promise(async (resolve : () => void, reject) =>
+        {
+            try
+            {
+                await collection().remove(accountId);
+
+                // クライアントに通知
+                await SocketManager.notifyDeleteUser(accountId);
+
+                log.stepOut();
+                resolve();
+            }
+            catch (err) {log.stepOut(); reject(err);}
+        });
     }
 
     /**

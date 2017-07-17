@@ -68,7 +68,8 @@ export default class R
             'unlinkProvider':             'Unlink ${provider}',
             'user':                       'User',
             'userName':                   'User name',
-            'userList':                   'User list'
+            'userList':                   'User list',
+            'withdrawal':                 'Withdrawal'
         },
 
         'ja':
@@ -130,7 +131,8 @@ export default class R
             'unlinkProvider':             '${provider}との紐づけを解除する',
             'user':                       'ユーザー',
             'userName':                   'ユーザー名',
-            'userList':                   'ユーザー一覧'
+            'userList':                   'ユーザー一覧',
+            'withdrawal':                 '退会'
         }
     };
 
@@ -192,6 +194,7 @@ export default class R
     static USER =                          'user';
     static USER_NAME =                     'userName';
     static USER_LIST =                     'userList';
+    static WITHDRAWAL =                    'withdrawal';
 
     /**
      * 文字列を取得する

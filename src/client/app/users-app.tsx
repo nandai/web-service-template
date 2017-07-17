@@ -70,9 +70,9 @@ export default class UsersApp extends App
      */
     notifySocketEvent(data : SocketEventData) : void
     {
-        const user = data.notifyUpdateUser;
-        if (user)
+        if (data.notifyUpdateUser)
         {
+            const user = data.notifyUpdateUser;
             const {userList} = this.store;
             let replace = false;
 
@@ -88,6 +88,21 @@ export default class UsersApp extends App
 
             if (replace === false) {
                 userList.push(user);
+            }
+        }
+
+        if (data.notifyDeleteUser)
+        {
+            const user = data.notifyDeleteUser;
+            const {userList} = this.store;
+
+            for (const i in userList)
+            {
+                if (userList[i].id === user.id)
+                {
+                    userList.splice(Number(i), 1);
+                    break;
+                }
             }
         }
     }

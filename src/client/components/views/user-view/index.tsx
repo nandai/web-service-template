@@ -25,6 +25,11 @@ export default class UserView extends React.Component<UserViewProps, {}>
         const {store} = this.props;
         const {locale, user} = store;
 
+        let status = '';
+        if (user.id === 0) {
+            status = `（${R.text(R.WITHDRAWAL, locale)}）`;
+        }
+
         let userNameEl : JSX.Element;
         if (user.name) {
             userNameEl = <p>@{store.user.name}</p>;
@@ -34,7 +39,7 @@ export default class UserView extends React.Component<UserViewProps, {}>
             <ViewContainer>
                 <Header />
                 <ViewContents>
-                    <p>{store.user.accountName}</p>
+                    <p>{store.user.accountName}{status}</p>
                     {userNameEl}
                     <Button onClick={store.onBack}>{R.text(R.BACK, locale)}</Button>
                 </ViewContents>
