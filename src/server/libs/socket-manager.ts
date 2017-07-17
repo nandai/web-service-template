@@ -229,8 +229,18 @@ export default class SocketManager
         const room = accountRoom(accountId);
         const ns = SocketManager.io.to(room);
 
-        log.d(`送信数: ${ns.adapter.rooms[room].length}`);
-        ns.emit('notifyUpdateAccount', account);
+        if (room in ns.adapter.rooms)
+        {
+            log.d(`送信数: ${ns.adapter.rooms[room].length}`);
+//          ns.emit('notifyUpdateAccount', account);
+        }
+        else
+        {
+            log.d(`${room} は存在しません。`);
+        }
+
+        ns.emit('notifyUpdateAccount', account);    // roomが存在しなくてもnsを取得した以上はemit()しないと
+                                                    // なぜかその後の送信がされなくなってしまう
         log.stepOut();
     }
 
@@ -240,6 +250,8 @@ export default class SocketManager
     static notifyUpdateUser(user : Response.User) : void
     {
         const log = slog.stepIn(SocketManager.CLS_NAME, 'notifyUpdateUser');
+        log.d(JSON.stringify(user, null, 2));
+
         SocketManager.io.emit('notifyUpdateUser', user);
         log.stepOut();
     }

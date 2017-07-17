@@ -69,6 +69,7 @@ export default class AccountAgent
      */
     static async update(model : Account)
     {
+        const log = slog.stepIn(AccountAgent.CLS_NAME, 'update');
         return new Promise(async (resolve : () => void, reject) =>
         {
             try
@@ -93,9 +94,10 @@ export default class AccountAgent
                 const user = Converter.accountToUserResponse(model);
                 SocketManager.notifyUpdateUser(user);
 
+                log.stepOut();
                 resolve();
             }
-            catch (err) {reject(err);}
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 
@@ -264,7 +266,7 @@ export default class AccountAgent
                 log.stepOut();
                 resolve(account);
             }
-            catch (err) {reject(err);}
+            catch (err) {log.stepOut(); reject(err);}
         });
     }
 

@@ -74,13 +74,20 @@ export default class UsersApp extends App
         if (user)
         {
             const {userList} = this.store;
+            let replace = false;
+
             for (const i in userList)
             {
                 if (userList[i].id === user.id)
                 {
                     userList[i] = user;
+                    replace = true;
                     break;
                 }
+            }
+
+            if (replace === false) {
+                userList.push(user);
             }
         }
     }

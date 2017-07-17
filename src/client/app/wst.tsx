@@ -205,7 +205,19 @@ class WstApp
         const log = slog.stepIn('WstApp', 'onHistory');
         return new Promise(async (resolve) =>
         {
-            this.setAccount(this.account);
+            // アカウント情報の再取得と再設定
+            try
+            {
+                if (! this.account)
+                {
+                    const res : Response.GetAccount = await SettingsApi.getAccount();
+                    this.setAccount(res.account);
+                }
+            }
+            catch (err)
+            {
+                console.warn(err.message);
+            }
 
             // 画面遷移時のエフェクト設定
             if (direction === 'back')
