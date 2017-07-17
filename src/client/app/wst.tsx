@@ -239,8 +239,8 @@ class WstApp
         this.routes.forEach((route) =>
         {
             const store = route.app['store'];
-            if (store && 'account' in store)
-            {
+
+            if (store && 'account' in store) {
                 store.account = _.clone(account);
             }
         });

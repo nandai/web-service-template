@@ -3,25 +3,28 @@
  */
 export default class History
 {
-//  private static onPushState : () => void = null;
+    private static onPushState : (direction : string, massage? : string) => void = null;
     private static count = 0;
 
     static setCallback(callback : (direction : string, massage? : string) => void)
     {
-//      History.onPushState = callback;
-        window['historyCallback'] = callback;
+        History.onPushState = callback;
+        // window['historyCallback'] = callback;
         window.addEventListener('popstate', History.onPopState);
     }
 
     private static getCallback() : (direction : string, massage? : string) => void
     {
-        return window['historyCallback'];
+        return History.onPushState;
+        // return window['historyCallback'];
     }
 
     static pushState(url : string, message? : string) : void
     {
-        if (location.pathname + location.search !== url) {
-            history.pushState(++History.count, null, url);
+        if (location.pathname + location.search !== url)
+        {
+            History.count++;
+            history.pushState(History.count, null, url);
         }
 
         // location.pathname + location.search === url であってもonPushStateはコールする
@@ -43,18 +46,19 @@ export default class History
 
     static back() : void
     {
-        History.count--;
+        // History.count--;
         history.back();
 
-        const callback = History.getCallback();
-        if (callback) {
-            callback('back');
-        }
+        // const callback = History.getCallback();
+        // if (callback) {
+        //     console.log('back()');
+        //     callback('back');
+        // }
     }
 
-    static onPopState(e : PopStateEvent) : void
+    private static onPopState(e : PopStateEvent) : void
     {
-//      console.log('count:' + History.count);
+        // console.log('count:' + History.count);
         let direction : string;
 
         if (e.state > History.count)
