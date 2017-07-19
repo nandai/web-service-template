@@ -226,15 +226,7 @@ export default class Utils
      */
     static generateUrl(path : string, id? : string) : string
     {
-        let url;
-
-        const protocol = (Config.hasSSL() ? 'https' : 'http');
-        const host = Config.APP_HOST;
-        const port = process.env.APP_PORT || Config.APP_PORT;
-        const isDefaultPort = (port === 80 || port === 443);
-
-        if (isDefaultPort) {url = `${protocol}://${host}/${path}`;}
-        else               {url = `${protocol}://${host}:${port}/${path}`;}
+        let url = `${Config.APP_URL}/${path}`;
 
         if (id) {
             url += `?id=${id}`;

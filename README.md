@@ -10,8 +10,8 @@ SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し
 {
     "app":
     {
-        "app-host":                "localhost",
         "app-port":                80,
+        "app-url":                 "http://localhost",
         "ssl-key":                 "",
         "ssl-cert":                "",
         "ssl-ca":                  "",

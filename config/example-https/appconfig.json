@@ -1,8 +1,8 @@
 {
     "app":
     {
-        "app-host":                "localhost",
         "app-port":                443,
+        "app-url":                 "https://localhost",
         "ssl-key":                 "server.key",
         "ssl-cert":                "server.crt",
         "ssl-ca":                  "ca.crt",

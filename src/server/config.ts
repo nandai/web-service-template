@@ -20,8 +20,9 @@ export default class Config
 
     static ROOT_DIR =   rootDir;
     static STATIC_DIR = rootDir + '/www/static';
-    static APP_HOST = '';
+
     static APP_PORT = 0;
+    static APP_URL = '';
     static SSL_KEY = '';
     static SSL_CERT = '';
     static SSL_CA = '';
@@ -101,8 +102,8 @@ export default class Config
 
         const appData = Config.get(data, 'app', 'object');
 
-        Config.APP_HOST =                Config.get(appData, 'app-host');
         Config.APP_PORT =                Config.get(appData, 'app-port', 'number');
+        Config.APP_URL =                 Config.get(appData, 'app-url');
         Config.SSL_KEY =                 Config.get(appData, 'ssl-key');
         Config.SSL_CERT =                Config.get(appData, 'ssl-cert');
         Config.SSL_CA =                  Config.get(appData, 'ssl-ca');
