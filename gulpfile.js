@@ -8,6 +8,7 @@ const abspath =     require('gulp-absolute-path');
 const babel =       require('gulp-babel');
 const gulpif =      require('gulp-if');
 const postcss =     require('gulp-postcss');
+const replace =     require('gulp-replace');
 const tslint =      require('gulp-tslint');
 const typescript =  require('gulp-typescript');
 const uglify =      require('gulp-uglify');
@@ -34,7 +35,7 @@ const babelOptions =
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 console.log('NODE_ENV ... ' + process.env.NODE_ENV + '\n');
 
-const condition = (process.env.NODE_ENV === 'production');
+const isProduction = (process.env.NODE_ENV === 'production');
 
 /**
  * TypeScript
@@ -51,10 +52,33 @@ gulp.task('typescript', function ()
         .src(src)
         .pipe(abspath({rootDir:'./src'}))
         .pipe(typescript(tsOptions))
-        .pipe(gulpif(condition, babel(babelOptions)))   // uglifyのためにやむなくbabel
+        .pipe(gulpif(isProduction, babel(babelOptions)))   // uglifyのためにやむなくbabel
         .pipe(gulp.dest('./build'));
 });
 
+/**
+ * remove-client-log
+ */
+gulp.task('remove-client-log', function()
+{
+    const src =
+    [
+        './build/**/*.js',
+        '!./build/server/**/*.js',
+        '!./build/test/**/*.js'
+    ];
+
+    return gulp
+        .src(src)
+        .pipe(gulpif(isProduction,
+            replace(/(const slog_1 = require\(.+\);|\s*slog_1\.slog\.setConfig\(.+\);|\s*const log = slog_1\.slog\.stepIn\(.+\);|\s*log\.[diwe]\(.+\);|log\.stepOut\(\);)/g, ''))
+        )
+        .pipe(gulp.dest('./build-client'));
+});
+
+/**
+ * browserify
+ */
 gulp.task('browserify', function ()
 {
     buildClient('wst.js');
@@ -62,32 +86,42 @@ gulp.task('browserify', function ()
 
 function buildClient(fileName)
 {
-    browserify({entries: ['./build/client/app/' + fileName]})
+    browserify({entries: ['./build-client/client/app/' + fileName]})
         .bundle()
         .pipe(source('./www/static/js/' + fileName))
         .pipe(buffer())
-        .pipe(gulpif(condition, uglify()))
+        .pipe(gulpif(isProduction, uglify()))
         .pipe(gulp.dest('.'));
 }
 
+/**
+ * javascript
+ */
 gulp.task('javascript', function (callback)
 {
     return runSequence(
         'typescript',
+        'remove-client-log',
         'browserify',
         callback
     )
 });
 
+/**
+ * css
+ */
 gulp.task('css', function()
 {
     return gulp
         .src('./src/client/css/wst.css')
         .pipe(postcss([cssImport, cssNext, cssMixins]))
-        .pipe(gulpif(condition, postcss([cssnano])))
+        .pipe(gulpif(isProduction, postcss([cssnano])))
         .pipe(gulp.dest('./www/static/components'));
 });
 
+/**
+ * tslint
+ */
 gulp.task('tslint', function ()
 {
     const src =
