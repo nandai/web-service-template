@@ -50,7 +50,7 @@ export default class SettingsApp extends App
     /**
      * 初期化
      */
-    init(params, message? : string)
+    init(params, _message? : string)
     {
         const {store} = this;
         store.unlinkProviderResponse = {status:Response.Status.OK, message:{}};

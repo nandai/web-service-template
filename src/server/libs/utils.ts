@@ -269,7 +269,7 @@ export default class Utils
                 text:    contents
             };
 
-            transporter.sendMail(mailOptions, (err : Error, response : mailer.SentMessageInfo) =>
+            transporter.sendMail(mailOptions, (err : Error, _response : mailer.SentMessageInfo) =>
             {
                 if (err) {
                     log.w(err.message);
@@ -356,7 +356,7 @@ export default class Utils
         return new Promise((resolve : (exists : boolean) => void) =>
         {
             const log = slog.stepIn(Utils.CLS_NAME, 'existsHost');
-            dns.lookup(hostname, (err : Error, address : string, family : number) =>
+            dns.lookup(hostname, (err : Error, _address : string, _family : number) =>
             {
                 let exists = true;
                 if (err)

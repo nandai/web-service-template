@@ -34,7 +34,7 @@ SessionStore.prototype.clear = function clear(callback)
     log.stepOut();
 };
 
-SessionStore.prototype.destroy = function destroy(sessionId, callback)
+SessionStore.prototype.destroy = function destroy(_sessionId, callback)
 {
     const log = slog.stepIn('SessionStore', 'destroy');
     if (callback) {
@@ -43,7 +43,7 @@ SessionStore.prototype.destroy = function destroy(sessionId, callback)
     log.stepOut();
 };
 
-SessionStore.prototype.get = function get(sessionId, callback)
+SessionStore.prototype.get = function get(_sessionId, callback)
 {
     const log = slog.stepIn('SessionStore', 'get');
     if (callback) {

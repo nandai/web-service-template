@@ -4,6 +4,7 @@
         "module": "commonjs",
         "jsx": "react",
         "experimentalDecorators": true,
+        "noUnusedParameters": true,
         "baseUrl": "./src",
         "sourceMap": false,
         "removeComments": false

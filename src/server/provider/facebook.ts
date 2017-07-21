@@ -34,7 +34,7 @@ export default class Facebook extends Provider
      * @param   profile         プロフィール
      * @param   done
      */
-    static verify(accessToken : string, refreshToken : string, profile : passportFacebook.Profile, done) : void
+    static verify(accessToken : string, refreshToken : string, _profile : passportFacebook.Profile, done) : void
     {
         super._verify('facebook', accessToken, refreshToken, done);
     }
@@ -63,12 +63,12 @@ export default class Facebook extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, refreshToken : string)
+    protected inquiry(accessToken : string, _refreshToken : string)
     {
         const log = slog.stepIn(Facebook.CLS_NAME_2, 'inquiry');
         const self = this;
 
-        return new Promise(async (resolve : () => void, reject) =>
+        return new Promise(async (resolve : () => void) =>
         {
             try
             {
@@ -97,7 +97,7 @@ export default class Facebook extends Provider
     private validateAccessToken(accessToken : string) : Promise<boolean>
     {
         const log = slog.stepIn(Facebook.CLS_NAME_2, 'validateAccessToken');
-        return new Promise((resolve : BooleanResolve, reject) =>
+        return new Promise((resolve : BooleanResolve) =>
         {
             fb.api('debug_token',
             {
@@ -126,7 +126,7 @@ export default class Facebook extends Provider
     private me(accessToken : string)
     {
         const log = slog.stepIn(Facebook.CLS_NAME_2, 'me');
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise((resolve : () => void) =>
         {
             fb.api('me',
             {

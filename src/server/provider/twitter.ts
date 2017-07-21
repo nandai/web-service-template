@@ -33,7 +33,7 @@ export default class Twitter extends Provider
      * @param   profile         プロフィール
      * @param   done
      */
-    static verify(accessToken : string, refreshToken : string, profile : passportTwitter.Profile, done) : void
+    static verify(accessToken : string, refreshToken : string, _profile : passportTwitter.Profile, done) : void
     {
         super._verify('twitter', accessToken, refreshToken, done);
     }
@@ -65,7 +65,7 @@ export default class Twitter extends Provider
     protected inquiry(accessToken : string, refreshToken : string)
     {
         const log = slog.stepIn(Twitter.CLS_NAME_2, 'inquiry');
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise((resolve : () => void) =>
         {
             try
             {
@@ -114,7 +114,7 @@ export default class Twitter extends Provider
      * @param   accessToken アクセストークン
      * @param   result      account/verify_credentialsのレスポンス
      */
-    private validateAccessToken(accessToken : string, result) : boolean
+    private validateAccessToken(_accessToken : string, result) : boolean
     {
         const log = slog.stepIn(Twitter.CLS_NAME_2, 'validateAccessToken');
         let success = false;

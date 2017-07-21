@@ -39,7 +39,7 @@ export default class Github extends Provider
      * @param   profile         プロフィール
      * @param   done
      */
-    static verify(accessToken : string, refreshToken : string, profile : passportGithub.Profile, done) : void
+    static verify(accessToken : string, refreshToken : string, _profile : passportGithub.Profile, done) : void
     {
         super._verify('github', accessToken, refreshToken, done);
     }
@@ -68,12 +68,12 @@ export default class Github extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, refreshToken : string)
+    protected inquiry(accessToken : string, _refreshToken : string)
     {
         const log = slog.stepIn(Github.CLS_NAME_2, 'inquiry');
         const self = this;
 
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise((resolve : () => void) =>
         {
             try
             {
@@ -88,7 +88,7 @@ export default class Github extends Provider
                     access_token: accessToken,
                     client_id:    Config.GITHUB_CLIENT_ID
                 },
-                (err, result) =>
+                (_err, result) =>
                 {
 //                  console.log(err);
 //                  console.log(JSON.stringify(result, null, 2));

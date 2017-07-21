@@ -56,7 +56,7 @@ export default class LoginApp extends App
     /**
      * 初期化
      */
-    init(params, message? : string)
+    init(params, _message? : string)
     {
         document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 

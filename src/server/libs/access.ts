@@ -34,7 +34,7 @@ export default class Access
 
         const fn = bodyParser.json(
         {
-            verify: (_req : express.Request, _res : express.Response, body : Buffer, encoding : string) =>
+            verify: (_req : express.Request, _res : express.Response, body : Buffer, _encoding : string) =>
             {
                 bodyBuffer = body;
             }
@@ -63,7 +63,7 @@ export default class Access
      * @param   req httpリクエスト
      * @param   req httpレスポンス
      */
-    static logger(req : express.Request, res : express.Response, next : express.NextFunction) : void
+    static logger(req : express.Request, _res : express.Response, next : express.NextFunction) : void
     {
         const log = slog.stepIn(Access.CLS_NAME, 'logger');
 

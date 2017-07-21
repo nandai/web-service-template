@@ -27,7 +27,7 @@ export default class Authy
      */
     static registerUser(email : string, countryCode : string, phoneNo : string)
     {
-        return new Promise((resolve : (authyId : number) => void, reject) =>
+        return new Promise((resolve : (authyId : number) => void) =>
         {
             const log = slog.stepIn(Authy.CLS_NAME, 'registerUser');
             Authy.authy.register_user(email, phoneNo, countryCode, (err, response) =>
@@ -53,7 +53,7 @@ export default class Authy
      */
     static deleteUser(authyId : number)
     {
-        return new Promise((resolve : (result : boolean) => void, reject) =>
+        return new Promise((resolve : (result : boolean) => void) =>
         {
             const log = slog.stepIn(Authy.CLS_NAME, 'deleteUser');
             Authy.authy.delete_user(authyId, (err, response) =>
@@ -79,7 +79,7 @@ export default class Authy
      */
     static verify(authyId : number, token : number)
     {
-        return new Promise((resolve : (result : boolean) => void, reject) =>
+        return new Promise((resolve : (result : boolean) => void) =>
         {
             const log = slog.stepIn(Authy.CLS_NAME, 'verify');
             Authy.authy.verify(authyId, token, (err, response) =>
@@ -105,7 +105,7 @@ export default class Authy
      */
     static sendApprovalRequest(authyId : number)
     {
-        return new Promise((resolve : (uuid : string) => void, reject) =>
+        return new Promise((resolve : (uuid : string) => void) =>
         {
             const log = slog.stepIn(Authy.CLS_NAME, 'sendApprovalRequest');
             const payload =
@@ -165,7 +165,7 @@ export default class Authy
      */
      static checkApprovalStatus(uuid : string)
      {
-         return new Promise((resolve : (result : boolean) => void, reject) =>
+         return new Promise((resolve : (result : boolean) => void) =>
          {
              const log = slog.stepIn(Authy.CLS_NAME, 'checkApprovalStatus');
              Authy.check_approval_status(uuid, (err, response) =>

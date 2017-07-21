@@ -227,7 +227,7 @@ export default class SocketManager
             const room = sessionRoom(sessionId);
             const ns = SocketManager.io.to(room);
 
-            ns.clients((err, clients : string[]) =>
+            ns.clients((_err, clients : string[]) =>
             {
                 clients.forEach((socketId) => SocketManager.joinAccountRoom(socketId, accountId));
                 log.stepOut();
@@ -299,8 +299,8 @@ export default class SocketManager
             log.d(`送信数: ${ns.adapter.rooms[room].length}`);
             ns.emit('notifyLogout');
 
-            ns = SocketManager.io.to(room);         // emit後のnsを続けて使うとns.clients()のコールバックで
-            ns.clients((err, clients : string[]) => // なぜかclientsがおかしな結果になってしまう
+            ns = SocketManager.io.to(room);             // emit後のnsを続けて使うとns.clients()のコールバックで
+            ns.clients((_err, clients : string[]) =>    // なぜかclientsがおかしな結果になってしまう
             {
                 clients.forEach((socketId) => SocketManager.leaveAccountRoom(socketId));
                 log.stepOut();

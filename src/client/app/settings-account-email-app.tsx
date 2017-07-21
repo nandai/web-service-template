@@ -43,7 +43,7 @@ export default class SettingsAccountEmailApp extends App
     /**
      * 初期化
      */
-    init(params, message? : string)
+    init(params, _message? : string)
     {
         const {store} = this;
         store.requestChangeEmailResponse = {status:Response.Status.OK, message:{}};

@@ -49,7 +49,7 @@ export default class SettingsAccountApp extends App
     /**
      * 初期化
      */
-    init(params, message? : string)
+    init(params, _message? : string)
     {
         const {store} = this;
         store.setAccountResponse =    {status:Response.Status.OK, message:{}};

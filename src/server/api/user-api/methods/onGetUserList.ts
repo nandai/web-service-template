@@ -11,7 +11,7 @@ import express = require('express');
  * ユーザー一覧取得<br>
  * GET /api/users
  */
-export async function onGetUserList(req : express.Request, res : express.Response)
+export async function onGetUserList(_req : express.Request, res : express.Response)
 {
     const log = slog.stepIn('UserApi', 'onGetUserList');
     try

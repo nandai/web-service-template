@@ -18,7 +18,7 @@ export abstract class App
      * @param   params  URLに含まれるパラメータ（Utils.getParamsFromUrl参照）
      * @param   message 前画面から渡されるメッセージ（History.pushState参照）
      */
-    init(params, message? : string)
+    init(_params, _message? : string)
     {
         return new Promise((resolve : () => void) =>
         {
@@ -34,7 +34,7 @@ export abstract class App
     /**
      * ソケットイベント通知
      */
-    notifySocketEvent(data : SocketEventData) : void
+    notifySocketEvent(_data : SocketEventData) : void
     {
     }
 

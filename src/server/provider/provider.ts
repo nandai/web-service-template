@@ -44,7 +44,7 @@ export default class Provider
     {
         const log = slog.stepIn(Provider.CLS_NAME, '_customCallback');
         const options = {session:false};
-        const handler = passport.authenticate(provider, options, (err, user, info) =>
+        const handler = passport.authenticate(provider, options, (_err, user, _info) =>
         {
             if (!user)
             {
@@ -57,7 +57,7 @@ export default class Provider
             }
             else
             {
-                req.login(user, options, (_err) => next(_err));
+                req.login(user, options, (err) => next(err));
             }
         });
 
@@ -98,7 +98,7 @@ export default class Provider
         const log = slog.stepIn(Provider.CLS_NAME, 'signupOrLogin');
         const self = this;
 
-        return new Promise(async (resolve : () => void, reject) =>
+        return new Promise(async (resolve : () => void) =>
         {
             try
             {
@@ -340,9 +340,9 @@ export default class Provider
     /**
      * プロバイダに問い合わせる
      */
-    protected inquiry(accessToken : string, refreshToken : string)
+    protected inquiry(_accessToken : string, _refreshToken : string)
     {
-        return new Promise((resolve : () => void, reject) => reject());
+        return new Promise((_resolve : () => void, reject) => reject());
     }
 
     /**
@@ -361,7 +361,7 @@ export default class Provider
     protected sendResponse(req : express.Request, res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string)
     {
         const log = slog.stepIn(Provider.CLS_NAME, 'sendResponse');
-        return new Promise(async (resolve : () => void, reject) =>
+        return new Promise(async (resolve : () => void) =>
         {
             try
             {

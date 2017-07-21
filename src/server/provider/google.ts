@@ -35,7 +35,7 @@ export default class Google extends Provider
      * @param   profile         プロフィール
      * @param   done
      */
-    static verify(accessToken : string, refreshToken : string, profile : passportGoogle.Profile, done) : void
+    static verify(accessToken : string, refreshToken : string, _profile : passportGoogle.Profile, done) : void
     {
         super._verify('google', accessToken, refreshToken, done);
     }
@@ -69,7 +69,7 @@ export default class Google extends Provider
         const log = slog.stepIn(Google.CLS_NAME_2, 'inquiry');
         const self = this;
 
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise((resolve : () => void) =>
         {
             try
             {
@@ -80,7 +80,7 @@ export default class Google extends Provider
                     refresh_token: refreshToken
                 });
 
-                plus.people.get({userId:'me', auth:oauth2Client}, (err, profile) =>
+                plus.people.get({userId:'me', auth:oauth2Client}, (_err, profile) =>
                 {
 //                  console.log(err);
 //                  console.log(JSON.stringify(profile, null, 2));

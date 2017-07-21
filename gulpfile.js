@@ -19,14 +19,6 @@ const cssMixins =   require('postcss-mixins');
 const buffer =      require('vinyl-buffer');
 const source =      require('vinyl-source-stream');
 
-const tsOptions =
-{
-    target: 'es6',
-    module: 'commonjs',
-    jsx:    'react',
-    experimentalDecorators: true
-};
-
 const babelOptions =
 {
   presets: ['latest']
@@ -48,10 +40,12 @@ gulp.task('typescript', function ()
         './src/**/*.tsx'
     ];
 
+    const tsProj = typescript.createProject('./tsconfig.json');
+
     return gulp
         .src(src)
         .pipe(abspath({rootDir:'./src'}))
-        .pipe(typescript(tsOptions))
+        .pipe(tsProj())
         .pipe(gulpif(isProduction, babel(babelOptions)))   // uglifyのためにやむなくbabel
         .pipe(gulp.dest('./build'));
 });

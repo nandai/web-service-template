@@ -52,7 +52,7 @@ export async function onSignupEmail(req : express.Request, res : express.Respons
         process.nextTick(() =>
         {
             const hashPassword = Utils.getHashPassword(email, password, Config.PASSWORD_SALT);
-            Email.verify(email, hashPassword, (err, user) =>
+            Email.verify(email, hashPassword, (_err, user) =>
             {
                 req.ext.command = 'signup';
                 req.user = user;

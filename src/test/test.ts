@@ -13,7 +13,7 @@ import {testIsChangePasswordValid} from './_testIsChangePasswordValid';
 import {testPasswordValid}         from './_testPasswordValid';
 import {testUserNameValid}         from './_testUserNameValid';
 
-test.before(async (t) =>
+test.before(async () =>
 {
         try
         {
@@ -29,7 +29,7 @@ test.before(async (t) =>
     // });
 });
 
-test.after.always((t) =>
+test.after.always(() =>
 {
     return new Promise(async (resolve) =>
     {

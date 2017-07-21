@@ -87,12 +87,12 @@ export default class Email extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, refreshToken : string)
+    protected inquiry(accessToken : string, _refreshToken : string)
     {
         const log = slog.stepIn(Email.CLS_NAME_2, 'inquiry');
         const self = this;
 
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise((resolve : () => void) =>
         {
             self.id = accessToken;  // email
             log.stepOut();
@@ -119,10 +119,10 @@ export default class Email extends Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(req : express.Request, res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string)
+    protected sendResponse(req : express.Request, res : express.Response, _session : Session, _redirect : string, phrase? : string, smsId? : string)
     {
         const log = slog.stepIn(Email.CLS_NAME_2, 'sendResponse');
-        return new Promise((resolve : () => void, reject) =>
+        return new Promise((resolve : () => void) =>
         {
             const locale = req.ext.locale;
 

@@ -60,7 +60,7 @@ export async function onLoginEmail(req : express.Request, res : express.Response
 
             process.nextTick(() =>
             {
-                Email.verify(email, hashPassword, (err, user) =>
+                Email.verify(email, hashPassword, (_err, user) =>
                 {
                     req.ext.command = 'login';
                     req.user = user;

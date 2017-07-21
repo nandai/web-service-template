@@ -52,7 +52,7 @@ export default class SignupApp extends App
     /**
      * 初期化
      */
-    init(params, message? : string)
+    init(params, _message? : string)
     {
         const {store} = this;
         store.email =    '',
