@@ -26,7 +26,7 @@ export default class DeleteAccountCollection
             {
                 const sql = 'INSERT INTO delete_account SET ?';
                 const values = model;
-                const results = await DB.query(sql, values);
+                await DB.query(sql, values);
 
                 log.stepOut();
                 resolve(model);

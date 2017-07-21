@@ -40,8 +40,8 @@ export function testPasswordValid()
         const log = slog.stepIn('test', t['_test'].title);
         const password = null;
         const confirm =  null;
-        const canNull = true;
-        const result = Validator.password({password, confirm, canNull:true}, locale);
+        const canNull =  true;
+        const result = Validator.password({password, confirm, canNull}, locale);
         const {status} = result;
 
         log.d(JSON.stringify(result, null, 2));

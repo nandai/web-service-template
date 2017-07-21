@@ -5,6 +5,7 @@
     ],
     "jsRules": {},
     "rules": {
+        "align":                           false,
         "callable-types":                  false,
         "forin":                           false,
         "import-spacing":                  false,

@@ -17,7 +17,7 @@ interface ButtonProps
 
 export default class Button extends React.Component<ButtonProps, {}>
 {
-    private static defaultProps : ButtonProps =
+    static defaultProps : ButtonProps =
     {
         className: null,
         url:       null,

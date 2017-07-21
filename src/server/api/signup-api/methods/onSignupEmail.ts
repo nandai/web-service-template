@@ -5,7 +5,6 @@ import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
 import AccountAgent from 'server/agents/account-agent';
 import Config       from 'server/config';
-import R            from 'server/libs/r';
 import {slog}       from 'server/libs/slog';
 import Utils        from 'server/libs/utils';
 import Validator    from 'server/libs/validator';

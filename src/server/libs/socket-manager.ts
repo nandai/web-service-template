@@ -7,7 +7,6 @@ import SessionAgent from 'server/agents/session-agent';
 import Config       from 'server/config';
 import {slog}       from './slog';
 
-import _ =        require('lodash');
 import socketIO = require('socket.io');
 import redis =    require('socket.io-redis');
 

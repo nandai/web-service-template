@@ -6,7 +6,7 @@ import {onLoginAuthyOneTouch} from './methods/onLoginAuthyOneTouch';
 import {onLoginEmail}         from './methods/onLoginEmail';
 import {onLoginSms}           from './methods/onLoginSms';
 
-import express = require('express');
+// import express = require('express');
 
 /**
  * ログインAPI

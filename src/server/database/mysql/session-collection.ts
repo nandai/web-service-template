@@ -5,8 +5,6 @@ import {slog}    from 'server/libs/slog';
 import {Session} from 'server/models/session';
 import DB        from '.';
 
-import _ = require('lodash');
-
 /**
  * セッションモデル
  */
@@ -26,7 +24,7 @@ export default class SessionCollection
             {
                 const sql = 'INSERT INTO session SET ?';
                 const values = model;
-                const results = await DB.query(sql, values);
+                await DB.query(sql, values);
 
                 log.stepOut();
                 resolve(model);
@@ -65,7 +63,7 @@ export default class SessionCollection
                     values.push(cond.accountId);
                 }
 
-                const results = await DB.query(sql, values);
+                await DB.query(sql, values);
 
                 log.stepOut();
                 resolve();

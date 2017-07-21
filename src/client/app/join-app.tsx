@@ -10,7 +10,6 @@ import JoinView    from 'client/components/views/join-view';
 import {Store}     from 'client/components/views/join-view/store';
 import {slog}      from 'client/libs/slog';
 import Utils       from 'client/libs/utils';
-import {Request}   from 'libs/request';
 import {Response}  from 'libs/response';
 import CommonUtils from 'libs/utils';
 

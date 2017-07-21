@@ -6,7 +6,7 @@ import {onConfirmSignupEmail}  from './methods/onConfirmSignupEmail';
 import {onJoin}                from './methods/onJoin';
 import {onSignupEmail}         from './methods/onSignupEmail';
 
-import express = require('express');
+// import express = require('express');
 
 /**
  * サインアップAPI

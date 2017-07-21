@@ -56,7 +56,7 @@ export default class AccountCollection
             {
                 const sql = 'UPDATE account SET ? WHERE id=?';
                 const values = [model, model.id];
-                const results = await DB.query(sql, values);
+                await DB.query(sql, values);
 
                 log.stepOut();
                 resolve();
@@ -81,7 +81,7 @@ export default class AccountCollection
             {
                 const sql = 'DELETE FROM account WHERE id=?';
                 const values = accountId;
-                const results = await DB.query(sql, values);
+                await DB.query(sql, values);
 
                 log.stepOut();
                 resolve();

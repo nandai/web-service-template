@@ -23,7 +23,6 @@ export async function onLoginAuthyOneTouch(req : express.Request, res : express.
     {
         do
         {
-            const locale = req.ext.locale;
             const session : Session = req.ext.session;
             let approval = false;
 

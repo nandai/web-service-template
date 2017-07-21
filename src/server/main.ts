@@ -33,7 +33,6 @@ import {slog}                        from './libs/slog';
 import SocketManager                 from './libs/socket-manager';
 import Utils                         from './libs/utils';
 import {Session}                     from './models/session';
-import Email                         from './provider/email';
 import Facebook                      from './provider/facebook';
 import Github                        from './provider/github';
 import Google                        from './provider/google';

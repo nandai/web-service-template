@@ -17,7 +17,7 @@ interface InputProps
 
 export default class Input extends React.Component<InputProps, {}>
 {
-    private static defaultProps : InputProps = {
+    static defaultProps : InputProps = {
         type:        'text',
         placeholder: '',
         value:       '',

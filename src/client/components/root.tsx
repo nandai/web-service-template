@@ -102,7 +102,6 @@ export default class Root extends React.Component<RootProps, RootState>
     onTransitionEnd(e : React.TransitionEvent<Element>)
     {
         const {state} = this;
-        const {views} = state;
         const el = ReactDOM.findDOMNode(this.refs['root']);
 
         if (el === e.target && state.nextView)

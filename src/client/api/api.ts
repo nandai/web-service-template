@@ -1,17 +1,13 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Request}  from 'libs/request';
-import {Response} from 'libs/response';
-import R          from '../libs/r';
-import Utils      from '../libs/utils';
+import R     from '../libs/r';
+import Utils from '../libs/utils';
 
 import request = require('superagent');
 
 export default class Api
 {
-    private static CLS_NAME = 'Api';
-
     /**
      * GETリクエストを送信する
      *

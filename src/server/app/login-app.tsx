@@ -17,7 +17,7 @@ import R                from 'server/libs/r';
 import {slog}           from 'server/libs/slog';
 import Utils            from 'server/libs/utils';
 import {Session}        from 'server/models/session';
-import {notFound, view} from './view';
+import {view}           from './view';
 
 import express = require('express');
 

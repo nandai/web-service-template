@@ -8,7 +8,6 @@ import {App}             from 'client/app/app';
 import UserView          from 'client/components/views/user-view';
 import {Store}           from 'client/components/views/user-view/store';
 import History           from 'client/libs/history';
-import {slog}            from 'client/libs/slog';
 import {SocketEventData} from 'client/libs/socket-event-data';
 import Utils             from 'client/libs/utils';
 import {Response}        from 'libs/response';
@@ -20,7 +19,6 @@ const ssrStore = Utils.getSsrStore<Store>();
  */
 export default class UserApp extends App
 {
-    private static CLS_NAME = 'UserApp';
     private store : Store;
 
     /**

@@ -12,7 +12,6 @@ import {Session}      from 'server/models/session';
 import Provider       from './provider';
 
 import express =  require('express');
-import passport = require('passport');
 
 /**
  * Email

@@ -23,8 +23,6 @@ function collection()
  */
 export default class DeleteAccountAgent
 {
-    private static CLS_NAME = 'DeleteAccountAgent';
-
     /**
      * アカウントを追加する
      *

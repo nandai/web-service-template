@@ -24,8 +24,6 @@ function collection()
  */
 export default class LoginHistoryAgent
 {
-    private static CLS_NAME = 'LoginHistoryAgent';
-
     /**
      * ログイン履歴を追加する
      *

@@ -5,6 +5,7 @@
         "jsx": "react",
         "experimentalDecorators": true,
         "noUnusedParameters": true,
+        "noUnusedLocals": true,
         "baseUrl": "./src",
         "sourceMap": false,
         "removeComments": false
