@@ -41,6 +41,7 @@ import Twitter                       from './provider/twitter';
 import bodyParser =       require('body-parser');
 import cookieParser =     require('cookie-parser');
 import express =          require('express');
+import expressDomain =    require('express-domain-middleware');
 import session =          require('express-session');
 import fs =               require('fs');
 import helmet =           require('helmet');
@@ -77,6 +78,7 @@ class Initializer
             this.app.use(helmet.hidePoweredBy());
             this.app.use(helmet.noSniff());
             this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
+            this.app.use(expressDomain);
             this.app.use(expressExtension);
             this.app.use(cookieParser());
             this.app.use(bodyParser.urlencoded({extended:true}));

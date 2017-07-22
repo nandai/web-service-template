@@ -37,6 +37,7 @@
     "country-data": "0.0.31",
     "cssnano": "^3.10.0",
     "express": "^4.15.3",
+    "express-domain-middleware": "^0.1.0",
     "express-session": "^1.15.4",
     "fb": "^2.0.0",
     "github": "^9.2.0",

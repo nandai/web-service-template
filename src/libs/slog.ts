@@ -202,9 +202,7 @@ export namespace slog
         /**
          * 擬似スレッドID
          */
-        tid = (isServerSide
-            ? process.pid
-            : Math.floor(Math.random () * 0x7FFF));
+        tid = Math.floor(Math.random () * 0x7FFF);
 
         /**
          * シーケンスログリスト
@@ -586,7 +584,7 @@ export namespace slog
             array[pos++] = item.type;
 
             // スレッド ID
-            const tid = this.tid;
+            const tid = this.getTid();
             array[pos++] = (tid >> 24) & 0xFF;
             array[pos++] = (tid >> 16) & 0xFF;
             array[pos++] = (tid >>  8) & 0xFF;
@@ -658,6 +656,26 @@ export namespace slog
             array[1] =  pos       & 0xFF;
 
             return pos;
+        }
+
+        /**
+         * 擬似スレッドIDを取得します。
+         */
+        getTid() : number
+        {
+            let tid = this.tid;
+            if (isServerSide)
+            {
+                if (process.domain && typeof process.domain['id'] === 'number')
+                {
+                    tid = process.domain['id'];
+                }
+                else
+                {
+                    tid = process.pid;
+                }
+            }
+            return tid;
         }
 
         /**
