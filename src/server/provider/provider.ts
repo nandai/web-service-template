@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog}            from 'libs/slog';
 import AccountAgent      from 'server/agents/account-agent';
 import LoginHistoryAgent from 'server/agents/login-history-agent';
 import SessionAgent      from 'server/agents/session-agent';
@@ -8,7 +9,6 @@ import Config            from 'server/config';
 import Authy             from 'server/libs/authy';
 import {PassportUser}    from 'server/libs/passport';
 import R                 from 'server/libs/r';
-import {slog}            from 'server/libs/slog';
 import Utils             from 'server/libs/utils';
 import {Account}         from 'server/models/account';
 import {LoginHistory}    from 'server/models/login-history';

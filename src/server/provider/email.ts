@@ -2,10 +2,10 @@
  * (C) 2016 printf.jp
  */
 import {Response}     from 'libs/response';
+import {slog}         from 'libs/slog';
 import CommonUtils    from 'libs/utils';
 import {PassportUser} from 'server/libs/passport';
 import R              from 'server/libs/r';
-import {slog}         from 'server/libs/slog';
 import Utils          from 'server/libs/utils';
 import {Account}      from 'server/models/account';
 import {Session}      from 'server/models/session';

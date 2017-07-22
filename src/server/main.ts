@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog}                        from 'libs/slog';
 import SessionAgent                  from './agents/session-agent';
 import LoginApi                      from './api/login-api';
 import LogoutApi                     from './api/logout-api';
@@ -29,7 +30,6 @@ import Authy                         from './libs/authy';
 import {expressExtension}            from './libs/express-extension';
 import R                             from './libs/r';
 import {SessionStore}                from './libs/session-store';
-import {slog}                        from './libs/slog';
 import SocketManager                 from './libs/socket-manager';
 import Utils                         from './libs/utils';
 import {Session}                     from './models/session';

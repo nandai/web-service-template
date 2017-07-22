@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {slog} from 'client/libs/slog';
+import {slog} from 'libs/slog';
 import Api    from './api';
 
 export default class LogoutApi extends Api

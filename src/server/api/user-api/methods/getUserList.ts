@@ -2,9 +2,9 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response}   from 'libs/response';
+import {slog}       from 'libs/slog';
 import AccountAgent from 'server/agents/account-agent';
 import Converter    from 'server/libs/converter';
-import {slog}       from 'server/libs/slog';
 
 /**
  * ユーザー一覧取得

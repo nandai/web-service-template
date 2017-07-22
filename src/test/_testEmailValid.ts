@@ -3,7 +3,7 @@
  */
 import test       from 'ava';
 import {Response} from 'libs/response';
-import {slog}     from 'server/libs/slog';
+import {slog}     from 'libs/slog';
 import Validator  from 'server/libs/validator';
 import {Account}  from 'server/models/account';
 

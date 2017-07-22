@@ -9,8 +9,8 @@ import {App}      from 'client/app/app';
 import TopView    from 'client/components/views/top-view';
 import {Store}    from 'client/components/views/top-view/store';
 import History    from 'client/libs/history';
-import {slog}     from 'client/libs/slog';
 import Utils      from 'client/libs/utils';
+import {slog}     from 'libs/slog';
 
 const ssrStore = Utils.getSsrStore<Store>();
 

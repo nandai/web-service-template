@@ -2,10 +2,10 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response}        from 'libs/response';
+import {slog}            from 'libs/slog';
 import LoginHistoryAgent from 'server/agents/login-history-agent';
 import SessionAgent      from 'server/agents/session-agent';
 import Authy             from 'server/libs/authy';
-import {slog}            from 'server/libs/slog';
 import Utils             from 'server/libs/utils';
 import {LoginHistory}    from 'server/models/login-history';
 import {Session}         from 'server/models/session';

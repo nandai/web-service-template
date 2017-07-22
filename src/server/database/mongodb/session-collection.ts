@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {slog}    from 'server/libs/slog';
+import {slog}    from 'libs/slog';
 import {Session} from 'server/models/session';
 import DB        from '.';
 

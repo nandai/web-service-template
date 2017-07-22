@@ -2,11 +2,11 @@
  * (C) 2017 printf.jp
  */
 import test                        from 'ava';
+import {slog}                      from 'libs/slog';
 import Config                      from 'server/config';
 import MongoDB                     from 'server/database/mongodb';
 import MySQL                       from 'server/database/mysql';
 import R                           from 'server/libs/r';
-import {slog}                      from 'server/libs/slog';
 import {testAccountNameValid}      from './_testAccountNameValid';
 import {testEmailValid}            from './_testEmailValid';
 import {testIsChangePasswordValid} from './_testIsChangePasswordValid';

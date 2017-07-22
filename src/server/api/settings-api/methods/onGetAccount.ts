@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {slog}       from 'server/libs/slog';
+import {slog}       from 'libs/slog';
 import Utils        from 'server/libs/utils';
 import {getAccount} from './getAccount';
 

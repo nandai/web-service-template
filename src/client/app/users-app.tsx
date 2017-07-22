@@ -9,10 +9,10 @@ import {App}             from 'client/app/app';
 import UsersView         from 'client/components/views/users-view';
 import {Store}           from 'client/components/views/users-view/store';
 import History           from 'client/libs/history';
-import {slog}            from 'client/libs/slog';
 import {SocketEventData} from 'client/libs/socket-event-data';
 import Utils             from 'client/libs/utils';
 import {Response}        from 'libs/response';
+import {slog}            from 'libs/slog';
 
 const ssrStore = Utils.getSsrStore<Store>();
 

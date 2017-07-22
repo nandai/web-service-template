@@ -1,10 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog}            from 'libs/slog';
 import Config            from 'server/config';
 import MongoDBCollection from 'server/database/mongodb/session-collection';
 import MySQLCollection   from 'server/database/mysql/session-collection';
-import {slog}            from 'server/libs/slog';
 import SocketManager     from 'server/libs/socket-manager';
 import Utils             from 'server/libs/utils';
 import {Session}         from 'server/models/session';

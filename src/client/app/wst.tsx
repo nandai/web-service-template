@@ -6,11 +6,11 @@ import * as React                    from 'react';
 import * as ReactDOM                 from 'react-dom';
 
 import {Response}                    from 'libs/response';
+import {slog}                        from 'libs/slog';
 import SettingsApi                   from '../api/settings-api';
 import Root                          from '../components/root';
 import History                       from '../libs/history';
 import R                             from '../libs/r';
-import {slog}                        from '../libs/slog';
 import {SocketEventData}             from '../libs/socket-event-data';
 import Utils                         from '../libs/utils';
 import {App}                         from './app';

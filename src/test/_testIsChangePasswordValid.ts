@@ -4,10 +4,10 @@
 import test                    from 'ava';
 import {Request}               from 'libs/request';
 import {Response}              from 'libs/response';
+import {slog}                  from 'libs/slog';
 import AccountAgent            from 'server/agents/account-agent';
 import {isChangePasswordValid} from 'server/api/settings-api/methods/onChangePassword';
 import Config                  from 'server/config';
-import {slog}                  from 'server/libs/slog';
 import Utils                   from 'server/libs/utils';
 import {Account}               from 'server/models/account';
 

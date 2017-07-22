@@ -8,9 +8,9 @@ import ResetApi   from 'client/api/reset-api';
 import {App}      from 'client/app/app';
 import ForgetView from 'client/components/views/forget-view';
 import {Store}    from 'client/components/views/forget-view/store';
-import {slog}     from 'client/libs/slog';
 import Utils      from 'client/libs/utils';
 import {Response} from 'libs/response';
+import {slog}     from 'libs/slog';
 
 const ssrStore = Utils.getSsrStore<Store>();
 

@@ -8,9 +8,9 @@ import SettingsApi                    from 'client/api/settings-api';
 import {App}                          from 'client/app/app';
 import SettingsAccountEmailChangeView from 'client/components/views/settings-account-email-change-view';
 import {Store}                        from 'client/components/views/settings-account-email-change-view/store';
-import {slog}                         from 'client/libs/slog';
 import Utils                          from 'client/libs/utils';
 import {Response}                     from 'libs/response';
+import {slog}                         from 'libs/slog';
 import CommonUtils                    from 'libs/utils';
 
 const ssrStore = Utils.getSsrStore<Store>();

@@ -2,10 +2,10 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response}            from 'libs/response';
+import {slog}                from 'libs/slog';
 import CommonUtils           from 'libs/utils';
 import SessionAgent          from 'server/agents/session-agent';
 import {forbidden, notFound} from 'server/app/view';
-import {slog}                from 'server/libs/slog';
 import {Session}             from 'server/models/session';
 import Cookie                from './cookie';
 import R                     from './r';

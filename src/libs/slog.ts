@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import WebSocket = require('websocket');
-const  WebSocketClient = WebSocket.client;
+import NodeWebSocket = require('websocket');
+
+const isServerSide = (process['browser'] !== true);
 
 type LOGLEVEL = 'ALL' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'NONE';
 
@@ -37,11 +38,11 @@ export namespace slog
     const OPEN =        1;
     const CLOSED =      3;
 
-    class WS
+    class ServerSideWS
     {
         readyState = INIT;
-        private client = new WebSocketClient();
-        private ws : WebSocket.connection;
+        private client = new NodeWebSocket.client();
+        private ws : NodeWebSocket.connection;
         private errorCallback : () => void;
         private closeCallback : () => void;
 
@@ -122,6 +123,58 @@ export namespace slog
         }
     }
 
+    class ClientSideWS
+    {
+        readyState = INIT;
+        private ws : WebSocket;
+
+        connect(url : string) : void
+        {
+            this.ws = new WebSocket(url);
+            this.ws.binaryType = 'arraybuffer';
+            this.readyState = CONNECTING;
+        }
+
+        onConnect(callback : () => void) : void
+        {
+            const self = this;
+            this.ws.onopen = () =>
+            {
+                self.readyState = OPEN;
+                callback();
+            };
+        }
+
+        onError(callback : () => void) : void
+        {
+            const self = this;
+            this.ws.onerror = () =>
+            {
+                self.readyState = CLOSED;
+                callback();
+            };
+        }
+
+        onClose(callback : () => void) : void
+        {
+            const self = this;
+            this.ws.onclose = () =>
+            {
+                self.readyState = CLOSED;
+                callback();
+            };
+        }
+
+        onConnectFailed(_callback : () => void)
+        {
+        }
+
+        send(array : Uint8Array) : void
+        {
+            this.ws.send(array.buffer);
+        }
+    }
+
     /**
      * シーケンスログクライアント（singleton）
      *
@@ -132,7 +185,9 @@ export namespace slog
         /**
          * WebSocket
          */
-        ws = new WS();
+        ws = (isServerSide
+            ? new ServerSideWS()
+            : new ClientSideWS());
 
         /**
          * ログレベル
@@ -147,7 +202,9 @@ export namespace slog
         /**
          * 擬似スレッドID
          */
-        tid = (typeof process !== 'undefined' ? process.pid : Math.floor(Math.random () * 0x7FFF));
+        tid = (isServerSide
+            ? process.pid
+            : Math.floor(Math.random () * 0x7FFF));
 
         /**
          * シーケンスログリスト
@@ -244,7 +301,7 @@ export namespace slog
                 let pos = 0;
 
                 // プロセスID
-                const pid = (typeof process !== 'undefined' ? process.pid : 0);
+                const pid = (isServerSide ? process.pid : 0);
                 array[pos++] = (pid >> 24) & 0xFF;
                 array[pos++] = (pid >> 16) & 0xFF;
                 array[pos++] = (pid >>  8) & 0xFF;

@@ -2,8 +2,8 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response}   from 'libs/response';
+import {slog}       from 'libs/slog';
 import SessionAgent from 'server/agents/session-agent';
-import {slog}       from 'server/libs/slog';
 import Utils        from 'server/libs/utils';
 import {Session}    from 'server/models/session';
 

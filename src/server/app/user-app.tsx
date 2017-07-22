@@ -8,8 +8,8 @@ import Root             from 'client/components/root';
 import UserView         from 'client/components/views/user-view';
 import {Store}          from 'client/components/views/user-view/store';
 import ClientR          from 'client/libs/r';
+import {slog}           from 'libs/slog';
 import UserApi          from 'server/api/user-api';
-import {slog}           from 'server/libs/slog';
 import {notFound, view} from './view';
 
 import express = require('express');

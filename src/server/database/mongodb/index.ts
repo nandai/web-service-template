@@ -1,8 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog} from 'libs/slog';
 import Config from 'server/config';
-import {slog} from 'server/libs/slog';
 
 import mongodb =       require('mongodb');
 import autoIncrement = require("mongodb-autoincrement");

@@ -2,7 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response} from 'libs/response';
-import {slog}     from 'server/libs/slog';
+import {slog}     from 'libs/slog';
 import R          from './r';
 
 import express = require('express');

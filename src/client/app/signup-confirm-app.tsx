@@ -8,9 +8,9 @@ import SignupApi         from 'client/api/signup-api';
 import {App}             from 'client/app/app';
 import SignupConfirmView from 'client/components/views/signup-confirm-view';
 import {Store}           from 'client/components/views/signup-confirm-view/store';
-import {slog}            from 'client/libs/slog';
 import Utils             from 'client/libs/utils';
 import {Response}        from 'libs/response';
+import {slog}            from 'libs/slog';
 import CommonUtils       from 'libs/utils';
 
 const ssrStore = Utils.getSsrStore<Store>();

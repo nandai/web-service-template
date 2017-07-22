@@ -1,8 +1,8 @@
 /**
  * (C) 2016 printf.jp
  */
+import {slog}   from 'libs/slog';
 import Config   from 'server/config';
-import {slog}   from 'server/libs/slog';
 import Utils    from 'server/libs/utils';
 import Provider from './provider';
 

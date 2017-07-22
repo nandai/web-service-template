@@ -2,10 +2,10 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response}   from 'libs/response';
+import {slog}       from 'libs/slog';
 import CommonUtils  from 'libs/utils';
 import SessionAgent from 'server/agents/session-agent';
 import Config       from 'server/config';
-import {slog}       from './slog';
 
 import socketIO = require('socket.io');
 import redis =    require('socket.io-redis');

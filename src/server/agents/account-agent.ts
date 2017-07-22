@@ -1,12 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog}            from 'libs/slog';
 import LoginHistoryAgent from 'server/agents/login-history-agent';
 import Config            from 'server/config';
 import MongoDBCollection from 'server/database/mongodb/account-collection';
 import MySQLCollection   from 'server/database/mysql/account-collection';
 import Converter         from 'server/libs/converter';
-import {slog}            from 'server/libs/slog';
 import SocketManager     from 'server/libs/socket-manager';
 import Utils             from 'server/libs/utils';
 import {Account}         from 'server/models/account';

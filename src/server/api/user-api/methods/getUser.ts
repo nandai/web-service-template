@@ -3,9 +3,9 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import {slog}       from 'libs/slog';
 import AccountAgent from 'server/agents/account-agent';
 import Converter    from 'server/libs/converter';
-import {slog}       from 'server/libs/slog';
 import {Account}    from 'server/models/account';
 
 import express = require('express');

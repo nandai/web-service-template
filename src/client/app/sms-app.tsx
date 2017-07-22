@@ -9,9 +9,9 @@ import {App}       from 'client/app/app';
 import SmsView     from 'client/components/views/sms-view';
 import {Store}     from 'client/components/views/sms-view/store';
 import History     from 'client/libs/history';
-import {slog}      from 'client/libs/slog';
 import Utils       from 'client/libs/utils';
 import {Response}  from 'libs/response';
+import {slog}      from 'libs/slog';
 import CommonUtils from 'libs/utils';
 
 const ssrStore = Utils.getSsrStore<Store>();

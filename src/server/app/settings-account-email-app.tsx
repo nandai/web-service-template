@@ -9,8 +9,8 @@ import SettingsAccountEmailView from 'client/components/views/settings-account-e
 import {Store}                  from 'client/components/views/settings-account-email-view/store';
 import ClientR                  from 'client/libs/r';
 import {Response}               from 'libs/response';
+import {slog}                   from 'libs/slog';
 import SettingsApi              from 'server/api/settings-api';
-import {slog}                   from 'server/libs/slog';
 import Utils                    from 'server/libs/utils';
 import {view}                   from './view';
 

@@ -4,8 +4,8 @@
 import bind              from 'bind-decorator';
 
 import History           from 'client/libs/history';
-import {slog}            from 'client/libs/slog';
 import {SocketEventData} from 'client/libs/socket-event-data';
+import {slog}            from 'libs/slog';
 
 export abstract class App
 {

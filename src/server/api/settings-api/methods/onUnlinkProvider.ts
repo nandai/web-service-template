@@ -3,9 +3,9 @@
  */
 import {Request}    from 'libs/request';
 import {Response}   from 'libs/response';
+import {slog}       from 'libs/slog';
 import AccountAgent from 'server/agents/account-agent';
 import R            from 'server/libs/r';
-import {slog}       from 'server/libs/slog';
 import Utils        from 'server/libs/utils';
 import {Session}    from 'server/models/session';
 

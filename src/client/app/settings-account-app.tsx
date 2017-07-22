@@ -8,9 +8,9 @@ import SettingsApi         from 'client/api/settings-api';
 import {App}               from 'client/app/app';
 import SettingsAccountView from 'client/components/views/settings-account-view';
 import {Store}             from 'client/components/views/settings-account-view/store';
-import {slog}              from 'client/libs/slog';
 import Utils               from 'client/libs/utils';
 import {Response}          from 'libs/response';
+import {slog}              from 'libs/slog';
 
 const ssrStore = Utils.getSsrStore<Store>();
 

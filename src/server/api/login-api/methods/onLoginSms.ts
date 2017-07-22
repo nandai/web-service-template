@@ -3,12 +3,12 @@
  */
 import {Request}         from 'libs/request';
 import {Response}        from 'libs/response';
+import {slog}            from 'libs/slog';
 import AccountAgent      from 'server/agents/account-agent';
 import LoginHistoryAgent from 'server/agents/login-history-agent';
 import SessionAgent      from 'server/agents/session-agent';
 import Authy             from 'server/libs/authy';
 import R                 from 'server/libs/r';
-import {slog}            from 'server/libs/slog';
 import Utils             from 'server/libs/utils';
 import {LoginHistory}    from 'server/models/login-history';
 import {Session}         from 'server/models/session';

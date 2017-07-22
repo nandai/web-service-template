@@ -9,8 +9,8 @@ import SignupConfirmView from 'client/components/views/signup-confirm-view';
 import {Store}           from 'client/components/views/signup-confirm-view/store';
 import ClientR           from 'client/libs/r';
 import {Response}        from 'libs/response';
+import {slog}            from 'libs/slog';
 import AccountAgent      from 'server/agents/account-agent';
-import {slog}            from 'server/libs/slog';
 import Utils             from 'server/libs/utils';
 import {notFound, view}  from './view';
 
