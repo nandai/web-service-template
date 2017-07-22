@@ -45,6 +45,7 @@ import session =          require('express-session');
 import fs =               require('fs');
 import helmet =           require('helmet');
 import https =            require('https');
+import log4js =           require('log4js');
 import passport =         require('passport');
 import passportFacebook = require('passport-facebook');
 import passportGithub =   require('passport-github');
@@ -302,6 +303,15 @@ async function main()
 {
     slog.setConfig( 'ws://localhost:8080', 'webServiceTemplate.log', 'ALL', 'slog', 'gols');
 //  slog.setConfig('wss://localhost:8443', 'webServiceTemplate.log', 'ALL', 'slog', 'gols');
+
+    const logger = log4js.getLogger();
+    logger.level = 'debug';
+
+    slog.bind(
+        logger.debug.bind(logger),
+        logger.info .bind(logger),
+        logger.warn .bind(logger),
+        logger.error.bind(logger));
 
     const log = slog.stepIn('app.ts', 'main');
     const app = express();

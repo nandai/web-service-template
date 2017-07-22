@@ -380,7 +380,13 @@ window.addEventListener('DOMContentLoaded', async () =>
 {
 //  const serviceAddr = (('https:' === document.location.protocol) ? 'wss://localhost:8443' : 'ws://localhost:8080');
     const serviceAddr = 'ws://localhost:8080';
-    slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL');
+    slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL', 'slog', 'gols');
+
+    slog.bind(
+        console.log,
+        console.info,
+        console.warn,
+        console.error);
 
     const log = slog.stepIn('window', 'DOMContentLoaded');
     const locale = Utils.getLocale();

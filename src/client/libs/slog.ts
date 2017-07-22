@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+type LOGLEVEL = 'ALL' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'NONE';
 
 /**
  * @namespace slog
@@ -28,21 +29,21 @@ export namespace slog
     const WARN =  2;    // 警告
     const ERROR = 3;    // エラー
 
+    const INIT =       -1;
+    const CONNECTING =  0;
+    const OPEN =        1;
+    const CLOSED =      3;
+
     class WS
     {
-        static readonly INIT =       -1;
-        static readonly CONNECTING =  0;
-        static readonly OPEN =        1;
-        static readonly CLOSED =      3;
-
-        readyState = WS.INIT;
+        readyState = INIT;
         private ws : WebSocket;
 
         connect(url : string) : void
         {
             this.ws = new WebSocket(url);
             this.ws.binaryType = 'arraybuffer';
-            this.readyState = WS.CONNECTING;
+            this.readyState = CONNECTING;
         }
 
         onConnect(callback : () => void) : void
@@ -50,7 +51,7 @@ export namespace slog
             const self = this;
             this.ws.onopen = () =>
             {
-                self.readyState = WS.OPEN;
+                self.readyState = OPEN;
                 callback();
             };
         }
@@ -60,7 +61,7 @@ export namespace slog
             const self = this;
             this.ws.onerror = () =>
             {
-                self.readyState = WS.CLOSED;
+                self.readyState = CLOSED;
                 callback();
             };
         }
@@ -70,9 +71,13 @@ export namespace slog
             const self = this;
             this.ws.onclose = () =>
             {
-                self.readyState = WS.CLOSED;
+                self.readyState = CLOSED;
                 callback();
             };
+        }
+
+        onConnectFailed(_callback : () => void)
+        {
         }
 
         send(array : Uint8Array) : void
@@ -106,7 +111,7 @@ export namespace slog
         /**
          * 擬似スレッドID
          */
-        tid = Math.floor(Math.random () * 0x7FFF);
+        tid = (typeof process !== 'undefined' ? process.pid : Math.floor(Math.random () * 0x7FFF));
 
         /**
          * シーケンスログリスト
@@ -132,6 +137,17 @@ export namespace slog
          * 送信バッファ
          */
         arrayList : Uint8Array[] = [];
+
+        /**
+         * 他ロガー
+         */
+        other =
+        {
+            debug: null,
+            info:  null,
+            warn:  null,
+            error: null
+        };
 
         /**
          * コンストラクタ
@@ -160,7 +176,7 @@ export namespace slog
          *
          * @return  なし
          */
-        setConfig(address : string, fileName : string, logLevel : string, userName : string, passwd : string) : void
+        setConfig(address : string, fileName : string, logLevel : LOGLEVEL, userName : string, passwd : string) : void
         {
             if (logLevel === 'ALL')   {this.logLevel = DEBUG - 1;}
             if (logLevel === 'DEBUG') {this.logLevel = DEBUG;}
@@ -192,7 +208,7 @@ export namespace slog
                 let pos = 0;
 
                 // プロセスID
-                const pid = 0;
+                const pid = (typeof process !== 'undefined' ? process.pid : 0);
                 array[pos++] = (pid >> 24) & 0xFF;
                 array[pos++] = (pid >> 16) & 0xFF;
                 array[pos++] = (pid >>  8) & 0xFF;
@@ -250,6 +266,11 @@ export namespace slog
             this.ws.onClose(() =>
             {
                 console.info('close slog WebSocket');
+            });
+
+            this.ws.onConnectFailed(() =>
+            {
+                console.error('connect failed slog WebSocket');
             });
         }
 
@@ -368,8 +389,8 @@ export namespace slog
                 return false;
             }
 
-            if (this.ws.readyState !== WS.CONNECTING
-            &&  this.ws.readyState !== WS.OPEN)
+            if (this.ws.readyState !== CONNECTING
+            &&  this.ws.readyState !== OPEN)
             {
                 return false;
             }
@@ -557,7 +578,7 @@ export namespace slog
          */
         sendItem(item : SequenceLogItem) : void
         {
-            if (this.ws.readyState === WS.CONNECTING) {
+            if (this.ws.readyState === CONNECTING) {
                 return;
             }
 
@@ -599,6 +620,37 @@ export namespace slog
         }
 
         /**
+         * 他ロガーに出力
+         *
+         * @return  なし
+         */
+        outputOther(level : number, text : string) : void
+        {
+            const {other} = this;
+            let method;
+
+            switch (level)
+            {
+                case DEBUG: method = other.debug; break;
+                case INFO:  method = other.info;  break;
+                case WARN:  method = other.warn;  break;
+                case ERROR: method = other.error; break;
+            }
+
+            if (method) {
+                method(text);
+            }
+        }
+
+        /**
+         * 他ロガー設定
+         */
+        bind(debug, info, warn, error) : void
+        {
+            this.other = {debug, info, warn, error};
+        }
+
+        /**
          * SequenceLogItemを取得します。
          *
          * @method  getItem
@@ -607,7 +659,7 @@ export namespace slog
          */
         getItem() : SequenceLogItem
         {
-            if (this.ws.readyState === WS.OPEN) {
+            if (this.ws.readyState === OPEN) {
                 this.itemListPos = 0;
             }
 
@@ -728,11 +780,12 @@ export namespace slog
          */
         stepIn(className : string, funcName : string) : void
         {
+            this.seqNo = client.getSequenceNo();
+            client.outputOther(DEBUG, `[${this.seqNo}] ${className}.${funcName}`);
+
             if (client.canOutput() === false) {
                 return;
             }
-
-            this.seqNo = client.getSequenceNo();
 
             const item = client.getItem();
             item.seqNo = this.seqNo;
@@ -752,6 +805,8 @@ export namespace slog
          */
         stepOut() : void
         {
+            client.outputOther(DEBUG, `[${this.seqNo}]`);
+
             if (client.canOutput() === false) {
                 return;
             }
@@ -792,6 +847,8 @@ export namespace slog
      */
     function message(log : SequenceLog, level : number, msg : string) : void
     {
+        client.outputOther(level, `[${log.seqNo}] ${msg}`);
+
         if (client.canOutput() === false) {
             return;
         }
@@ -816,9 +873,17 @@ export namespace slog
      *
      * @return  なし
      */
-    export function setConfig(address : string, fileName : string, logLevel : string) : void
+    export function setConfig(address : string, fileName : string, logLevel : LOGLEVEL, userName : string, passwd : string) : void
     {
-        client.setConfig(address, fileName, logLevel, '', '');
+        client.setConfig(address, fileName, logLevel, userName, passwd);
+    }
+
+    /**
+     * 他ロガー設定
+     */
+    export function bind(debug, info, warn, error) : void
+    {
+        client.bind(debug, info, warn, error);
     }
 
     /**

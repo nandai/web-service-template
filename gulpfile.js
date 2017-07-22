@@ -65,7 +65,7 @@ gulp.task('remove-client-log', function()
     return gulp
         .src(src)
         .pipe(gulpif(isProduction,
-            replace(/(const slog_1 = require\(.+\);|\s*slog_1\.slog\.setConfig\(.+\);|\s*const log = slog_1\.slog\.stepIn\(.+\);|\s*log\.[diwe]\(.+\);|log\.stepOut\(\);)/g, ''))
+            replace(/(const slog_1 = require\(.+\);|\s*slog_1\.slog\.setConfig\(.+\);|\s*slog_1\.slog\.bind\(.+\);|\s*const log = slog_1\.slog\.stepIn\(.+\);|\s*log\.[diwe]\(.+\);|log\.stepOut\(\);)/g, ''))
         )
         .pipe(gulp.dest('./build-client'));
 });
