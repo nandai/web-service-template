@@ -86,13 +86,13 @@ export namespace slog
             };
         }
 
-        onConnectFailed(callback : () => void)
+        onConnectFailed(callback : (err) => void)
         {
             const self = this;
-            this.client.on('connectFailed', () =>
+            this.client.on('connectFailed', (err) =>
             {
                 self.readyState = CLOSED;
-                callback();
+                callback(err);
             });
         }
 
@@ -130,42 +130,59 @@ export namespace slog
 
         connect(url : string) : void
         {
-            this.ws = new WebSocket(url);
-            this.ws.binaryType = 'arraybuffer';
-            this.readyState = CONNECTING;
+            try
+            {
+                this.ws = new WebSocket(url);
+                this.ws.binaryType = 'arraybuffer';
+                this.readyState = CONNECTING;
+            }
+            catch (err)
+            {
+                console.warn(err.message);
+                this.readyState = CLOSED;
+            }
         }
 
         onConnect(callback : () => void) : void
         {
-            const self = this;
-            this.ws.onopen = () =>
+            if (this.ws)
             {
-                self.readyState = OPEN;
-                callback();
-            };
+                const self = this;
+                this.ws.onopen = () =>
+                {
+                    self.readyState = OPEN;
+                    callback();
+                };
+            }
         }
 
         onError(callback : () => void) : void
         {
-            const self = this;
-            this.ws.onerror = () =>
+            if (this.ws)
             {
-                self.readyState = CLOSED;
-                callback();
-            };
+                const self = this;
+                this.ws.onerror = () =>
+                {
+                    self.readyState = CLOSED;
+                    callback();
+                };
+            }
         }
 
         onClose(callback : () => void) : void
         {
-            const self = this;
-            this.ws.onclose = () =>
+            if (this.ws)
             {
-                self.readyState = CLOSED;
-                callback();
-            };
+                const self = this;
+                this.ws.onclose = () =>
+                {
+                    self.readyState = CLOSED;
+                    callback();
+                };
+            }
         }
 
-        onConnectFailed(_callback : () => void)
+        onConnectFailed(_callback : (err) => void)
         {
         }
 
@@ -359,9 +376,9 @@ export namespace slog
                 console.info('close slog WebSocket');
             });
 
-            this.ws.onConnectFailed(() =>
+            this.ws.onConnectFailed((err) =>
             {
-                console.error('connect failed slog WebSocket');
+                console.error(`connect failed slog WebSocket: ${err.message}`);
             });
         }
 
