@@ -53,6 +53,7 @@ class WstApp
      */
     init()
     {
+        const log = slog.stepIn('WstApp', 'init');
         const locale = Utils.getLocale();
         const loginApp =    new LoginApp();
         const notFoundApp = new NotFoundApp();
@@ -87,6 +88,7 @@ class WstApp
         this.connectSocket();
 
         History.setCallback(this.onHistory);
+        log.stepOut();
     }
 
     /**
@@ -275,12 +277,15 @@ class WstApp
     @bind
     private connectSocket()
     {
+        const log = slog.stepIn('WstApp', 'connectSocket');
         const io = socketIO.connect();
         io.on('connect',             this.onConnect);
+        io.on('disconnect',          this.onDisconnect);
         io.on('notifyUpdateAccount', this.onNotifyUpdateAccount);
         io.on('notifyUpdateUser',    this.onNotifyUpdateUser);
         io.on('notifyDeleteUser',    this.onNotifyDeleteUser);
         io.on('notifyLogout',        this.onNotifyLogout);
+        log.stepOut();
     }
 
     /**
@@ -290,6 +295,17 @@ class WstApp
     onConnect()
     {
         const log = slog.stepIn('WstApp', 'onConnect');
+        log.stepOut();
+    }
+
+    /**
+     * disconnect event
+     */
+    @bind
+    onDisconnect(reason : string)
+    {
+        const log = slog.stepIn('WstApp', 'onDisconnect');
+        log.w(reason);
         log.stepOut();
     }
 

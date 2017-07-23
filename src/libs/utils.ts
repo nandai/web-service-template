@@ -17,12 +17,16 @@ export default class Utils
     static parseRawQueryString(query : string, separator : string = '&') : any
     {
         const obj = {};
-        const pairs = query.split(separator);
 
-        for (const pair of pairs)
+        if (query)
         {
-            const [key, value] = pair.split('=');
-            obj[key.trim()] = value;
+            const pairs = query.split(separator);
+
+            for (const pair of pairs)
+            {
+                const [key, value] = pair.split('=');
+                obj[key.trim()] = value;
+            }
         }
 
         return obj;

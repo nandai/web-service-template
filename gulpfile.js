@@ -46,7 +46,7 @@ gulp.task('typescript', function ()
         .src(src)
         .pipe(abspath({rootDir:'./src'}))
         .pipe(tsProj())
-        .pipe(gulpif(isProduction, babel(babelOptions)))   // uglifyのためにやむなくbabel
+        .pipe(babel(babelOptions))  // uglifyのためにやむなくbabel
         .pipe(gulp.dest('./build'));
 });
 
