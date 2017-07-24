@@ -12,6 +12,7 @@ interface InputProps
     value        : string;
     message?     : string;
     error?       : boolean;
+    isMarginTop? : boolean;
     onChange     : (value : string) => void;
 }
 
@@ -23,6 +24,7 @@ export default class Input extends React.Component<InputProps, {}>
         value:       '',
         message:     '',
         error:       true,
+        isMarginTop: false,
         onChange:    () => {}
     };
 
@@ -32,12 +34,16 @@ export default class Input extends React.Component<InputProps, {}>
     render() : JSX.Element
     {
         const {props} = this;
+        const style = (props.isMarginTop
+            ? {marginTop:'48px'}
+            : {});
+
         const textClassName = (props.error
             ? 'wst-input-error'
             : 'wst-input-ok');
 
         return (
-            <div>
+            <div style={style}>
                 <input className =   "wst-input"
                        type =        {props.type}
                        placeholder = {props.placeholder}

@@ -46,7 +46,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
                         <Button onClick={store.onFacebook}>{R.text(R.LOGIN_WITH_FACEBOOK, locale)}</Button>
                         <Button onClick={store.onGoogle}  >{R.text(R.LOGIN_WITH_GOOGLE,   locale)}</Button>
                         <Button onClick={store.onGithub}  >{R.text(R.LOGIN_WITH_GITHUB,   locale)}</Button>
-                        <Input type="email"    placeholder={R.text(R.EMAIL,    locale)} value={store.email}    onChange={store.onEmailChange} />
+                        <Input type="email"    placeholder={R.text(R.EMAIL,    locale)} value={store.email}    onChange={store.onEmailChange} isMarginTop={true} />
                         <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} onChange={store.onPasswordChange} />
                         <Button submit={true} onClick={store.onLogin} >{R.text(R.LOGIN, locale)}</Button>
                         <Button url="/signup" onClick={store.onSignup}>{R.text(R.GO_SIGNUP, locale)}</Button>

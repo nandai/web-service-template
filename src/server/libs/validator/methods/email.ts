@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import {Response} from 'libs/response';
+import {slog}     from 'libs/slog';
 import R          from 'server/libs/r';
 import Utils      from 'server/libs/utils';
 import {Account}  from 'server/models/account';
@@ -15,6 +16,7 @@ export function email(aEmail : string, accountId : number, alreadyExistsAccount 
 {
     return new Promise(async (resolve : (result : ValidationResult) => void) =>
     {
+        const log = slog.stepIn('Validator', 'email');
         let status = Response.Status.FAILED;
         let message : string;
 
@@ -42,6 +44,8 @@ export function email(aEmail : string, accountId : number, alreadyExistsAccount 
             status = Response.Status.OK;
         }
         while (false);
+
+        log.stepOut();
         resolve({status, message});
     });
 }

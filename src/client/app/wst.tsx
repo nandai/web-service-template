@@ -399,10 +399,10 @@ window.addEventListener('DOMContentLoaded', async () =>
     slog.setConfig(serviceAddr, 'webServiceTemplate.log', 'ALL', 'slog', 'gols');
 
     slog.bind(
-        console.log,
-        console.info,
-        console.warn,
-        console.error);
+        console.log  .bind(console),
+        console.info .bind(console),
+        console.warn .bind(console),
+        console.error.bind(console));
 
     const log = slog.stepIn('window', 'DOMContentLoaded');
     const locale = Utils.getLocale();

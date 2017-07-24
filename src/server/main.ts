@@ -77,6 +77,9 @@ class Initializer
             this.app = app;
             this.app.use(helmet.hidePoweredBy());
             this.app.use(helmet.noSniff());
+            this.app.use(helmet.frameguard({action:'deny'}));
+            this.app.use(helmet.xssFilter());
+            this.app.use(helmet.noCache());
             this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
             this.app.use(expressDomain);
             this.app.use(expressExtension);
