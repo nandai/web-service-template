@@ -168,7 +168,10 @@ export default class SocketManager
                 break;
             }
 
-            const accountId = session.account_id;
+            const accountId = (SessionAgent.isLogin(session)
+                ? session.account_id
+                : null);
+
             SocketManager.clients[socket.id] = {socket, sessionId, accountId};
             SocketManager.joinSessionRoom(socket.id, sessionId);
             SocketManager.joinAccountRoom(socket.id, accountId);

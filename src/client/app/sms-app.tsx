@@ -49,6 +49,7 @@ export default class SmsApp extends App
         const {store} = this;
         store.smsCode = '';
         store.message = '';
+        store.loginSmsResponse = {status:Response.Status.OK, message:{}};
         return super.init(params);
     }
 

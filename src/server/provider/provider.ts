@@ -200,7 +200,7 @@ export default class Provider
                         // ログイン処理
                         if (findAccount)
                         {
-                            if (session.account_id === null)
+                            if (SessionAgent.isLogin(session) === false)
                             {
                                 log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
                                 let phrase : string;
@@ -416,12 +416,15 @@ export default class Provider
             const authToken =  Config.TWILIO_AUTH_TOKEN;
             const client = new twilio(accountSid, authToken);
 
-            client.messages.create(
+            const param =
             {
                 body: message,
                 to:   phoneNo,
                 from: Config.TWILIO_FROM_PHONE_NO
-            })
+            };
+//          log.d(JSON.stringify(param, null, 2));
+
+            client.messages.create(param)
             .then((_message) =>
             {
 //              log.d(_message)

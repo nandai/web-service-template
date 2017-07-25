@@ -122,6 +122,7 @@ class WstApp
 
             if (this.currentRoute !== route)
             {
+                log.d(route.title);
                 if (isInit)
                 {
                     try

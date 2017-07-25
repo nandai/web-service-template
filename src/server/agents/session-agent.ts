@@ -109,6 +109,24 @@ export default class SessionAgent
     }
 
     /**
+     * ログインしているかどうか
+     */
+    static isLogin(model : Session) : boolean
+    {
+        const {account_id, sms_id} = model;
+
+        if (account_id === null) {
+            return false;
+        }
+
+        if (sms_id !== null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Sessionに変換
      */
     static toModel(data) : Session

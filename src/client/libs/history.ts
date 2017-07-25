@@ -1,6 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {slog} from 'libs/slog';
+
 export default class History
 {
     private static onPushState : (direction : string, massage? : string) => void = null;
@@ -21,6 +23,7 @@ export default class History
 
     static pushState(url : string, message? : string) : void
     {
+        const log = slog.stepIn('History', 'pushState');
         if (location.pathname + location.search !== url)
         {
             History.count++;
@@ -32,16 +35,19 @@ export default class History
         if (callback) {
             callback('forward', message);
         }
+        log.stepOut();
     }
 
     static replaceState(url : string) : void
     {
+        const log = slog.stepIn('History', 'replaceState');
         history.replaceState(History.count, null, url);
 
         const callback = History.getCallback();
         if (callback) {
             callback('forward');
         }
+        log.stepOut();
     }
 
     static back() : void
