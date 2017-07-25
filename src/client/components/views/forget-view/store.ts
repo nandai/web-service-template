@@ -9,6 +9,7 @@ export interface Store
     email?                     : string;
     requestResetPasswordResult : Response.RequestResetPassword;
     message?                   : string;
+    loading?                   : boolean;
     onEmailChange?             : (value : string) => void;
     onSend?                    : () => void;
     onBack?                    : () => void;

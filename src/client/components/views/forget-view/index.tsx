@@ -5,6 +5,7 @@ import * as React    from 'react';
 
 import Button        from 'client/components/common/button';
 import Input         from 'client/components/common/input';
+import Loading       from 'client/components/common/loading';
 import Text          from 'client/components/common/text';
 import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
@@ -30,6 +31,11 @@ export default class ForgetView extends React.Component<ForgetViewProps, {}>
         const response = store.requestResetPasswordResult;
         const {message} = response;
 
+        const messageEl = (store.loading
+            ? <Loading />
+            : <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
+        );
+
         return (
             <ViewContainer>
                 <Header />
@@ -38,7 +44,7 @@ export default class ForgetView extends React.Component<ForgetViewProps, {}>
                         <Input type="text" placeholder={R.text(R.EMAIL, locale)} value={store.email} message={message.email} onChange={store.onEmailChange} />
                         <Button submit={true} onClick={store.onSend}>{R.text(R.SEND_MAIL, locale)}</Button>
                         <Button               onClick={store.onBack}>{R.text(R.BACK,      locale)}</Button>
-                        <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
+                        {messageEl}
                     </form>
                 </ViewContents>
             </ViewContainer>

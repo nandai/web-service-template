@@ -32,6 +32,7 @@ export default class ForgetApp extends App
         {
             locale:                     Utils.getLocale(),
             requestResetPasswordResult: ssrStore.requestResetPasswordResult,
+            loading:                    false,
             onEmailChange:              this.onEmailChange,
             onSend:                     this.onSend,
             onBack:                     this.onBack,
@@ -77,16 +78,23 @@ export default class ForgetApp extends App
         const log = slog.stepIn(ForgetApp.CLS_NAME, 'onSend');
         const {store} = this;
 
+        store.message = '';
+        store.requestResetPasswordResult.message = {};
+        store.loading = true;
+        this.render();
+
         try
         {
             const res : Response.RequestResetPassword = await ResetApi.requestResetPassword({email:this.store.email});
             store.requestResetPasswordResult = res;
+            store.loading = false;
             this.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
+            store.loading = false;
             this.render();
             log.stepOut();
         }
