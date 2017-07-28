@@ -7,13 +7,13 @@ import * as React  from 'react';
 import ResetApi    from 'client/api/reset-api';
 import {App}       from 'client/app/app';
 import ResetView   from 'client/components/views/reset-view';
-import {Store}     from 'client/components/views/reset-view/store';
+import {storeNS}   from 'client/components/views/reset-view/store';
 import Utils       from 'client/libs/utils';
 import {Response}  from 'libs/response';
 import {slog}      from 'libs/slog';
 import CommonUtils from 'libs/utils';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * reset app
@@ -21,7 +21,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class ResetApp extends App
 {
     private static CLS_NAME = 'ResetApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -29,17 +29,10 @@ export default class ResetApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:                Utils.getLocale(),
-            password:              '',
-            confirm:               '',
-            resetPasswordResponse: ssrStore.resetPasswordResponse,
-            message:               '',
-            onPasswordChange:      this.onPasswordChange,
-            onConfirmChange:       this.onConfirmChange,
-            onChange:              this.onChange,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onPasswordChange = this.onPasswordChange;
+        this.store.onConfirmChange =  this.onConfirmChange;
+        this.store.onChange =         this.onChange;
     }
 
     /**

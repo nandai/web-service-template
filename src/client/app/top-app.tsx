@@ -7,12 +7,12 @@ import * as React from 'react';
 import LogoutApi  from 'client/api/logout-api';
 import {App}      from 'client/app/app';
 import TopView    from 'client/components/views/top-view';
-import {Store}    from 'client/components/views/top-view/store';
+import {storeNS}  from 'client/components/views/top-view/store';
 import History    from 'client/libs/history';
 import Utils      from 'client/libs/utils';
 import {slog}     from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * top App
@@ -20,7 +20,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class TopApp extends App
 {
     private static CLS_NAME = 'TopApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -28,16 +28,11 @@ export default class TopApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:     Utils.getLocale(),
-            account:    ssrStore.account,
-            message:    ssrStore.message,
-            onSettings: this.onSettings,
-            onInvite:   this.onInvite,
-            onUsers:    this.onUsers,
-            onLogout:   this.onLogout,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onSettings = this.onSettings;
+        this.store.onInvite =   this.onInvite;
+        this.store.onUsers =    this.onUsers;
+        this.store.onLogout =   this.onLogout;
     }
 
     /**

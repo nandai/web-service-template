@@ -6,9 +6,8 @@ import * as ReactDOM    from 'react-dom/server';
 
 import Root             from 'client/components/root';
 import SmsView          from 'client/components/views/sms-view';
-import {Store}          from 'client/components/views/sms-view/store';
+import {storeNS}        from 'client/components/views/sms-view/store';
 import ClientR          from 'client/libs/r';
-import {Response}       from 'libs/response';
 import {slog}           from 'libs/slog';
 import Utils            from 'server/libs/utils';
 import {Session}        from 'server/models/session';
@@ -57,14 +56,7 @@ export default class SmsApp
                     break;
                 }
 
-                const store : Store =
-                {
-                    locale,
-                    smsCode: '',
-                    loginSmsResponse: {status:Response.Status.OK, message:{}},
-                    message: ''
-                };
-
+                const store = storeNS.init({locale});
                 const title = ClientR.text(ClientR.AUTH_SMS, locale);
                 const el = <SmsView store={store} />;
                 const contents = ReactDOM.renderToString(<Root view={el} />);

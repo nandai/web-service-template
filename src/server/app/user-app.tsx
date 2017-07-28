@@ -6,7 +6,7 @@ import * as ReactDOM    from 'react-dom/server';
 
 import Root             from 'client/components/root';
 import UserView         from 'client/components/views/user-view';
-import {Store}          from 'client/components/views/user-view/store';
+import {storeNS}        from 'client/components/views/user-view/store';
 import ClientR          from 'client/libs/r';
 import {slog}           from 'libs/slog';
 import UserApi          from 'server/api/user-api';
@@ -34,15 +34,11 @@ export default class UserApp
         const id : string = req.params.id;
 
         const data = await UserApi.getUser({id}, req);
+        const {user} = data;
 
-        if (data.user)
+        if (user)
         {
-            const store : Store =
-            {
-                locale,
-                user:   data.user
-            };
-
+            const store = storeNS.init({locale, user});
             const title = ClientR.text(ClientR.USER, locale);
             const el = <UserView store={store} />;
             const contents = ReactDOM.renderToString(<Root view={el} />);

@@ -6,9 +6,8 @@ import * as ReactDOM from 'react-dom/server';
 
 import Root          from 'client/components/root';
 import ForgetView    from 'client/components/views/forget-view';
-import {Store}       from 'client/components/views/forget-view/store';
+import {storeNS}     from 'client/components/views/forget-view/store';
 import ClientR       from 'client/libs/r';
-import {Response}    from 'libs/response';
 import {slog}        from 'libs/slog';
 import {view}        from './view';
 
@@ -31,15 +30,7 @@ export default class ForgetApp
     {
         const log = slog.stepIn(ForgetApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
-
-        const store : Store =
-        {
-            locale,
-            email:    '',
-            requestResetPasswordResult: {status:Response.Status.OK, message:{}},
-            message:  ''
-        };
-
+        const store = storeNS.init({locale});
         const title = ClientR.text(ClientR.GO_FORGET, locale);
         const el = <ForgetView store={store}/>;
         const contents = ReactDOM.renderToString(<Root view={el} />);

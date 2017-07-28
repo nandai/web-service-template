@@ -1,14 +1,30 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response} from 'libs/response';
+import {Response}  from 'libs/response';
+import {BaseStore} from '../base-store';
 
-export interface Store
+export namespace storeNS
 {
-    locale           : string;
-    smsCode          : string;
-    loginSmsResponse : Response.LoginSms;
-    message?         : string;
-    onSmsCodeChange? : (value : string) => void;
-    onSend?          : () => void;
+    export interface Store extends BaseStore
+    {
+        smsCode?          : string;
+        message?          : string;
+        onSmsCodeChange?  : (value : string) => void;
+        onSend?           : () => void;
+        loginSmsResponse? : Response.LoginSms;
+    }
+
+    export function init(src : Store) : Store
+    {
+        const store : Store =
+        {
+            locale:           src.locale,
+            smsCode:          '',
+            message:          '',
+            onSmsCodeChange:  src.onSmsCodeChange,
+            loginSmsResponse: {status:Response.Status.OK, message:{}}
+        };
+        return store;
+    }
 }

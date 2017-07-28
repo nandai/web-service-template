@@ -7,13 +7,13 @@ import * as React                     from 'react';
 import SettingsApi                    from 'client/api/settings-api';
 import {App}                          from 'client/app/app';
 import SettingsAccountEmailChangeView from 'client/components/views/settings-account-email-change-view';
-import {Store}                        from 'client/components/views/settings-account-email-change-view/store';
+import {storeNS}                      from 'client/components/views/settings-account-email-change-view/store';
 import Utils                          from 'client/libs/utils';
 import {Response}                     from 'libs/response';
 import {slog}                         from 'libs/slog';
 import CommonUtils                    from 'libs/utils';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * settings account email change app
@@ -21,7 +21,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class SettingsAccountEmailChangeApp extends App
 {
     private static CLS_NAME = 'SettingsAccountEmailChangeApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -29,15 +29,9 @@ export default class SettingsAccountEmailChangeApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:   Utils.getLocale(),
-            password: '',
-            changeEmailResponse: ssrStore.changeEmailResponse,
-            message:  '',
-            onPasswordChange: this.onPasswordChange,
-            onChange:         this.onChange,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onPasswordChange = this.onPasswordChange;
+        this.store.onChange =         this.onChange;
     }
 
     /**

@@ -6,9 +6,8 @@ import * as ReactDOM    from 'react-dom/server';
 
 import Root             from 'client/components/root';
 import JoinView         from 'client/components/views/join-view';
-import {Store}          from 'client/components/views/join-view/store';
+import {storeNS}        from 'client/components/views/join-view/store';
 import ClientR          from 'client/libs/r';
-import {Response}       from 'libs/response';
 import {slog}           from 'libs/slog';
 import AccountAgent     from 'server/agents/account-agent';
 import Utils            from 'server/libs/utils';
@@ -59,14 +58,7 @@ export default class JoinApp
                     break;
                 }
 
-                const store : Store =
-                {
-                    locale,
-                    password: '',
-                    joinResponse: {status:Response.Status.OK, message:{}},
-                    message:  ''
-                };
-
+                const store = storeNS.init({locale});
                 const title = ClientR.text(ClientR.JOIN, locale);
                 const el = <JoinView store={store} />;
                 const contents = ReactDOM.renderToString(<Root view={el} />);

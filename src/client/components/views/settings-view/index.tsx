@@ -11,13 +11,13 @@ import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
 import {Response}    from 'libs/response';
 import CommonUtils   from 'libs/utils';
-import {Store}       from './store';
+import {storeNS}     from './store';
 
 import moment = require('moment');
 
 interface SettingsViewProps
 {
-    store : Store;
+    store : storeNS.Store;
 }
 
 export default class SettingsView extends React.Component<SettingsViewProps, {}>

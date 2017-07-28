@@ -7,13 +7,13 @@ import * as React   from 'react';
 import SettingsApi  from 'client/api/settings-api';
 import {App}        from 'client/app/app';
 import SettingsView from 'client/components/views/settings-view';
-import {Store}      from 'client/components/views/settings-view/store';
+import {storeNS}    from 'client/components/views/settings-view/store';
 import History      from 'client/libs/history';
 import Utils        from 'client/libs/utils';
 import {Response}   from 'libs/response';
 import {slog}       from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * settings app
@@ -21,7 +21,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class SettingsApp extends App
 {
     private static CLS_NAME = 'SettingsApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -29,22 +29,16 @@ export default class SettingsApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:                 Utils.getLocale(),
-            account:                ssrStore.account,
-            unlinkProviderResponse: ssrStore.unlinkProviderResponse,
-            message:                ssrStore.message,
-            onTwitter:              this.onTwitter,
-            onFacebook:             this.onFacebook,
-            onGoogle:               this.onGoogle,
-            onGithub:               this.onGithub,
-            onEmail:                this.onEmail,
-            onPassword:             this.onPassword,
-            onAccount:              this.onAccount,
-            onLeave:                this.onLeave,
-            onBack:                 this.onBack,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onTwitter =  this.onTwitter;
+        this.store.onFacebook = this.onFacebook;
+        this.store.onGoogle =   this.onGoogle;
+        this.store.onGithub =   this.onGithub;
+        this.store.onEmail =    this.onEmail;
+        this.store.onPassword = this.onPassword;
+        this.store.onAccount =  this.onAccount;
+        this.store.onLeave =    this.onLeave;
+        this.store.onBack =     this.onBack;
     }
 
     /**
@@ -52,9 +46,8 @@ export default class SettingsApp extends App
      */
     init(params, _message? : string)
     {
-        const {store} = this;
-        store.unlinkProviderResponse = {status:Response.Status.OK, message:{}};
-        store.message = '';
+        this.store = storeNS.init(this.store);
+        this.store.message = '';
         return super.init(params);
     }
 

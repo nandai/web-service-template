@@ -1,20 +1,43 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response} from 'libs/response';
+import {Response}  from 'libs/response';
+import {BaseStore} from '../base-store';
 
-export interface Store
+export namespace storeNS
 {
-    locale                : string;
-    account               : Response.Account;
-    setAccountResponse    : Response.SetAccount;
-    checkUserNameResponse : Response.CheckUserName;
-    message               : string;
-    onNameChange?         : (value : string) => void;
-    onUserNameChange?     : (value : string) => void;
-    onPhoneNoChange?      : (value : string) => void;
-    onCountryCodeChange?  : (value : string) => void;
-    onTwoFactorAuth?      : (twoFactorAuth : string) => void;
-    onChange?             : () => void;
-    onBack?               : () => void;
+    export interface Store extends BaseStore
+    {
+        account?               : Response.Account;
+        message?               : string;
+        onNameChange?          : (value : string) => void;
+        onUserNameChange?      : (value : string) => void;
+        onPhoneNoChange?       : (value : string) => void;
+        onCountryCodeChange?   : (value : string) => void;
+        onTwoFactorAuth?       : (twoFactorAuth : string) => void;
+        onChange?              : () => void;
+        onBack?                : () => void;
+        setAccountResponse?    : Response.SetAccount;
+        checkUserNameResponse? : Response.CheckUserName;
+    }
+
+    export function init(src : Store) : Store
+    {
+        const store : Store =
+        {
+            locale:                src.locale,
+            account:               src.account || null,
+            message:               '',
+            onNameChange:          src.onNameChange,
+            onUserNameChange:      src.onUserNameChange,
+            onPhoneNoChange:       src.onPhoneNoChange,
+            onCountryCodeChange:   src.onCountryCodeChange,
+            onTwoFactorAuth:       src.onTwoFactorAuth,
+            onChange:              src.onChange,
+            onBack:                src.onBack,
+            setAccountResponse:    {status:Response.Status.OK, message:{}},
+            checkUserNameResponse: {status:Response.Status.OK, message:{}}
+        };
+        return store;
+    }
 }

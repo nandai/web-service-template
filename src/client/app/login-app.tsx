@@ -7,14 +7,14 @@ import * as React from 'react';
 import LoginApi   from 'client/api/login-api';
 import {App}      from 'client/app/app';
 import LoginView  from 'client/components/views/login-view';
-import {Store}    from 'client/components/views/login-view/store';
+import {storeNS}  from 'client/components/views/login-view/store';
 import History    from 'client/libs/history';
 import Utils      from 'client/libs/utils';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * login app
@@ -22,7 +22,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class LoginApp extends App
 {
     private static CLS_NAME = 'LoginApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -30,27 +30,19 @@ export default class LoginApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:             Utils.getLocale(),
-            name:               ssrStore.name,
-            email:              '',
-            password:           '',
-            loginEmailResponse: ssrStore.loginEmailResponse,
-            message:            ssrStore.message,
-            onTwitter:          this.onTwitter,
-            onFacebook:         this.onFacebook,
-            onGoogle:           this.onGoogle,
-            onGithub:           this.onGithub,
-            onEmailChange:      this.onEmailChange,
-            onPasswordChange:   this.onPasswordChange,
-            onLogin:            this.onLogin,
-            onSignup:           this.onSignup,
-            onForget:           this.onForget,
-            onUsers:            this.onUsers,
-            onHome:             this.onHome,
-            onAbout:            this.onAbout,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onTwitter =        this.onTwitter;
+        this.store.onFacebook =       this.onFacebook;
+        this.store.onGoogle =         this.onGoogle;
+        this.store.onGithub =         this.onGithub;
+        this.store.onEmailChange =    this.onEmailChange;
+        this.store.onPasswordChange = this.onPasswordChange;
+        this.store.onLogin =          this.onLogin;
+        this.store.onSignup =         this.onSignup;
+        this.store.onForget =         this.onForget;
+        this.store.onUsers =          this.onUsers;
+        this.store.onHome =           this.onHome;
+        this.store.onAbout =          this.onAbout;
     }
 
     /**
@@ -62,8 +54,8 @@ export default class LoginApp extends App
 
         const {store} = this;
         store.name = (location.pathname === '/' ? 'home' : 'about');
-        store.loginEmailResponse = {status:Response.Status.OK, message:{}};
         store.message =  '';
+        store.loginEmailResponse = {status:Response.Status.OK, message:{}};
         return super.init(params);
     }
 

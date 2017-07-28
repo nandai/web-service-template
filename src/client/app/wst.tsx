@@ -7,7 +7,7 @@ import * as ReactDOM                 from 'react-dom';
 
 import {Response}                    from 'libs/response';
 import {slog}                        from 'libs/slog';
-import SettingsApi                   from '../api/settings-api';
+// ort SettingsApi                   from '../api/settings-api';
 import Root                          from '../components/root';
 import History                       from '../libs/history';
 import R                             from '../libs/r';
@@ -209,18 +209,16 @@ class WstApp
         return new Promise(async (resolve) =>
         {
             // アカウント情報の再取得と再設定
-            try
-            {
-                if (! this.account)
-                {
-                    const res : Response.GetAccount = await SettingsApi.getAccount();
-                    this.setAccount(res.account);
-                }
-            }
-            catch (err)
-            {
-                console.warn(err.message);
-            }
+            // try
+            // {
+            //     const res : Response.GetAccount = await SettingsApi.getAccount();
+            //     this.setAccount(res.account);
+            // }
+            // catch (err)
+            // {
+            //     console.warn(err.message);
+            // }
+            this.setAccount(this.account);
 
             // 画面遷移時のエフェクト設定
             if (direction === 'back')

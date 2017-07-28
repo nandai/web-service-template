@@ -7,12 +7,12 @@ import * as React         from 'react';
 import SettingsApi        from 'client/api/settings-api';
 import {App}              from 'client/app/app';
 import SettingsInviteView from 'client/components/views/settings-invite-view';
-import {Store}            from 'client/components/views/settings-invite-view/store';
+import {storeNS}          from 'client/components/views/settings-invite-view/store';
 import Utils              from 'client/libs/utils';
 import {Response}         from 'libs/response';
 import {slog}             from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * settings invite app
@@ -20,7 +20,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class SettingsInviteApp extends App
 {
     private static CLS_NAME = 'SettingsInviteApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -28,17 +28,10 @@ export default class SettingsInviteApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:         Utils.getLocale(),
-            account:        ssrStore.account,
-            email:          ssrStore.email,
-            inviteResponse: ssrStore.inviteResponse,
-            loading:        false,
-            onEmailChange:  this.onEmailChange,
-            onInvite:       this.onInvite,
-            onBack:         this.onBack,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onEmailChange = this.onEmailChange;
+        this.store.onInvite =      this.onInvite;
+        this.store.onBack =        this.onBack;
     }
 
     /**
@@ -46,10 +39,7 @@ export default class SettingsInviteApp extends App
      */
     init(params, _message? : string)
     {
-        const {store} = this;
-        store.email =   '';
-        store.inviteResponse = {status:Response.Status.OK, message:{}};
-        store.message = '';
+        this.store = storeNS.init(this.store);
         return super.init(params);
     }
 

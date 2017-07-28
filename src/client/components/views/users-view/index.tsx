@@ -9,11 +9,11 @@ import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
-import {Store}       from './store';
+import {storeNS}     from './store';
 
 interface UsersViewProps
 {
-    store : Store;
+    store : storeNS.Store;
 }
 
 export default class UsersView extends React.Component<UsersViewProps, {}>

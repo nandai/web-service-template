@@ -7,12 +7,12 @@ import * as React                  from 'react';
 import SettingsApi                 from 'client/api/settings-api';
 import {App}                       from 'client/app/app';
 import SettingsAccountPasswordView from 'client/components/views/settings-account-password-view';
-import {Store}                     from 'client/components/views/settings-account-password-view/store';
+import {storeNS}                   from 'client/components/views/settings-account-password-view/store';
 import Utils                       from 'client/libs/utils';
 import {Response}                  from 'libs/response';
 import {slog}                      from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * settings account password app
@@ -20,7 +20,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class SettingsAccountPasswordApp extends App
 {
     private static CLS_NAME = 'SettingsAccountPasswordApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -28,20 +28,12 @@ export default class SettingsAccountPasswordApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:                 Utils.getLocale(),
-            account:                ssrStore.account,
-            oldPassword:            '',
-            newPassword:            '',
-            confirm:                '',
-            changePasswordResponse: ssrStore.changePasswordResponse,
-            onOldPasswordChange:    this.onOldPasswordChange,
-            onNewPasswordChange:    this.onNewPasswordChange,
-            onConfirmChange:        this.onConfirmChange,
-            onChange:               this.onChange,
-            onBack:                 this.onBack,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onOldPasswordChange = this.onOldPasswordChange;
+        this.store.onNewPasswordChange = this.onNewPasswordChange;
+        this.store.onConfirmChange =     this.onConfirmChange;
+        this.store.onChange =            this.onChange;
+        this.store.onBack =              this.onBack;
     }
 
     /**
@@ -49,12 +41,7 @@ export default class SettingsAccountPasswordApp extends App
      */
     init(params, _message? : string)
     {
-        const {store} = this;
-        store.oldPassword = '',
-        store.newPassword = '',
-        store.confirm =     '',
-        store.changePasswordResponse = {status:Response.Status.OK, message:{}};
-        store.message =     '';
+        this.store = storeNS.init(this.store);
         return super.init(params);
     }
 

@@ -7,13 +7,13 @@ import * as React  from 'react';
 import SignupApi   from 'client/api/signup-api';
 import {App}       from 'client/app/app';
 import JoinView    from 'client/components/views/join-view';
-import {Store}     from 'client/components/views/join-view/store';
+import {storeNS}   from 'client/components/views/join-view/store';
 import Utils       from 'client/libs/utils';
 import {Response}  from 'libs/response';
 import {slog}      from 'libs/slog';
 import CommonUtils from 'libs/utils';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * join app
@@ -21,7 +21,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class JoinApp extends App
 {
     private static CLS_NAME = 'JoinApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -29,15 +29,9 @@ export default class JoinApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:           Utils.getLocale(),
-            password:         '',
-            joinResponse:     ssrStore.joinResponse,
-            message:          '',
-            onPasswordChange: this.onPasswordChange,
-            onJoin:           this.onJoin,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onPasswordChange = this.onPasswordChange;
+        this.store.onJoin =           this.onJoin;
     }
 
     /**

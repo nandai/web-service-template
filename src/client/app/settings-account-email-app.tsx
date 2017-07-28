@@ -7,12 +7,12 @@ import * as React               from 'react';
 import SettingsApi              from 'client/api/settings-api';
 import {App}                    from 'client/app/app';
 import SettingsAccountEmailView from 'client/components/views/settings-account-email-view';
-import {Store}                  from 'client/components/views/settings-account-email-view/store';
+import {storeNS}                from 'client/components/views/settings-account-email-view/store';
 import Utils                    from 'client/libs/utils';
 import {Response}               from 'libs/response';
 import {slog}                   from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * settings account email app
@@ -20,7 +20,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class SettingsAccountEmailApp extends App
 {
     private static CLS_NAME = 'SettingsAccountEmailApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -28,16 +28,10 @@ export default class SettingsAccountEmailApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:                     Utils.getLocale(),
-            account:                    ssrStore.account,
-            requestChangeEmailResponse: ssrStore.requestChangeEmailResponse,
-            loading:                    false,
-            onEmailChange:              this.onEmailChange,
-            onChange:                   this.onChange,
-            onBack:                     this.onBack,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onEmailChange = this.onEmailChange;
+        this.store.onChange =      this.onChange;
+        this.store.onBack =        this.onBack;
     }
 
     /**
@@ -45,9 +39,7 @@ export default class SettingsAccountEmailApp extends App
      */
     init(params, _message? : string)
     {
-        const {store} = this;
-        store.requestChangeEmailResponse = {status:Response.Status.OK, message:{}};
-        store.message = '';
+        this.store = storeNS.init(this.store);
         return super.init(params);
     }
 

@@ -7,12 +7,12 @@ import * as React          from 'react';
 import SettingsApi         from 'client/api/settings-api';
 import {App}               from 'client/app/app';
 import SettingsAccountView from 'client/components/views/settings-account-view';
-import {Store}             from 'client/components/views/settings-account-view/store';
+import {storeNS}           from 'client/components/views/settings-account-view/store';
 import Utils               from 'client/libs/utils';
 import {Response}          from 'libs/response';
 import {slog}              from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * settings account app
@@ -20,7 +20,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class SettingsAccountApp extends App
 {
     private static CLS_NAME = 'SettingsAccountApp';
-    private store : Store;
+    private store : storeNS.Store;
     private checkUserNameTimerId = 0;
 
     /**
@@ -29,21 +29,14 @@ export default class SettingsAccountApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:                Utils.getLocale(),
-            account:               ssrStore.account,
-            setAccountResponse:    ssrStore.setAccountResponse,
-            checkUserNameResponse: ssrStore.checkUserNameResponse,
-            message:               '',
-            onNameChange:          this.onNameChange,
-            onUserNameChange:      this.onUserNameChange,
-            onPhoneNoChange:       this.onPhoneNoChange,
-            onTwoFactorAuth:       this.onTwoFactorAuth,
-            onCountryCodeChange:   this.onCountryCodeChange,
-            onChange:              this.onChange,
-            onBack:                this.onBack,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onNameChange =        this.onNameChange;
+        this.store.onUserNameChange =    this.onUserNameChange;
+        this.store.onPhoneNoChange =     this.onPhoneNoChange;
+        this.store.onTwoFactorAuth =     this.onTwoFactorAuth;
+        this.store.onCountryCodeChange = this.onCountryCodeChange;
+        this.store.onChange =            this.onChange;
+        this.store.onBack =              this.onBack;
     }
 
     /**
@@ -51,10 +44,7 @@ export default class SettingsAccountApp extends App
      */
     init(params, _message? : string)
     {
-        const {store} = this;
-        store.setAccountResponse =    {status:Response.Status.OK, message:{}};
-        store.checkUserNameResponse = {status:Response.Status.OK, message:{}};
-        store.message = '';
+        this.store = storeNS.init(this.store);
         return super.init(params);
     }
 

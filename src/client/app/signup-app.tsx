@@ -7,14 +7,14 @@ import * as React from 'react';
 import SignupApi  from 'client/api/signup-api';
 import {App}      from 'client/app/app';
 import SignupView from 'client/components/views/signup-view';
-import {Store}    from 'client/components/views/signup-view/store';
+import {storeNS}  from 'client/components/views/signup-view/store';
 import History    from 'client/libs/history';
 import Utils      from 'client/libs/utils';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * signup app
@@ -22,7 +22,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class SignupApp extends App
 {
     private static CLS_NAME = 'SignupApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -30,23 +30,15 @@ export default class SignupApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:              Utils.getLocale(),
-            email:               '',
-            password:            '',
-            message:             ssrStore.message,
-            signupEmailResponse: ssrStore.signupEmailResponse,
-            loading:             false,
-            onTwitter:           this.onTwitter,
-            onFacebook:          this.onFacebook,
-            onGoogle:            this.onGoogle,
-            onGithub:            this.onGithub,
-            onEmailChange:       this.onEmailChange,
-            onPasswordChange:    this.onPasswordChange,
-            onSignup:            this.onSignup,
-            onTop:               this.onTop,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onTwitter =        this.onTwitter;
+        this.store.onFacebook =       this.onFacebook;
+        this.store.onGoogle =         this.onGoogle;
+        this.store.onGithub =         this.onGithub;
+        this.store.onEmailChange =    this.onEmailChange;
+        this.store.onPasswordChange = this.onPasswordChange;
+        this.store.onSignup =         this.onSignup;
+        this.store.onTop =            this.onTop;
     }
 
     /**
@@ -54,11 +46,8 @@ export default class SignupApp extends App
      */
     init(params, _message? : string)
     {
-        const {store} = this;
-        store.email =    '',
-        store.password = '',
-        store.signupEmailResponse = {status:Response.Status.OK, message:{}};
-        store.message =  '';
+        this.store = storeNS.init(this.store);
+        this.store.message = '';
         return super.init(params);
     }
 

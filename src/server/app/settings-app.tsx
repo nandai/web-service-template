@@ -6,9 +6,8 @@ import * as ReactDOM from 'react-dom/server';
 
 import Root          from 'client/components/root';
 import SettingsView  from 'client/components/views/settings-view';
-import {Store}       from 'client/components/views/settings-view/store';
+import {storeNS}     from 'client/components/views/settings-view/store';
 import ClientR       from 'client/libs/r';
-import {Response}    from 'libs/response';
 import {slog}        from 'libs/slog';
 import SessionAgent  from 'server/agents/session-agent';
 import SettingsApi   from 'server/api/settings-api';
@@ -55,14 +54,8 @@ export default class SettingsApp
             }
 
             const data = await SettingsApi.getAccount(req);
-            const store : Store =
-            {
-                locale,
-                account: data.account,
-                unlinkProviderResponse: {status:Response.Status.OK, message:{}},
-                message
-            };
-
+            const {account} = data;
+            const store = storeNS.init({locale, account, message});
             const title = ClientR.text(ClientR.SETTINGS, locale);
             const el = <SettingsView store={store} />;
             const contents = ReactDOM.renderToString(<Root view={el} />);

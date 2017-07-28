@@ -6,9 +6,8 @@ import * as ReactDOM    from 'react-dom/server';
 
 import Root             from 'client/components/root';
 import ResetView        from 'client/components/views/reset-view';
-import {Store}          from 'client/components/views/reset-view/store';
+import {storeNS}        from 'client/components/views/reset-view/store';
 import ClientR          from 'client/libs/r';
-import {Response}       from 'libs/response';
 import {slog}           from 'libs/slog';
 import AccountAgent     from 'server/agents/account-agent';
 import Utils            from 'server/libs/utils';
@@ -59,15 +58,7 @@ export default class ResetApp
                     break;
                 }
 
-                const store : Store =
-                {
-                    locale,
-                    password: '',
-                    confirm:  '',
-                    resetPasswordResponse: {status:Response.Status.OK, message:{}},
-                    message:  ''
-                };
-
+                const store = storeNS.init({locale});
                 const title = ClientR.text(ClientR.RESET_PASSWORD, locale);
                 const el = <ResetView store={store} />;
                 const contents = ReactDOM.renderToString(<Root view={el} />);

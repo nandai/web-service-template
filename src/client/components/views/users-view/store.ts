@@ -1,12 +1,27 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response} from 'libs/response';
+import {Response}  from 'libs/response';
+import {BaseStore} from '../base-store';
 
-export interface Store
+export namespace storeNS
 {
-    locale   : string;
-    userList : Response.User[];
-    onUser?  : (id : string) => void;
-    onBack?  : () => void;
+    export interface Store extends BaseStore
+    {
+        userList : Response.User[];
+        onUser?  : (id : string) => void;
+        onBack?  : () => void;
+    }
+
+    export function init(src : Store) : Store
+    {
+        const store : Store =
+        {
+            locale:   src.locale,
+            userList: src.userList || [],
+            onUser:   src.onUser,
+            onBack:   src.onBack
+        };
+        return store;
+    }
 }

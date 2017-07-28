@@ -6,9 +6,8 @@ import * as ReactDOM     from 'react-dom/server';
 
 import Root              from 'client/components/root';
 import SignupConfirmView from 'client/components/views/signup-confirm-view';
-import {Store}           from 'client/components/views/signup-confirm-view/store';
+import {storeNS}         from 'client/components/views/signup-confirm-view/store';
 import ClientR           from 'client/libs/r';
-import {Response}        from 'libs/response';
 import {slog}            from 'libs/slog';
 import AccountAgent      from 'server/agents/account-agent';
 import Utils             from 'server/libs/utils';
@@ -59,14 +58,7 @@ export default class SignupConfirmApp
                     break;
                 }
 
-                const store : Store =
-                {
-                    locale,
-                    password: '',
-                    confirmSignupEmailResponse: {status:Response.Status.OK, message:{}},
-                    message:  ''
-                };
-
+                const store = storeNS.init({locale});
                 const title = ClientR.text(ClientR.SIGNUP_CONFIRM, locale);
                 const el = <SignupConfirmView store={store} />;
                 const contents = ReactDOM.renderToString(<Root view={el} />);

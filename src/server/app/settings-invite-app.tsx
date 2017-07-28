@@ -6,9 +6,8 @@ import * as ReactDOM      from 'react-dom/server';
 
 import Root               from 'client/components/root';
 import SettingsInviteView from 'client/components/views/settings-invite-view';
-import {Store}            from 'client/components/views/settings-invite-view/store';
+import {storeNS}          from 'client/components/views/settings-invite-view/store';
 import ClientR            from 'client/libs/r';
-import {Response}         from 'libs/response';
 import {slog}             from 'libs/slog';
 import SettingsApi        from 'server/api/settings-api';
 import Utils              from 'server/libs/utils';
@@ -38,14 +37,8 @@ export default class SettingsInviteApp
         try
         {
             const data = await SettingsApi.getAccount(req);
-            const store : Store =
-            {
-                locale,
-                account: data.account,
-                email:   '',
-                inviteResponse: {status:Response.Status.OK, message:{}}
-            };
-
+            const {account} = data;
+            const store = storeNS.init({locale, account});
             const title = ClientR.text(ClientR.SETTINGS_INVITE, locale);
             const el = <SettingsInviteView store={store} />;
             const contents = ReactDOM.renderToString(<Root view={el} />);

@@ -1,16 +1,35 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response} from 'libs/response';
+import {Response}  from 'libs/response';
+import {BaseStore} from '../base-store';
 
-export interface Store
+export namespace storeNS
 {
-    locale                     : string;
-    account                    : Response.Account;
-    requestChangeEmailResponse : Response.RequestChangeEmail;
-    loading?                   : boolean;
-    message?                   : string;
-    onEmailChange?             : (value : string) => void;
-    onChange?                  : () => void;
-    onBack?                    : () => void;
+    export interface Store extends BaseStore
+    {
+        account?                    : Response.Account;
+        message?                    : string;
+        loading?                    : boolean;
+        onEmailChange?              : (value : string) => void;
+        onChange?                   : () => void;
+        onBack?                     : () => void;
+        requestChangeEmailResponse? : Response.RequestChangeEmail;
+    }
+
+    export function init(src : Store) : Store
+    {
+        const store : Store =
+        {
+            locale:        src.locale,
+            account:       src.account || null,
+            message:       '',
+            loading:       false,
+            onEmailChange: src.onEmailChange,
+            onChange:      src.onChange,
+            onBack:        src.onBack,
+            requestChangeEmailResponse: {status:Response.Status.OK, message:{}},
+        };
+        return store;
+    }
 }

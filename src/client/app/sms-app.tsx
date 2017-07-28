@@ -7,14 +7,14 @@ import * as React  from 'react';
 import LoginApi    from 'client/api/login-api';
 import {App}       from 'client/app/app';
 import SmsView     from 'client/components/views/sms-view';
-import {Store}     from 'client/components/views/sms-view/store';
+import {storeNS}   from 'client/components/views/sms-view/store';
 import History     from 'client/libs/history';
 import Utils       from 'client/libs/utils';
 import {Response}  from 'libs/response';
 import {slog}      from 'libs/slog';
 import CommonUtils from 'libs/utils';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * sms app
@@ -22,7 +22,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class SmsApp extends App
 {
     private static CLS_NAME = 'SmsView';
-    private store : Store;
+    private store : storeNS.Store;
     private approvalTimerId = 0;
 
     /**
@@ -31,14 +31,9 @@ export default class SmsApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:           Utils.getLocale(),
-            smsCode:          ssrStore.smsCode,
-            loginSmsResponse: ssrStore.loginSmsResponse,
-            onSmsCodeChange:  this.onSmsCodeChange,
-            onSend:           this.onSend,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onSmsCodeChange = this.onSmsCodeChange;
+        this.store.onSend =          this.onSend;
     }
 
     /**
@@ -46,10 +41,7 @@ export default class SmsApp extends App
      */
     init(params, _message? : string)
     {
-        const {store} = this;
-        store.smsCode = '';
-        store.message = '';
-        store.loginSmsResponse = {status:Response.Status.OK, message:{}};
+        this.store = storeNS.init(this.store);
         return super.init(params);
     }
 

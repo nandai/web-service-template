@@ -6,20 +6,20 @@ import * as React        from 'react';
 import UserApi           from 'client/api/user-api';
 import {App}             from 'client/app/app';
 import UserView          from 'client/components/views/user-view';
-import {Store}           from 'client/components/views/user-view/store';
+import {storeNS}         from 'client/components/views/user-view/store';
 import History           from 'client/libs/history';
 import {SocketEventData} from 'client/libs/socket-event-data';
 import Utils             from 'client/libs/utils';
 import {Response}        from 'libs/response';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * users app
  */
 export default class UserApp extends App
 {
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -27,12 +27,8 @@ export default class UserApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale: Utils.getLocale(),
-            user:   ssrStore.user,
-            onBack: this.onBack,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onBack = this.onBack;
     }
 
     /**

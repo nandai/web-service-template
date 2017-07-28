@@ -7,12 +7,12 @@ import * as React from 'react';
 import ResetApi   from 'client/api/reset-api';
 import {App}      from 'client/app/app';
 import ForgetView from 'client/components/views/forget-view';
-import {Store}    from 'client/components/views/forget-view/store';
+import {storeNS}  from 'client/components/views/forget-view/store';
 import Utils      from 'client/libs/utils';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<Store>();
+const ssrStore = Utils.getSsrStore<storeNS.Store>();
 
 /**
  * forget app
@@ -20,7 +20,7 @@ const ssrStore = Utils.getSsrStore<Store>();
 export default class ForgetApp extends App
 {
     private static CLS_NAME = 'ForgetApp';
-    private store : Store;
+    private store : storeNS.Store;
 
     /**
      * @constructor
@@ -28,15 +28,10 @@ export default class ForgetApp extends App
     constructor()
     {
         super();
-        this.store =
-        {
-            locale:                     Utils.getLocale(),
-            requestResetPasswordResult: ssrStore.requestResetPasswordResult,
-            loading:                    false,
-            onEmailChange:              this.onEmailChange,
-            onSend:                     this.onSend,
-            onBack:                     this.onBack,
-        };
+        this.store = storeNS.init(ssrStore);
+        this.store.onEmailChange = this.onEmailChange;
+        this.store.onSend =        this.onSend;
+        this.store.onBack =        this.onBack;
     }
 
     /**
@@ -44,10 +39,7 @@ export default class ForgetApp extends App
      */
     init(params, _message? : string)
     {
-        const {store} = this;
-        store.email =   '';
-        store.requestResetPasswordResult = {status:Response.Status.OK, message:{}};
-        store.message = '';
+        this.store = storeNS.init(this.store);
         return super.init(params);
     }
 

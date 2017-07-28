@@ -6,7 +6,7 @@ import * as ReactDOM from 'react-dom/server';
 
 import Root          from 'client/components/root';
 import TopView       from 'client/components/views/top-view';
-import {Store}       from 'client/components/views/top-view/store';
+import {storeNS}     from 'client/components/views/top-view/store';
 import ClientR       from 'client/libs/r';
 import {slog}        from 'libs/slog';
 import SessionAgent  from 'server/agents/session-agent';
@@ -48,13 +48,8 @@ export default class TopApp
             }
 
             const data = await SettingsApi.getAccount(req);
-            const store : Store =
-            {
-                locale,
-                account: data.account,
-                message
-            };
-
+            const {account} = data;
+            const store = storeNS.init({locale, account, message});
             const title = ClientR.text(ClientR.TOP, locale);
             const el = <TopView store={store} />;
             const contents = ReactDOM.renderToString(<Root view={el} />);

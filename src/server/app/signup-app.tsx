@@ -6,9 +6,8 @@ import * as ReactDOM    from 'react-dom/server';
 
 import Root             from 'client/components/root';
 import SignupView       from 'client/components/views/signup-view';
-import {Store}          from 'client/components/views/signup-view/store';
+import {storeNS}        from 'client/components/views/signup-view/store';
 import ClientR          from 'client/libs/r';
-import {Response}       from 'libs/response';
 import {slog}           from 'libs/slog';
 import SessionAgent     from 'server/agents/session-agent';
 import SignupConfirmApp from 'server/app/signup-confirm-app';
@@ -55,15 +54,7 @@ export default class SignupApp
                 await SessionAgent.update(session);
             }
 
-            const store : Store =
-            {
-                locale,
-                email:    '',
-                password: '',
-                message,
-                signupEmailResponse: {status:Response.Status.OK, message:{}}
-            };
-
+            const store = storeNS.init({locale, message});
             const title = ClientR.text(ClientR.SIGNUP, locale);
             const el = <SignupView store={store} />;
             const contents = ReactDOM.renderToString(<Root view={el} />);
