@@ -262,6 +262,18 @@ class WstApp
     }
 
     /**
+     * オンライン設定
+     */
+    private setOnline(online : boolean) : void
+    {
+        this.routes.forEach((route) =>
+        {
+            const store : BaseStore = route.app['store'];
+            store.online = online;
+        });
+    }
+
+    /**
      * ソケットイベント通知
      */
     private notifySocketEvent(data : SocketEventData) : void
@@ -296,6 +308,8 @@ class WstApp
     onConnect()
     {
         const log = slog.stepIn('WstApp', 'onConnect');
+        this.setOnline(true);
+        this.render();
         log.stepOut();
     }
 
@@ -306,6 +320,8 @@ class WstApp
     onDisconnect(reason : string)
     {
         const log = slog.stepIn('WstApp', 'onDisconnect');
+        this.setOnline(false);
+        this.render();
         log.w(reason);
         log.stepOut();
     }

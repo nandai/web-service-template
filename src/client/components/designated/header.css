@@ -19,6 +19,12 @@
         border-bottom:    1px solid white;
         box-sizing:       border-box;
         font-weight:      bold;
+        transition:       .5s;
+
+        &.offline
+        {
+            background-color: darkgray;
+        }
 
         & .header-title
         {

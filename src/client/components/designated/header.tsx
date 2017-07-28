@@ -30,12 +30,13 @@ export default class Header extends React.Component<HeaderProps, {}>
     {
         const {store} = this.props;
         const {account} = store;
+        const headerFixedClassName = 'header-fixed' + (store.online === false ? ' offline' : '');
         const name = (account ? account.name : '');
 
         // iOS safariのバグに対応するため、通常のdivで高さを確保しつつfixedのdivでヘッダを実装する
         return (
             <div className="header">
-                <div className="header-fixed">
+                <div className={headerFixedClassName}>
                     <a className="header-title" href="/" onClick={this.onClick}>web service template</a>
                     <span className="header-account">{name}</span>
                 </div>
