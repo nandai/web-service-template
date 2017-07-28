@@ -213,7 +213,7 @@ export default class Access
      * @param   req httpリクエスト
      * @param   req httpレスポンス
      */
-    static auth(req : express.Request, res : express.Response, next : express.NextFunction) : void
+    static async auth(req : express.Request, res : express.Response, next : express.NextFunction)
     {
         const log = slog.stepIn(Access.CLS_NAME, 'auth');
         try
@@ -229,7 +229,7 @@ export default class Access
                 }
                 else
                 {
-                    forbidden(req, res);
+                    await forbidden(req, res);
                 }
                 log.stepOut();
             }
@@ -249,7 +249,7 @@ export default class Access
      * @param   req httpリクエスト
      * @param   req httpレスポンス
      */
-    static notFound(req : express.Request, res : express.Response) : void
+    static async notFound(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(Access.CLS_NAME, 'notFound');
 
@@ -265,7 +265,7 @@ export default class Access
         }
         else
         {
-            notFound(req, res);
+            await notFound(req, res);
         }
 
         log.stepOut();

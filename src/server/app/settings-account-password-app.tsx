@@ -48,7 +48,7 @@ export default class SettingsAccountPasswordApp
             }
             else
             {
-                notFound(req, res);
+                await notFound(req, res);
             }
             log.stepOut();
         }

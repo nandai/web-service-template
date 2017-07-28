@@ -46,7 +46,7 @@ export default class SettingsAccountEmailChangeApp
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    notFound(req, res);
+                    await notFound(req, res);
                     break;
                 }
 
@@ -55,7 +55,7 @@ export default class SettingsAccountEmailChangeApp
 
                 if (account === null)
                 {
-                    notFound(req, res);
+                    await notFound(req, res);
                     break;
                 }
 

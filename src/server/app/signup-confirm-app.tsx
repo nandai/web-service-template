@@ -45,7 +45,7 @@ export default class SignupConfirmApp
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    notFound(req, res);
+                    await notFound(req, res);
                     break;
                 }
 
@@ -54,7 +54,7 @@ export default class SignupConfirmApp
 
                 if (account === null)
                 {
-                    notFound(req, res);
+                    await notFound(req, res);
                     break;
                 }
 

@@ -9,6 +9,7 @@ import UsersView     from 'client/components/views/users-view';
 import {storeNS}     from 'client/components/views/users-view/store';
 import ClientR       from 'client/libs/r';
 import {slog}        from 'libs/slog';
+import SettingsApi   from 'server/api/settings-api';
 import UserApi       from 'server/api/user-api';
 import {view}        from './view';
 
@@ -32,9 +33,11 @@ export default class UsersApp
         const log = slog.stepIn(UsersApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
 
-        const data = await UserApi.getUserList();
-        const {userList} = data;
-        const store = storeNS.init({locale, userList});
+        const data1 = await SettingsApi.getAccount(req);
+        const data2 = await UserApi.getUserList();
+        const {account} =  data1;
+        const {userList} = data2;
+        const store = storeNS.init({locale, account, userList});
         const title = ClientR.text(ClientR.USER_LIST, locale);
         const el = <UsersView store={store}/>;
         const contents = ReactDOM.renderToString(<Root view={el} />);

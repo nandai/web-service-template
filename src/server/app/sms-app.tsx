@@ -43,7 +43,7 @@ export default class SmsApp
 
                 if (Utils.existsParameters(param, condition) === false)
                 {
-                    notFound(req, res);
+                    await notFound(req, res);
                     break;
                 }
 
@@ -52,7 +52,7 @@ export default class SmsApp
 
                 if (session.sms_id !== smsId)
                 {
-                    notFound(req, res);
+                    await notFound(req, res);
                     break;
                 }
 

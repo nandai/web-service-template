@@ -117,6 +117,10 @@ class WstApp
         return new Promise(async (resolve : () => void) =>
         {
             let routeResult = this.getRoute(url);
+            if (routeResult.route === null) {
+                routeResult = this.getRoute('404');
+            }
+
             let route =    routeResult.route;
             const params = routeResult.params;
 
