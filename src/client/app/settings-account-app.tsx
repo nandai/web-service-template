@@ -62,7 +62,7 @@ export default class SettingsAccountApp extends App
     @bind
     private onNameChange(value : string) : void
     {
-        this.store.account.name = value;
+        this.store.editAccount.name = value;
         this.render();
     }
 
@@ -72,7 +72,7 @@ export default class SettingsAccountApp extends App
     @bind
     private onUserNameChange(value : string) : void
     {
-        this.store.account.userName = value;
+        this.store.editAccount.userName = value;
         this.render();
 
         if (this.checkUserNameTimerId) {
@@ -88,7 +88,7 @@ export default class SettingsAccountApp extends App
     @bind
     private onPhoneNoChange(value : string) : void
     {
-        this.store.account.phoneNo = value;
+        this.store.editAccount.phoneNo = value;
         this.render();
     }
 
@@ -98,7 +98,7 @@ export default class SettingsAccountApp extends App
     @bind
     private onCountryCodeChange(value : string) : void
     {
-        this.store.account.countryCode = value;
+        this.store.editAccount.countryCode = value;
         this.render();
     }
 
@@ -108,7 +108,7 @@ export default class SettingsAccountApp extends App
     @bind
     private onTwoFactorAuth(twoFactorAuth : string) : void
     {
-        this.store.account.twoFactorAuth = twoFactorAuth;
+        this.store.editAccount.twoFactorAuth = twoFactorAuth;
         this.render();
     }
 
@@ -123,7 +123,7 @@ export default class SettingsAccountApp extends App
 
         try
         {
-            const {account} = store;
+            const account = store.editAccount;
             const {name, userName, countryCode, phoneNo, twoFactorAuth} = account;
 
             const res : Response.SetAccount = await SettingsApi.setAccount({name, userName, countryCode, phoneNo, twoFactorAuth});
@@ -147,7 +147,7 @@ export default class SettingsAccountApp extends App
     private async checkUserName()
     {
         const {store} = this;
-        const userName = store.account.userName;
+        const userName = store.editAccount.userName;
         const res : Response.CheckUserName = await SettingsApi.checkUserName({userName});
         store.checkUserNameResponse = res;
         this.render();

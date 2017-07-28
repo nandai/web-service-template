@@ -1,10 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response}  from 'libs/response';
-import {BaseStore} from '../base-store';
-
-import _ = require('lodash');
+import {Response}                 from 'libs/response';
+import {BaseStore, initBaseStore} from '../base-store';
 
 export namespace storeNS
 {
@@ -27,11 +25,11 @@ export namespace storeNS
 
     export function init(src : Store) : Store
     {
-        const store = _.clone(src);
-        const overwrite : Store =
+        const store : Store =
         {
             email:               '',
             password:            '',
+            message:             src.message,
             loading:             false,
             onTwitter:           src.onTwitter,
             onFacebook:          src.onFacebook,
@@ -43,7 +41,7 @@ export namespace storeNS
             onTop:               src.onTop,
             signupEmailResponse: {status:Response.Status.OK, message:{}}
         };
-        _.assign(store, overwrite);
+        initBaseStore(store, src);
         return store;
     }
 }

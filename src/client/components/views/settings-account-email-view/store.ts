@@ -1,8 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response}  from 'libs/response';
-import {BaseStore} from '../base-store';
+import {Response}                 from 'libs/response';
+import {BaseStore, initBaseStore} from '../base-store';
 
 export namespace storeNS
 {
@@ -20,8 +20,6 @@ export namespace storeNS
     {
         const store : Store =
         {
-            locale:        src.locale,
-            account:       src.account || null,
             message:       '',
             loading:       false,
             onEmailChange: src.onEmailChange,
@@ -29,6 +27,7 @@ export namespace storeNS
             onBack:        src.onBack,
             requestChangeEmailResponse: {status:Response.Status.OK, message:{}},
         };
+        initBaseStore(store, src);
         return store;
     }
 }

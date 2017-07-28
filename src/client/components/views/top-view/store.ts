@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {BaseStore} from '../base-store';
+import {BaseStore, initBaseStore} from '../base-store';
 
 export namespace storeNS
 {
@@ -18,14 +18,13 @@ export namespace storeNS
     {
         const store : Store =
         {
-            locale:     src.locale,
-            account:    src.account || null,
             message:    src.message || '',
             onSettings: src.onSettings,
             onInvite:   src.onInvite,
             onUsers:    src.onUsers,
             onLogout:   src.onLogout,
         };
+        initBaseStore(store, src);
         return store;
     }
 }

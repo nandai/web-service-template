@@ -28,7 +28,8 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
     render() : JSX.Element
     {
         const {store} = this.props;
-        const {locale, account} = store;
+        const {locale} = store;
+        const account =  store.editAccount;
         const response = store.setAccountResponse;
         const {message} = response;
         const userNameError =  (store.checkUserNameResponse.status !== Response.Status.OK);
