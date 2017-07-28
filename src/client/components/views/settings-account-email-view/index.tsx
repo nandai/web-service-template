@@ -40,7 +40,7 @@ export default class SettingsAccountEmailView extends React.Component<SettingsAc
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <form>
                         <Input type="email" placeholder={R.text(R.EMAIL, locale)} value={account.email} message={message.email} onChange={store.onEmailChange} />

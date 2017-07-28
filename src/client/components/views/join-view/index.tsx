@@ -32,7 +32,7 @@ export default class InviteView extends React.Component<InviteViewProps, {}>
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <form>
                         <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} message={message.password} onChange={store.onPasswordChange} />

@@ -1,12 +1,18 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import bind       from 'bind-decorator';
-import * as React from 'react';
+import bind        from 'bind-decorator';
+import * as React  from 'react';
 
-import History    from 'client/libs/history';
+import History     from 'client/libs/history';
+import {BaseStore} from '../views/base-store';
 
-export default class Header extends React.Component<{}, {}>
+interface HeaderProps
+{
+    store : BaseStore;
+}
+
+export default class Header extends React.Component<HeaderProps, {}>
 {
     /**
      * @constructor
@@ -22,11 +28,17 @@ export default class Header extends React.Component<{}, {}>
      */
     render() : JSX.Element
     {
+        const {store} = this.props;
+        const {account} = store;
+        const name = (account ? account.name : '');
+
         // iOS safariのバグに対応するため、通常のdivで高さを確保しつつfixedのdivでヘッダを実装する
+                    // <span onClick={this.onClick}>web service template</span>
         return (
             <div className="header">
                 <div className="header-fixed">
-                    <span onClick={this.onClick}>web service template</span>
+                    <a className="header-title" href="/" onClick={this.onClick}>web service template</a>
+                    <span className="header-account">{name}</span>
                 </div>
             </div>
         );
@@ -36,8 +48,9 @@ export default class Header extends React.Component<{}, {}>
      * click event
      */
     @bind
-    private onClick() : void
+    private onClick(e : React.MouseEvent<Element>) : void
     {
+        e.preventDefault();
         History.pushState('/');
     }
 }

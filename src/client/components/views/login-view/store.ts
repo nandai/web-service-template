@@ -8,7 +8,7 @@ export namespace storeNS
 {
     export interface Store extends BaseStore
     {
-        name?               : string;
+        name?               : 'home' | 'about';
         email?              : string;
         password?           : string;
         message?            : string;

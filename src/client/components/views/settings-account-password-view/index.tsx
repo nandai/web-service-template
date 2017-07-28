@@ -32,7 +32,7 @@ export default class SettingsAccountPasswordView extends React.Component<Setting
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <form>
                         <Input type="password" placeholder={R.text(R.CURRENT_PASSWORD,   locale)} value={store.oldPassword} message={message.oldPassword} onChange={store.onOldPasswordChange} />

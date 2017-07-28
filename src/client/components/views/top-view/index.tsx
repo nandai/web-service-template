@@ -28,7 +28,7 @@ export default class TopView extends React.Component<TopViewProps, {}>
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <Button onClick={store.onSettings} url="/settings"       >{R.text(R.GO_SETTINGS, locale)}</Button>
                     <Button onClick={store.onInvite}   url="/settings/invite">{R.text(R.INVITE,      locale)}</Button>

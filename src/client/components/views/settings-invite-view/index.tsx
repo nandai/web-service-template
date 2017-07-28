@@ -40,7 +40,7 @@ export default class SettingsInviteView extends React.Component<SettingsInviteVi
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <form>
                         <Input type="email" placeholder={R.text(R.EMAIL, locale)} value={store.email} message={message.email} onChange={store.onEmailChange} />

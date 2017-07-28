@@ -70,7 +70,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 {home}
                 {about}
                 <Footer>

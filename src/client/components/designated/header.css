@@ -6,28 +6,42 @@
 .header
 {
     min-height: var(--header-height);
-}
 
-.header-fixed
-{
-    position:   fixed;
-    width:      100%;
-    z-index:    100;
-    top:        0;
-    min-height: var(--header-height);
-    color:            white;
-    background-color: rgb(39, 152, 142);
-    border-bottom:    1px solid white;
-    box-sizing:       border-box;
-    font-weight:      bold;
-
-    & > span
+    & .header-fixed
     {
-        display:    block;
-        height:     var(--header-height);
-        padding:    calc((var(--header-height) - 1rem) / 2) 0;
-        box-sizing: border-box;
-        text-align: center;
-        cursor:     pointer;
+        position:   fixed;
+        width:      100%;
+        z-index:    100;
+        top:        0;
+        min-height: var(--header-height);
+        color:            white;
+        background-color: rgb(39, 152, 142);
+        border-bottom:    1px solid white;
+        box-sizing:       border-box;
+        font-weight:      bold;
+
+        & .header-title
+        {
+            position:        absolute;
+            left:            0;
+            right:           0;
+            height:          var(--header-height);
+            padding:         calc((var(--header-height) - 1rem) / 2) 0;
+            box-sizing:      border-box;
+            text-align:      center;
+            cursor:          pointer;
+            color:           white;
+            text-decoration: none;
+        }
+
+        & .header-account
+        {
+            position:      absolute;
+            right:         0;
+            height:        var(--header-height);
+            padding:       calc((var(--header-height) - 1rem) / 2) 0;
+            padding-right: 8px;
+            box-sizing:    border-box;
+        }
     }
 }

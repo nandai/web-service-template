@@ -31,7 +31,7 @@ export default class SmsView extends React.Component<SmsViewProps, {}>
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <form>
                         <Input type="number" placeholder={R.text(R.LOGIN_CODE, locale)} value={store.smsCode} message={message.smsCode} onChange={store.onSmsCodeChange} />

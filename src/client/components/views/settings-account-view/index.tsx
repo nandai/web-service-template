@@ -42,7 +42,7 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <form>
                         <Input type="text" placeholder={R.text(R.ACCOUNT_NAME, locale)} value={account.name}        message={message.name}        onChange={store.onNameChange} />

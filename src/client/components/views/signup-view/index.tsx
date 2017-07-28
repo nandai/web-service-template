@@ -40,7 +40,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <form>
                         <Button onClick={store.onTwitter} >{R.text(R.SIGNUP_WITH_TWITTER,  locale)}</Button>

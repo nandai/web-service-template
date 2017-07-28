@@ -31,6 +31,6 @@ export default class ForbiddenApp extends App
      */
     view() : JSX.Element
     {
-        return <ForbiddenView />;
+        return <ForbiddenView store={this.store} />;
     }
 }

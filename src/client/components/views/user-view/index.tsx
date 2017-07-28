@@ -37,7 +37,7 @@ export default class UserView extends React.Component<UserViewProps, {}>
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <p>{store.user.accountName}{status}</p>
                     {userNameEl}

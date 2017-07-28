@@ -38,7 +38,7 @@ export default class ForgetView extends React.Component<ForgetViewProps, {}>
 
         return (
             <ViewContainer>
-                <Header />
+                <Header store={store} />
                 <ViewContents>
                     <form>
                         <Input type="text" placeholder={R.text(R.EMAIL, locale)} value={store.email} message={message.email} onChange={store.onEmailChange} />

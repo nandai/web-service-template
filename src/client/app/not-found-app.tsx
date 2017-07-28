@@ -31,6 +31,6 @@ export default class NotFoundApp extends App
      */
     view() : JSX.Element
     {
-        return <NotFoundView />;
+        return <NotFoundView store={this.store} />;
     }
 }
