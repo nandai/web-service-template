@@ -22,6 +22,7 @@ export namespace storeNS
         const store : Store =
         {
             locale:                src.locale,
+            account:               null,
             password:              '',
             confirm:               '',
             message:               '',

@@ -20,6 +20,7 @@ export namespace storeNS
         const store : Store =
         {
             locale:           src.locale,
+            account:          null,
             password:         '',
             message:          '',
             onPasswordChange: src.onPasswordChange,

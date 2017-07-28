@@ -8,7 +8,6 @@ export namespace storeNS
 {
     export interface Store extends BaseStore
     {
-        account?        : Response.Account;
         email?          : string;
         message?        : string;
         loading?        : boolean;

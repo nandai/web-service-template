@@ -9,6 +9,7 @@ import {Response}                    from 'libs/response';
 import {slog}                        from 'libs/slog';
 // ort SettingsApi                   from '../api/settings-api';
 import Root                          from '../components/root';
+import {BaseStore}                   from '../components/views/base-store';
 import History                       from '../libs/history';
 import R                             from '../libs/r';
 import {SocketEventData}             from '../libs/socket-event-data';
@@ -36,7 +37,7 @@ import UsersApp                      from './users-app';
 import _ =        require('lodash');
 import socketIO = require('socket.io-client');
 
-const ssrStore = window['ssrStore'];
+const ssrStore = Utils.getSsrStore<BaseStore>();
 
 /**
  * wst app
@@ -255,11 +256,8 @@ class WstApp
 
         this.routes.forEach((route) =>
         {
-            const store = route.app['store'];
-
-            if (store && 'account' in store) {
-                store.account = _.clone(account);
-            }
+            const store : BaseStore = route.app['store'];
+            store.account = _.clone(account);
         });
     }
 

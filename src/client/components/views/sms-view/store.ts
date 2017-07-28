@@ -20,6 +20,7 @@ export namespace storeNS
         const store : Store =
         {
             locale:           src.locale,
+            account:          null,
             smsCode:          '',
             message:          '',
             onSmsCodeChange:  src.onSmsCodeChange,

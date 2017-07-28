@@ -1,14 +1,12 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response}  from 'libs/response';
 import {BaseStore} from '../base-store';
 
 export namespace storeNS
 {
     export interface Store extends BaseStore
     {
-        account?    : Response.Account;
         message?    : string;
         onSettings? : () => void;
         onInvite?   : () => void;

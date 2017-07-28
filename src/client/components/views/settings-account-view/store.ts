@@ -8,7 +8,6 @@ export namespace storeNS
 {
     export interface Store extends BaseStore
     {
-        account?               : Response.Account;
         message?               : string;
         onNameChange?          : (value : string) => void;
         onUserNameChange?      : (value : string) => void;

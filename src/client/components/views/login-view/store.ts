@@ -32,6 +32,7 @@ export namespace storeNS
         const store : Store =
         {
             locale:             src.locale,
+            account:            null,
             name:               src.name,
             email:              '',
             password:           '',

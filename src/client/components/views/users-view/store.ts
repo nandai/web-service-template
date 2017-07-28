@@ -8,7 +8,6 @@ export namespace storeNS
 {
     export interface Store extends BaseStore
     {
-        account?  : Response.Account;
         userList? : Response.User[];
         onUser?   : (id : string) => void;
         onBack?   : () => void;
