@@ -14,22 +14,25 @@ import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * login app
  */
 export default class LoginApp extends App
 {
     private static CLS_NAME = 'LoginApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onTwitter =        this.onTwitter;
         this.store.onFacebook =       this.onFacebook;
@@ -43,6 +46,14 @@ export default class LoginApp extends App
         this.store.onUsers =          this.onUsers;
         this.store.onHome =           this.onHome;
         this.store.onAbout =          this.onAbout;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'LoginApp';
     }
 
     /**

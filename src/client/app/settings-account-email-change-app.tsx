@@ -13,25 +13,36 @@ import {Response}                     from 'libs/response';
 import {slog}                         from 'libs/slog';
 import CommonUtils                    from 'libs/utils';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * settings account email change app
  */
 export default class SettingsAccountEmailChangeApp extends App
 {
     private static CLS_NAME = 'SettingsAccountEmailChangeApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onPasswordChange = this.onPasswordChange;
         this.store.onChange =         this.onChange;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'SettingsAccountEmailChangeApp';
     }
 
     /**

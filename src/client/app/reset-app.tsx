@@ -13,26 +13,37 @@ import {Response}  from 'libs/response';
 import {slog}      from 'libs/slog';
 import CommonUtils from 'libs/utils';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * reset app
  */
 export default class ResetApp extends App
 {
     private static CLS_NAME = 'ResetApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onPasswordChange = this.onPasswordChange;
         this.store.onConfirmChange =  this.onConfirmChange;
         this.store.onChange =         this.onChange;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'ResetApp';
     }
 
     /**

@@ -1,17 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React                     from 'react';
-import * as ReactDOM                  from 'react-dom/server';
+import * as React       from 'react';
+import * as ReactDOM    from 'react-dom/server';
 
-import Root                           from 'client/components/root';
-import SettingsAccountEmailChangeView from 'client/components/views/settings-account-email-change-view';
-import {storeNS}                      from 'client/components/views/settings-account-email-change-view/store';
-import ClientR                        from 'client/libs/r';
-import {slog}                         from 'libs/slog';
-import AccountAgent                   from 'server/agents/account-agent';
-import Utils                          from 'server/libs/utils';
-import {notFound, view}               from './view';
+import ClientApp        from 'client/app/settings-account-email-change-app';
+import Root             from 'client/components/root';
+import ClientR          from 'client/libs/r';
+import {slog}           from 'libs/slog';
+import AccountAgent     from 'server/agents/account-agent';
+import Utils            from 'server/libs/utils';
+import {notFound, view} from './view';
 
 import express = require('express');
 
@@ -59,11 +58,10 @@ export default class SettingsAccountEmailChangeApp
                     break;
                 }
 
-                const store = storeNS.init({locale});
                 const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_EMAIL_CHANGE, locale);
-                const el = <SettingsAccountEmailChangeView store={store} />;
-                const contents = ReactDOM.renderToString(<Root view={el} />);
-                res.send(view(title, 'wst.js', contents, store));
+                const app = new ClientApp({locale});
+                const contents = ReactDOM.renderToString(<Root app={app} />);
+                res.send(view(title, 'wst.js', contents, app.store));
             }
             while (false);
             log.stepOut();

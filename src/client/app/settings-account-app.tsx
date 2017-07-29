@@ -12,23 +12,27 @@ import Utils               from 'client/libs/utils';
 import {Response}          from 'libs/response';
 import {slog}              from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * settings account app
  */
 export default class SettingsAccountApp extends App
 {
     private static CLS_NAME = 'SettingsAccountApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
+
     private checkUserNameTimerId = 0;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onNameChange =        this.onNameChange;
         this.store.onUserNameChange =    this.onUserNameChange;
@@ -37,6 +41,14 @@ export default class SettingsAccountApp extends App
         this.store.onCountryCodeChange = this.onCountryCodeChange;
         this.store.onChange =            this.onChange;
         this.store.onBack =              this.onBack;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'SettingsAccountApp';
     }
 
     /**

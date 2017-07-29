@@ -4,9 +4,8 @@
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom/server';
 
+import ClientApp     from 'client/app/settings-app';
 import Root          from 'client/components/root';
-import SettingsView  from 'client/components/views/settings-view';
-import {storeNS}     from 'client/components/views/settings-view/store';
 import ClientR       from 'client/libs/r';
 import {slog}        from 'libs/slog';
 import SessionAgent  from 'server/agents/session-agent';
@@ -55,11 +54,10 @@ export default class SettingsApp
 
             const data = await SettingsApi.getAccount(req);
             const {account} = data;
-            const store = storeNS.init({locale, account, message});
             const title = ClientR.text(ClientR.SETTINGS, locale);
-            const el = <SettingsView store={store} />;
-            const contents = ReactDOM.renderToString(<Root view={el} />);
-            res.send(view(title, 'wst.js', contents, store));
+            const app = new ClientApp({locale, account, message});
+            const contents = ReactDOM.renderToString(<Root app={app} />);
+            res.send(view(title, 'wst.js', contents, app.store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

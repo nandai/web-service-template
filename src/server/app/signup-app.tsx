@@ -4,9 +4,8 @@
 import * as React       from 'react';
 import * as ReactDOM    from 'react-dom/server';
 
+import ClientApp        from 'client/app/signup-app';
 import Root             from 'client/components/root';
-import SignupView       from 'client/components/views/signup-view';
-import {storeNS}        from 'client/components/views/signup-view/store';
 import ClientR          from 'client/libs/r';
 import {slog}           from 'libs/slog';
 import SessionAgent     from 'server/agents/session-agent';
@@ -54,11 +53,10 @@ export default class SignupApp
                 await SessionAgent.update(session);
             }
 
-            const store = storeNS.init({locale, message});
             const title = ClientR.text(ClientR.SIGNUP, locale);
-            const el = <SignupView store={store} />;
-            const contents = ReactDOM.renderToString(<Root view={el} />);
-            res.send(view(title, 'wst.js', contents, store));
+            const app = new ClientApp({locale, message});
+            const contents = ReactDOM.renderToString(<Root app={app} />);
+            res.send(view(title, 'wst.js', contents, app.store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

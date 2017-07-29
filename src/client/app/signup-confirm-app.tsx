@@ -13,25 +13,36 @@ import {Response}        from 'libs/response';
 import {slog}            from 'libs/slog';
 import CommonUtils       from 'libs/utils';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * signup confirm app
  */
 export default class SignupConfirmApp extends App
 {
     private static CLS_NAME = 'SignupConfirmApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onPasswordChange = this.onPasswordChange;
         this.store.onConfirm =        this.onConfirm;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'SignupConfirmApp';
     }
 
     /**

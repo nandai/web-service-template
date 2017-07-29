@@ -4,9 +4,8 @@
 import * as React       from 'react';
 import * as ReactDOM    from 'react-dom/server';
 
+import ClientApp        from 'client/app/join-app';
 import Root             from 'client/components/root';
-import JoinView         from 'client/components/views/join-view';
-import {storeNS}        from 'client/components/views/join-view/store';
 import ClientR          from 'client/libs/r';
 import {slog}           from 'libs/slog';
 import AccountAgent     from 'server/agents/account-agent';
@@ -58,11 +57,10 @@ export default class JoinApp
                     break;
                 }
 
-                const store = storeNS.init({locale});
                 const title = ClientR.text(ClientR.JOIN, locale);
-                const el = <JoinView store={store} />;
-                const contents = ReactDOM.renderToString(<Root view={el} />);
-                res.send(view(title, 'wst.js', contents, store));
+                const app = new ClientApp({locale});
+                const contents = ReactDOM.renderToString(<Root app={app} />);
+                res.send(view(title, 'wst.js', contents, app.store));
             }
             while (false);
             log.stepOut();

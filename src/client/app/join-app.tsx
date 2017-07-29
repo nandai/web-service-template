@@ -13,25 +13,36 @@ import {Response}  from 'libs/response';
 import {slog}      from 'libs/slog';
 import CommonUtils from 'libs/utils';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * join app
  */
 export default class JoinApp extends App
 {
     private static CLS_NAME = 'JoinApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onPasswordChange = this.onPasswordChange;
         this.store.onJoin =           this.onJoin;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'JoinApp';
     }
 
     /**

@@ -1,22 +1,21 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React       from 'react';
-import * as ReactDOM    from 'react-dom/server';
+import * as React    from 'react';
+import * as ReactDOM from 'react-dom/server';
 
-import Root             from 'client/components/root';
-import LoginView        from 'client/components/views/login-view';
-import {storeNS}        from 'client/components/views/login-view/store';
-import ClientR          from 'client/libs/r';
-import {slog}           from 'libs/slog';
-import SessionAgent     from 'server/agents/session-agent';
-import SmsApp           from 'server/app/sms-app';
-import TopApp           from 'server/app/top-app';
-import Cookie           from 'server/libs/cookie';
-import R                from 'server/libs/r';
-import Utils            from 'server/libs/utils';
-import {Session}        from 'server/models/session';
-import {view}           from './view';
+import ClientApp     from 'client/app/login-app';
+import Root          from 'client/components/root';
+import ClientR       from 'client/libs/r';
+import {slog}        from 'libs/slog';
+import SessionAgent  from 'server/agents/session-agent';
+import SmsApp        from 'server/app/sms-app';
+import TopApp        from 'server/app/top-app';
+import Cookie        from 'server/libs/cookie';
+import R             from 'server/libs/r';
+import Utils         from 'server/libs/utils';
+import {Session}     from 'server/models/session';
+import {view}        from './view';
 
 import express = require('express');
 
@@ -66,11 +65,10 @@ export default class LoginApp
                 await SessionAgent.update(session);
             }
 
-            const store = storeNS.init({locale, name:'home', message});
             const title = ClientR.text(ClientR.LOGIN, locale);
-            const el = <LoginView store={store} />;
-            const contents = ReactDOM.renderToString(<Root view={el} />);
-            res.send(view(title, 'wst.js', contents, store));
+            const app = new ClientApp({locale, name:'home', message});
+            const contents = ReactDOM.renderToString(<Root app={app} />);
+            res.send(view(title, 'wst.js', contents, app.store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}
@@ -89,11 +87,10 @@ export default class LoginApp
 
         try
         {
-            const store = storeNS.init({locale, name:'about', message:''});
             const title = ClientR.text(ClientR.ABOUT, locale);
-            const el = <LoginView store={store} />;
-            const contents = ReactDOM.renderToString(<Root view={el} />);
-            res.send(view(title, 'wst.js', contents, store));
+            const app = new ClientApp({locale, name:'about', message:''});
+            const contents = ReactDOM.renderToString(<Root app={app} />);
+            res.send(view(title, 'wst.js', contents, app.store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

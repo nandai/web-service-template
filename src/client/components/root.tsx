@@ -5,18 +5,20 @@ import bind          from 'bind-decorator';
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 
+import {App}         from 'client/app/app';
+
 interface RootProps
 {
-    view    : JSX.Element;
+    app     : App;
     effect? : string;
 }
 
 interface RootState
 {
-    views?       : JSX.Element[];
-    currentView? : JSX.Element;
-    nextView?    : JSX.Element;
-    fade?        : boolean;
+    apps?       : App[];
+    currentApp? : App;
+    nextApp?    : App;
+    fade?       : boolean;
 }
 
 export default class Root extends React.Component<RootProps, RootState>
@@ -30,10 +32,10 @@ export default class Root extends React.Component<RootProps, RootState>
 
         this.state =
         {
-            views:      [props.view],
-            currentView: props.view,
-            nextView:    null,
-            fade:        false
+            apps:      [props.app],
+            currentApp: props.app,
+            nextApp:    null,
+            fade:       false
         };
     }
 
@@ -50,21 +52,21 @@ export default class Root extends React.Component<RootProps, RootState>
         }
 
         // スクロール位置を保持するため、非アクティブなビューは破棄せず非表示にしておく
-        const elements = state.views.map((view, i) =>
+        const elements = state.apps.map((app, i) =>
         {
             const style =
             {
-                display: (view.type === state.currentView.type ? 'flex' : 'none'),
+                display: (app.toString() === state.currentApp.toString() ? 'flex' : 'none'),
                 flexGrow: 1
             };
-            return <div key={i} style={style}>{view}</div>;
+            return <div key={i} style={style}>{app.view()}</div>;
         });
 
         return (
             <div className="root" tabIndex={0}>
-                <div className={className} ref="root" onTransitionEnd={this.onTransitionEnd}>
+                 <div className={className} ref="root" onTransitionEnd={this.onTransitionEnd}>
                     {elements}
-                </div>
+                 </div>
             </div>
         );
     }
@@ -74,13 +76,13 @@ export default class Root extends React.Component<RootProps, RootState>
      */
     componentWillReceiveProps(nextProps : RootProps)
     {
-        if (this.state.currentView.type === nextProps.view.type || nextProps.effect === undefined || nextProps.effect === 'none')
+        if (this.state.currentApp.toString() === nextProps.app.toString() || nextProps.effect === undefined || nextProps.effect === 'none')
         {
-            const newViews = this.addOrReplaceView(nextProps.view);
+            const newApps = this.addOrReplaceApp(nextProps.app);
             const newState : RootState =
             {
-                views:       newViews,
-                currentView: nextProps.view
+                apps:       newApps,
+                currentApp: nextProps.app
             };
             this.setState(newState);
         }
@@ -88,8 +90,8 @@ export default class Root extends React.Component<RootProps, RootState>
         {
             const newState : RootState =
             {
-                nextView: nextProps.view,
-                fade:     true
+                nextApp: nextProps.app,
+                fade:    true
             };
             this.setState(newState);
         }
@@ -104,14 +106,14 @@ export default class Root extends React.Component<RootProps, RootState>
         const {state} = this;
         const el = ReactDOM.findDOMNode(this.refs['root']);
 
-        if (el === e.target && state.nextView)
+        if (el === e.target && state.nextApp)
         {
-            const newViews = this.addOrReplaceView(state.nextView);
+            const newApps = this.addOrReplaceApp(state.nextApp);
             const newState : RootState =
             {
-                views:       newViews,
-                currentView: state.nextView,
-                nextView:    null
+                apps:       newApps,
+                currentApp: state.nextApp,
+                nextApp:    null
             };
             this.setState(newState);
 
@@ -121,28 +123,28 @@ export default class Root extends React.Component<RootProps, RootState>
     }
 
     /**
-     * ビューを追加または置き換え
+     * Appを追加または置き換え
      */
-    private addOrReplaceView(addView : JSX.Element) : JSX.Element[]
+    private addOrReplaceApp(addApp : App) : App[]
     {
         const {state} = this;
-        const newViews = Object.assign([], state.views);
+        const newApps : App[] = Object.assign([], state.apps);
         let exists = false;
 
-        for (let i = 0; i < newViews.length; i++)
+        for (let i = 0; i < newApps.length; i++)
         {
-            if (newViews[i].type === addView.type)
+            if (newApps[i].toString() === addApp.toString())
             {
-                newViews[i] = addView;
+                newApps[i] = addApp;
                 exists = true;
                 break;
             }
         }
 
         if (exists === false) {
-            newViews.push(addView);
+            newApps.push(addApp);
         }
 
-        return newViews;
+        return newApps;
     }
 }

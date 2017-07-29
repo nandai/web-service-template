@@ -13,22 +13,25 @@ import Utils        from 'client/libs/utils';
 import {Response}   from 'libs/response';
 import {slog}       from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * settings app
  */
 export default class SettingsApp extends App
 {
     private static CLS_NAME = 'SettingsApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onTwitter =  this.onTwitter;
         this.store.onFacebook = this.onFacebook;
@@ -39,6 +42,14 @@ export default class SettingsApp extends App
         this.store.onAccount =  this.onAccount;
         this.store.onLeave =    this.onLeave;
         this.store.onBack =     this.onBack;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'SettingsApp';
     }
 
     /**

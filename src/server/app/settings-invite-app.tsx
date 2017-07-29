@@ -1,17 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React         from 'react';
-import * as ReactDOM      from 'react-dom/server';
+import * as React    from 'react';
+import * as ReactDOM from 'react-dom/server';
 
-import Root               from 'client/components/root';
-import SettingsInviteView from 'client/components/views/settings-invite-view';
-import {storeNS}          from 'client/components/views/settings-invite-view/store';
-import ClientR            from 'client/libs/r';
-import {slog}             from 'libs/slog';
-import SettingsApi        from 'server/api/settings-api';
-import Utils              from 'server/libs/utils';
-import {view}             from './view';
+import ClientApp     from 'client/app/settings-invite-app';
+import Root          from 'client/components/root';
+import ClientR       from 'client/libs/r';
+import {slog}        from 'libs/slog';
+import SettingsApi   from 'server/api/settings-api';
+import Utils         from 'server/libs/utils';
+import {view}        from './view';
 
 import express = require('express');
 
@@ -38,11 +37,10 @@ export default class SettingsInviteApp
         {
             const data = await SettingsApi.getAccount(req);
             const {account} = data;
-            const store = storeNS.init({locale, account});
             const title = ClientR.text(ClientR.SETTINGS_INVITE, locale);
-            const el = <SettingsInviteView store={store} />;
-            const contents = ReactDOM.renderToString(<Root view={el} />);
-            res.send(view(title, 'wst.js', contents, store));
+            const app = new ClientApp({locale, account});
+            const contents = ReactDOM.renderToString(<Root app={app} />);
+            res.send(view(title, 'wst.js', contents, app.store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

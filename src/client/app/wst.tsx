@@ -99,10 +99,10 @@ class WstApp
     render() : void
     {
         const route = this.currentRoute;
-        const view = route.app.view();
+        const app = route.app;
 
         ReactDOM.render(
-            <Root view={view} effect={this.rootEffect} />,
+            <Root app={app} effect={this.rootEffect} />,
             document.getElementById('root'));
     }
 

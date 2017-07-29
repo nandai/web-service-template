@@ -12,23 +12,34 @@ import {SocketEventData} from 'client/libs/socket-event-data';
 import Utils             from 'client/libs/utils';
 import {Response}        from 'libs/response';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * users app
  */
 export default class UserApp extends App
 {
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onBack = this.onBack;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'UserApp';
     }
 
     /**

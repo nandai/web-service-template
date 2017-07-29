@@ -12,27 +12,38 @@ import History    from 'client/libs/history';
 import Utils      from 'client/libs/utils';
 import {slog}     from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * top App
  */
 export default class TopApp extends App
 {
     private static CLS_NAME = 'TopApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onSettings = this.onSettings;
         this.store.onInvite =   this.onInvite;
         this.store.onUsers =    this.onUsers;
         this.store.onLogout =   this.onLogout;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'TopApp';
     }
 
     /**

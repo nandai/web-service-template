@@ -8,8 +8,6 @@ import NotFoundView from 'client/components/views/not-found-view';
 import Utils        from 'client/libs/utils';
 import {BaseStore}  from '../components/views/base-store';
 
-const ssrStore = Utils.getSsrStore<BaseStore>();
-
 /**
  * not found app
  */
@@ -23,7 +21,17 @@ export default class NotFoundApp extends App
     constructor()
     {
         super();
+
+        const ssrStore = Utils.getSsrStore<BaseStore>();
         this.store = ssrStore;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'NotFoundApp';
     }
 
     /**

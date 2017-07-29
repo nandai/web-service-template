@@ -1,17 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React                  from 'react';
-import * as ReactDOM               from 'react-dom/server';
+import * as React       from 'react';
+import * as ReactDOM    from 'react-dom/server';
 
-import Root                        from 'client/components/root';
-import SettingsAccountPasswordView from 'client/components/views/settings-account-password-view';
-import {storeNS}                   from 'client/components/views/settings-account-password-view/store';
-import ClientR                     from 'client/libs/r';
-import {slog}                      from 'libs/slog';
-import SettingsApi                 from 'server/api/settings-api';
-import Utils                       from 'server/libs/utils';
-import {notFound, view}            from './view';
+import ClientApp        from 'client/app/settings-account-password-app';
+import Root             from 'client/components/root';
+import ClientR          from 'client/libs/r';
+import {slog}           from 'libs/slog';
+import SettingsApi      from 'server/api/settings-api';
+import Utils            from 'server/libs/utils';
+import {notFound, view} from './view';
 
 import express = require('express');
 
@@ -40,11 +39,10 @@ export default class SettingsAccountPasswordApp
             const {account} = data;
             if (account.email)
             {
-                const store = storeNS.init({locale, account});
                 const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_PASSWORD, locale);
-                const el = <SettingsAccountPasswordView store={store} />;
-                const contents = ReactDOM.renderToString(<Root view={el} />);
-                res.send(view(title, 'wst.js', contents, store));
+                const app = new ClientApp({locale, account});
+                const contents = ReactDOM.renderToString(<Root app={app} />);
+                res.send(view(title, 'wst.js', contents, app.store));
             }
             else
             {

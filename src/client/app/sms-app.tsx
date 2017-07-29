@@ -14,26 +14,38 @@ import {Response}  from 'libs/response';
 import {slog}      from 'libs/slog';
 import CommonUtils from 'libs/utils';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * sms app
  */
 export default class SmsApp extends App
 {
     private static CLS_NAME = 'SmsView';
-    private store : storeNS.Store;
+    store : storeNS.Store;
+
     private approvalTimerId = 0;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onSmsCodeChange = this.onSmsCodeChange;
         this.store.onSend =          this.onSend;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'SmsApp';
     }
 
     /**

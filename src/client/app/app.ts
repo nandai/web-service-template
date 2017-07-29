@@ -13,6 +13,11 @@ export abstract class App
     render : () => void;
 
     /**
+     * toString
+     */
+    abstract toString() : string;
+
+    /**
      * 初期化
      *
      * @param   params  URLに含まれるパラメータ（Utils.getParamsFromUrl参照）

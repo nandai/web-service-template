@@ -12,26 +12,37 @@ import Utils      from 'client/libs/utils';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * forget app
  */
 export default class ForgetApp extends App
 {
     private static CLS_NAME = 'ForgetApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onEmailChange = this.onEmailChange;
         this.store.onSend =        this.onSend;
         this.store.onBack =        this.onBack;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'ForgetApp';
     }
 
     /**

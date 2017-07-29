@@ -8,8 +8,6 @@ import ForbiddenView from 'client/components/views/forbidden-view';
 import Utils         from 'client/libs/utils';
 import {BaseStore}   from '../components/views/base-store';
 
-const ssrStore = Utils.getSsrStore<BaseStore>();
-
 /**
  * forbidden app
  */
@@ -23,7 +21,17 @@ export default class ForbiddenApp extends App
     constructor()
     {
         super();
+
+        const ssrStore = Utils.getSsrStore<BaseStore>();
         this.store = ssrStore;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'ForbiddenApp';
     }
 
     /**

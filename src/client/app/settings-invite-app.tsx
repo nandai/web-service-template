@@ -12,26 +12,37 @@ import Utils              from 'client/libs/utils';
 import {Response}         from 'libs/response';
 import {slog}             from 'libs/slog';
 
-const ssrStore = Utils.getSsrStore<storeNS.Store>();
-
 /**
  * settings invite app
  */
 export default class SettingsInviteApp extends App
 {
     private static CLS_NAME = 'SettingsInviteApp';
-    private store : storeNS.Store;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
+
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
         this.store = storeNS.init(ssrStore);
         this.store.onEmailChange = this.onEmailChange;
         this.store.onInvite =      this.onInvite;
         this.store.onBack =        this.onBack;
+    }
+
+    /**
+     * toString
+     */
+    toString() : string
+    {
+        return 'SettingsInviteApp';
     }
 
     /**

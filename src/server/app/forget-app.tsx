@@ -4,9 +4,8 @@
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom/server';
 
+import ClientApp     from 'client/app/forget-app';
 import Root          from 'client/components/root';
-import ForgetView    from 'client/components/views/forget-view';
-import {storeNS}     from 'client/components/views/forget-view/store';
 import ClientR       from 'client/libs/r';
 import {slog}        from 'libs/slog';
 import {view}        from './view';
@@ -30,11 +29,10 @@ export default class ForgetApp
     {
         const log = slog.stepIn(ForgetApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
-        const store = storeNS.init({locale});
         const title = ClientR.text(ClientR.GO_FORGET, locale);
-        const el = <ForgetView store={store}/>;
-        const contents = ReactDOM.renderToString(<Root view={el} />);
-        res.send(view(title, 'wst.js', contents, store));
+        const app = new ClientApp({locale});
+        const contents = ReactDOM.renderToString(<Root app={app} />);
+        res.send(view(title, 'wst.js', contents, app.store));
         log.stepOut();
     }
 }
