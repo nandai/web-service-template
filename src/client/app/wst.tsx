@@ -7,7 +7,7 @@ import * as ReactDOM                 from 'react-dom';
 
 import {Response}                    from 'libs/response';
 import {slog}                        from 'libs/slog';
-// ort SettingsApi                   from '../api/settings-api';
+import SettingsApi                   from '../api/settings-api';
 import Root                          from '../components/root';
 import {BaseStore}                   from '../components/views/base-store';
 import History                       from '../libs/history';
@@ -305,12 +305,33 @@ class WstApp
      * connect event
      */
     @bind
-    onConnect()
+    async onConnect()
     {
         const log = slog.stepIn('WstApp', 'onConnect');
-        this.setOnline(true);
-        this.render();
-        log.stepOut();
+
+        try
+        {
+            this.setOnline(true);
+
+            const res : Response.GetAccount = await SettingsApi.getAccount();
+            const {account} = res;
+
+            if (account)
+            {
+                const route = this.currentRoute;
+                const params = Utils.getParamsFromUrl(location.pathname, route.url);
+                await route.app.init(params);
+
+                this.deliverUpdateAccount(account);
+            }
+            else
+            {
+                this.deliverLogout();
+            }
+
+            log.stepOut();
+        }
+        catch (err) {log.w(err.message); log.stepOut();}
     }
 
     /**
@@ -335,18 +356,7 @@ class WstApp
         const log = slog.stepIn('WstApp', 'onNotifyUpdateAccount');
         log.d(JSON.stringify(account, null, 2));
 
-        const isLogin = (this.account === null && account);
-        this.setAccount(account);
-
-        if (isLogin && this.currentRoute.url === '/')
-        {
-            History.pushState('/');
-        }
-        else
-        {
-            this.render();
-        }
-
+        this.deliverUpdateAccount(account);
         log.stepOut();
     }
 
@@ -381,15 +391,44 @@ class WstApp
     onNotifyLogout()
     {
         const log = slog.stepIn('WstApp', 'onNotifyLogout');
-        const route = this.currentRoute;
+        this.deliverLogout();
+        log.stepOut();
+    }
 
-        this.setAccount(null);
+    /**
+     * アカウント更新通知を配信
+     */
+    deliverUpdateAccount(account : Response.Account)
+    {
+        const isLogin = (this.account === null && account);
+        this.setAccount(account);
 
-        if (route.auth) {
+        if (isLogin && this.currentRoute.url === '/')
+        {
             History.pushState('/');
         }
+        else
+        {
+            this.render();
+        }
+    }
 
-        log.stepOut();
+    /**
+     * ログアウト通知を配信
+     */
+    deliverLogout()
+    {
+        const route = this.currentRoute;
+        this.setAccount(null);
+
+        if (route.auth)
+        {
+            History.pushState('/');
+        }
+        else
+        {
+            this.render();
+        }
     }
 }
 
