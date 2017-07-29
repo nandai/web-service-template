@@ -45,8 +45,11 @@ export default class UsersApp extends App
             try
             {
                 const {store} = this;
-                const res : Response.GetUserList = await UserApi.getUserList();
-                store.userList = res.userList;
+                if (store.online)
+                {
+                    const res : Response.GetUserList = await UserApi.getUserList();
+                    store.userList = res.userList;
+                }
                 resolve();
             }
             catch (err) {reject(err);}

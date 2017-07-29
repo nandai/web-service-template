@@ -41,16 +41,24 @@ export default class UserApp extends App
             try
             {
                 const {store} = this;
-                const res : Response.GetUser = await UserApi.getUser({id:params.id});
-
-                if (res.status !== Response.Status.OK)
+                if (store.online)
                 {
-                    reject(new Error('user not found.'));
+                    const res : Response.GetUser = await UserApi.getUser({id:params.id});
+
+                    if (res.status !== Response.Status.OK || res.user === null)
+                    {
+                        reject(new Error('user not found.'));
+                    }
+                    else
+                    {
+                        store.user = res.user;
+                        resolve();
+                    }
                 }
                 else
                 {
-                    store.user = res.user;
-                    resolve();
+                    // TODO:offlineをrejectにするのは変だから別の仕組みが必要
+                    reject(new Error('user not found.'));
                 }
             }
             catch (err) {reject(err);}

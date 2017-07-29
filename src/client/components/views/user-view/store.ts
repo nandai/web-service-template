@@ -8,18 +8,16 @@ export namespace storeNS
 {
     export interface Store extends BaseStore
     {
-        user?    : Response.User;
-        onBack?  : () => void;
+        user?   : Response.User;
+        onBack? : () => void;
     }
 
     export function init(src : Store) : Store
     {
         const store : Store =
         {
-            locale:  src.locale,
-            account: src.account  || null,
-            user:    src.user,
-            onBack:  src.onBack,
+            user:   src.user || null,
+            onBack: src.onBack,
         };
         initBaseStore(store, src);
         return store;
