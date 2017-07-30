@@ -3,16 +3,24 @@
  */
 import * as React from 'react';
 
-export default class ViewContainer extends React.Component<{}, {}>
+interface ViewContainerProps
+{
+    active : boolean;
+}
+
+export default class ViewContainer extends React.Component<ViewContainerProps, {}>
 {
     /**
      * render
      */
     render() : JSX.Element
     {
+        const {props} = this;
+        const style = {display: props.active ? 'flex' : 'none'};
+
         return (
-            <div className="view-container">
-                {this.props.children}
+            <div className="view-container" style={style}>
+                {props.children}
             </div>
         );
     }

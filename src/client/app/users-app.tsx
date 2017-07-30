@@ -70,9 +70,9 @@ export default class UsersApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <UsersView store={this.store} />;
+        return <UsersView key={i} store={this.store} />;
     }
 
     /**

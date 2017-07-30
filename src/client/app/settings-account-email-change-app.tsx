@@ -48,9 +48,9 @@ export default class SettingsAccountEmailChangeApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <SettingsAccountEmailChangeView store={this.store} />;
+        return <SettingsAccountEmailChangeView key={i} store={this.store} />;
     }
 
     /**

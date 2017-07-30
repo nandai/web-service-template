@@ -73,9 +73,9 @@ export default class LoginApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <LoginView store={this.store} />;
+        return <LoginView key={i} store={this.store} />;
     }
 
     /**

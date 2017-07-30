@@ -3,13 +3,14 @@
  */
 import bind              from 'bind-decorator';
 
+import {BaseStore}       from 'client/components/views/base-store';
 import History           from 'client/libs/history';
 import {SocketEventData} from 'client/libs/socket-event-data';
 import {slog}            from 'libs/slog';
 
 export abstract class App
 {
-    active = false;
+    abstract store : BaseStore;
     render : () => void;
 
     /**
@@ -34,7 +35,7 @@ export abstract class App
     /**
      * view
      */
-    abstract view() : JSX.Element;
+    abstract view(i : number) : JSX.Element;
 
     /**
      * ソケットイベント通知

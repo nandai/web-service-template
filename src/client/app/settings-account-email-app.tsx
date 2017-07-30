@@ -57,9 +57,9 @@ export default class SettingsAccountEmailApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <SettingsAccountEmailView store={this.store} />;
+        return <SettingsAccountEmailView key={i} store={this.store} />;
     }
 
     /**

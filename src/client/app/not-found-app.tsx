@@ -13,7 +13,7 @@ import {BaseStore}  from '../components/views/base-store';
  */
 export default class NotFoundApp extends App
 {
-    private store : BaseStore;
+    store : BaseStore;
 
     /**
      * @constructor
@@ -37,8 +37,8 @@ export default class NotFoundApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <NotFoundView store={this.store} />;
+        return <NotFoundView key={i} store={this.store} />;
     }
 }

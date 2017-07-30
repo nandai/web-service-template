@@ -39,7 +39,7 @@ export default class SettingsInviteView extends React.Component<SettingsInviteVi
         const disabled = (store.loading === true);
 
         return (
-            <ViewContainer>
+            <ViewContainer active={store.active}>
                 <Header store={store} />
                 <ViewContents>
                     <form>

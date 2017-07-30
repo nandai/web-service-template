@@ -48,9 +48,9 @@ export default class JoinApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <JoinView store={this.store} />;
+        return <JoinView key={i} store={this.store} />;
     }
 
     /**

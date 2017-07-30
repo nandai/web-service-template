@@ -59,9 +59,9 @@ export default class SettingsAccountPasswordApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <SettingsAccountPasswordView store={this.store} />;
+        return <SettingsAccountPasswordView key={i} store={this.store} />;
     }
 
     /**

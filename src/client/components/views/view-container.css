@@ -1,8 +1,11 @@
 .view-container
 {
-    display: flex;
-    flex-direction: column;
-    width:   100%;
-    height:  100vh;
-    outline: none;
+    position:         absolute;
+/*  display:          flex;*/
+    flex-direction:   column;
+    width:            100%;
+    height:           100vh;
+    outline:          none;
+    background-color: white;
+    transition:       all .5s;
 }

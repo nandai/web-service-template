@@ -48,9 +48,9 @@ export default class SignupConfirmApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <SignupConfirmView store={this.store} />;
+        return <SignupConfirmView key={i} store={this.store} />;
     }
 
     /**

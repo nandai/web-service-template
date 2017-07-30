@@ -37,8 +37,6 @@ import UsersApp                      from './users-app';
 import _ =        require('lodash');
 import socketIO = require('socket.io-client');
 
-const ssrStore = Utils.getSsrStore<BaseStore>();
-
 /**
  * wst app
  */
@@ -85,6 +83,7 @@ class WstApp
 
         this.routes.forEach((route) => route.app.render = this.render);
 
+        const ssrStore = Utils.getSsrStore<BaseStore>();
         this.setAccount(ssrStore.account);
         this.connectSocket();
 
@@ -102,7 +101,7 @@ class WstApp
         const app = route.app;
 
         ReactDOM.render(
-            <Root app={app} effect={this.rootEffect} />,
+            <Root app={app} effect={this.rootEffect} onChangeApp={this.onChangeApp} />,
             document.getElementById('root'));
     }
 
@@ -160,12 +159,7 @@ class WstApp
      */
     private setCurrentRoute(route : Route) : void
     {
-        if (this.currentRoute) {
-            this.currentRoute.app.active = false;
-        }
-
         this.currentRoute = route;
-        this.currentRoute.app.active = true;
     }
 
     /**
@@ -247,6 +241,16 @@ class WstApp
     }
 
     /**
+     * onChangeApp
+     */
+    @bind
+    private onChangeApp(prevApp : App, currentApp : App) : void
+    {
+        prevApp   .store.active = false;
+        currentApp.store.active = true;
+    }
+
+    /**
      * アカウント設定
      */
     private setAccount(account : Response.Account) : void
@@ -256,7 +260,7 @@ class WstApp
 
         this.routes.forEach((route) =>
         {
-            const store : BaseStore = route.app['store'];
+            const store = route.app.store;
             store.account = _.clone(account);
         });
     }
@@ -268,7 +272,7 @@ class WstApp
     {
         this.routes.forEach((route) =>
         {
-            const store : BaseStore = route.app['store'];
+            const store = route.app.store;
             store.online = online;
         });
     }

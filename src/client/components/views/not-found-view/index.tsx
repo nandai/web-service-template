@@ -22,7 +22,7 @@ export default class NotFoundView extends React.Component<NotFoundViewProps, {}>
     {
         const {store} = this.props;
         return (
-            <ViewContainer>
+            <ViewContainer active={store.active}>
                 <Header store={store} />
                 <ViewContents>
                     <div className="not-found-view">

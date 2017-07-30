@@ -9,8 +9,9 @@ import {App}         from 'client/app/app';
 
 interface RootProps
 {
-    app     : App;
-    effect? : string;
+    app          : App;
+    effect?      : string;
+    onChangeApp? : (prevApp : App, currentApp : App) => void;
 }
 
 interface RootState
@@ -45,7 +46,8 @@ export default class Root extends React.Component<RootProps, RootState>
     render() : JSX.Element
     {
         const {state} = this;
-        let className = 'root-transition';
+        // let className = 'root-transition';
+        let className = 'root';
 
         if (state.fade) {
             className += ' fade';
@@ -54,19 +56,26 @@ export default class Root extends React.Component<RootProps, RootState>
         // スクロール位置を保持するため、非アクティブなビューは破棄せず非表示にしておく
         const elements = state.apps.map((app, i) =>
         {
-            const style =
-            {
-                display: (app.toString() === state.currentApp.toString() ? 'flex' : 'none'),
-                flexGrow: 1
-            };
-            return <div key={i} style={style}>{app.view()}</div>;
+            // const style =
+            // {
+            //     display: (app.toString() === state.currentApp.toString() ? 'flex' : 'none'),
+            //     flexGrow: 1
+            // };
+            // return <div key={i} style={style}>{app.view(i)}</div>;
+            return app.view(i);
         });
 
+        // return (
+        //     <div className="root" tabIndex={0}>
+        //         <div className={className} ref="root" onTransitionEnd={this.onTransitionEnd}>
+        //             {elements}
+        //         </div>
+        //     </div>
+        // );
+
         return (
-            <div className="root" tabIndex={0}>
-                 <div className={className} ref="root" onTransitionEnd={this.onTransitionEnd}>
-                    {elements}
-                 </div>
+            <div className={className} tabIndex={0} ref="root" onTransitionEnd={this.onTransitionEnd}>
+                {elements}
             </div>
         );
     }
@@ -78,7 +87,10 @@ export default class Root extends React.Component<RootProps, RootState>
     {
         if (this.state.currentApp.toString() === nextProps.app.toString() || nextProps.effect === undefined || nextProps.effect === 'none')
         {
-            const newApps = this.addOrReplaceApp(nextProps.app);
+            const nextApp = nextProps.app;
+            this.props.onChangeApp(this.state.currentApp, nextApp);
+
+            const newApps = this.addOrReplaceApp(nextApp);
             const newState : RootState =
             {
                 apps:       newApps,
@@ -104,15 +116,18 @@ export default class Root extends React.Component<RootProps, RootState>
     onTransitionEnd(e : React.TransitionEvent<Element>)
     {
         const {state} = this;
+        const {nextApp} = state;
         const el = ReactDOM.findDOMNode(this.refs['root']);
 
-        if (el === e.target && state.nextApp)
+        if (el === e.target && nextApp)
         {
-            const newApps = this.addOrReplaceApp(state.nextApp);
+            this.props.onChangeApp(state.currentApp, nextApp);
+
+            const newApps = this.addOrReplaceApp(nextApp);
             const newState : RootState =
             {
                 apps:       newApps,
-                currentApp: state.nextApp,
+                currentApp: nextApp,
                 nextApp:    null
             };
             this.setState(newState);

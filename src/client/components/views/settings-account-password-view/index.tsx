@@ -31,7 +31,7 @@ export default class SettingsAccountPasswordView extends React.Component<Setting
         const {message} = response;
 
         return (
-            <ViewContainer>
+            <ViewContainer active={store.active}>
                 <Header store={store} />
                 <ViewContents>
                     <form>

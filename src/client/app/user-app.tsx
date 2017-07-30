@@ -79,9 +79,9 @@ export default class UserApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <UserView store={this.store} />;
+        return <UserView key={i} store={this.store} />;
     }
 
     /**
@@ -103,7 +103,7 @@ export default class UserApp extends App
                     break;
                 }
 
-                if (this.active && store.user.name !== user.name)
+                if (store.active && store.user.name !== user.name)
                 {
                     const id = (user.name ? user.name : user.id.toString());
                     History.replaceState(`/users/${id}`);

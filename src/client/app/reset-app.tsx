@@ -49,9 +49,9 @@ export default class ResetApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <ResetView store={this.store} />;
+        return <ResetView key={i} store={this.store} />;
     }
 
     /**

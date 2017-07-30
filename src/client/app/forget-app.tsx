@@ -57,9 +57,9 @@ export default class ForgetApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <ForgetView store={this.store} />;
+        return <ForgetView key={i} store={this.store} />;
     }
 
     /**

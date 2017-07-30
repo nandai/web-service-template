@@ -63,9 +63,9 @@ export default class SettingsAccountApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <SettingsAccountView store={this.store} />;
+        return <SettingsAccountView key={i} store={this.store} />;
     }
 
     /**

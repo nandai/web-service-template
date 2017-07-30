@@ -65,9 +65,9 @@ export default class SignupApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <SignupView store={this.store} />;
+        return <SignupView key={i} store={this.store} />;
     }
 
     /**

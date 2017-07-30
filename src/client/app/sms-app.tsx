@@ -60,13 +60,13 @@ export default class SmsApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
         if (this.store.onSend && this.approvalTimerId === 0) {
             this.setPollingTimer();
         }
 
-        return <SmsView store={this.store} />;
+        return <SmsView key={i} store={this.store} />;
     }
 
     /**

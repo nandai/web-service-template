@@ -57,9 +57,9 @@ export default class SettingsInviteApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <SettingsInviteView store={this.store} />;
+        return <SettingsInviteView key={i} store={this.store} />;
     }
 
     /**

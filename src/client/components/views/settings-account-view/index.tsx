@@ -42,7 +42,7 @@ export default class SettingsAccountView extends React.Component<SettingsAccount
         ];
 
         return (
-            <ViewContainer>
+            <ViewContainer active={store.active}>
                 <Header store={store} />
                 <ViewContents>
                     <form>

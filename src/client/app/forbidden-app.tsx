@@ -13,7 +13,7 @@ import {BaseStore}   from '../components/views/base-store';
  */
 export default class ForbiddenApp extends App
 {
-    private store : BaseStore;
+    store : BaseStore;
 
     /**
      * @constructor
@@ -37,8 +37,8 @@ export default class ForbiddenApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <ForbiddenView store={this.store} />;
+        return <ForbiddenView key={i} store={this.store} />;
     }
 }

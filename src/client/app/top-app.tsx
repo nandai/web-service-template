@@ -59,9 +59,9 @@ export default class TopApp extends App
     /**
      * view
      */
-    view() : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return <TopView store={this.store} />;
+        return <TopView key={i} store={this.store} />;
     }
 
     /**

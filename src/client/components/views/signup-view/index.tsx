@@ -39,7 +39,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
         const disabled = (store.loading === true);
 
         return (
-            <ViewContainer>
+            <ViewContainer active={store.active}>
                 <Header store={store} />
                 <ViewContents>
                     <form>

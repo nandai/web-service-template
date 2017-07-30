@@ -1,22 +1,31 @@
 .root
 {
+    /*
     display:  flex;
     flex-direction: column;
-    width:    100%;
+    width:    100%;*/
     height:   100vh;
+    /*
     outline:  none;
+    */
     overflow: hidden;
 
+    /*
     & .root-transition
     {
+    */
         display:    flex;
+        /*
         flex-grow:  1;
+        */
         opacity:    1;
-        transition: all .3s;
+        transition: all .5s;
 
         &.fade
         {
             opacity: 0;
         }
+    /*
     }
+    */
 }
