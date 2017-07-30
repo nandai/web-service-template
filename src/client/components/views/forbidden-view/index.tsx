@@ -22,7 +22,7 @@ export default class ForbiddenView extends React.Component<ForbiddenViewProps, {
     {
         const {store} = this.props;
         return (
-            <ViewContainer active={store.active}>
+            <ViewContainer store={store}>
                 <Header store={store} />
                 <ViewContents>
                     <div className="forbidden-view">

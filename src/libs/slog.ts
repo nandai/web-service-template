@@ -58,8 +58,8 @@ export namespace slog
             this.client.on('connect', (connection) =>
             {
                 self.ws = connection;
-                self.ws.on('error', callback);
-                self.ws.on('close', callback);
+                self.ws.on('error', this.errorCallback);
+                self.ws.on('close', this.closeCallback);
 
                 self.readyState = OPEN;
                 callback();

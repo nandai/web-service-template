@@ -1,17 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import bind          from 'bind-decorator';
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom';
+import bind       from 'bind-decorator';
+import * as React from 'react';
 
-import {App}         from 'client/app/app';
+import {App}      from 'client/app/app';
 
 interface RootProps
 {
     app          : App;
     effect?      : string;
-    onChangeApp? : (prevApp : App, currentApp : App) => void;
+    onActiveApp? : (app : App) => void;
 }
 
 interface RootState
@@ -19,7 +18,6 @@ interface RootState
     apps?       : App[];
     currentApp? : App;
     nextApp?    : App;
-    fade?       : boolean;
 }
 
 export default class Root extends React.Component<RootProps, RootState>
@@ -35,8 +33,7 @@ export default class Root extends React.Component<RootProps, RootState>
         {
             apps:      [props.app],
             currentApp: props.app,
-            nextApp:    null,
-            fade:       false
+            nextApp:    null
         };
     }
 
@@ -46,35 +43,14 @@ export default class Root extends React.Component<RootProps, RootState>
     render() : JSX.Element
     {
         const {state} = this;
-        // let className = 'root-transition';
-        let className = 'root';
-
-        if (state.fade) {
-            className += ' fade';
-        }
-
-        // スクロール位置を保持するため、非アクティブなビューは破棄せず非表示にしておく
         const elements = state.apps.map((app, i) =>
         {
-            // const style =
-            // {
-            //     display: (app.toString() === state.currentApp.toString() ? 'flex' : 'none'),
-            //     flexGrow: 1
-            // };
-            // return <div key={i} style={style}>{app.view(i)}</div>;
+            app.store.onTransitionEnd = this.onTransitionEnd;   // TODO:仮
             return app.view(i);
         });
 
-        // return (
-        //     <div className="root" tabIndex={0}>
-        //         <div className={className} ref="root" onTransitionEnd={this.onTransitionEnd}>
-        //             {elements}
-        //         </div>
-        //     </div>
-        // );
-
         return (
-            <div className={className} tabIndex={0} ref="root" onTransitionEnd={this.onTransitionEnd}>
+            <div className='root' tabIndex={0}>
                 {elements}
             </div>
         );
@@ -85,12 +61,13 @@ export default class Root extends React.Component<RootProps, RootState>
      */
     componentWillReceiveProps(nextProps : RootProps)
     {
+        const nextApp = nextProps.app;
+        const newApps = this.addOrReplaceApp(nextApp);
+
         if (this.state.currentApp.toString() === nextProps.app.toString() || nextProps.effect === undefined || nextProps.effect === 'none')
         {
-            const nextApp = nextProps.app;
-            this.props.onChangeApp(this.state.currentApp, nextApp);
+            this.props.onActiveApp(nextApp);
 
-            const newApps = this.addOrReplaceApp(nextApp);
             const newState : RootState =
             {
                 apps:       newApps,
@@ -102,8 +79,8 @@ export default class Root extends React.Component<RootProps, RootState>
         {
             const newState : RootState =
             {
-                nextApp: nextProps.app,
-                fade:    true
+                apps:       newApps,
+                nextApp
             };
             this.setState(newState);
         }
@@ -113,27 +90,20 @@ export default class Root extends React.Component<RootProps, RootState>
      * onTransitionEnd
      */
     @bind
-    onTransitionEnd(e : React.TransitionEvent<Element>)
+    onTransitionEnd()
     {
         const {state} = this;
         const {nextApp} = state;
-        const el = ReactDOM.findDOMNode(this.refs['root']);
 
-        if (el === e.target && nextApp)
+        if (nextApp)
         {
-            this.props.onChangeApp(state.currentApp, nextApp);
-
-            const newApps = this.addOrReplaceApp(nextApp);
+            this.props.onActiveApp(nextApp);
             const newState : RootState =
             {
-                apps:       newApps,
                 currentApp: nextApp,
                 nextApp:    null
             };
             this.setState(newState);
-
-            // ワンテンポずらす（そうしないとエフェクトが発動しないため）
-            setTimeout(() => this.setState({fade:false}), 0);
         }
     }
 

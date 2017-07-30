@@ -101,7 +101,7 @@ class WstApp
         const app = route.app;
 
         ReactDOM.render(
-            <Root app={app} effect={this.rootEffect} onChangeApp={this.onChangeApp} />,
+            <Root app={app} effect={this.rootEffect} onActiveApp={this.onActiveApp} />,
             document.getElementById('root'));
     }
 
@@ -159,7 +159,16 @@ class WstApp
      */
     private setCurrentRoute(route : Route) : void
     {
-        this.currentRoute = route;
+        if (this.currentRoute === null)
+        {
+            this.currentRoute = route;
+        }
+        else
+        {
+            this.currentRoute.app.store.active = false;
+            this.currentRoute = route;
+            this.currentRoute.app.store.active = false;
+        }
     }
 
     /**
@@ -241,13 +250,12 @@ class WstApp
     }
 
     /**
-     * onChangeApp
+     * onActiveApp
      */
     @bind
-    private onChangeApp(prevApp : App, currentApp : App) : void
+    private onActiveApp(app : App) : void
     {
-        prevApp   .store.active = false;
-        currentApp.store.active = true;
+        app.store.active = true;
     }
 
     /**

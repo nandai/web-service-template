@@ -31,7 +31,7 @@ export default class ResetView extends React.Component<ResetViewProps, {}>
         const {message} = response;
 
         return (
-            <ViewContainer active={store.active}>
+            <ViewContainer store={store}>
                 <Header store={store} />
                 <ViewContents>
                     <form>

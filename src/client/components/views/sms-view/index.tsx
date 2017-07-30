@@ -30,7 +30,7 @@ export default class SmsView extends React.Component<SmsViewProps, {}>
         const {message} = response;
 
         return (
-            <ViewContainer active={store.active}>
+            <ViewContainer store={store}>
                 <Header store={store} />
                 <ViewContents>
                     <form>

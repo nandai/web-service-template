@@ -39,7 +39,7 @@ export default class SettingsAccountEmailView extends React.Component<SettingsAc
         const disabled = (store.loading === true);
 
         return (
-            <ViewContainer active={store.active}>
+            <ViewContainer store={store}>
                 <Header store={store} />
                 <ViewContents>
                     <form>
