@@ -1,40 +1,26 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import bind                          from 'bind-decorator';
-import * as React                    from 'react';
-import * as ReactDOM                 from 'react-dom';
+import bind                 from 'bind-decorator';
+import * as React           from 'react';
+import * as ReactDOM        from 'react-dom';
 
-import {Response}                    from 'libs/response';
-import {slog}                        from 'libs/slog';
-import SettingsApi                   from '../api/settings-api';
-import Root                          from '../components/root';
-import {BaseStore}                   from '../components/views/base-store';
-import History                       from '../libs/history';
-import R                             from '../libs/r';
-import {SocketEventData}             from '../libs/socket-event-data';
-import Utils                         from '../libs/utils';
-import {App}                         from './app';
-import ForbiddenApp                  from './forbidden-app';
-import ForgetApp                     from './forget-app';
-import JoinApp                       from './join-app';
-import LoginApp                      from './login-app';
-import NotFoundApp                   from './not-found-app';
-import ResetApp                      from './reset-app';
-import SettingsAccountApp            from './settings-account-app';
-import SettingsAccountEmailApp       from './settings-account-email-app';
-import SettingsAccountEmailChangeApp from './settings-account-email-change-app';
-import SettingsAccountPasswordApp    from './settings-account-password-app';
-import SettingsApp                   from './settings-app';
-import SettingsInviteApp             from './settings-invite-app';
-import SignupApp                     from './signup-app';
-import SignupConfirmApp              from './signup-confirm-app';
-import SmsApp                        from './sms-app';
-import TopApp                        from './top-app';
-import UserApp                       from './user-app';
-import UsersApp                      from './users-app';
+import {Response}           from 'libs/response';
+import {slog}               from 'libs/slog';
+import SettingsApi          from '../api/settings-api';
+import Root                 from '../components/root';
+import {BaseStore}          from '../components/views/base-store';
+import History, {Direction} from '../libs/history';
+import R                    from '../libs/r';
+import {SocketEventData}    from '../libs/socket-event-data';
+import Utils                from '../libs/utils';
+import {App}                from './app';
+import {Data}               from './wst/data';
+import {initRoutes}         from './wst/initRoutes';
+import {setAccount}         from './wst/setAccount';
+import {setOnline}          from './wst/setOnline';
+import {updateCurrentRoute} from './wst/updateCurrentRoute';
 
-import _ =        require('lodash');
 import socketIO = require('socket.io-client');
 
 /**
@@ -42,10 +28,13 @@ import socketIO = require('socket.io-client');
  */
 class WstApp
 {
-    private currentRoute : Route =   null;
-    private routes       : Route[] = null;
-    private rootEffect   : string;
-    private account      : Response.Account;
+    data : Data =
+    {
+        currentRoute: null,
+        routes:       null,
+        account:      null,
+        rootEffect:   null
+    };
 
     /**
      * 初期化
@@ -53,38 +42,14 @@ class WstApp
     init()
     {
         const log = slog.stepIn('WstApp', 'init');
-        const locale = Utils.getLocale();
-        const loginApp =    new LoginApp();
-        const notFoundApp = new NotFoundApp();
+        const {data} = this;
 
-        this.routes =
-        [
-            {url:'/',                              app:new TopApp(),                        title:R.text(R.TOP,                            locale), effect:'fade', auth:true},
-            {url:'/',                              app:loginApp,                            title:R.text(R.LOGIN,                          locale), effect:'fade'},
-            {url:'/',                              app:new SmsApp(),                        title:R.text(R.AUTH_SMS,                       locale), effect:'fade', query:true},
-            {url:'/signup',                        app:new SignupApp(),                     title:R.text(R.SIGNUP,                         locale), effect:'fade'},
-            {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                 locale), effect:'fade', query:true},
-            {url:'/join',                          app:new JoinApp(),                       title:R.text(R.JOIN,                           locale), effect:'fade', query:true},
-            {url:'/forget',                        app:new ForgetApp(),                     title:R.text(R.GO_FORGET,                      locale), effect:'fade'},
-            {url:'/reset',                         app:new ResetApp(),                      title:R.text(R.RESET_PASSWORD,                 locale), effect:'fade', query:true},
-            {url:'/settings',                      app:new SettingsApp(),                   title:R.text(R.SETTINGS,                       locale), effect:'fade', auth:true},
-            {url:'/settings/account',              app:new SettingsAccountApp(),            title:R.text(R.SETTINGS_ACCOUNT,               locale), effect:'none', auth:true},
-            {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,         locale), effect:'none', auth:true},
-            {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE,  locale), effect:'none', query:true},
-            {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,      locale), effect:'none', auth:true},
-            {url:'/settings/invite',               app:new SettingsInviteApp(),             title:R.text(R.SETTINGS_INVITE,                locale), effect:'fade', auth:true},
-            {url:'/users/:id',                     app:new UserApp(),                       title:R.text(R.USER,                           locale), effect:'fade'},
-            {url:'/users',                         app:new UsersApp(),                      title:R.text(R.USER_LIST,                      locale), effect:'fade'},
-            {url:'/about',                         app:loginApp,                            title:R.text(R.ABOUT,                          locale), effect:'fade'},
-            {url:'403',                            app:new ForbiddenApp(),                  title:R.text(R.FORBIDDEN,                      locale), effect:'fade'},
-            {url:'404',                            app:notFoundApp,                         title:R.text(R.NOT_FOUND,                      locale), effect:'fade'},
-            {url:'404',                            app:notFoundApp,                         title:R.text(R.NOT_FOUND,                      locale), effect:'fade', query:true}
-        ];
-
-        this.routes.forEach((route) => route.app.render = this.render);
+        initRoutes(data);
+        data.routes.forEach((route) => route.app.render = this.render);
 
         const ssrStore = Utils.getSsrStore<BaseStore>();
-        this.setAccount(ssrStore.account);
+        setAccount(data, ssrStore.account);
+
         this.connectSocket();
 
         History.setCallback(this.onHistory);
@@ -97,156 +62,13 @@ class WstApp
     @bind
     render() : void
     {
-        const route = this.currentRoute;
+        const {data} = this;
+        const route = data.currentRoute;
         const app = route.app;
 
         ReactDOM.render(
-            <Root app={app} effect={this.rootEffect} onActiveApp={this.onActiveApp} />,
+            <Root app={app} effect={data.rootEffect} onActiveApp={this.onActiveApp} />,
             document.getElementById('root'));
-    }
-
-    /**
-     * カレントRoute更新
-     *
-     * @param   url     URL
-     * @param   isInit  app.init()をコールするかどうか。初回（DOMContentLoaded時）は不要（SSR Storeを使用してレンダリングするため）
-     */
-    updateCurrentRoute(url : string, isInit : boolean, message? : string)
-    {
-        const log = slog.stepIn('WstApp', 'updateCurrentRoute');
-        return new Promise(async (resolve : () => void) =>
-        {
-            let routeResult = this.getRoute(url);
-            if (routeResult.route === null) {
-                routeResult = this.getRoute('404');
-            }
-
-            let route =    routeResult.route;
-            const params = routeResult.params;
-
-            if (this.currentRoute !== route)
-            {
-                log.d(route.title);
-                if (isInit)
-                {
-                    try
-                    {
-                        await route.app.init(params, message);
-                        this.setCurrentRoute(route);
-                    }
-                    catch (err)
-                    {
-                        console.warn(err.message);
-                        routeResult = this.getRoute('404');
-                        route = routeResult.route;
-                        this.setCurrentRoute(route);
-                    }
-                }
-                else
-                {
-                    this.setCurrentRoute(route);
-                }
-            }
-
-            document.title = route.title;
-            log.stepOut();
-            resolve();
-        });
-    }
-
-    /**
-     * カレントRoute設定
-     */
-    private setCurrentRoute(route : Route) : void
-    {
-        if (this.currentRoute === null)
-        {
-            this.currentRoute = route;
-        }
-        else
-        {
-            this.currentRoute.app.store.active = false;
-            this.currentRoute = route;
-            this.currentRoute.app.store.active = false;
-        }
-    }
-
-    /**
-     * route取得
-     */
-    private getRoute(url : string)
-    {
-        let route : Route = null;
-        let params;
-
-        for (const _route of this.routes)
-        {
-            params = Utils.getParamsFromUrl(url, _route.url);
-
-            if (params === null) {
-                continue;
-            }
-
-            if (_route.auth && this.account === null) {
-                continue;
-            }
-
-            if (_route.query !== true && location.search === '')
-            {
-                route = _route;
-                break;
-            }
-
-            if (_route.query === true && location.search !== '')
-            {
-                route = _route;
-                break;
-            }
-        }
-
-        return {route, params};
-    }
-
-    /**
-     * pushstate, popstate event
-     */
-    @bind
-    private onHistory(direction : string, message? : string)
-    {
-        const log = slog.stepIn('WstApp', 'onHistory');
-        return new Promise(async (resolve) =>
-        {
-            // アカウント情報の再取得と再設定
-            // try
-            // {
-            //     const res : Response.GetAccount = await SettingsApi.getAccount();
-            //     this.setAccount(res.account);
-            // }
-            // catch (err)
-            // {
-            //     console.warn(err.message);
-            // }
-            this.setAccount(this.account);
-
-            // 画面遷移時のエフェクト設定
-            if (direction === 'back')
-            {
-                // 戻る場合は遷移元のエフェクトを使用
-                this.rootEffect = this.currentRoute.effect;
-            }
-
-            await this.updateCurrentRoute(location.pathname, true, message);
-
-            if (direction === 'forward')
-            {
-                // 進む場合は繊維先のエフェクトを使用
-                this.rootEffect = this.currentRoute.effect;
-            }
-
-            this.render();
-            log.stepOut();
-            resolve();
-        });
     }
 
     /**
@@ -259,29 +81,37 @@ class WstApp
     }
 
     /**
-     * アカウント設定
+     * pushstate, popstate event
      */
-    private setAccount(account : Response.Account) : void
+    @bind
+    private onHistory(direction : Direction, message? : string)
     {
-        account = account || null;
-        this.account = account;
-
-        this.routes.forEach((route) =>
+        const log = slog.stepIn('WstApp', 'onHistory');
+        return new Promise(async (resolve) =>
         {
-            const store = route.app.store;
-            store.account = _.clone(account);
-        });
-    }
+            const {data} = this;
 
-    /**
-     * オンライン設定
-     */
-    private setOnline(online : boolean) : void
-    {
-        this.routes.forEach((route) =>
-        {
-            const store = route.app.store;
-            store.online = online;
+            // アカウント情報の再取得と再設定
+            // setAccount(this.data, this.account);
+
+            // 画面遷移時のエフェクト設定
+            if (direction === 'back')
+            {
+                // 戻る場合は遷移元のエフェクトを使用
+                data.rootEffect = data.currentRoute.effect;
+            }
+
+            await updateCurrentRoute(data, location.pathname, true, message);
+
+            if (direction === 'forward')
+            {
+                // 進む場合は繊維先のエフェクトを使用
+                data.rootEffect = data.currentRoute.effect;
+            }
+
+            this.render();
+            log.stepOut();
+            resolve();
         });
     }
 
@@ -290,7 +120,7 @@ class WstApp
      */
     private notifySocketEvent(data : SocketEventData) : void
     {
-        this.routes.forEach((route) =>
+        this.data.routes.forEach((route) =>
         {
             route.app.notifySocketEvent(data);
         });
@@ -317,20 +147,21 @@ class WstApp
      * connect event
      */
     @bind
-    async onConnect()
+    private async onConnect()
     {
         const log = slog.stepIn('WstApp', 'onConnect');
 
         try
         {
-            this.setOnline(true);
+            const {data} = this;
+            setOnline(data, true);
 
             const res : Response.GetAccount = await SettingsApi.getAccount();
             const {account} = res;
 
             if (account)
             {
-                const route = this.currentRoute;
+                const route = data.currentRoute;
                 const params = Utils.getParamsFromUrl(location.pathname, route.url);
                 await route.app.init(params);
 
@@ -350,10 +181,10 @@ class WstApp
      * disconnect event
      */
     @bind
-    onDisconnect(reason : string)
+    private onDisconnect(reason : string) : void
     {
         const log = slog.stepIn('WstApp', 'onDisconnect');
-        this.setOnline(false);
+        setOnline(this.data, false);
         this.render();
         log.w(reason);
         log.stepOut();
@@ -363,7 +194,7 @@ class WstApp
      * アカウント更新通知
      */
     @bind
-    onNotifyUpdateAccount(account : Response.Account)
+    private onNotifyUpdateAccount(account : Response.Account) : void
     {
         const log = slog.stepIn('WstApp', 'onNotifyUpdateAccount');
         log.d(JSON.stringify(account, null, 2));
@@ -376,7 +207,7 @@ class WstApp
      * ユーザー更新通知
      */
     @bind
-    onNotifyUpdateUser(user : Response.User)
+    private onNotifyUpdateUser(user : Response.User) : void
     {
         const log = slog.stepIn('WstApp', 'onNotifyUpdateUser');
         this.notifySocketEvent({notifyUpdateUser:user});
@@ -388,7 +219,7 @@ class WstApp
      * ユーザー削除通知
      */
     @bind
-    onNotifyDeleteUser(userId : number)
+    private onNotifyDeleteUser(userId : number) : void
     {
         const log = slog.stepIn('WstApp', 'onNotifyDeleteUser');
         this.notifySocketEvent({notifyDeleteUser:{id:userId}});
@@ -400,7 +231,7 @@ class WstApp
      * ログアウト通知
      */
     @bind
-    onNotifyLogout()
+    private onNotifyLogout() : void
     {
         const log = slog.stepIn('WstApp', 'onNotifyLogout');
         this.deliverLogout();
@@ -410,12 +241,13 @@ class WstApp
     /**
      * アカウント更新通知を配信
      */
-    deliverUpdateAccount(account : Response.Account)
+    private deliverUpdateAccount(account : Response.Account) : void
     {
-        const isLogin = (this.account === null && account);
-        this.setAccount(account);
+        const {data} = this;
+        const isLogin = (data.account === null && account);
+        setAccount(data, account);
 
-        if (isLogin && this.currentRoute.url === '/')
+        if (isLogin && data.currentRoute.url === '/')
         {
             History.pushState('/');
         }
@@ -428,10 +260,11 @@ class WstApp
     /**
      * ログアウト通知を配信
      */
-    deliverLogout()
+    private deliverLogout() : void
     {
-        const route = this.currentRoute;
-        this.setAccount(null);
+        const {data} = this;
+        const route = data.currentRoute;
+        setAccount(data, null);
 
         if (route.auth)
         {
@@ -445,20 +278,7 @@ class WstApp
 }
 
 /**
- * URL route
- */
-interface Route
-{
-    url    : string;
-    app    : App;
-    title  : string;
-    effect : string;
-    query? : boolean;
-    auth?  : boolean;
-}
-
-/**
- * onLoad
+ * DOMContentLoaded
  */
 window.addEventListener('DOMContentLoaded', async () =>
 {
@@ -482,7 +302,7 @@ window.addEventListener('DOMContentLoaded', async () =>
     const app = new WstApp();
     app.init();
 
-    await app.updateCurrentRoute(url, false);
+    await updateCurrentRoute(app.data, url, false);
     app.render();
     log.stepOut();
 });
