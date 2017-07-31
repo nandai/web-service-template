@@ -87,6 +87,7 @@ export default class LoginApp extends App
             &&   current !== prev)
             {
                 store.active = true;
+                store.show[0] = true;
             }
         }
 

@@ -8,6 +8,8 @@ import * as ReactDOM from 'react-dom';
 import {BaseStore}   from 'client/components/views/base-store';
 import {slog}        from 'libs/slog';
 
+import _ = require('lodash');
+
 interface ViewContainerProps
 {
     store : BaseStore;
@@ -22,8 +24,20 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
     {
         const {props} = this;
         const {store} = props;
-        const {active, effect} = store;
-        const style = styles[effect][active ? 'active' : 'inactive'];
+        const {active, show, effect} = store;
+        let style : {} = _.clone(styles[effect][active ? 'active' : 'inactive']);
+
+        if (show[1] === false) {
+            style['display'] = 'none';
+        }
+
+        if (show[0] === false && show[1] === true) {
+            style =
+            {
+                display: 'flex',
+                opacity: 0
+            };
+        }
 
         return (
             <div className="view-container" style={style} onTransitionEnd={this.onTransitionEnd}>

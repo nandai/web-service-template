@@ -9,7 +9,7 @@ import {App}      from 'client/app/app';
 interface RootProps
 {
     app          : App;
-    onActiveApp? : (app : App) => void;
+    onActiveApp? : (prevApp : App, nextApp : App) => void;
 }
 
 interface RootState
@@ -73,11 +73,11 @@ export default class Root extends React.Component<RootProps, RootState>
     onTransitionEnd()
     {
         const {state} = this;
-        const {nextApp} = state;
+        const {currentApp, nextApp} = state;
 
         if (nextApp)
         {
-            this.props.onActiveApp(nextApp);
+            this.props.onActiveApp(currentApp, nextApp);
             const newState : RootState =
             {
                 currentApp: nextApp,

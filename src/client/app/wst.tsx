@@ -75,9 +75,14 @@ class WstApp
      * onActiveApp
      */
     @bind
-    private onActiveApp(app : App) : void
+    private onActiveApp(prevApp : App, nextApp : App) : void
     {
-        app.store.active = true;
+        prevApp.store.show[0] = true;
+        prevApp.store.show[1] = false;
+
+        nextApp.store.active =  true;
+        nextApp.store.show[0] = true;
+        nextApp.store.show[1] = true;
     }
 
     /**

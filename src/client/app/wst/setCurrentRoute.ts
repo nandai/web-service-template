@@ -16,7 +16,10 @@ export function setCurrentRoute(data : Data, route : Route) : void
     else
     {
         data.currentRoute.app.store.active = false;
+
+        route.app.store.active = false;
+        route.app.store.show[0] = false;
+        route.app.store.show[1] = true;
         data.currentRoute = route;
-        data.currentRoute.app.store.active = false;
     }
 }
