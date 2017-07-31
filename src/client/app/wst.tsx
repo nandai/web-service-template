@@ -77,12 +77,10 @@ class WstApp
     @bind
     private onActiveApp(prevApp : App, nextApp : App) : void
     {
-        prevApp.store.show[0] = true;
-        prevApp.store.show[1] = false;
+        prevApp.store.displayStatus = 'hidden';
 
         nextApp.store.active =  true;
-        nextApp.store.show[0] = true;
-        nextApp.store.show[1] = true;
+        nextApp.store.displayStatus = 'showing';
     }
 
     /**

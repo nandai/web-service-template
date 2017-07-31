@@ -24,14 +24,19 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
     {
         const {props} = this;
         const {store} = props;
-        const {active, show, effect} = store;
+        const {active, displayStatus, effect} = store;
         let style : {} = _.clone(styles[effect][active ? 'active' : 'inactive']);
 
-        if (show[1] === false) {
+        if (displayStatus === 'hidden')
+        {
+            // 非アクティブ化が完了しているので非表示にする
             style['display'] = 'none';
         }
 
-        if (show[0] === false && show[1] === true) {
+        if (displayStatus === 'preparation')
+        {
+            // アクティブ化するためにまずはdisplayをnoneからflexにして描画し、次の描画でエフェクト開始
+            // （displayの変更と同時にエフェクトを行うと即完了状態になってしまう）
             style =
             {
                 display: 'flex',

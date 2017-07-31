@@ -3,8 +3,6 @@
  */
 import {Response} from 'libs/response';
 
-import _ = require('lodash');
-
 export type Effect = 'fade' | 'slide' | 'none';
 
 export interface BaseStore
@@ -13,7 +11,7 @@ export interface BaseStore
     account?         : Response.Account;
     online?          : boolean;
     active?          : boolean;
-    show?            : boolean[];
+    displayStatus?   : 'hidden' | 'preparation' | 'showing' | 'displayed';
     effect?          : Effect;
     prevPathName?    : string;
     onTransitionEnd? : () => void;
@@ -23,9 +21,9 @@ export function initBaseStore(dest : BaseStore, src : BaseStore) : void
 {
     dest.locale =          src.locale;
     dest.account =         src.account || null;
-    dest.online =         (src.online !== undefined ? src.online : true);
-    dest.active =         (src.active !== undefined ? src.active : true);
-    dest.show =           (src.show   !== undefined ? _.clone(src.show) : [true, true]);
+    dest.online =         (src.online        !== undefined ? src.online        : true);
+    dest.active =         (src.active        !== undefined ? src.active        : true);
+    dest.displayStatus =  (src.displayStatus !== undefined ? src.displayStatus : 'displayed');
 //  dest.effect =         (src.effect !== undefined ? src.effect : 'none');
     dest.onTransitionEnd = null;
 }
