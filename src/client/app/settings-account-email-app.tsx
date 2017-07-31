@@ -68,7 +68,7 @@ export default class SettingsAccountEmailApp extends App
     @bind
     private onEmailChange(value : string) : void
     {
-        this.store.account.email = value;
+        this.store.editAccount.email = value;
         this.render();
     }
 

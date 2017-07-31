@@ -27,6 +27,7 @@ export namespace storeNS
     {
         const store : Store =
         {
+            effect:              'fade',
             email:               '',
             password:            '',
             message:             src.message,

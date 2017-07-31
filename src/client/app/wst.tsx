@@ -33,7 +33,7 @@ class WstApp
         currentRoute: null,
         routes:       null,
         account:      null,
-        rootEffect:   null
+        pathName:     location.pathname
     };
 
     /**
@@ -67,7 +67,7 @@ class WstApp
         const app = route.app;
 
         ReactDOM.render(
-            <Root app={app} effect={data.rootEffect} onActiveApp={this.onActiveApp} />,
+            <Root app={app} onActiveApp={this.onActiveApp} />,
             document.getElementById('root'));
     }
 
@@ -84,30 +84,25 @@ class WstApp
      * pushstate, popstate event
      */
     @bind
-    private onHistory(direction : Direction, message? : string)
+    private onHistory(_direction : Direction, message? : string)
     {
         const log = slog.stepIn('WstApp', 'onHistory');
         return new Promise(async (resolve) =>
         {
             const {data} = this;
 
+            data.routes.forEach((route) =>
+            {
+                const store = route.app.store;
+                store.prevPathName = data.pathName;
+            });
+
+            data.pathName = location.pathname;
+
             // アカウント情報の再取得と再設定
             // setAccount(this.data, this.account);
 
-            // 画面遷移時のエフェクト設定
-            if (direction === 'back')
-            {
-                // 戻る場合は遷移元のエフェクトを使用
-                data.rootEffect = data.currentRoute.effect;
-            }
-
             await updateCurrentRoute(data, location.pathname, true, message);
-
-            if (direction === 'forward')
-            {
-                // 進む場合は繊維先のエフェクトを使用
-                data.rootEffect = data.currentRoute.effect;
-            }
 
             this.render();
             log.stepOut();

@@ -75,7 +75,22 @@ export default class LoginApp extends App
      */
     view(i : number) : JSX.Element
     {
-        return <LoginView key={i} store={this.store} />;
+        const {store} = this;
+
+        if (typeof location !== 'undefined')
+        {
+            const prev = store.prevPathName;
+            const current = location.pathname;
+
+            if ((prev    === '/' || prev    === '/about')
+            &&  (current === '/' || current === '/about')
+            &&   current !== prev)
+            {
+                store.active = true;
+            }
+        }
+
+        return <LoginView key={i} store={store} />;
     }
 
     /**

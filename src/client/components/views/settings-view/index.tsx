@@ -29,6 +29,11 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
     {
         const {store} = this.props;
         const {locale, account} = store;
+
+        if (account === null) {
+            return null;
+        }
+
         const response = store.unlinkProviderResponse;
         const {message} = response;
 

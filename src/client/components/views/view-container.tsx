@@ -21,26 +21,9 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
     render() : JSX.Element
     {
         const {props} = this;
-        let style = {};
-
-        if (props.store.active)
-        {
-            style =
-            {
-                display: 'flex',
-                opacity: 1,
-                zIndex:  1
-            };
-        }
-        else
-        {
-            style =
-            {
-                display: 'flex',
-                opacity: 0,
-                zIndex:  0
-            };
-        }
+        const {store} = props;
+        const {active, effect} = store;
+        const style = styles[effect][active ? 'active' : 'inactive'];
 
         return (
             <div className="view-container" style={style} onTransitionEnd={this.onTransitionEnd}>
@@ -64,3 +47,63 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
         }
     }
 }
+
+const styles =
+{
+    none:
+    {
+        active:
+        {
+            display:    'flex',
+            transition: 'all .01s',
+            zIndex:     1,
+            opacity:    1
+        },
+
+        inactive:
+        {
+            display:    'flex',
+            transition: 'all .01s',
+            zIndex:     0,
+            opacity:    0
+        },
+    },
+
+    fade:
+    {
+        active:
+        {
+            display:    'flex',
+            transition: 'all .5s',
+            zIndex:     1,
+            opacity:    1
+        },
+
+        inactive:
+        {
+            display:    'flex',
+            transition: 'all .5s',
+            zIndex:     0,
+            opacity:    0
+        },
+    },
+
+    slide:
+    {
+        active:
+        {
+            display:    'flex',
+            transition: 'all .5s',
+            zIndex:     1,
+            transform:  'translateX(0)'
+        },
+
+        inactive:
+        {
+            display:    'flex',
+            transition: 'all .5s',
+            zIndex:     0,
+            transform:  'translateX(-100%)'
+        }
+    }
+};

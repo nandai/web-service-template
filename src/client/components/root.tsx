@@ -9,7 +9,6 @@ import {App}      from 'client/app/app';
 interface RootProps
 {
     app          : App;
-    effect?      : string;
     onActiveApp? : (app : App) => void;
 }
 
@@ -62,28 +61,9 @@ export default class Root extends React.Component<RootProps, RootState>
     componentWillReceiveProps(nextProps : RootProps)
     {
         const nextApp = nextProps.app;
-        const newApps = this.addOrReplaceApp(nextApp);
-
-        if (this.state.currentApp.toString() === nextProps.app.toString() || nextProps.effect === undefined || nextProps.effect === 'none')
-        {
-            this.props.onActiveApp(nextApp);
-
-            const newState : RootState =
-            {
-                apps:       newApps,
-                currentApp: nextProps.app
-            };
-            this.setState(newState);
-        }
-        else
-        {
-            const newState : RootState =
-            {
-                apps:       newApps,
-                nextApp
-            };
-            this.setState(newState);
-        }
+        const apps = this.addOrReplaceApp(nextApp);
+        const newState : RootState = {apps, nextApp};
+        this.setState(newState);
     }
 
     /**

@@ -24,6 +24,7 @@ export namespace storeNS
     {
         const store : Store =
         {
+            effect:                 'fade',
             oldPassword:            '',
             newPassword:            '',
             confirm:                '',

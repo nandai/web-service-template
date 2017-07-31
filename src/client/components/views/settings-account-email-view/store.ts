@@ -4,10 +4,13 @@
 import {Response}                 from 'libs/response';
 import {BaseStore, initBaseStore} from '../base-store';
 
+import _ = require('lodash');
+
 export namespace storeNS
 {
     export interface Store extends BaseStore
     {
+        editAccount?                : Response.Account;
         message?                    : string;
         loading?                    : boolean;
         onEmailChange?              : (value : string) => void;
@@ -18,8 +21,11 @@ export namespace storeNS
 
     export function init(src : Store) : Store
     {
+        const account = src.account || null;
         const store : Store =
         {
+            effect:        'fade',
+            editAccount:    _.clone(account),
             message:       '',
             loading:       false,
             onEmailChange: src.onEmailChange,

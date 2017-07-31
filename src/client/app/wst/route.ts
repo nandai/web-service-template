@@ -11,7 +11,6 @@ export interface Route
     url    : string;
     app    : App;
     title  : string;
-    effect : string;
     query? : boolean;
     auth?  : boolean;
 }

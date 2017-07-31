@@ -13,7 +13,6 @@ import ViewContainer   from 'client/components/views/view-container';
 import ViewContents    from 'client/components/views/view-contents';
 import R               from 'client/libs/r';
 import {Response}      from 'libs/response';
-import {slog}          from 'libs/slog';
 import {storeNS}       from './store';
 
 interface LoginViewProps
@@ -28,7 +27,6 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
      */
     render() : JSX.Element
     {
-        const log = slog.stepIn('LoginView', 'render');
         const {store} = this.props;
         const {locale} = store;
         const response = store.loginEmailResponse;
@@ -70,7 +68,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
             </div>
         );
 
-        const el = (
+        return (
             <ViewContainer store={store}>
                 <Header store={store} />
                 {home}
@@ -80,8 +78,5 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
                 </Footer>
             </ViewContainer>
         );
-
-        log.stepOut();
-        return el;
     }
 }

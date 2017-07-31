@@ -27,7 +27,8 @@ export default class SettingsAccountEmailView extends React.Component<SettingsAc
     render() : JSX.Element
     {
         const {store} = this.props;
-        const {locale, account} = store;
+        const {locale} = store;
+        const account =  store.editAccount;
         const response = store.requestChangeEmailResponse;
         const {message} = response;
 
