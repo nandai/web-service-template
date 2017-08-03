@@ -1,9 +1,10 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Response} from 'libs/response';
+import {Direction} from 'client/libs/history';
+import {Response}  from 'libs/response';
 
-export type Effect = 'fade' | 'slide' | 'none';
+export type Effect = 'fade' | 'slide';
 
 export interface BaseStore
 {
@@ -13,7 +14,7 @@ export interface BaseStore
     active?          : boolean;
     displayStatus?   : 'hidden' | 'preparation' | 'showing' | 'displayed';
     effect?          : Effect;
-    prevPathName?    : string;
+    direction?       : Direction;
     onTransitionEnd? : () => void;
 }
 
@@ -24,6 +25,7 @@ export function initBaseStore(dest : BaseStore, src : BaseStore) : void
     dest.online =         (src.online        !== undefined ? src.online        : true);
     dest.active =         (src.active        !== undefined ? src.active        : true);
     dest.displayStatus =  (src.displayStatus !== undefined ? src.displayStatus : 'displayed');
-//  dest.effect =         (src.effect !== undefined ? src.effect : 'none');
+//  dest.effect;
+    dest.direction =       'forward';
     dest.onTransitionEnd = null;
 }

@@ -1,10 +1,103 @@
 .view-container
 {
     position:         absolute;
-/*  display:          flex;*/
     flex-direction:   column;
     width:            100%;
     height:           100vh;
     outline:          none;
     background-color: white;
+
+    &.hidden
+    {
+        display: none;
+    }
+
+    &.fade
+    {
+        display: flex;
+
+        &.active
+        {
+            transition: all .5s;
+            z-index:    1;
+            opacity:    1;
+        }
+
+        &.inactive
+        {
+            &.forward
+            {
+                transition: all .5s;
+                z-index:    0;
+                opacity:    0;
+            }
+
+            &.back
+            {
+                transition: all .5s;
+                z-index:    0;
+                opacity:    0;
+            }
+        }
+
+        &.prepare
+        {
+            &.forward
+            {
+                opacity: 0;
+            }
+
+            &.back
+            {
+                opacity: 0;
+            }
+        }
+    }
+
+    &.slide
+    {
+        display: flex;
+
+        &.active
+        {
+            transition: all .5s;
+            z-index:    1;
+            opacity:    1;
+            transform:  translateX(0);
+        }
+
+        &.inactive
+        {
+            &.forward
+            {
+                transition: all .5s;
+                z-index:    0;
+                opacity:    0;
+                transform:  translateX(-100%);
+            }
+
+            &.back
+            {
+                transition: all .5s;
+                z-index:    0;
+                opacity:    0;
+                transform:  translateX(100%);
+            }
+        }
+
+        &.prepare
+        {
+            &.forward
+            {
+                opacity:    0;
+                transform:  translateX(100%);
+            }
+
+            &.back
+            {
+                opacity:    0;
+                transform:  translateX(-100%);
+            }
+        }
+    }
 }

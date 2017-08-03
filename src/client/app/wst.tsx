@@ -87,7 +87,7 @@ class WstApp
      * pushstate, popstate event
      */
     @bind
-    private onHistory(_direction : Direction, message? : string)
+    private onHistory(direction : Direction, message? : string)
     {
         const log = slog.stepIn('WstApp', 'onHistory');
         return new Promise(async (resolve) =>
@@ -97,7 +97,7 @@ class WstApp
             data.routes.forEach((route) =>
             {
                 const store = route.app.store;
-                store.prevPathName = data.pathName;
+                store.direction = direction;
             });
 
             data.pathName = location.pathname;

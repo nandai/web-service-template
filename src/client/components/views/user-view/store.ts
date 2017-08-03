@@ -16,7 +16,7 @@ export namespace storeNS
     {
         const store : Store =
         {
-            effect: 'fade',
+            effect: 'slide',
             user:   src.user || null,
             onBack: src.onBack,
         };

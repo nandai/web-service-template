@@ -49,7 +49,6 @@ export default class History
             history.pushState(History.count, null, url);
         }
 
-        // location.pathname + location.search === url であってもonPushStateはコールする
         History.emit('forward', message);
         log.stepOut();
     }
@@ -79,7 +78,8 @@ export default class History
      */
     private static onEvent(e : PopStateEvent) : void
     {
-        // console.log('count:' + History.count);
+        const log = slog.stepIn('History', 'onEvent');
+        // log.d('count:' + History.count);
         let direction : Direction;
 
         if (e.state > History.count)
@@ -94,5 +94,6 @@ export default class History
         }
 
         History.emit(direction);
+        log.stepOut();
     }
 }
