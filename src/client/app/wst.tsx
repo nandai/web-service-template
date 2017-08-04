@@ -14,7 +14,7 @@ import History, {Direction} from '../libs/history';
 import R                    from '../libs/r';
 import {SocketEventData}    from '../libs/socket-event-data';
 import Utils                from '../libs/utils';
-import {App}                from './app';
+// import {App}                from './app';
 import {Data}               from './wst/data';
 import {initRoutes}         from './wst/initRoutes';
 import {setAccount}         from './wst/setAccount';
@@ -67,20 +67,8 @@ class WstApp
         const app = route.app;
 
         ReactDOM.render(
-            <Root app={app} onActiveApp={this.onActiveApp} />,
+            <Root app={app} />,
             document.getElementById('root'));
-    }
-
-    /**
-     * onActiveApp
-     */
-    @bind
-    private onActiveApp(prevApp : App, nextApp : App) : void
-    {
-        prevApp.store.displayStatus = 'hidden';
-
-        nextApp.store.active =  true;
-        nextApp.store.displayStatus = 'showing';
     }
 
     /**
@@ -106,8 +94,15 @@ class WstApp
             // setAccount(this.data, this.account);
 
             await updateCurrentRoute(data, location.pathname, true, message);
-
             this.render();
+
+            // setTimeout(() =>
+            // {
+            //     data.currentRoute.app.store.active = true;
+            //     data.currentRoute.app.store.displayStatus = 'showing';
+            //     this.render();
+            // }, 500);
+
             log.stepOut();
             resolve();
         });

@@ -89,14 +89,14 @@
         {
             &.forward
             {
-                opacity:    0;
-                transform:  translateX(100%);
+                opacity:   0;
+                transform: translateX(100%);
             }
 
             &.back
             {
-                opacity:    0;
-                transform:  translateX(-100%);
+                opacity:   0;
+                transform: translateX(-100%);
             }
         }
     }
