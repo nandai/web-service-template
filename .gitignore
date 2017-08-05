@@ -5,7 +5,7 @@
 /doc/
 /node_modules/
 /ssl/*
-/www/static/js/
-/www/static/components/wst.css
+/www/static/wst.js
+/www/static/wst.css
 !.gitkeep
 !README.md
