@@ -6,9 +6,10 @@ import {Effect} from 'client/components/views/base-store';
 
 export default class Apps
 {
-    private apps?       : App[];
-    private currentApp? : App;
-    private nextApp?    : App;
+    private apps       : App[];
+    private currentApp : App;
+    private nextApp    : App;
+    private bgTheme    : string;
 
     /**
      * @constructor
@@ -18,6 +19,7 @@ export default class Apps
         this.apps =      [app];
         this.currentApp = app;
         this.nextApp =    null;
+        this.bgTheme =    null;
     }
 
     /**
@@ -35,6 +37,7 @@ export default class Apps
             this.nextApp = nextApp;
             this.nextApp.store.active = false;
             this.nextApp.store.displayStatus = 'preparation';
+            this.bgTheme = null;
 
             // 優先する遷移エフェクトがあれば設定
             const curName =  this.currentApp.toString();
@@ -47,6 +50,7 @@ export default class Apps
                 {
                     this.currentApp.store.highPriorityEffect = transition.effect1;
                     this.nextApp   .store.highPriorityEffect = transition.effect2;
+                    this.bgTheme =                             transition.bgTheme;
                     break;
                 }
             }
@@ -100,24 +104,45 @@ export default class Apps
     }
 
     /**
-     * DOM生成
+     * ページ情報取得
      */
-    createElements()
+    getPage()
     {
-        return this.apps.map((app, i) => app.view(i));
+        return {
+            elements: this.apps.map((app, i) => app.view(i)),
+            bgTheme:  this.bgTheme
+        };
     }
 }
 
 interface Transition
 {
-    appName1 : string;
-    appName2 : string;
-    effect1  : Effect;
-    effect2  : Effect;
+    appName1  : string;
+    appName2  : string;
+    effect1?  : Effect;
+    effect2?  : Effect;
+    bgTheme?  : string;
 }
 
 const transitions : Transition[] =
 [
-    {appName1:'LoginApp', appName2:'UsersApp',    effect1:'slide', effect2:'slide'},
-    {appName1:'TopApp',   appName2:'SettingsApp', effect1:'slide', effect2:'slide'}
+    {
+        appName1: 'LoginApp',
+        appName2: 'UsersApp',
+        effect1:  'slide',
+        effect2:  'slide'
+    },
+
+    {
+        appName1: 'LoginApp',
+        appName2: 'TopApp',
+        bgTheme:  'black'
+    },
+
+    {
+        appName1: 'TopApp',
+        appName2: 'SettingsApp',
+        effect1:  'slide',
+        effect2:  'slide'
+    }
 ];

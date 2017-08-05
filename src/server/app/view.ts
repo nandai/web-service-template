@@ -66,7 +66,7 @@ function sendAbnormal(req : express.Request, res : express.Response, phrase : st
             const title = ClientR.text(phrase, locale);
             const data = await SettingsApi.getAccount(req);
             const {account} = data;
-            res.status(status).send(view(title, 'wst.js', '', {locale, account}));
+            res.status(status).send(view(title, 'wst.js', '', {locale, account, active:true}));
             resolve();
         }
         catch (err) {reject(err);}

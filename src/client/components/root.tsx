@@ -26,10 +26,22 @@ export default class Root extends React.Component<RootProps, {}>
             apps = new Apps(props.app);
         }
 
-        const elements = apps.createElements();
+        const page = apps.getPage();
+        let bgClassName = 'root-background';
+
+        switch (page.bgTheme)
+        {
+        case 'black':
+            bgClassName += ' black';
+            break;
+        }
+
         return (
             <div className='root' tabIndex={0}>
-                {elements}
+                <div className={bgClassName}>
+                    <div>web service template</div>
+                </div>
+                {page.elements}
             </div>
         );
     }
