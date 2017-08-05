@@ -9,7 +9,7 @@ export default class Apps
     private apps       : App[];
     private currentApp : App;
     private nextApp    : App;
-    private bgTheme    : string;
+    private transition : Transition;
 
     /**
      * @constructor
@@ -19,7 +19,7 @@ export default class Apps
         this.apps =      [app];
         this.currentApp = app;
         this.nextApp =    null;
-        this.bgTheme =    null;
+        this.transition = null;
     }
 
     /**
@@ -37,7 +37,7 @@ export default class Apps
             this.nextApp = nextApp;
             this.nextApp.store.active = false;
             this.nextApp.store.displayStatus = 'preparation';
-            this.bgTheme = null;
+            this.transition = null;
 
             // 優先する遷移エフェクトがあれば設定
             const curName =  this.currentApp.toString();
@@ -45,12 +45,19 @@ export default class Apps
 
             for (const transition of transitions)
             {
-                if ((transition.appName1 === curName  && transition.appName2 === nextName)
-                ||  (transition.appName1 === nextName && transition.appName2 === curName))
+                if (transition.appName1 === curName  && transition.appName2 === nextName)
                 {
                     this.currentApp.store.highPriorityEffect = transition.effect1;
                     this.nextApp   .store.highPriorityEffect = transition.effect2;
-                    this.bgTheme =                             transition.bgTheme;
+                    this.transition =                          transition;
+                    break;
+                }
+
+                if (transition.appName1 === nextName && transition.appName2 === curName)
+                {
+                    this.currentApp.store.highPriorityEffect = transition.effect2;
+                    this.nextApp   .store.highPriorityEffect = transition.effect1;
+                    this.transition =                          transition;
                     break;
                 }
             }
@@ -66,16 +73,24 @@ export default class Apps
         if (this.nextApp)
         {
             this.currentApp.store.displayStatus = 'hidden';
-            this.currentApp.store.highPriorityEffect = null;
 
-            this.nextApp.store.active = true;
-            this.nextApp.store.displayStatus = 'showing';
-            this.nextApp.store.highPriorityEffect = null;
+//          this.nextApp.store.active = true;
+//          this.nextApp.store.displayStatus = 'showing';
 
             this.currentApp = this.nextApp;
             this.nextApp =    null;
         }
         return changed;
+    }
+
+    /**
+     * 次のappをアクティブにする
+     */
+    setActiveNextApp()
+    {
+        const app = this.nextApp || this.currentApp;
+        app.store.active = true;
+        app.store.displayStatus = 'showing';
     }
 
     /**
@@ -104,45 +119,75 @@ export default class Apps
     }
 
     /**
+     * 次のappのeffect delayを取得する
+     */
+    getEffectDelay() : number
+    {
+        const {transition} = this;
+        let effectDelay = 500;
+
+        if (transition && transition.effectDelay !== undefined) {
+            effectDelay = transition.effectDelay;
+        }
+
+        return Math.max(effectDelay, 10);
+    }
+
+    /**
      * ページ情報取得
      */
     getPage()
     {
+        const {transition} = this;
         return {
             elements: this.apps.map((app, i) => app.view(i)),
-            bgTheme:  this.bgTheme
+            bgTheme:  (transition ? transition.bgTheme : null)
         };
     }
 }
 
 interface Transition
 {
-    appName1  : string;
-    appName2  : string;
-    effect1?  : Effect;
-    effect2?  : Effect;
-    bgTheme?  : string;
+    appName1     : string;
+    appName2     : string;
+    effect1?     : Effect;
+    effect2?     : Effect;
+    effectDelay? : number;
+    bgTheme?     : string;
 }
 
 const transitions : Transition[] =
 [
     {
-        appName1: 'LoginApp',
-        appName2: 'UsersApp',
-        effect1:  'slide',
-        effect2:  'slide'
+        appName1:    'LoginApp',
+        appName2:    'UsersApp',
+        effect1:     'slide',
+        effect2:     'slide'
     },
 
     {
-        appName1: 'LoginApp',
-        appName2: 'TopApp',
-        bgTheme:  'black'
+        appName1:    'LoginApp',
+        appName2:    'TopApp',
+        bgTheme:     'black',
+        effectDelay: 2000
     },
 
     {
-        appName1: 'TopApp',
-        appName2: 'SettingsApp',
-        effect1:  'slide',
-        effect2:  'slide'
+        appName1:    'TopApp',
+        appName2:    'SettingsApp',
+        effect1:     'slide',
+        effect2:     'slide'
+    },
+
+    {
+        appName1:    'TopApp',
+        appName2:    'SettingsInviteApp',
+        effectDelay: 0
+    },
+
+    {
+        appName1:    'UsersApp',
+        appName2:    'UserApp',
+        effectDelay: 0
     }
 ];

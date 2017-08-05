@@ -36,10 +36,22 @@ export default class Root extends React.Component<RootProps, {}>
             break;
         }
 
+        const effectDelay = apps.getEffectDelay();
+        let bgEl : JSX.Element;
+
+        if (effectDelay >= 500)
+        {
+            bgEl = (
+                <div>
+                    <div>web service template</div>
+                </div>
+            );
+        }
+
         return (
             <div className='root' tabIndex={0}>
                 <div className={bgClassName}>
-                    <div>web service template</div>
+                    {bgEl}
                 </div>
                 {page.elements}
             </div>

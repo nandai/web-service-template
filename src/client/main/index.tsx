@@ -81,10 +81,21 @@ class WstApp
         return new Promise(async (resolve) =>
         {
             const {data} = this;
-            data.routes.forEach((route) => route.app.store.direction = direction);
+            data.routes.forEach((route) =>
+            {
+                route.app.store.direction = direction;
+                route.app.store.highPriorityEffect = null;
+            });
 
             await updateCurrentRoute(data, location.pathname, true, message);
             this.render();
+
+            const {apps} = data;
+            setTimeout(() =>
+            {
+                apps.setActiveNextApp();
+                this.render();
+            }, apps.getEffectDelay());
 
             log.stepOut();
             resolve();

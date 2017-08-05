@@ -15,11 +15,22 @@
 
         & > div
         {
-            position:    absolute;
-            color:       lightgray;
-            font-size:   32px;
-            font-weight: bold;
+            position:      absolute;
+            width:         480px;
+            height:        480px;
+            border-radius: 50%;
+            border:        10px solid lightgray;
             @mixin wst-center;
+
+            & > div
+            {
+                position:      absolute;
+                color:         lightgray;
+                font-size:     32px;
+                font-weight:   bold;
+                white-space:   nowrap;
+                @mixin wst-center;
+            }
         }
     }
 }
