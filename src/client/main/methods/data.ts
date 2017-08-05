@@ -12,5 +12,4 @@ export interface Data
     currentRoute : Route;
     routes       : Route[];
     account      : Response.Account;
-    pathName     : string;
 }

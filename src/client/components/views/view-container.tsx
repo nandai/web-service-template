@@ -21,7 +21,8 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
     {
         const {props} = this;
         const {store} = props;
-        const {active, displayStatus, effect, direction} = store;
+        const {active, displayStatus, direction} = store;
+        const effect = store.highPriorityEffect || store.effect;
         let className = 'view-container';
 
              if (displayStatus === 'preparation') {className += ` ${effect} prepare ${direction}`;}

@@ -14,6 +14,7 @@ export interface BaseStore
     active?             : boolean;
     displayStatus?      : 'hidden' | 'preparation' | 'showing' | 'displayed';
     effect?             : Effect;
+    highPriorityEffect? : Effect;
     direction?          : Direction;
     onChangeCurrentApp? : () => void;
 }
@@ -26,6 +27,7 @@ export function initBaseStore(dest : BaseStore, src : BaseStore) : void
     dest.active =         (src.active        !== undefined ? src.active        : true);
     dest.displayStatus =  (src.displayStatus !== undefined ? src.displayStatus : 'displayed');
 //  dest.effect;
-    dest.direction = 'forward';
+    dest.highPriorityEffect = null;
+    dest.direction =          'forward';
     dest.onChangeCurrentApp = src.onChangeCurrentApp;
 }

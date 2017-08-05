@@ -32,8 +32,7 @@ class WstApp
         apps:         null,
         currentRoute: null,
         routes:       null,
-        account:      null,
-        pathName:     location.pathname
+        account:      null
     };
 
     /**
@@ -82,27 +81,10 @@ class WstApp
         return new Promise(async (resolve) =>
         {
             const {data} = this;
-
-            data.routes.forEach((route) =>
-            {
-                const store = route.app.store;
-                store.direction = direction;
-            });
-
-            data.pathName = location.pathname;
-
-            // アカウント情報の再取得と再設定
-            // setAccount(this.data, this.account);
+            data.routes.forEach((route) => route.app.store.direction = direction);
 
             await updateCurrentRoute(data, location.pathname, true, message);
             this.render();
-
-            // setTimeout(() =>
-            // {
-            //     data.currentRoute.app.store.active = true;
-            //     data.currentRoute.app.store.displayStatus = 'showing';
-            //     this.render();
-            // }, 500);
 
             log.stepOut();
             resolve();
