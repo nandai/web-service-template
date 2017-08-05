@@ -14,7 +14,6 @@ import History, {Direction} from '../libs/history';
 import R                    from '../libs/r';
 import {SocketEventData}    from '../libs/socket-event-data';
 import Utils                from '../libs/utils';
-// import {App}                from './app';
 import {Data}               from './wst/data';
 import {initRoutes}         from './wst/initRoutes';
 import {setAccount}         from './wst/setAccount';
@@ -30,6 +29,7 @@ class WstApp
 {
     data : Data =
     {
+        apps:         null,
         currentRoute: null,
         routes:       null,
         account:      null,
@@ -45,7 +45,12 @@ class WstApp
         const {data} = this;
 
         initRoutes(data);
-        data.routes.forEach((route) => route.app.render = this.render);
+        data.routes.forEach((route) =>
+        {
+            const {app} = route;
+            app.render = this.render;
+            app.store.onChangeCurrentApp = this.onChangeCurrentApp;
+        });
 
         const ssrStore = Utils.getSsrStore<BaseStore>();
         setAccount(data, ssrStore.account);
@@ -62,12 +67,8 @@ class WstApp
     @bind
     render() : void
     {
-        const {data} = this;
-        const route = data.currentRoute;
-        const app = route.app;
-
         ReactDOM.render(
-            <Root app={app} />,
+            <Root apps={this.data.apps} />,
             document.getElementById('root'));
     }
 
@@ -106,6 +107,21 @@ class WstApp
             log.stepOut();
             resolve();
         });
+    }
+
+    /**
+     * 次のappをカレントにする
+     */
+    @bind
+    onChangeCurrentApp()
+    {
+        const log = slog.stepIn('WstApp', 'onChangeCurrentApp');
+        if (this.data.apps.changeCurrentApp())
+        {
+            log.d('changed');
+            this.render();
+        }
+        log.stepOut();
     }
 
     /**

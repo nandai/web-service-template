@@ -8,7 +8,6 @@ import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
-import {slog}        from 'libs/slog';
 import {storeNS}     from './store';
 
 interface UserViewProps
@@ -23,7 +22,6 @@ export default class UserView extends React.Component<UserViewProps, {}>
      */
     render() : JSX.Element
     {
-        const log = slog.stepIn('UserView', 'render');
         const {store} = this.props;
         const {locale, user} = store;
 
@@ -37,7 +35,7 @@ export default class UserView extends React.Component<UserViewProps, {}>
             userNameEl = <p>@{store.user.name}</p>;
         }
 
-        const el = (
+        return (
             <ViewContainer store={store}>
                 <Header store={store} />
                 <ViewContents>
@@ -47,8 +45,5 @@ export default class UserView extends React.Component<UserViewProps, {}>
                 </ViewContents>
             </ViewContainer>
         );
-
-        log.stepOut();
-        return el;
     }
 }

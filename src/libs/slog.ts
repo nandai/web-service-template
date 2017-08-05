@@ -368,7 +368,7 @@ export namespace slog
 
             this.ws.onError(() =>
             {
-                console.error('error slog WebSocket');
+//              console.error('error slog WebSocket');
             });
 
             this.ws.onClose(() =>

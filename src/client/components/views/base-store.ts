@@ -8,14 +8,14 @@ export type Effect = 'fade' | 'slide';
 
 export interface BaseStore
 {
-    locale?          : string;
-    account?         : Response.Account;
-    online?          : boolean;
-    active?          : boolean;
-    displayStatus?   : 'hidden' | 'preparation' | 'showing' | 'displayed';
-    effect?          : Effect;
-    direction?       : Direction;
-    onTransitionEnd? : () => void;
+    locale?             : string;
+    account?            : Response.Account;
+    online?             : boolean;
+    active?             : boolean;
+    displayStatus?      : 'hidden' | 'preparation' | 'showing' | 'displayed';
+    effect?             : Effect;
+    direction?          : Direction;
+    onChangeCurrentApp? : () => void;
 }
 
 export function initBaseStore(dest : BaseStore, src : BaseStore) : void
@@ -26,6 +26,6 @@ export function initBaseStore(dest : BaseStore, src : BaseStore) : void
     dest.active =         (src.active        !== undefined ? src.active        : true);
     dest.displayStatus =  (src.displayStatus !== undefined ? src.displayStatus : 'displayed');
 //  dest.effect;
-    dest.direction =       'forward';
-    dest.onTransitionEnd = null;
+    dest.direction = 'forward';
+    dest.onChangeCurrentApp = src.onChangeCurrentApp;
 }

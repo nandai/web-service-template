@@ -6,7 +6,6 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 
 import {BaseStore}   from 'client/components/views/base-store';
-import {slog}        from 'libs/slog';
 
 interface ViewContainerProps
 {
@@ -44,11 +43,9 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
     onTransitionEnd(e : React.TransitionEvent<Element>)
     {
         const el = ReactDOM.findDOMNode(this);
-        if (el === e.target)
-        {
-            const log = slog.stepIn('ViewContainer', 'onTransitionEnd');
-            this.props.store.onTransitionEnd();
-            log.stepOut();
+
+        if (el === e.target) {
+            this.props.store.onChangeCurrentApp();
         }
     }
 }
