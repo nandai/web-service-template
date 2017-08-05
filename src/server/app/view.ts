@@ -24,8 +24,8 @@ export function view(title : string, js : string, contents : string, store) : st
         var ssrStore = ${JSON.stringify(store)};
     </script>
 
-    <link  href="/components/wst.css" rel="stylesheet" />
-    <script src="/js/${js}"></script>
+    <link  href="/wst.css" rel="stylesheet" />
+    <script src="/${js}"></script>
 </head>
 
 <body ontouchstart="">

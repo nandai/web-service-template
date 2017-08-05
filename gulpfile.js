@@ -75,18 +75,16 @@ gulp.task('remove-client-log', function()
  */
 gulp.task('browserify', function ()
 {
-    buildClient('wst.js');
-});
+    const src = './build-client/client/main/index.js';
+    const dest = './www/static/wst.js';
 
-function buildClient(fileName)
-{
-    browserify({entries: ['./build-client/client/app/' + fileName]})
+    browserify({entries: [src]})
         .bundle()
-        .pipe(source('./www/static/js/' + fileName))
+        .pipe(source(dest))
         .pipe(buffer())
         .pipe(gulpif(isProduction, uglify()))
         .pipe(gulp.dest('.'));
-}
+});
 
 /**
  * javascript
@@ -110,7 +108,7 @@ gulp.task('css', function()
         .src('./src/client/css/wst.css')
         .pipe(postcss([cssImport, cssNext, cssMixins]))
         .pipe(gulpif(isProduction, postcss([cssnano])))
-        .pipe(gulp.dest('./www/static/components'));
+        .pipe(gulp.dest('./www/static'));
 });
 
 /**

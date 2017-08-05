@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Apps    from '../apps';
+import Apps    from 'client/app/apps';
 import {Data}  from './data';
 import {Route} from './route';
 

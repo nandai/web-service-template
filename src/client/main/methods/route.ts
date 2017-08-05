@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {App} from '../app';
+import {App} from 'client/app/app';
 
 /**
  * URL route

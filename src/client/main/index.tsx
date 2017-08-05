@@ -14,11 +14,11 @@ import History, {Direction} from '../libs/history';
 import R                    from '../libs/r';
 import {SocketEventData}    from '../libs/socket-event-data';
 import Utils                from '../libs/utils';
-import {Data}               from './wst/data';
-import {initRoutes}         from './wst/initRoutes';
-import {setAccount}         from './wst/setAccount';
-import {setOnline}          from './wst/setOnline';
-import {updateCurrentRoute} from './wst/updateCurrentRoute';
+import {Data}               from './methods/data';
+import {initRoutes}         from './methods/initRoutes';
+import {setAccount}         from './methods/setAccount';
+import {setOnline}          from './methods/setOnline';
+import {updateCurrentRoute} from './methods/updateCurrentRoute';
 
 import socketIO = require('socket.io-client');
 
