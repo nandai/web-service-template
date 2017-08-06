@@ -22,6 +22,7 @@ import SettingsInviteApp             from './app/settings-invite-app';
 import SignupApp                     from './app/signup-app';
 import UserApp                       from './app/user-app';
 import UsersApp                      from './app/users-app';
+import {loadCss}                     from './app/view';
 import Config                        from './config';
 import MongoDB                       from './database/mongodb';
 import MySQL                         from './database/mysql';
@@ -39,6 +40,7 @@ import Google                        from './provider/google';
 import Twitter                       from './provider/twitter';
 
 import bodyParser =       require('body-parser');
+import compression =      require('compression');
 import cookieParser =     require('cookie-parser');
 import express =          require('express');
 import expressDomain =    require('express-domain-middleware');
@@ -69,6 +71,7 @@ class Initializer
         {
             Config.load();
             R     .load();
+            loadCss();
 
             await MongoDB.init();
             await MySQL  .init();
@@ -80,6 +83,7 @@ class Initializer
             this.app.use(helmet.frameguard({action:'deny'}));
             this.app.use(helmet.xssFilter());
             this.app.use(helmet.noCache());
+            this.app.use(compression({level:6}));
             this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
             this.app.use(expressDomain);
             this.app.use(expressExtension);

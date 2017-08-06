@@ -3,8 +3,32 @@
  */
 import ClientR     from 'client/libs/r';
 import SettingsApi from 'server/api/settings-api';
+import Config      from 'server/config';
 
 import express = require('express');
+import fs =      require('fs');
+import path =    require('path');
+
+let css : string = '';
+
+/**
+ * cssをロードする
+ */
+export function loadCss()
+{
+    const absPath = path.resolve(`${Config.STATIC_DIR}/wst.css`);
+
+    try
+    {
+        fs.statSync(absPath);
+        css = fs.readFileSync(absPath, 'utf8');
+    }
+    catch (err)
+    {
+        console.log(`${absPath}が見つかりませんでした。`);
+        process.exit();
+    }
+}
 
 /**
  * view
@@ -24,12 +48,14 @@ export function view(title : string, js : string, contents : string, store) : st
         var ssrStore = ${JSON.stringify(store)};
     </script>
 
-    <link  href="/wst.css" rel="stylesheet" />
-    <script src="/${js}"></script>
+    <style>
+        ${css}
+    </style>
 </head>
 
 <body ontouchstart="" tabIndex="0">
     <div id="root">${contents}</div>
+    <script src="/${js}"></script>
 </body>
 </html>
     `;
