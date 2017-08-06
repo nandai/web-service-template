@@ -48,7 +48,7 @@ class WstApp
         {
             const {app} = route;
             app.render = this.render;
-            app.store.onChangeCurrentApp = this.onChangeCurrentApp;
+            app.store.onPageTransitionEnd = this.onPageTransitionEnd;
         });
 
         const ssrStore = Utils.getSsrStore<BaseStore>();
@@ -103,17 +103,14 @@ class WstApp
     }
 
     /**
-     * 次のappをカレントにする
+     * ページ遷移終了イベント
      */
     @bind
-    onChangeCurrentApp()
+    onPageTransitionEnd()
     {
-        const log = slog.stepIn('WstApp', 'onChangeCurrentApp');
-        if (this.data.apps.changeCurrentApp())
-        {
-            log.d('changed');
-            this.render();
-        }
+        const log = slog.stepIn('WstApp', 'onPageTransitionEnd');
+        this.data.apps.changeCurrentApp();
+        this.render();
         log.stepOut();
     }
 

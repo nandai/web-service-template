@@ -33,4 +33,12 @@
             }
         }
     }
+
+    & .root-click-guard
+    {
+        position: absolute;
+        width:    100%;
+        height:   100vh;
+        z-index:  99999;
+    }
 }

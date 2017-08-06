@@ -36,17 +36,8 @@ export default class Root extends React.Component<RootProps, {}>
             break;
         }
 
-        const effectDelay = apps.getEffectDelay();
-        let bgEl : JSX.Element;
-
-        if (effectDelay >= 500)
-        {
-            bgEl = (
-                <div>
-                    <div>web service template</div>
-                </div>
-            );
-        }
+        const bgEl =    this.createBgElement(apps);
+        const guardEl = this.createClickGuardElement(apps);
 
         return (
             <div className='root' tabIndex={0}>
@@ -54,7 +45,45 @@ export default class Root extends React.Component<RootProps, {}>
                     {bgEl}
                 </div>
                 {page.elements}
+                {guardEl}
             </div>
         );
+    }
+
+    /**
+     * バックグラウンド生成
+     */
+    private createBgElement(apps : Apps) : JSX.Element
+    {
+        let el : JSX.Element;
+
+        if (apps.isDuringTransition())
+        {
+            const effectDelay = apps.getEffectDelay();
+            if (effectDelay >= 500)
+            {
+                el = (
+                    <div>
+                        <div>web service template</div>
+                    </div>
+                );
+            }
+        }
+
+        return el;
+    }
+
+    /**
+     * クリックガード生成
+     */
+    private createClickGuardElement(apps : Apps) : JSX.Element
+    {
+        let el : JSX.Element;
+
+        if (apps.isDuringTransition()) {
+            el = <div className='root-click-guard' />;
+        }
+
+        return el;
     }
 }

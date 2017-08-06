@@ -8,15 +8,15 @@ export type Effect = 'fade' | 'slide';
 
 export interface BaseStore
 {
-    locale?             : string;
-    account?            : Response.Account;
-    online?             : boolean;
-    active?             : boolean;
-    displayStatus?      : 'hidden' | 'preparation' | 'showing' | 'displayed';
-    effect?             : Effect;
-    highPriorityEffect? : Effect;
-    direction?          : Direction;
-    onChangeCurrentApp? : () => void;
+    locale?              : string;
+    account?             : Response.Account;
+    online?              : boolean;
+    active?              : boolean;
+    displayStatus?       : 'hidden' | 'preparation' | 'showing' | 'displayed';
+    effect?              : Effect;
+    highPriorityEffect?  : Effect;
+    direction?           : Direction;
+    onPageTransitionEnd? : () => void;
 }
 
 export function initBaseStore(dest : BaseStore, src : BaseStore) : void
@@ -29,5 +29,5 @@ export function initBaseStore(dest : BaseStore, src : BaseStore) : void
 //  dest.effect;
     dest.highPriorityEffect = null;
     dest.direction =          'forward';
-    dest.onChangeCurrentApp = src.onChangeCurrentApp;
+    dest.onPageTransitionEnd = src.onPageTransitionEnd;
 }

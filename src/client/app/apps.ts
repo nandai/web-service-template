@@ -25,7 +25,7 @@ export default class Apps
     /**
      * 次のappを設定する
      */
-    setNextApp(nextApp : App)
+    setNextApp(nextApp : App) : void
     {
         if (this.currentApp !== nextApp)
         {
@@ -45,7 +45,7 @@ export default class Apps
 
             for (const transition of transitions)
             {
-                if (transition.appName1 === curName  && transition.appName2 === nextName)
+                if (transition.appName1 === curName && transition.appName2 === nextName)
                 {
                     this.currentApp.store.highPriorityEffect = transition.effect1;
                     this.nextApp   .store.highPriorityEffect = transition.effect2;
@@ -67,9 +67,8 @@ export default class Apps
     /**
      * 次のappをカレントにする
      */
-    changeCurrentApp() : boolean
+    changeCurrentApp() : void
     {
-        const changed = (this.nextApp !== null);
         if (this.nextApp)
         {
             this.currentApp.store.displayStatus = 'hidden';
@@ -80,13 +79,16 @@ export default class Apps
             this.currentApp = this.nextApp;
             this.nextApp =    null;
         }
-        return changed;
+        else
+        {
+            this.currentApp.store.displayStatus = 'displayed';
+        }
     }
 
     /**
      * 次のappをアクティブにする
      */
-    setActiveNextApp()
+    setActiveNextApp() : void
     {
         const app = this.nextApp || this.currentApp;
         app.store.active = true;
@@ -143,6 +145,17 @@ export default class Apps
             elements: this.apps.map((app, i) => app.view(i)),
             bgTheme:  (transition ? transition.bgTheme : null)
         };
+    }
+
+    /**
+     * 遷移中かどうか
+     */
+    isDuringTransition() : boolean
+    {
+        if (this.nextApp === null && this.currentApp.store.displayStatus === 'displayed') {
+            return false;
+        }
+        return true;
     }
 }
 
