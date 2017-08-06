@@ -87,15 +87,19 @@ class WstApp
                 route.app.store.highPriorityEffect = null;
             });
 
+            const prevApp = data.currentRoute.app;
             await updateCurrentRoute(data, location.pathname, true, message);
             this.render();
 
-            const {apps} = data;
-            setTimeout(() =>
+            if (prevApp !== data.currentRoute.app)
             {
-                apps.setActiveNextApp();
-                this.render();
-            }, apps.getEffectDelay());
+                const {apps} = data;
+                setTimeout(() =>
+                {
+                    apps.setActiveNextApp();
+                    this.render();
+                }, apps.getEffectDelay());
+            }
 
             log.stepOut();
             resolve();

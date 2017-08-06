@@ -52,7 +52,7 @@ export default class Button extends React.Component<ButtonProps, {}>
         if (disabled === false && url)
         {
             el = (
-                <div className={className} style={style} tabIndex={0} onKeyUp={this.onKeyUp}>
+                <div className={className} style={style}>
                     <a tabIndex = {-1}
                        href =     {url}
                        onClick =  {onClick}>
@@ -65,7 +65,8 @@ export default class Button extends React.Component<ButtonProps, {}>
         {
             const type = (submit ? 'submit' : 'button');
             el = (
-                <button className = {className}
+                <button tabIndex=   {-1}
+                        className = {className}
                         style=      {style}
                         type =      {type}
                         disabled =  {disabled}
@@ -85,17 +86,7 @@ export default class Button extends React.Component<ButtonProps, {}>
     private onClick(e : React.MouseEvent<Element>)
     {
         e.preventDefault();
+        document.body.focus();
         this.props.onClick();
-    }
-
-    /**
-     * keyup event
-     */
-    @bind
-    private onKeyUp(e : React.KeyboardEvent<Element>)
-    {
-        if (e.keyCode === 0x20 || e.keyCode === 0x0D) {
-            this.props.onClick();
-        }
     }
 }

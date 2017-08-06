@@ -40,7 +40,7 @@ export default class Root extends React.Component<RootProps, {}>
         const guardEl = this.createClickGuardElement(apps);
 
         return (
-            <div className='root' tabIndex={0}>
+            <div className='root'>
                 <div className={bgClassName}>
                     {bgEl}
                 </div>

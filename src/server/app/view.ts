@@ -28,7 +28,7 @@ export function view(title : string, js : string, contents : string, store) : st
     <script src="/${js}"></script>
 </head>
 
-<body ontouchstart="">
+<body ontouchstart="" tabIndex="0">
     <div id="root">${contents}</div>
 </body>
 </html>

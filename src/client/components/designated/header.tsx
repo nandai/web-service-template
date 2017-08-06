@@ -37,7 +37,7 @@ export default class Header extends React.Component<HeaderProps, {}>
         return (
             <div className="header">
                 <div className={headerFixedClassName}>
-                    <a className="header-title" href="/" onClick={this.onClick}>web service template</a>
+                    <a tabIndex = {-1} className="header-title" href="/" onClick={this.onClick}>web service template</a>
                     <span className="header-account">{name}</span>
                 </div>
             </div>

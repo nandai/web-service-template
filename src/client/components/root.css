@@ -16,8 +16,8 @@
         & > div
         {
             position:      absolute;
-            width:         480px;
-            height:        480px;
+            width:         calc(100vmin / 6 * 4);
+            height:        calc(100vmin / 6 * 4);
             border-radius: 50%;
             border:        10px solid lightgray;
             @mixin wst-center;
@@ -26,7 +26,7 @@
             {
                 position:      absolute;
                 color:         lightgray;
-                font-size:     32px;
+                font-size:     5vmin;
                 font-weight:   bold;
                 white-space:   nowrap;
                 @mixin wst-center;
