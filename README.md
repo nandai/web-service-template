@@ -3,6 +3,9 @@ web service template（以下WST）は登録型ウェブサービス開発に向
 
 SNSアカウント認証にはpassportを使用し、認証後はカスタムコールバックによりサインアップ画面やトップページなど、適切な画面に遷移します。
 
+# DEMO
+<https://www.printf.jp:8443/>
+
 # 設定
 SNSアカウント認証等に必要な各種設定はappconfig.jsonに記述し、ルートディレクトリ（package.jsonのあるディレクトリ）配下の/config/[NODE_ENV]/に配置します。フォーマットは以下の通り。
 
