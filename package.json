@@ -1,6 +1,6 @@
 {
   "name": "web-service-template",
-  "version": "1.0.0",
+  "version": "4.3.0",
   "description": "web service template",
   "main": "main.js",
   "dependencies": {
@@ -37,7 +37,7 @@
     "cookie-parser": "^1.4.3",
     "country-data": "0.0.31",
     "cssnano": "^3.10.0",
-    "express": "^4.15.3",
+    "express": "^4.15.4",
     "express-domain-middleware": "^0.1.0",
     "express-session": "^1.15.5",
     "fb": "^2.0.0",
@@ -93,7 +93,10 @@
     "test": "ava build/test --verbose",
     "start": "node build/server/main"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "SHINOHARA Yuki",
+    "url": "https://github.com/nandai"
+  },
+  "license": "MIT",
   "private": true
 }
