@@ -48,20 +48,7 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
         if (el === e.target)
         {
             const {store} = this.props;
-            const {active, displayStatus} = store;
-
-            if (active)
-            {
-                if (displayStatus === 'showing') {
-                    store.onPageTransitionEnd();
-                }
-            }
-            else
-            {
-                if (displayStatus === 'displayed') {
-                    store.onPageTransitionEnd();
-                }
-            }
+            store.onPageTransitionEnd(store);
         }
     }
 }

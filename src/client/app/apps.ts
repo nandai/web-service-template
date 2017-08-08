@@ -1,8 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {App}    from 'client/app/app';
-import {Effect} from 'client/components/views/base-store';
+import {App}               from 'client/app/app';
+import {BaseStore, Effect} from 'client/components/views/base-store';
 
 export default class Apps
 {
@@ -65,27 +65,6 @@ export default class Apps
     }
 
     /**
-     * 次のappをカレントにする
-     */
-    changeCurrentApp() : void
-    {
-        if (this.nextApp)
-        {
-            this.currentApp.store.displayStatus = 'hidden';
-
-//          this.nextApp.store.active = true;
-//          this.nextApp.store.displayStatus = 'showing';
-
-            this.currentApp = this.nextApp;
-            this.nextApp =    null;
-        }
-        else
-        {
-            this.currentApp.store.displayStatus = 'displayed';
-        }
-    }
-
-    /**
      * 次のappをアクティブにする
      */
     setActiveNextApp() : void
@@ -93,6 +72,37 @@ export default class Apps
         const app = this.nextApp || this.currentApp;
         app.store.active = true;
         app.store.displayStatus = 'showing';
+    }
+
+    /**
+     * displayStatusを変更する
+     */
+    changeDisplayStatus(store : BaseStore) : boolean
+    {
+        const {active, displayStatus} = store;
+        let changed = false;
+
+        if (active)
+        {
+            if (displayStatus === 'showing')
+            {
+                const app = this.nextApp || this.currentApp;
+                app.store.displayStatus = 'displayed';
+                changed = true;
+            }
+        }
+        else
+        {
+            if (displayStatus === 'displayed')
+            {
+                this.currentApp.store.displayStatus = 'hidden';
+                this.currentApp = this.nextApp;
+                this.nextApp =    null;
+                changed = true;
+            }
+        }
+
+        return changed;
     }
 
     /**

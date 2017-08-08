@@ -110,11 +110,17 @@ class WstApp
      * ページ遷移終了イベント
      */
     @bind
-    onPageTransitionEnd()
+    onPageTransitionEnd(store : BaseStore)
     {
         const log = slog.stepIn('WstApp', 'onPageTransitionEnd');
-        this.data.apps.changeCurrentApp();
-        this.render();
+        const {displayStatus} = store;
+
+        if (this.data.apps.changeDisplayStatus(store))
+        {
+            log.d(`displayStatus changed. (${displayStatus} -> ${store.displayStatus})`);
+            this.render();
+        }
+
         log.stepOut();
     }
 

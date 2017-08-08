@@ -16,7 +16,7 @@ export interface BaseStore
     effect?              : Effect;
     highPriorityEffect?  : Effect;
     direction?           : Direction;
-    onPageTransitionEnd? : () => void;
+    onPageTransitionEnd? : (store : BaseStore) => void;
 }
 
 export function initBaseStore(dest : BaseStore, src : BaseStore) : void
