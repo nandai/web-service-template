@@ -8,7 +8,6 @@ import SignupApi  from 'client/api/signup-api';
 import {App}      from 'client/app/app';
 import SignupView from 'client/components/views/signup-view';
 import {storeNS}  from 'client/components/views/signup-view/store';
-import History    from 'client/libs/history';
 import Utils      from 'client/libs/utils';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
@@ -41,7 +40,7 @@ export default class SignupApp extends App
         this.store.onEmailChange =    this.onEmailChange;
         this.store.onPasswordChange = this.onPasswordChange;
         this.store.onSignup =         this.onSignup;
-        this.store.onTop =            this.onTop;
+        this.store.onBack =           this.onBack;
     }
 
     /**
@@ -151,18 +150,6 @@ export default class SignupApp extends App
             log.stepOut();
         }
         catch (err) {log.stepOut();}
-    }
-
-    /**
-     * onTop
-     */
-    @bind
-    private onTop() : void
-    {
-        const log = slog.stepIn(SignupApp.CLS_NAME, 'onTop');
-//      History.back(); // SNSサインアップに失敗して戻ってきた場合に、back()では'/signup'になってしまう
-        History.replaceState('/');
-        log.stepOut();
     }
 
     /**

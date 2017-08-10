@@ -53,6 +53,7 @@ export default class Provider
                     case 'signup': res.redirect('/signup');   break;
                     case 'login':  res.redirect('/');         break;
                     case 'link':   res.redirect('/settings'); break;
+                    default:       res.redirect('/');         break;
                 }
             }
             else

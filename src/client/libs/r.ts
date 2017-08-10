@@ -28,7 +28,6 @@ export default class R
             'goPasswordSettings':         'Go password settings',
             'goSettings':                 'Go settings',
             'goSignup':                   'Go sign up',
-            'goTop':                      'Go top',
             'invite':                     'Invite',
             'join':                       'Join',
             'linkProvider':               'Link ${provider}',
@@ -91,7 +90,6 @@ export default class R
             'goPasswordSettings':         'パスワードを設定する',
             'goSettings':                 '設定画面へ',
             'goSignup':                   'サインアップ画面へ',
-            'goTop':                      'トップ画面へ',
             'invite':                     '招待する',
             'join':                       '参加する',
             'linkProvider':               '${provider}を紐づける',
@@ -153,7 +151,6 @@ export default class R
     static GO_PASSWORD_SETTINGS =          'goPasswordSettings';
     static GO_SETTINGS =                   'goSettings';
     static GO_SIGNUP =                     'goSignup';
-    static GO_TOP =                        'goTop';
     static INVITE =                        'invite';
     static JOIN =                          'join';
     static LINK_PROVIDER =                 'linkProvider';

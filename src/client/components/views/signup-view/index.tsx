@@ -50,7 +50,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
                         <Input type="text"     placeholder={R.text(R.EMAIL,    locale)} value={store.email}    message={message.email}    onChange={store.onEmailChange} isMarginTop={true} />
                         <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} message={message.password} onChange={store.onPasswordChange} />
                         <Button submit={true} disabled={disabled} onClick={store.onSignup}>{R.text(R.SIGNUP, locale)}</Button>
-                        <Button               disabled={disabled} onClick={store.onTop}   >{R.text(R.GO_TOP, locale)}</Button>
+                        <Button               disabled={disabled} onClick={store.onBack}  >{R.text(R.BACK,   locale)}</Button>
                         {messageEl}
                     </form>
                 </ViewContents>

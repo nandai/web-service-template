@@ -19,7 +19,7 @@ export namespace storeNS
         onEmailChange?       : (value : string) => void;
         onPasswordChange?    : (value : string) => void;
         onSignup?            : () => void;
-        onTop?               : () => void;
+        onBack?              : () => void;
         signupEmailResponse? : Response.SignupEmail;
     }
 
@@ -39,7 +39,7 @@ export namespace storeNS
             onEmailChange:       src.onEmailChange,
             onPasswordChange:    src.onPasswordChange,
             onSignup:            src.onSignup,
-            onTop:               src.onTop,
+            onBack:              src.onBack,
             signupEmailResponse: {status:Response.Status.OK, message:{}}
         };
         initBaseStore(store, src);
