@@ -10,8 +10,8 @@ import SettingsApi                   from './api/settings-api';
 import SignupApi                     from './api/signup-api';
 import UserApi                       from './api/user-api';
 import ForgetApp                     from './app/forget-app';
+import HomeApp                       from './app/home-app';
 import JoinApp                       from './app/join-app';
-import LoginApp                      from './app/login-app';
 import ResetApp                      from './app/reset-app';
 import SettingsAccountApp            from './app/settings-account-app';
 import SettingsAccountEmailApp       from './app/settings-account-email-app';
@@ -226,8 +226,8 @@ class Initializer
 
         // const provider = ':provider(twitter|facebook|google)';   // TODO:delete
 
-        this.app.get('/',       LoginApp .index);
-        this.app.get('/about',  LoginApp .about);
+        this.app.get('/',       HomeApp  .index);
+        this.app.get('/about',  HomeApp  .about);
         this.app.get('/signup', SignupApp.index);
         this.app.get('/join',   JoinApp  .index);
         this.app.get('/forget', ForgetApp.index);

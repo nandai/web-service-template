@@ -3,8 +3,8 @@
  */
 import ForbiddenApp                  from 'client/app/forbidden-app';
 import ForgetApp                     from 'client/app/forget-app';
+import HomeApp                       from 'client/app/home-app';
 import JoinApp                       from 'client/app/join-app';
-import LoginApp                      from 'client/app/login-app';
 import NotFoundApp                   from 'client/app/not-found-app';
 import ResetApp                      from 'client/app/reset-app';
 import SettingsAccountApp            from 'client/app/settings-account-app';
@@ -29,13 +29,13 @@ import {Data}                        from './data';
 export function initRoutes(data : Data)
 {
     const locale = Utils.getLocale();
-    const loginApp =    new LoginApp();
+    const homeApp =     new HomeApp();
     const notFoundApp = new NotFoundApp();
 
     data.routes =
     [
         {url:'/',                              app:new TopApp(),                        title:R.text(R.TOP,                           locale), auth:true},
-        {url:'/',                              app:loginApp,                            title:R.text(R.LOGIN,                         locale)},
+        {url:'/',                              app:homeApp,                             title:R.text(R.LOGIN,                         locale)},
         {url:'/',                              app:new SmsApp(),                        title:R.text(R.AUTH_SMS,                      locale), query:true},
         {url:'/signup',                        app:new SignupApp(),                     title:R.text(R.SIGNUP,                        locale)},
         {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                locale), query:true},
@@ -50,7 +50,7 @@ export function initRoutes(data : Data)
         {url:'/settings/invite',               app:new SettingsInviteApp(),             title:R.text(R.SETTINGS_INVITE,               locale), auth:true},
         {url:'/users/:id',                     app:new UserApp(),                       title:R.text(R.USER,                          locale)},
         {url:'/users',                         app:new UsersApp(),                      title:R.text(R.USER_LIST,                     locale)},
-        {url:'/about',                         app:loginApp,                            title:R.text(R.ABOUT,                         locale)},
+        {url:'/about',                         app:homeApp,                             title:R.text(R.ABOUT,                         locale)},
         {url:'403',                            app:new ForbiddenApp(),                  title:R.text(R.FORBIDDEN,                     locale)},
         {url:'404',                            app:notFoundApp,                         title:R.text(R.NOT_FOUND,                     locale)},
         {url:'404',                            app:notFoundApp,                         title:R.text(R.NOT_FOUND,                     locale), query:true}

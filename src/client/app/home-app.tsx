@@ -59,7 +59,7 @@ export default class HomeApp extends App
      */
     toString() : string
     {
-        return 'LoginApp';
+        return 'HomeApp';
     }
 
     /**
@@ -192,7 +192,7 @@ class LoginApp extends App
      */
     toString() : string
     {
-        return 'HomeApp';
+        return 'LoginApp';
     }
 
     /**

@@ -39,7 +39,7 @@ export default class HomeView extends React.Component<HomeViewProps, {}>
             <ViewContainer store={store}>
                 <Header    store={store} />
                 <div style={{position:'relative', flexGrow:1}}>
-                    <LoginView  store={store.loginStore} />
+                    <LoginView store={store.loginStore} />
                     <AboutView store={store.aboutStore} />
                 </div>
                 <Footer>

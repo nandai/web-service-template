@@ -4,7 +4,7 @@
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom/server';
 
-import ClientApp     from 'client/app/login-app';
+import ClientApp     from 'client/app/home-app';
 import Root          from 'client/components/root';
 import ClientR       from 'client/libs/r';
 import {slog}        from 'libs/slog';
@@ -20,11 +20,11 @@ import {view}        from './view';
 import express = require('express');
 
 /**
- * top App
+ * home app
  */
-export default class LoginApp
+export default class HomeApp
 {
-    private static CLS_NAME = 'LoginApp';
+    private static CLS_NAME = 'HomeApp';
 
     /**
      * GET /
@@ -47,7 +47,7 @@ export default class LoginApp
             return;
         }
 
-        const log = slog.stepIn(LoginApp.CLS_NAME, 'index');
+        const log = slog.stepIn(HomeApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
 
         try
@@ -82,7 +82,7 @@ export default class LoginApp
      */
     static async about(req : express.Request, res : express.Response)
     {
-        const log = slog.stepIn(LoginApp.CLS_NAME, 'index');
+        const log = slog.stepIn(HomeApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
 
         try
