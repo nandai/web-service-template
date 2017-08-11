@@ -1,20 +1,20 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import bind        from 'bind-decorator';
-import * as React  from 'react';
+import bind                 from 'bind-decorator';
+import * as React           from 'react';
 
-import LoginApi    from 'client/api/login-api';
-import {App}       from 'client/app/app';
-import Apps        from 'client/app/apps';
-import {BaseStore} from 'client/components/views/base-store';
-import LoginView   from 'client/components/views/login-view';
-import {storeNS}   from 'client/components/views/login-view/store';
-import History     from 'client/libs/history';
-import Utils       from 'client/libs/utils';
-import {Request}   from 'libs/request';
-import {Response}  from 'libs/response';
-import {slog}      from 'libs/slog';
+import LoginApi             from 'client/api/login-api';
+import {App}                from 'client/app/app';
+import Apps                 from 'client/app/apps';
+import {BaseStore}          from 'client/components/views/base-store';
+import LoginView            from 'client/components/views/login-view';
+import {storeNS}            from 'client/components/views/login-view/store';
+import History, {Direction} from 'client/libs/history';
+import Utils                from 'client/libs/utils';
+import {Request}            from 'libs/request';
+import {Response}           from 'libs/response';
+import {slog}               from 'libs/slog';
 
 /**
  * login app
@@ -44,6 +44,9 @@ export default class LoginApp extends App
 
         this.homeApp =  new HomeApp( this.store.homeStore);
         this.aboutApp = new AboutApp(this.store.aboutStore);
+
+        this.store.homeStore .page.active = false;
+        this.store.aboutStore.page.active = false;
 
         this.store.homeStore .page.onPageTransitionEnd = this.onPageTransitionEnd;
         this.store.aboutStore.page.onPageTransitionEnd = this.onPageTransitionEnd;
@@ -89,11 +92,40 @@ export default class LoginApp extends App
         const {store} = this;
         store.name = name;
 
-        store.homeStore .page.active =        (name === 'home');
-        store.homeStore .page.displayStatus = (name === 'home' ? 'displayed' : 'hidden');
+        let app : App;
+        let direction : Direction;
 
-        store.aboutStore.page.active =        (name === 'about');
-        store.aboutStore.page.displayStatus = (name === 'about' ? 'displayed' : 'hidden');
+        if (name === 'home')
+        {
+            app = this.homeApp;
+            direction = 'back';
+        }
+        else
+        {
+            app = this.aboutApp;
+            direction = 'forward';
+        }
+
+        this.store.homeStore .page.direction = direction;
+        this.store.aboutStore.page.direction = direction;
+
+        if (! this.apps)
+        {
+            // 初回設定時
+            app.store.page.active = true;
+            this.apps = new Apps(app);
+        }
+        else
+        {
+            // 二度目以降
+            this.apps.setNextApp(app);
+
+            setTimeout(() =>
+            {
+                this.apps.setActiveNextApp();
+                App.render();
+            }, this.apps.getEffectDelay());
+        }
     }
 
     /**
@@ -103,7 +135,7 @@ export default class LoginApp extends App
     private onHome() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onHome');
-        History.pushState('/');
+        History.replaceState('/');
         log.stepOut();
     }
 
@@ -114,7 +146,7 @@ export default class LoginApp extends App
     private onAbout() : void
     {
         const log = slog.stepIn(LoginApp.CLS_NAME, 'onAbout');
-        History.pushState('/about');
+        History.replaceState('/about');
         log.stepOut();
     }
 
@@ -122,8 +154,11 @@ export default class LoginApp extends App
      * ページ遷移終了イベント
      */
     @bind
-    onPageTransitionEnd(_store : BaseStore)
+    onPageTransitionEnd(store : BaseStore)
     {
+        if (this.apps.changeDisplayStatus(store)) {
+            App.render();
+        }
     }
 }
 

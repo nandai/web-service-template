@@ -212,5 +212,11 @@ const transitions : Transition[] =
         appName1:    'UsersApp',
         appName2:    'UserApp',
         effectDelay: 0
+    },
+
+    {
+        appName1:    'HomeApp',
+        appName2:    'AboutApp',
+        effectDelay: 0
     }
 ];
