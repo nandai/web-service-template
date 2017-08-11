@@ -11,7 +11,7 @@ import {slog}            from 'libs/slog';
 export abstract class App
 {
     abstract store : BaseStore;
-    render : () => void;
+    static render : () => void;
 
     /**
      * toString

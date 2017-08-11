@@ -69,7 +69,7 @@ export default class ForgetApp extends App
     private onEmailChange(value : string) : void
     {
         this.store.email = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -84,21 +84,21 @@ export default class ForgetApp extends App
         store.message = '';
         store.requestResetPasswordResult.message = {};
         store.loading = true;
-        this.render();
+        App.render();
 
         try
         {
             const res : Response.RequestResetPassword = await ResetApi.requestResetPassword({email:this.store.email});
             store.requestResetPasswordResult = res;
             store.loading = false;
-            this.render();
+            App.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
             store.loading = false;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }

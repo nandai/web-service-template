@@ -200,7 +200,7 @@ export default class SettingsApp extends App
         catch (err)
         {
             store.message = err.message;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }
@@ -228,14 +228,14 @@ export default class SettingsApp extends App
                     store.unlinkProviderResponse = res;
                 }
 
-                this.render();
+                App.render();
                 log.stepOut();
                 resolve();
             }
             catch (err)
             {
                 store.message = err.message;
-                this.render();
+                App.render();
                 log.stepOut();
                 reject();
             }

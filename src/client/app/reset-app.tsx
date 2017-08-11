@@ -61,7 +61,7 @@ export default class ResetApp extends App
     private onPasswordChange(value : string) : void
     {
         this.store.password = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -71,7 +71,7 @@ export default class ResetApp extends App
     private onConfirmChange(value : string) : void
     {
         this.store.confirm = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -90,13 +90,13 @@ export default class ResetApp extends App
             const {password, confirm} = store;
             const res : Response.ResetPassword = await ResetApi.resetPassword({resetId, password, confirm});
             store.resetPasswordResponse = res;
-            this.render();
+            App.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }

@@ -113,7 +113,7 @@ export default class TopApp extends App
         catch (err)
         {
             this.store.message = err.message;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }

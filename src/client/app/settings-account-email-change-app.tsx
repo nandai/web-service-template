@@ -60,7 +60,7 @@ export default class SettingsAccountEmailChangeApp extends App
     private onPasswordChange(value : string) : void
     {
         this.store.password = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -80,13 +80,13 @@ export default class SettingsAccountEmailChangeApp extends App
 
             const res : Response.ChangeEmail = await SettingsApi.changeEmail({changeId, password});
             store.changeEmailResponse = res;
-            this.render();
+            App.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }

@@ -69,7 +69,7 @@ export default class SettingsInviteApp extends App
     private onEmailChange(value : string) : void
     {
         this.store.email = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -84,7 +84,7 @@ export default class SettingsInviteApp extends App
         store.message = '';
         store.inviteResponse.message = {};
         store.loading = true;
-        this.render();
+        App.render();
 
         try
         {
@@ -93,14 +93,14 @@ export default class SettingsInviteApp extends App
             const res : Response.Invite = await SettingsApi.invite({email});
             store.inviteResponse = res;
             store.loading = false;
-            this.render();
+            App.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
             store.loading = false;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }

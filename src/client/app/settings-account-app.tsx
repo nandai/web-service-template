@@ -75,7 +75,7 @@ export default class SettingsAccountApp extends App
     private onNameChange(value : string) : void
     {
         this.store.editAccount.name = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -85,7 +85,7 @@ export default class SettingsAccountApp extends App
     private onUserNameChange(value : string) : void
     {
         this.store.editAccount.userName = value;
-        this.render();
+        App.render();
 
         if (this.checkUserNameTimerId) {
             clearTimeout(this.checkUserNameTimerId);
@@ -101,7 +101,7 @@ export default class SettingsAccountApp extends App
     private onPhoneNoChange(value : string) : void
     {
         this.store.editAccount.phoneNo = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -111,7 +111,7 @@ export default class SettingsAccountApp extends App
     private onCountryCodeChange(value : string) : void
     {
         this.store.editAccount.countryCode = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -121,7 +121,7 @@ export default class SettingsAccountApp extends App
     private onTwoFactorAuth(twoFactorAuth : string) : void
     {
         this.store.editAccount.twoFactorAuth = twoFactorAuth;
-        this.render();
+        App.render();
     }
 
     /**
@@ -141,13 +141,13 @@ export default class SettingsAccountApp extends App
             const res : Response.SetAccount = await SettingsApi.setAccount({name, userName, countryCode, phoneNo, twoFactorAuth});
             store.setAccountResponse = res;
 
-            this.render();
+            App.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }
@@ -162,7 +162,7 @@ export default class SettingsAccountApp extends App
         const userName = store.editAccount.userName;
         const res : Response.CheckUserName = await SettingsApi.checkUserName({userName});
         store.checkUserNameResponse = res;
-        this.render();
+        App.render();
         this.checkUserNameTimerId = 0;
     }
 }

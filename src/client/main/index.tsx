@@ -8,6 +8,7 @@ import * as ReactDOM        from 'react-dom';
 import {Response}           from 'libs/response';
 import {slog}               from 'libs/slog';
 import SettingsApi          from '../api/settings-api';
+import {App}                from '../app/app';
 import Root                 from '../components/root';
 import {BaseStore}          from '../components/views/base-store';
 import History, {Direction} from '../libs/history';
@@ -43,11 +44,12 @@ class WstApp
         const log = slog.stepIn('WstApp', 'init');
         const {data} = this;
 
+        App.render = this.render;
+
         initRoutes(data);
         data.routes.forEach((route) =>
         {
             const {app} = route;
-            app.render = this.render;
             app.store.page.onPageTransitionEnd = this.onPageTransitionEnd;
         });
 

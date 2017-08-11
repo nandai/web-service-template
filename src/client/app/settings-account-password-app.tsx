@@ -71,7 +71,7 @@ export default class SettingsAccountPasswordApp extends App
     private onOldPasswordChange(value : string) : void
     {
         this.store.oldPassword = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -81,7 +81,7 @@ export default class SettingsAccountPasswordApp extends App
     private onNewPasswordChange(value : string) : void
     {
         this.store.newPassword = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -91,7 +91,7 @@ export default class SettingsAccountPasswordApp extends App
     private onConfirmChange(value : string) : void
     {
         this.store.confirm = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -109,13 +109,13 @@ export default class SettingsAccountPasswordApp extends App
 
             const res : Response.ChangePassword = await SettingsApi.changePassword({oldPassword, newPassword, confirm});
             store.changePasswordResponse = res;
-            this.render();
+            App.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }

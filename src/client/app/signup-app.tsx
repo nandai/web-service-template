@@ -120,7 +120,7 @@ export default class SignupApp extends App
     private onEmailChange(value : string) : void
     {
         this.store.email = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -130,7 +130,7 @@ export default class SignupApp extends App
     private onPasswordChange(value : string) : void
     {
         this.store.password = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -165,14 +165,14 @@ export default class SignupApp extends App
             store.message = '';
             store.signupEmailResponse.message = {};
             store.loading = true;
-            this.render();
+            App.render();
 
             try
             {
                 const res : Response.SignupEmail = await SignupApi.signupEmail(param);
                 store.signupEmailResponse = res;
                 store.loading = false;
-                this.render();
+                App.render();
                 log.stepOut();
                 resolve();
             }
@@ -180,7 +180,7 @@ export default class SignupApp extends App
             {
                 store.message = err.message;
                 store.loading = false;
-                this.render();
+                App.render();
                 log.stepOut();
                 reject();
             }

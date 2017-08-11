@@ -60,7 +60,7 @@ export default class SignupConfirmApp extends App
     private onPasswordChange(value : string) : void
     {
         this.store.password = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -79,13 +79,13 @@ export default class SignupConfirmApp extends App
             const password = store.password;
             const res : Response.ConfirmSignupEmail = await SignupApi.confirmSignupEmail({signupId, password});
             store.confirmSignupEmailResponse = res;
-            this.render();
+            App.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }

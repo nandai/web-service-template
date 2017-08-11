@@ -76,7 +76,7 @@ export default class SmsApp extends App
     private onSmsCodeChange(value : string) : void
     {
         this.store.smsCode = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -103,7 +103,7 @@ export default class SmsApp extends App
             else
             {
                 store.loginSmsResponse = res;
-                this.render();
+                App.render();
             }
 
             log.stepOut();
@@ -111,7 +111,7 @@ export default class SmsApp extends App
         catch (err)
         {
             store.message = err.message;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }

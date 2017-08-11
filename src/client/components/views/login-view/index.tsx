@@ -9,6 +9,7 @@ import Tabs, {TabItem} from 'client/components/common/tabs';
 import Text            from 'client/components/common/text';
 import Footer          from 'client/components/designated/footer';
 import Header          from 'client/components/designated/header';
+import {BaseStore}     from 'client/components/views/base-store';
 import ViewContainer   from 'client/components/views/view-container';
 import ViewContents    from 'client/components/views/view-contents';
 import R               from 'client/libs/r';
@@ -28,18 +29,46 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
     render() : JSX.Element
     {
         const {store} = this.props;
-        const {locale} = store;
-        const response = store.loginEmailResponse;
-        const {message} = response;
-
         const items : TabItem[] =
         [
             {name:'home',  label:'HOME',  onClick:store.onHome},
             {name:'about', label:'ABOUT', onClick:store.onAbout}
         ];
 
-        const home = (
-            <div style={{display:(store.name === 'home' ? 'flex' : 'none'), flexGrow:1}}>
+        return (
+            <ViewContainer store={store}>
+                <Header    store={store} />
+                <div style={{position:'relative', flexGrow:1}}>
+                    <HomeView  store={store.homeStore} />
+                    <AboutView store={store.aboutStore} />
+                </div>
+                <Footer>
+                    <Tabs active={store.name} items={items} />
+                </Footer>
+            </ViewContainer>
+        );
+    }
+}
+
+interface HomeViewProps
+{
+    store : storeNS.HomeStore;
+}
+
+class HomeView extends React.Component<HomeViewProps, {}>
+{
+    /**
+     * render
+     */
+    render() : JSX.Element
+    {
+        const store = this.props.store;
+        const {locale} = store;
+        const response = store.loginEmailResponse;
+        const {message} = response;
+
+        return (
+            <ViewContainer store={store}>
                 <ViewContents>
                     <form>
                         <Button onClick={store.onTwitter} >{R.text(R.LOGIN_WITH_TWITTER,  locale)}</Button>
@@ -55,27 +84,31 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
                         <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
                     </form>
                 </ViewContents>
-            </div>
+            </ViewContainer>
         );
+    }
+}
 
-        const about = (
-            <div style={{display:(store.name === 'about' ? 'flex' : 'none'), flexGrow:1}}>
+interface AboutViewProps
+{
+    store : BaseStore;
+}
+
+class AboutView extends React.Component<AboutViewProps, {}>
+{
+    /**
+     * render
+     */
+    render() : JSX.Element
+    {
+        const {store} = this.props;
+        return (
+            <ViewContainer store={store}>
                 <ViewContents>
                     <p style={{textAlign:'center'}}>
                         <a href="https://github.com/nandai/web-service-template" target="_blank">https://github.com/nandai/web-service-template</a>
                     </p>
                 </ViewContents>
-            </div>
-        );
-
-        return (
-            <ViewContainer store={store}>
-                <Header store={store} />
-                {home}
-                {about}
-                <Footer>
-                    <Tabs active={store.name} items={items} />
-                </Footer>
             </ViewContainer>
         );
     }

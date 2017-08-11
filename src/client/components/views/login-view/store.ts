@@ -8,7 +8,16 @@ export namespace storeNS
 {
     export interface Store extends BaseStore
     {
-        name?               : 'home' | 'about';
+        name?       : 'home' | 'about';
+        onHome?     : () => void;
+        onAbout?    : () => void;
+
+        homeStore?  : HomeStore;
+        aboutStore? : BaseStore;
+    }
+
+    export interface HomeStore extends BaseStore
+    {
         email?              : string;
         password?           : string;
         message?            : string;
@@ -22,35 +31,51 @@ export namespace storeNS
         onSignup?           : () => void;
         onForget?           : () => void;
         onUsers?            : () => void;
-        onHome?             : () => void;
-        onAbout?            : () => void;
         loginEmailResponse? : Response.LoginEmail;
     }
 
     export function init(src : Store) : Store
     {
-        const store : Store =
+        const srcHomeStore = src.homeStore || {};
+
+        const homeStore : HomeStore =
         {
-            page:               {effect:'fade'},
-            name:               src.name,
+            page:               {effect:'slide'},
             email:              '',
             password:           '',
-            message:            src.message || '',
-            onTwitter:          src.onTwitter,
-            onFacebook:         src.onFacebook,
-            onGoogle:           src.onGoogle,
-            onGithub:           src.onGithub,
-            onEmailChange:      src.onEmailChange,
-            onPasswordChange:   src.onPasswordChange,
-            onLogin:            src.onLogin,
-            onSignup:           src.onSignup,
-            onForget:           src.onForget,
-            onUsers:            src.onUsers,
-            onHome:             src.onHome,
-            onAbout:            src.onAbout,
-            loginEmailResponse: {status:Response.Status.OK, message:{}}
+            message:            srcHomeStore.message || '',
+            onTwitter:          srcHomeStore.onTwitter,
+            onFacebook:         srcHomeStore.onFacebook,
+            onGoogle:           srcHomeStore.onGoogle,
+            onGithub:           srcHomeStore.onGithub,
+            onEmailChange:      srcHomeStore.onEmailChange,
+            onPasswordChange:   srcHomeStore.onPasswordChange,
+            onLogin:            srcHomeStore.onLogin,
+            onSignup:           srcHomeStore.onSignup,
+            onForget:           srcHomeStore.onForget,
+            onUsers:            srcHomeStore.onUsers,
+            loginEmailResponse: {status:Response.Status.OK, message:{}},
+        };
+        initBaseStore(homeStore, src);
+
+        const aboutStore : BaseStore =
+        {
+            page: {effect:'slide'}
+        };
+        initBaseStore(aboutStore, src);
+
+        const store : Store =
+        {
+            page:    {effect:'fade'},
+            name:    src.name,
+            onHome:  src.onHome,
+            onAbout: src.onAbout,
+
+            homeStore,
+            aboutStore
         };
         initBaseStore(store, src);
+
         return store;
     }
 }

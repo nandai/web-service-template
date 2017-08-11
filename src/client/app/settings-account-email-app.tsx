@@ -69,7 +69,7 @@ export default class SettingsAccountEmailApp extends App
     private onEmailChange(value : string) : void
     {
         this.store.editAccount.email = value;
-        this.render();
+        App.render();
     }
 
     /**
@@ -84,7 +84,7 @@ export default class SettingsAccountEmailApp extends App
         store.message = '';
         store.requestChangeEmailResponse.message = {};
         store.loading = true;
-        this.render();
+        App.render();
 
         try
         {
@@ -94,14 +94,14 @@ export default class SettingsAccountEmailApp extends App
             const res : Response.RequestChangeEmail = await SettingsApi.requestChangeEmail({email});
             store.requestChangeEmailResponse = res;
             store.loading = false;
-            this.render();
+            App.render();
             log.stepOut();
         }
         catch (err)
         {
             store.message = err.message;
             store.loading = false;
-            this.render();
+            App.render();
             log.stepOut();
         }
     }
