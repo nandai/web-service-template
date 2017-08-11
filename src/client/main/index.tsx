@@ -48,7 +48,7 @@ class WstApp
         {
             const {app} = route;
             app.render = this.render;
-            app.store.onPageTransitionEnd = this.onPageTransitionEnd;
+            app.store.page.onPageTransitionEnd = this.onPageTransitionEnd;
         });
 
         const ssrStore = Utils.getSsrStore<BaseStore>();
@@ -83,8 +83,9 @@ class WstApp
             const {data} = this;
             data.routes.forEach((route) =>
             {
-                route.app.store.direction = direction;
-                route.app.store.highPriorityEffect = null;
+                const {page} = route.app.store;
+                page.direction = direction;
+                page.highPriorityEffect = null;
             });
 
             const prevApp = data.currentRoute.app;
@@ -113,11 +114,11 @@ class WstApp
     onPageTransitionEnd(store : BaseStore)
     {
         const log = slog.stepIn('WstApp', 'onPageTransitionEnd');
-        const {displayStatus} = store;
+        const {displayStatus} = store.page;
 
         if (this.data.apps.changeDisplayStatus(store))
         {
-            log.d(`displayStatus changed. (${displayStatus} -> ${store.displayStatus})`);
+            log.d(`displayStatus changed. (${displayStatus} -> ${store.page.displayStatus})`);
             this.render();
         }
 

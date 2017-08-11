@@ -28,7 +28,7 @@ export namespace storeNS
         const account = src.account || null;
         const store : Store =
         {
-            effect:                'fade',
+            page:                  {effect:'fade'},
             editAccount:           _.clone(account),
             message:               '',
             onNameChange:          src.onNameChange,

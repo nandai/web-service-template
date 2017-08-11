@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {BaseStore} from 'client/components/views/base-store';
 import ClientR     from 'client/libs/r';
 import SettingsApi from 'server/api/settings-api';
 import Config      from 'server/config';
@@ -92,7 +93,9 @@ function sendAbnormal(req : express.Request, res : express.Response, phrase : st
             const title = ClientR.text(phrase, locale);
             const data = await SettingsApi.getAccount(req);
             const {account} = data;
-            res.status(status).send(view(title, 'wst.js', '', {locale, account, active:true}));
+            const page = {active:true};
+            const store : BaseStore = {locale, account, page};
+            res.status(status).send(view(title, 'wst.js', '', store));
             resolve();
         }
         catch (err) {reject(err);}

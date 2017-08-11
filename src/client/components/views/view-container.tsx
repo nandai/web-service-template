@@ -21,8 +21,9 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
     {
         const {props} = this;
         const {store} = props;
-        const {active, displayStatus, direction} = store;
-        const effect = store.highPriorityEffect || store.effect || 'fade';
+        const {page} = store;
+        const {active, displayStatus, direction} = page;
+        const effect = page.highPriorityEffect || page.effect || 'fade';
         let className = 'view-container';
 
              if (displayStatus === 'preparation') {className += ` ${effect} prepare ${direction}`;}
@@ -48,7 +49,7 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
         if (el === e.target)
         {
             const {store} = this.props;
-            store.onPageTransitionEnd(store);
+            store.page.onPageTransitionEnd(store);
         }
     }
 }

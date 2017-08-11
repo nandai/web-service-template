@@ -25,7 +25,7 @@ export namespace storeNS
     {
         const store : Store =
         {
-            effect:      'fade',
+            page:        {effect:'fade'},
             message:     src.message || '',
             onTwitter:   src.onTwitter,
             onFacebook:  src.onFacebook,

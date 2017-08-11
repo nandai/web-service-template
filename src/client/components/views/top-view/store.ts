@@ -18,7 +18,7 @@ export namespace storeNS
     {
         const store : Store =
         {
-            effect:     'fade',
+            page:       {effect:'fade'},
             message:    src.message || '',
             onSettings: src.onSettings,
             onInvite:   src.onInvite,

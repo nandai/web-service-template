@@ -19,7 +19,7 @@ export namespace storeNS
     {
         const store : Store =
         {
-            effect:           'fade',
+            page:             {effect:'fade'},
             smsCode:          '',
             message:          '',
             onSmsCodeChange:  src.onSmsCodeChange,

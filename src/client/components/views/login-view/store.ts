@@ -31,7 +31,7 @@ export namespace storeNS
     {
         const store : Store =
         {
-            effect:             'fade',
+            page:               {effect:'fade'},
             name:               src.name,
             email:              '',
             password:           '',

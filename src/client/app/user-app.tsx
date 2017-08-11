@@ -103,7 +103,7 @@ export default class UserApp extends App
                     break;
                 }
 
-                if (store.active && store.user.name !== user.name)
+                if (store.page.active && store.user.name !== user.name)
                 {
                     const id = (user.name ? user.name : user.id.toString());
                     History.replaceState(`/users/${id}`);

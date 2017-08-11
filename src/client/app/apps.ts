@@ -30,13 +30,13 @@ export default class Apps
         if (this.currentApp !== nextApp)
         {
             // 非アクティブ化
-            this.currentApp.store.active = false;
+            this.currentApp.store.page.active = false;
 
             // アクティブ化準備
             this.apps = this.addOrReplaceApp(nextApp);
             this.nextApp = nextApp;
-            this.nextApp.store.active = false;
-            this.nextApp.store.displayStatus = 'preparation';
+            this.nextApp.store.page.active = false;
+            this.nextApp.store.page.displayStatus = 'preparation';
             this.transition = null;
 
             // 優先する遷移エフェクトがあれば設定
@@ -47,17 +47,17 @@ export default class Apps
             {
                 if (transition.appName1 === curName && transition.appName2 === nextName)
                 {
-                    this.currentApp.store.highPriorityEffect = transition.effect1;
-                    this.nextApp   .store.highPriorityEffect = transition.effect2;
-                    this.transition =                          transition;
+                    this.currentApp.store.page.highPriorityEffect = transition.effect1;
+                    this.nextApp   .store.page.highPriorityEffect = transition.effect2;
+                    this.transition =                               transition;
                     break;
                 }
 
                 if (transition.appName1 === nextName && transition.appName2 === curName)
                 {
-                    this.currentApp.store.highPriorityEffect = transition.effect2;
-                    this.nextApp   .store.highPriorityEffect = transition.effect1;
-                    this.transition =                          transition;
+                    this.currentApp.store.page.highPriorityEffect = transition.effect2;
+                    this.nextApp   .store.page.highPriorityEffect = transition.effect1;
+                    this.transition =                               transition;
                     break;
                 }
             }
@@ -70,8 +70,8 @@ export default class Apps
     setActiveNextApp() : void
     {
         const app = this.nextApp || this.currentApp;
-        app.store.active = true;
-        app.store.displayStatus = 'showing';
+        app.store.page.active = true;
+        app.store.page.displayStatus = 'showing';
     }
 
     /**
@@ -79,7 +79,7 @@ export default class Apps
      */
     changeDisplayStatus(store : BaseStore) : boolean
     {
-        const {active, displayStatus} = store;
+        const {active, displayStatus} = store.page;
         let changed = false;
 
         if (active)
@@ -87,7 +87,7 @@ export default class Apps
             if (displayStatus === 'showing')
             {
                 const app = this.nextApp || this.currentApp;
-                app.store.displayStatus = 'displayed';
+                app.store.page.displayStatus = 'displayed';
                 changed = true;
             }
         }
@@ -95,7 +95,7 @@ export default class Apps
         {
             if (displayStatus === 'displayed')
             {
-                this.currentApp.store.displayStatus = 'hidden';
+                this.currentApp.store.page.displayStatus = 'hidden';
                 this.currentApp = this.nextApp;
                 this.nextApp =    null;
                 changed = true;
@@ -162,7 +162,7 @@ export default class Apps
      */
     isDuringTransition() : boolean
     {
-        if (this.nextApp === null && this.currentApp.store.displayStatus === 'displayed') {
+        if (this.nextApp === null && this.currentApp.store.page.displayStatus === 'displayed') {
             return false;
         }
         return true;
