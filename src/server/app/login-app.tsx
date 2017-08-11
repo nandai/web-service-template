@@ -66,7 +66,7 @@ export default class LoginApp
             }
 
             const title = ClientR.text(ClientR.LOGIN, locale);
-            const app = new ClientApp({locale, name:'home', homeStore:{message}});
+            const app = new ClientApp({locale, name:'login', loginStore:{message}});
             const contents = ReactDOM.renderToString(<Root app={app} />);
             res.send(view(title, 'wst.js', contents, app.store));
             log.stepOut();

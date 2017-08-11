@@ -8,15 +8,15 @@ export namespace storeNS
 {
     export interface Store extends BaseStore
     {
-        name?       : 'home' | 'about';
-        onHome?     : () => void;
+        name?       : 'login' | 'about';
+        onLogin?    : () => void;
         onAbout?    : () => void;
 
-        homeStore?  : HomeStore;
+        loginStore? : LoginStore;
         aboutStore? : BaseStore;
     }
 
-    export interface HomeStore extends BaseStore
+    export interface LoginStore extends BaseStore
     {
         email?              : string;
         password?           : string;
@@ -36,27 +36,27 @@ export namespace storeNS
 
     export function init(src : Store) : Store
     {
-        const srcHomeStore = src.homeStore || {};
+        const srcLoginStore = src.loginStore || {};
 
-        const homeStore : HomeStore =
+        const loginStore : LoginStore =
         {
             page:               {effect:'slide'},
             email:              '',
             password:           '',
-            message:            srcHomeStore.message || '',
-            onTwitter:          srcHomeStore.onTwitter,
-            onFacebook:         srcHomeStore.onFacebook,
-            onGoogle:           srcHomeStore.onGoogle,
-            onGithub:           srcHomeStore.onGithub,
-            onEmailChange:      srcHomeStore.onEmailChange,
-            onPasswordChange:   srcHomeStore.onPasswordChange,
-            onLogin:            srcHomeStore.onLogin,
-            onSignup:           srcHomeStore.onSignup,
-            onForget:           srcHomeStore.onForget,
-            onUsers:            srcHomeStore.onUsers,
+            message:            srcLoginStore.message || '',
+            onTwitter:          srcLoginStore.onTwitter,
+            onFacebook:         srcLoginStore.onFacebook,
+            onGoogle:           srcLoginStore.onGoogle,
+            onGithub:           srcLoginStore.onGithub,
+            onEmailChange:      srcLoginStore.onEmailChange,
+            onPasswordChange:   srcLoginStore.onPasswordChange,
+            onLogin:            srcLoginStore.onLogin,
+            onSignup:           srcLoginStore.onSignup,
+            onForget:           srcLoginStore.onForget,
+            onUsers:            srcLoginStore.onUsers,
             loginEmailResponse: {status:Response.Status.OK, message:{}},
         };
-        initBaseStore(homeStore, src);
+        initBaseStore(loginStore, src);
 
         const aboutStore : BaseStore =
         {
@@ -68,10 +68,10 @@ export namespace storeNS
         {
             page:    {effect:'fade'},
             name:    src.name,
-            onHome:  src.onHome,
+            onLogin: src.onLogin,
             onAbout: src.onAbout,
 
-            homeStore,
+            loginStore,
             aboutStore
         };
         initBaseStore(store, src);

@@ -16,12 +16,12 @@ import R               from 'client/libs/r';
 import {Response}      from 'libs/response';
 import {storeNS}       from './store';
 
-interface LoginViewProps
+interface HomeViewProps
 {
     store : storeNS.Store;
 }
 
-export default class LoginView extends React.Component<LoginViewProps, {}>
+export default class HomeView extends React.Component<HomeViewProps, {}>
 {
     /**
      * render
@@ -31,7 +31,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
         const {store} = this.props;
         const items : TabItem[] =
         [
-            {name:'home',  label:'HOME',  onClick:store.onHome},
+            {name:'login', label:'LOGIN', onClick:store.onLogin},
             {name:'about', label:'ABOUT', onClick:store.onAbout}
         ];
 
@@ -39,7 +39,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
             <ViewContainer store={store}>
                 <Header    store={store} />
                 <div style={{position:'relative', flexGrow:1}}>
-                    <HomeView  store={store.homeStore} />
+                    <LoginView  store={store.loginStore} />
                     <AboutView store={store.aboutStore} />
                 </div>
                 <Footer>
@@ -50,12 +50,12 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
     }
 }
 
-interface HomeViewProps
+interface LoginViewProps
 {
-    store : storeNS.HomeStore;
+    store : storeNS.LoginStore;
 }
 
-class HomeView extends React.Component<HomeViewProps, {}>
+class LoginView extends React.Component<LoginViewProps, {}>
 {
     /**
      * render

@@ -17,14 +17,14 @@ import {Response}           from 'libs/response';
 import {slog}               from 'libs/slog';
 
 /**
- * login app
+ * home app
  */
-export default class LoginApp extends App
+export default class HomeApp extends App
 {
-    private static CLS_NAME = 'LoginApp';
+    private static CLS_NAME = 'HomeApp';
     store    : storeNS.Store;
     apps     : Apps;
-    homeApp  : HomeApp;
+    loginApp : LoginApp;
     aboutApp : AboutApp;
 
     /**
@@ -39,16 +39,16 @@ export default class LoginApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
-        this.store.onHome =  this.onHome;
+        this.store.onLogin = this.onLogin;
         this.store.onAbout = this.onAbout;
 
-        this.homeApp =  new HomeApp( this.store.homeStore);
+        this.loginApp = new LoginApp(this.store.loginStore);
         this.aboutApp = new AboutApp(this.store.aboutStore);
 
-        this.store.homeStore .page.active = false;
+        this.store.loginStore.page.active = false;
         this.store.aboutStore.page.active = false;
 
-        this.store.homeStore .page.onPageTransitionEnd = this.onPageTransitionEnd;
+        this.store.loginStore.page.onPageTransitionEnd = this.onPageTransitionEnd;
         this.store.aboutStore.page.onPageTransitionEnd = this.onPageTransitionEnd;
 
         this.setName(this.store.name);
@@ -69,10 +69,10 @@ export default class LoginApp extends App
     {
         document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 
-        const store = this.store.homeStore;
+        const store = this.store.loginStore;
         store.message =  '';
         store.loginEmailResponse = {status:Response.Status.OK, message:{}};
-        this.setName(location.pathname === '/' ? 'home' : 'about');
+        this.setName(location.pathname === '/' ? 'login' : 'about');
         return super.init(params);
     }
 
@@ -87,7 +87,7 @@ export default class LoginApp extends App
     /**
      *
      */
-    private setName(name : 'home' | 'about')
+    private setName(name : 'login' | 'about')
     {
         const {store} = this;
         store.name = name;
@@ -95,9 +95,9 @@ export default class LoginApp extends App
         let app : App;
         let direction : Direction;
 
-        if (name === 'home')
+        if (name === 'login')
         {
-            app = this.homeApp;
+            app = this.loginApp;
             direction = 'back';
         }
         else
@@ -106,7 +106,7 @@ export default class LoginApp extends App
             direction = 'forward';
         }
 
-        this.store.homeStore .page.direction = direction;
+        this.store.loginStore.page.direction = direction;
         this.store.aboutStore.page.direction = direction;
 
         if (! this.apps)
@@ -129,12 +129,12 @@ export default class LoginApp extends App
     }
 
     /**
-     * onHome
+     * onLogin
      */
     @bind
-    private onHome() : void
+    private onLogin() : void
     {
-        const log = slog.stepIn(LoginApp.CLS_NAME, 'onHome');
+        const log = slog.stepIn(HomeApp.CLS_NAME, 'onLogin');
         History.replaceState('/');
         log.stepOut();
     }
@@ -145,7 +145,7 @@ export default class LoginApp extends App
     @bind
     private onAbout() : void
     {
-        const log = slog.stepIn(LoginApp.CLS_NAME, 'onAbout');
+        const log = slog.stepIn(HomeApp.CLS_NAME, 'onAbout');
         History.replaceState('/about');
         log.stepOut();
     }
@@ -162,15 +162,15 @@ export default class LoginApp extends App
     }
 }
 
-class HomeApp extends App
+class LoginApp extends App
 {
-    private static CLS_NAME = 'HomeApp';
-    store : storeNS.HomeStore;
+    private static CLS_NAME = 'LoginApp';
+    store : storeNS.LoginStore;
 
     /**
      * @constructor
      */
-    constructor(store : storeNS.HomeStore)
+    constructor(store : storeNS.LoginStore)
     {
         super();
 
@@ -209,7 +209,7 @@ class HomeApp extends App
     @bind
     private onTwitter() : void
     {
-        const log = slog.stepIn(HomeApp.CLS_NAME, 'onTwitter');
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onTwitter');
         location.href = '/login/twitter';
         log.stepOut();
     }
@@ -220,7 +220,7 @@ class HomeApp extends App
     @bind
     private onFacebook() : void
     {
-        const log = slog.stepIn(HomeApp.CLS_NAME, 'onFacebook');
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onFacebook');
         location.href = '/login/facebook';
         log.stepOut();
     }
@@ -231,7 +231,7 @@ class HomeApp extends App
     @bind
     private onGoogle() : void
     {
-        const log = slog.stepIn(HomeApp.CLS_NAME, 'onGoogle');
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onGoogle');
         location.href = '/login/google';
         log.stepOut();
     }
@@ -242,7 +242,7 @@ class HomeApp extends App
     @bind
     private onGithub() : void
     {
-        const log = slog.stepIn(HomeApp.CLS_NAME, 'onGithub');
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onGithub');
         location.href = '/login/github';
         log.stepOut();
     }
@@ -273,7 +273,7 @@ class HomeApp extends App
     @bind
     private async onLogin()
     {
-        const log = slog.stepIn(HomeApp.CLS_NAME, 'onLogin');
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onLogin');
         try
         {
             const {email, password} = this.store;
@@ -289,7 +289,7 @@ class HomeApp extends App
     @bind
     private onSignup() : void
     {
-        const log = slog.stepIn(HomeApp.CLS_NAME, 'onSignup');
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onSignup');
         History.pushState('/signup');
         log.stepOut();
     }
@@ -300,7 +300,7 @@ class HomeApp extends App
     @bind
     private onForget() : void
     {
-        const log = slog.stepIn(HomeApp.CLS_NAME, 'onForget');
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onForget');
         History.pushState('/forget');
         log.stepOut();
     }
@@ -311,7 +311,7 @@ class HomeApp extends App
     @bind
     private onUsers() : void
     {
-        const log = slog.stepIn(HomeApp.CLS_NAME, 'onUsers');
+        const log = slog.stepIn(LoginApp.CLS_NAME, 'onUsers');
         History.pushState('/users');
         log.stepOut();
     }
@@ -323,7 +323,7 @@ class HomeApp extends App
     {
         return new Promise(async (resolve : () => void, reject) =>
         {
-            const log = slog.stepIn(HomeApp.CLS_NAME, 'login');
+            const log = slog.stepIn(LoginApp.CLS_NAME, 'login');
             try
             {
                 const res : Response.LoginEmail = await LoginApi.loginEmail(param);
