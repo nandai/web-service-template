@@ -15,7 +15,7 @@ import Cookie        from 'server/libs/cookie';
 import R             from 'server/libs/r';
 import Utils         from 'server/libs/utils';
 import {Session}     from 'server/models/session';
-import {view}        from './view';
+import {view}        from '../view';
 
 import express = require('express');
 
@@ -32,7 +32,7 @@ export default class HomeApp
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async index(req : express.Request, res : express.Response)
+    static async login(req : express.Request, res : express.Response)
     {
         if (Object.keys(req.query).length > 0)
         {
@@ -47,7 +47,7 @@ export default class HomeApp
             return;
         }
 
-        const log = slog.stepIn(HomeApp.CLS_NAME, 'index');
+        const log = slog.stepIn(HomeApp.CLS_NAME, 'login');
         const locale = req.ext.locale;
 
         try

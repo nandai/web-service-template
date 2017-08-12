@@ -226,7 +226,7 @@ class Initializer
 
         // const provider = ':provider(twitter|facebook|google)';   // TODO:delete
 
-        this.app.get('/',       HomeApp  .index);
+        this.app.get('/',       HomeApp  .login);
         this.app.get('/about',  HomeApp  .about);
         this.app.get('/signup', SignupApp.index);
         this.app.get('/join',   JoinApp  .index);

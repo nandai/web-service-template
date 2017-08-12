@@ -182,14 +182,14 @@ interface Transition
 const transitions : Transition[] =
 [
     {
-        appName1:    'LoginApp',
+        appName1:    'HomeApp',
         appName2:    'UsersApp',
         effect1:     'slide',
         effect2:     'slide'
     },
 
     {
-        appName1:    'LoginApp',
+        appName1:    'HomeApp',
         appName2:    'TopApp',
         bgTheme:     'black',
         effectDelay: 2000
@@ -215,7 +215,7 @@ const transitions : Transition[] =
     },
 
     {
-        appName1:    'HomeApp',
+        appName1:    'LoginApp',
         appName2:    'AboutApp',
         effectDelay: 0
     }
