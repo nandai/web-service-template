@@ -32,7 +32,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
         return (
             <ViewContainer store={store}>
                 <ViewContents>
-                    <form>
+                    <form style={{marginTop:'48px'}}>
                         <Button onClick={store.onTwitter} >{R.text(R.LOGIN_WITH_TWITTER,  locale)}</Button>
                         <Button onClick={store.onFacebook}>{R.text(R.LOGIN_WITH_FACEBOOK, locale)}</Button>
                         <Button onClick={store.onGoogle}  >{R.text(R.LOGIN_WITH_GOOGLE,   locale)}</Button>
@@ -40,7 +40,6 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
                         <Input type="email"    placeholder={R.text(R.EMAIL,    locale)} value={store.email}    onChange={store.onEmailChange} isMarginTop={true} />
                         <Input type="password" placeholder={R.text(R.PASSWORD, locale)} value={store.password} onChange={store.onPasswordChange} />
                         <Button submit={true} onClick={store.onLogin} >{R.text(R.LOGIN, locale)}</Button>
-                        <Button url="/signup" onClick={store.onSignup}>{R.text(R.GO_SIGNUP, locale)}</Button>
                         <Button url="/forget" onClick={store.onForget}>{R.text(R.GO_FORGET, locale)}</Button>
                         <Button url="/users"  onClick={store.onUsers} >{R.text(R.USER_LIST, locale)}</Button>
                         <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>

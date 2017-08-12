@@ -4,7 +4,7 @@
 import * as React       from 'react';
 import * as ReactDOM    from 'react-dom/server';
 
-import ClientApp        from 'client/app/signup-app';
+import ClientApp        from 'client/app/home-app';
 import Root             from 'client/components/root';
 import ClientR          from 'client/libs/r';
 import {slog}           from 'libs/slog';
@@ -13,7 +13,7 @@ import SignupConfirmApp from 'server/app/signup-confirm-app';
 import R                from 'server/libs/r';
 import Utils            from 'server/libs/utils';
 import {Session}        from 'server/models/session';
-import {view}           from './view';
+import {view}           from '../view';
 
 import express = require('express');
 
@@ -54,7 +54,7 @@ export default class SignupApp
             }
 
             const title = ClientR.text(ClientR.SIGNUP, locale);
-            const app = new ClientApp({locale, message});
+            const app = new ClientApp({locale, name:'signup', signupStore:{message}});
             const contents = ReactDOM.renderToString(<Root app={app} />);
             res.send(view(title, 'wst.js', contents, app.store));
             log.stepOut();

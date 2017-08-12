@@ -27,7 +27,6 @@ export default class R
             'goForget':                   'Forget password',
             'goPasswordSettings':         'Go password settings',
             'goSettings':                 'Go settings',
-            'goSignup':                   'Go sign up',
             'invite':                     'Invite',
             'join':                       'Join',
             'linkProvider':               'Link ${provider}',
@@ -89,7 +88,6 @@ export default class R
             'goForget':                   'パスワードを忘れた',
             'goPasswordSettings':         'パスワードを設定する',
             'goSettings':                 '設定画面へ',
-            'goSignup':                   'サインアップ画面へ',
             'invite':                     '招待する',
             'join':                       '参加する',
             'linkProvider':               '${provider}を紐づける',
@@ -150,7 +148,6 @@ export default class R
     static GO_FORGET =                     'goForget';
     static GO_PASSWORD_SETTINGS =          'goPasswordSettings';
     static GO_SETTINGS =                   'goSettings';
-    static GO_SIGNUP =                     'goSignup';
     static INVITE =                        'invite';
     static JOIN =                          'join';
     static LINK_PROVIDER =                 'linkProvider';

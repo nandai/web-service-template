@@ -19,7 +19,6 @@ import SettingsAccountEmailChangeApp from './app/settings-account-email-change-a
 import SettingsAccountPasswordApp    from './app/settings-account-password-app';
 import SettingsApp                   from './app/settings-app';
 import SettingsInviteApp             from './app/settings-invite-app';
-import SignupApp                     from './app/signup-app';
 import UserApp                       from './app/user-app';
 import UsersApp                      from './app/users-app';
 import {loadCss}                     from './app/view';
@@ -227,8 +226,8 @@ class Initializer
         // const provider = ':provider(twitter|facebook|google)';   // TODO:delete
 
         this.app.get('/',       HomeApp  .login);
+        this.app.get('/signup', HomeApp  .signup);
         this.app.get('/about',  HomeApp  .about);
-        this.app.get('/signup', SignupApp.index);
         this.app.get('/join',   JoinApp  .index);
         this.app.get('/forget', ForgetApp.index);
         this.app.get('/reset',  ResetApp .index);

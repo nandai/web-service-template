@@ -7,7 +7,6 @@ import Button        from 'client/components/common/button';
 import Input         from 'client/components/common/input';
 import Loading       from 'client/components/common/loading';
 import Text          from 'client/components/common/text';
-import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
 import ViewContents  from 'client/components/views/view-contents';
 import R             from 'client/libs/r';
@@ -16,7 +15,7 @@ import {storeNS}     from './store';
 
 interface SignupViewProps
 {
-    store : storeNS.Store;
+    store : storeNS.SignupStore;
 }
 
 export default class SignupView extends React.Component<SignupViewProps, {}>
@@ -40,7 +39,6 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
 
         return (
             <ViewContainer store={store}>
-                <Header store={store} />
                 <ViewContents>
                     <form>
                         <Button onClick={store.onTwitter} >{R.text(R.SIGNUP_WITH_TWITTER,  locale)}</Button>

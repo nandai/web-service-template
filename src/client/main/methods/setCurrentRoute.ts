@@ -1,9 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import Apps    from 'client/app/apps';
-import {Data}  from './data';
-import {Route} from './route';
+import Apps, {AppTransition} from 'client/app/apps';
+import {Data}                from './data';
+import {Route}               from './route';
 
 /**
  * カレントRoute設定
@@ -13,7 +13,12 @@ export function setCurrentRoute(data : Data, route : Route) : void
     if (data.currentRoute === null)
     {
         // 初回設定時
-        data.apps = new Apps(route.app);
+        const options =
+        {
+            transitions,
+            effectDelay: 500
+        };
+        data.apps = new Apps(route.app, options);
     }
     else
     {
@@ -23,3 +28,39 @@ export function setCurrentRoute(data : Data, route : Route) : void
 
     data.currentRoute = route;
 }
+
+const transitions : AppTransition[] =
+[
+    {
+        appName1:    'HomeApp',
+        appName2:    'UsersApp',
+        effect1:     'slide',
+        effect2:     'slide'
+    },
+
+    {
+        appName1:    'HomeApp',
+        appName2:    'TopApp',
+        bgTheme:     'black',
+        effectDelay: 2000
+    },
+
+    {
+        appName1:    'TopApp',
+        appName2:    'SettingsApp',
+        effect1:     'slide',
+        effect2:     'slide'
+    },
+
+    {
+        appName1:    'TopApp',
+        appName2:    'SettingsInviteApp',
+        effectDelay: 0
+    },
+
+    {
+        appName1:    'UsersApp',
+        appName2:    'UserApp',
+        effectDelay: 0
+    }
+];

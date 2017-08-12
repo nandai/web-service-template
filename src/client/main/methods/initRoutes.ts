@@ -13,7 +13,6 @@ import SettingsAccountEmailChangeApp from 'client/app/settings-account-email-cha
 import SettingsAccountPasswordApp    from 'client/app/settings-account-password-app';
 import SettingsApp                   from 'client/app/settings-app';
 import SettingsInviteApp             from 'client/app/settings-invite-app';
-import SignupApp                     from 'client/app/signup-app';
 import SignupConfirmApp              from 'client/app/signup-confirm-app';
 import SmsApp                        from 'client/app/sms-app';
 import TopApp                        from 'client/app/top-app';
@@ -37,7 +36,7 @@ export function initRoutes(data : Data)
         {url:'/',                              app:new TopApp(),                        title:R.text(R.TOP,                           locale), auth:true},
         {url:'/',                              app:homeApp,                             title:R.text(R.LOGIN,                         locale)},
         {url:'/',                              app:new SmsApp(),                        title:R.text(R.AUTH_SMS,                      locale), query:true},
-        {url:'/signup',                        app:new SignupApp(),                     title:R.text(R.SIGNUP,                        locale)},
+        {url:'/signup',                        app:homeApp,                             title:R.text(R.SIGNUP,                        locale)},
         {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                locale), query:true},
         {url:'/join',                          app:new JoinApp(),                       title:R.text(R.JOIN,                          locale), query:true},
         {url:'/forget',                        app:new ForgetApp(),                     title:R.text(R.GO_FORGET,                     locale)},

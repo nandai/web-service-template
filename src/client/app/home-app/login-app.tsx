@@ -13,6 +13,9 @@ import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
 
+/**
+ * login app
+ */
 export default class LoginApp extends App
 {
     private static CLS_NAME = 'LoginApp';
@@ -33,7 +36,6 @@ export default class LoginApp extends App
         this.store.onEmailChange =    this.onEmailChange;
         this.store.onPasswordChange = this.onPasswordChange;
         this.store.onLogin =          this.onLogin;
-        this.store.onSignup =         this.onSignup;
         this.store.onForget =         this.onForget;
         this.store.onUsers =          this.onUsers;
     }
@@ -132,17 +134,6 @@ export default class LoginApp extends App
             log.stepOut();
         }
         catch (err) {log.stepOut();}
-    }
-
-    /**
-     * onSignup
-     */
-    @bind
-    private onSignup() : void
-    {
-        const log = slog.stepIn(LoginApp.CLS_NAME, 'onSignup');
-        History.pushState('/signup');
-        log.stepOut();
     }
 
     /**

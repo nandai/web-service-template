@@ -7,6 +7,9 @@ import {App}       from 'client/app/app';
 import {BaseStore} from 'client/components/views/base-store';
 import AboutView   from 'client/components/views/home-view/about-view';
 
+/**
+ * about app
+ */
 export default class AboutApp extends App
 {
     store : BaseStore;

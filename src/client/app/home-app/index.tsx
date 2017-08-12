@@ -15,6 +15,7 @@ import {Response}           from 'libs/response';
 import {slog}               from 'libs/slog';
 import AboutApp             from './about-app';
 import LoginApp             from './login-app';
+import SignupApp            from './signup-app';
 
 /**
  * home app
@@ -22,9 +23,13 @@ import LoginApp             from './login-app';
 export default class HomeApp extends App
 {
     private static CLS_NAME = 'HomeApp';
-    store    : storeNS.Store;
-    loginApp : LoginApp;
-    aboutApp : AboutApp;
+    store   : storeNS.Store;
+    subApps :
+    {
+        login  : LoginApp;
+        signup : SignupApp;
+        about  : AboutApp;
+    };
 
     /**
      * @constructor
@@ -38,17 +43,24 @@ export default class HomeApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
-        this.store.onLogin = this.onLogin;
-        this.store.onAbout = this.onAbout;
+        this.store.onLogin =  this.onLogin;
+        this.store.onSignup = this.onSignup;
+        this.store.onAbout =  this.onAbout;
 
-        this.loginApp = new LoginApp(this.store.loginStore);
-        this.aboutApp = new AboutApp(this.store.aboutStore);
+        this.subApps =
+        {
+            login:  new LoginApp( this.store.loginStore),
+            signup: new SignupApp(this.store.signupStore),
+            about:  new AboutApp( this.store.aboutStore)
+        };
 
-        this.store.loginStore.page.active = false;
-        this.store.aboutStore.page.active = false;
-
-        this.store.loginStore.page.onPageTransitionEnd = this.onPageTransitionEnd;
-        this.store.aboutStore.page.onPageTransitionEnd = this.onPageTransitionEnd;
+        for (const name in this.subApps)
+        {
+            const subApp : App = this.subApps[name];
+            const {page} = subApp.store;
+            page.active = false;
+            page.onPageTransitionEnd = this.onPageTransitionEnd;
+        }
 
         this.setName(this.store.name);
     }
@@ -68,10 +80,15 @@ export default class HomeApp extends App
     {
         document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 
-        const store = this.store.loginStore;
-        store.message =  '';
-        store.loginEmailResponse = {status:Response.Status.OK, message:{}};
-        this.setName(location.pathname === '/' ? 'login' : 'about');
+        const {loginStore} = this.store;
+        loginStore.message =  '';
+        loginStore.loginEmailResponse = {status:Response.Status.OK, message:{}};
+
+        const {signupStore} = this.store;
+        signupStore.message =  '';
+        signupStore.signupEmailResponse = {status:Response.Status.OK, message:{}};
+
+        this.setName(this.pathnameToName());
         return super.init(params);
     }
 
@@ -86,26 +103,42 @@ export default class HomeApp extends App
     /**
      *
      */
-    private setName(name : 'login' | 'about')
+    private pathnameToName() : 'login' | 'signup' | 'about'
+    {
+        const convert =
+        {
+            '/':       'login',
+            '/signup': 'signup',
+            '/about':  'about'
+        };
+
+        const {pathname} = location;
+        return convert[pathname];
+    }
+
+    /**
+     *
+     */
+    private getSubAppIndex(name : string)
+    {
+        let i = 0;
+        for (const key in this.subApps)
+        {
+            if (key === name) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
+    /**
+     *
+     */
+    private setName(name : 'login' | 'signup' | 'about')
     {
         const {store} = this;
-
-        let app : App;
-        let direction : Direction;
-
-        if (name === 'login')
-        {
-            app = this.loginApp;
-            direction = 'back';
-        }
-        else
-        {
-            app = this.aboutApp;
-            direction = 'forward';
-        }
-
-        this.store.loginStore.page.direction = direction;
-        this.store.aboutStore.page.direction = direction;
+        const app = this.subApps[name];
 
         if (! this.apps)
         {
@@ -118,6 +151,17 @@ export default class HomeApp extends App
             // 二度目以降
             if (store.name !== name)
             {
+                const i = this.getSubAppIndex(store.name);
+                const j = this.getSubAppIndex(name);
+                const direction : Direction = (i < j ? 'forward' : 'back');
+
+                for (const name2 in this.subApps)
+                {
+                    const subApp : App = this.subApps[name2];
+                    const {page} = subApp.store;
+                    page.direction = direction;
+                }
+
                 this.apps.setNextApp(app);
 
                 setTimeout(() =>
@@ -139,6 +183,17 @@ export default class HomeApp extends App
     {
         const log = slog.stepIn(HomeApp.CLS_NAME, 'onLogin');
         History.replaceState('/');
+        log.stepOut();
+    }
+
+    /**
+     * onSignup
+     */
+    @bind
+    private onSignup() : void
+    {
+        const log = slog.stepIn(HomeApp.CLS_NAME, 'onSignup');
+        History.replaceState('/signup');
         log.stepOut();
     }
 

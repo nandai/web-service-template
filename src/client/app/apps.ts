@@ -6,20 +6,24 @@ import {BaseStore, Effect} from 'client/components/views/base-store';
 
 export default class Apps
 {
-    private apps       : App[];
-    private currentApp : App;
-    private nextApp    : App;
-    private transition : Transition;
+    private apps        : App[];
+    private currentApp  : App;
+    private nextApp     : App;
+    private transitions : AppTransition[];
+    private transition  : AppTransition;
+    private effectDelay : number;
 
     /**
      * @constructor
      */
-    constructor(app : App)
+    constructor(app : App, options : {transitions? : AppTransition[], effectDelay? : number} = {})
     {
-        this.apps =      [app];
-        this.currentApp = app;
-        this.nextApp =    null;
-        this.transition = null;
+        this.apps =       [app];
+        this.currentApp =  app;
+        this.nextApp =     null;
+        this.transitions = options.transitions || [];
+        this.transition =  null;
+        this.effectDelay = options.effectDelay || 0;
     }
 
     /**
@@ -43,7 +47,7 @@ export default class Apps
             const curName =  this.currentApp.toString();
             const nextName = this.nextApp   .toString();
 
-            for (const transition of transitions)
+            for (const transition of this.transitions)
             {
                 if (transition.appName1 === curName && transition.appName2 === nextName)
                 {
@@ -131,12 +135,12 @@ export default class Apps
     }
 
     /**
-     * 次のappのeffect delayを取得する
+     * effect delayを取得する
      */
     getEffectDelay() : number
     {
         const {transition} = this;
-        let effectDelay = 500;
+        let {effectDelay} =  this;
 
         if (transition && transition.effectDelay !== undefined) {
             effectDelay = transition.effectDelay;
@@ -174,7 +178,7 @@ export default class Apps
     }
 }
 
-interface Transition
+export interface AppTransition
 {
     appName1     : string;
     appName2     : string;
@@ -183,45 +187,3 @@ interface Transition
     effectDelay? : number;
     bgTheme?     : string;
 }
-
-const transitions : Transition[] =
-[
-    {
-        appName1:    'HomeApp',
-        appName2:    'UsersApp',
-        effect1:     'slide',
-        effect2:     'slide'
-    },
-
-    {
-        appName1:    'HomeApp',
-        appName2:    'TopApp',
-        bgTheme:     'black',
-        effectDelay: 2000
-    },
-
-    {
-        appName1:    'TopApp',
-        appName2:    'SettingsApp',
-        effect1:     'slide',
-        effect2:     'slide'
-    },
-
-    {
-        appName1:    'TopApp',
-        appName2:    'SettingsInviteApp',
-        effectDelay: 0
-    },
-
-    {
-        appName1:    'UsersApp',
-        appName2:    'UserApp',
-        effectDelay: 0
-    },
-
-    {
-        appName1:    'LoginApp',
-        appName2:    'AboutApp',
-        effectDelay: 0
-    }
-];
