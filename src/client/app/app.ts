@@ -3,6 +3,7 @@
  */
 import bind              from 'bind-decorator';
 
+import Apps              from 'client/app/apps';
 import {BaseStore}       from 'client/components/views/base-store';
 import History           from 'client/libs/history';
 import {SocketEventData} from 'client/libs/socket-event-data';
@@ -11,7 +12,8 @@ import {slog}            from 'libs/slog';
 export abstract class App
 {
     abstract store : BaseStore;
-    static render : () => void;
+    apps           : Apps;
+    static render  : () => void;
 
     /**
      * toString

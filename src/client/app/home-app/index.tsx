@@ -22,7 +22,6 @@ export default class HomeApp extends App
 {
     private static CLS_NAME = 'HomeApp';
     store    : storeNS.Store;
-    apps     : Apps;
     loginApp : LoginApp;
     aboutApp : AboutApp;
 
@@ -89,7 +88,6 @@ export default class HomeApp extends App
     private setName(name : 'login' | 'about')
     {
         const {store} = this;
-        store.name = name;
 
         let app : App;
         let direction : Direction;
@@ -117,14 +115,19 @@ export default class HomeApp extends App
         else
         {
             // 二度目以降
-            this.apps.setNextApp(app);
-
-            setTimeout(() =>
+            if (store.name !== name)
             {
-                this.apps.setActiveNextApp();
-                App.render();
-            }, this.apps.getEffectDelay());
+                this.apps.setNextApp(app);
+
+                setTimeout(() =>
+                {
+                    this.apps.setActiveNextApp();
+                    App.render();
+                }, this.apps.getEffectDelay());
+            }
         }
+
+        store.name = name;
     }
 
     /**

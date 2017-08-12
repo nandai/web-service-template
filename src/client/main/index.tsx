@@ -24,9 +24,9 @@ import {updateCurrentRoute} from './methods/updateCurrentRoute';
 import socketIO = require('socket.io-client');
 
 /**
- * wst app
+ * main
  */
-class WstApp
+class Main
 {
     data : Data =
     {
@@ -41,7 +41,7 @@ class WstApp
      */
     init()
     {
-        const log = slog.stepIn('WstApp', 'init');
+        const log = slog.stepIn('Main', 'init');
         const {data} = this;
 
         App.render = this.render;
@@ -79,7 +79,7 @@ class WstApp
     @bind
     private onHistory(direction : Direction, message? : string)
     {
-        const log = slog.stepIn('WstApp', 'onHistory');
+        const log = slog.stepIn('Main', 'onHistory');
         return new Promise(async (resolve) =>
         {
             const {data} = this;
@@ -115,7 +115,7 @@ class WstApp
     @bind
     onPageTransitionEnd(store : BaseStore)
     {
-        const log = slog.stepIn('WstApp', 'onPageTransitionEnd');
+        const log = slog.stepIn('Main', 'onPageTransitionEnd');
         const {displayStatus} = store.page;
 
         if (this.data.apps.changeDisplayStatus(store))
@@ -144,7 +144,7 @@ class WstApp
     @bind
     private connectSocket()
     {
-        const log = slog.stepIn('WstApp', 'connectSocket');
+        const log = slog.stepIn('Main', 'connectSocket');
         const io = socketIO.connect();
         io.on('connect',             this.onConnect);
         io.on('disconnect',          this.onDisconnect);
@@ -161,7 +161,7 @@ class WstApp
     @bind
     private async onConnect()
     {
-        const log = slog.stepIn('WstApp', 'onConnect');
+        const log = slog.stepIn('Main', 'onConnect');
 
         try
         {
@@ -195,7 +195,7 @@ class WstApp
     @bind
     private onDisconnect(reason : string) : void
     {
-        const log = slog.stepIn('WstApp', 'onDisconnect');
+        const log = slog.stepIn('Main', 'onDisconnect');
         setOnline(this.data, false);
         this.render();
         log.w(reason);
@@ -208,7 +208,7 @@ class WstApp
     @bind
     private onNotifyUpdateAccount(account : Response.Account) : void
     {
-        const log = slog.stepIn('WstApp', 'onNotifyUpdateAccount');
+        const log = slog.stepIn('Main', 'onNotifyUpdateAccount');
         log.d(JSON.stringify(account, null, 2));
 
         this.deliverUpdateAccount(account);
@@ -221,7 +221,7 @@ class WstApp
     @bind
     private onNotifyUpdateUser(user : Response.User) : void
     {
-        const log = slog.stepIn('WstApp', 'onNotifyUpdateUser');
+        const log = slog.stepIn('Main', 'onNotifyUpdateUser');
         this.notifySocketEvent({notifyUpdateUser:user});
         this.render();
         log.stepOut();
@@ -233,7 +233,7 @@ class WstApp
     @bind
     private onNotifyDeleteUser(userId : number) : void
     {
-        const log = slog.stepIn('WstApp', 'onNotifyDeleteUser');
+        const log = slog.stepIn('Main', 'onNotifyDeleteUser');
         this.notifySocketEvent({notifyDeleteUser:{id:userId}});
         this.render();
         log.stepOut();
@@ -245,7 +245,7 @@ class WstApp
     @bind
     private onNotifyLogout() : void
     {
-        const log = slog.stepIn('WstApp', 'onNotifyLogout');
+        const log = slog.stepIn('Main', 'onNotifyLogout');
         this.deliverLogout();
         log.stepOut();
     }
@@ -311,11 +311,11 @@ window.addEventListener('DOMContentLoaded', async () =>
     if (document.title === R.text(R.FORBIDDEN, locale)) {url = '403';}
     if (document.title === R.text(R.NOT_FOUND, locale)) {url = '404';}
 
-    const app = new WstApp();
-    app.init();
+    const main = new Main();
+    main.init();
 
-    await updateCurrentRoute(app.data, url, false);
-    app.render();
+    await updateCurrentRoute(main.data, url, false);
+    main.render();
     log.stepOut();
 });
 

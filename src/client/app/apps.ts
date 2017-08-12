@@ -162,10 +162,15 @@ export default class Apps
      */
     isDuringTransition() : boolean
     {
-        if (this.nextApp === null && this.currentApp.store.page.displayStatus === 'displayed') {
-            return false;
+        if (this.nextApp !== null || this.currentApp.store.page.displayStatus !== 'displayed') {
+            return true;
         }
-        return true;
+
+        if (this.currentApp.apps) {
+            return this.currentApp.apps.isDuringTransition();
+        }
+
+        return false;
     }
 }
 
