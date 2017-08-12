@@ -8,9 +8,8 @@ import Apps       from 'client/app/apps';
 
 interface RootProps
 {
-    apps?       : Apps;
-    app?        : App;  // SSR用
-    clickGuard? : boolean;
+    apps? : Apps;
+    app?  : App;  // SSR用
 }
 
 export default class Root extends React.Component<RootProps, {}>

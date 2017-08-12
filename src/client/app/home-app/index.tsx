@@ -7,12 +7,13 @@ import * as React           from 'react';
 import {App}                from 'client/app/app';
 import Apps                 from 'client/app/apps';
 import {BaseStore}          from 'client/components/views/base-store';
-import LoginView            from 'client/components/views/login-view';
-import {storeNS}            from 'client/components/views/login-view/store';
+import HomeView             from 'client/components/views/home-view';
+import {storeNS}            from 'client/components/views/home-view/store';
 import History, {Direction} from 'client/libs/history';
 import Utils                from 'client/libs/utils';
 import {Response}           from 'libs/response';
 import {slog}               from 'libs/slog';
+import AboutApp             from './about-app';
 import LoginApp             from './login-app';
 
 /**
@@ -79,7 +80,7 @@ export default class HomeApp extends App
      */
     view(i : number) : JSX.Element
     {
-        return <LoginView key={i} store={this.store} />;
+        return <HomeView key={i} store={this.store} apps={this.apps} />;
     }
 
     /**
@@ -161,35 +162,5 @@ export default class HomeApp extends App
         if (this.apps.changeDisplayStatus(store)) {
             App.render();
         }
-    }
-}
-
-class AboutApp extends App
-{
-    store : BaseStore;
-
-    /**
-     * @constructor
-     */
-    constructor(store : BaseStore)
-    {
-        super();
-        this.store = store;
-    }
-
-    /**
-     * toString
-     */
-    toString() : string
-    {
-        return 'AboutApp';
-    }
-
-    /**
-     * view
-     */
-    view(_i : number) : JSX.Element
-    {
-        return null;
     }
 }

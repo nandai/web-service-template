@@ -2,10 +2,12 @@
  * (C) 2016-2017 printf.jp
  */
 import bind       from 'bind-decorator';
+import * as React from 'react';
 
 import LoginApi   from 'client/api/login-api';
 import {App}      from 'client/app/app';
-import {storeNS}  from 'client/components/views/login-view/store';
+import LoginView  from 'client/components/views/home-view/login-view';
+import {storeNS}  from 'client/components/views/home-view/store';
 import History    from 'client/libs/history';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
@@ -47,9 +49,9 @@ export default class LoginApp extends App
     /**
      * view
      */
-    view(_i : number) : JSX.Element
+    view(i : number) : JSX.Element
     {
-        return null;
+        return <LoginView key={i} store={this.store} />;
     }
 
     /**
