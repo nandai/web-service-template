@@ -40,7 +40,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
         return (
             <ViewContainer store={store}>
                 <ViewContents>
-                    <form>
+                    <form style={{marginTop:'48px'}}>
                         <Button onClick={store.onTwitter} >{R.text(R.SIGNUP_WITH_TWITTER,  locale)}</Button>
                         <Button onClick={store.onFacebook}>{R.text(R.SIGNUP_WITH_FACEBOOK, locale)}</Button>
                         <Button onClick={store.onGoogle}  >{R.text(R.SIGNUP_WITH_GOOGLE,   locale)}</Button>

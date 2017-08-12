@@ -6,9 +6,11 @@ import {BaseStore, initBaseStore} from '../base-store';
 
 export namespace storeNS
 {
+    export type Name = 'login' | 'signup' | 'about';
+
     export interface Store extends BaseStore
     {
-        name?        : 'login' | 'signup' | 'about';
+        name?        : Name;
         onLogin?     : () => void;
         onSignup?    : () => void;
         onAbout?     : () => void;

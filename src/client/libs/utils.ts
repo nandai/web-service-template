@@ -74,4 +74,14 @@ export default class Utils
     {
         return window['ssrStore'];
     }
+
+    /**
+     * モバイルかどうかを調べる
+     */
+    static isMobile() : boolean
+    {
+        let ua = navigator.userAgent;
+        ua = ua.toLowerCase();
+        return /android|iphone/.test(ua);
+    }
 }

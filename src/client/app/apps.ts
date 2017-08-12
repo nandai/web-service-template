@@ -3,6 +3,7 @@
  */
 import {App}               from 'client/app/app';
 import {BaseStore, Effect} from 'client/components/views/base-store';
+import Utils               from 'client/libs/utils';
 
 export default class Apps
 {
@@ -146,7 +147,7 @@ export default class Apps
             effectDelay = transition.effectDelay;
         }
 
-        return Math.max(effectDelay, 10);
+        return Math.max(effectDelay, Utils.isMobile() ? 200 : 10);
     }
 
     /**

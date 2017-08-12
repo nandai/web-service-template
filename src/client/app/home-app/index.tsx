@@ -103,9 +103,9 @@ export default class HomeApp extends App
     /**
      *
      */
-    private pathnameToName() : 'login' | 'signup' | 'about'
+    private pathnameToName() : storeNS.Name
     {
-        const convert =
+        const convert : {[pathname : string] : storeNS.Name} =
         {
             '/':       'login',
             '/signup': 'signup',
@@ -135,7 +135,7 @@ export default class HomeApp extends App
     /**
      *
      */
-    private setName(name : 'login' | 'signup' | 'about')
+    private setName(name : storeNS.Name)
     {
         const {store} = this;
         const app = this.subApps[name];
