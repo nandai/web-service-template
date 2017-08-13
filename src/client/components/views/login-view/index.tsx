@@ -14,7 +14,7 @@ import {storeNS}     from './store';
 
 interface LoginViewProps
 {
-    store : storeNS.LoginStore;
+    store : storeNS.Store;
 }
 
 export default class LoginView extends React.Component<LoginViewProps, {}>

@@ -15,7 +15,7 @@ import {storeNS}     from './store';
 
 interface SignupViewProps
 {
-    store : storeNS.SignupStore;
+    store : storeNS.Store;
 }
 
 export default class SignupView extends React.Component<SignupViewProps, {}>

@@ -6,9 +6,10 @@ import * as React from 'react';
 
 import LoginApi   from 'client/api/login-api';
 import {App}      from 'client/app/app';
-import LoginView  from 'client/components/views/home-view/login-view';
-import {storeNS}  from 'client/components/views/home-view/store';
+import LoginView  from 'client/components/views/login-view';
+import {storeNS}  from 'client/components/views/login-view/store';
 import History    from 'client/libs/history';
+import Utils      from 'client/libs/utils';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
@@ -19,16 +20,20 @@ import {slog}     from 'libs/slog';
 export default class LoginApp extends App
 {
     private static CLS_NAME = 'LoginApp';
-    store : storeNS.LoginStore;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor(store : storeNS.LoginStore)
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
 
-        this.store = store;
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
+        this.store = storeNS.init(ssrStore);
         this.store.onTwitter =        this.onTwitter;
         this.store.onFacebook =       this.onFacebook;
         this.store.onGoogle =         this.onGoogle;
@@ -46,6 +51,16 @@ export default class LoginApp extends App
     toString() : string
     {
         return 'LoginApp';
+    }
+
+    /**
+     * 初期化
+     */
+    init(params, _message? : string)
+    {
+        this.store = storeNS.init(this.store);
+        this.store.message =  '';
+        return super.init(params);
     }
 
     /**

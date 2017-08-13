@@ -11,7 +11,6 @@ import HomeView             from 'client/components/views/home-view';
 import {storeNS}            from 'client/components/views/home-view/store';
 import History, {Direction} from 'client/libs/history';
 import Utils                from 'client/libs/utils';
-import {Response}           from 'libs/response';
 import {slog}               from 'libs/slog';
 import AboutApp             from './about-app';
 import LoginApp             from './login-app';
@@ -76,17 +75,15 @@ export default class HomeApp extends App
     /**
      * 初期化
      */
-    init(params, _message? : string)
+    init(params, message? : string)
     {
         document.cookie = 'command=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 
-        const {loginStore} = this.store;
-        loginStore.message =  '';
-        loginStore.loginEmailResponse = {status:Response.Status.OK, message:{}};
-
-        const {signupStore} = this.store;
-        signupStore.message =  '';
-        signupStore.signupEmailResponse = {status:Response.Status.OK, message:{}};
+        for (const name in this.subApps)
+        {
+            const subApp : App = this.subApps[name];
+            subApp.init(params, message);
+        }
 
         this.setName(this.pathnameToName());
         return super.init(params);

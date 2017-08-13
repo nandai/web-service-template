@@ -6,8 +6,9 @@ import * as React from 'react';
 
 import SignupApi  from 'client/api/signup-api';
 import {App}      from 'client/app/app';
-import SignupView from 'client/components/views/home-view/signup-view';
-import {storeNS}  from 'client/components/views/home-view/store';
+import SignupView from 'client/components/views/signup-view';
+import {storeNS}  from 'client/components/views/signup-view/store';
+import Utils      from 'client/libs/utils';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
@@ -18,16 +19,20 @@ import {slog}     from 'libs/slog';
 export default class SignupApp extends App
 {
     private static CLS_NAME = 'SignupApp';
-    store : storeNS.SignupStore;
+    store : storeNS.Store;
 
     /**
      * @constructor
      */
-    constructor(store : storeNS.SignupStore)
+    constructor(ssrStore? : storeNS.Store)
     {
         super();
 
-        this.store = store;
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<storeNS.Store>();
+        }
+
+        this.store = storeNS.init(ssrStore);
         this.store.onTwitter =        this.onTwitter;
         this.store.onFacebook =       this.onFacebook;
         this.store.onGoogle =         this.onGoogle;

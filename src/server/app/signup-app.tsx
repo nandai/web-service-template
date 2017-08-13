@@ -13,7 +13,7 @@ import SignupConfirmApp from 'server/app/signup-confirm-app';
 import R                from 'server/libs/r';
 import Utils            from 'server/libs/utils';
 import {Session}        from 'server/models/session';
-import {view}           from '../view';
+import {view}           from './view';
 
 import express = require('express');
 

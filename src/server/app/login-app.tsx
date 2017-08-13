@@ -15,9 +15,7 @@ import Cookie        from 'server/libs/cookie';
 import R             from 'server/libs/r';
 import Utils         from 'server/libs/utils';
 import {Session}     from 'server/models/session';
-import {view}        from '../view';
-import AboutApp      from './about-app';
-import SignupApp     from './signup-app';
+import {view}        from './view';
 
 import express = require('express');
 
@@ -76,7 +74,4 @@ export default class LoginApp
         }
         catch (err) {Utils.internalServerError(err, res, log);}
     }
-
-    static about =  AboutApp .index;
-    static signup = SignupApp.index;
 }

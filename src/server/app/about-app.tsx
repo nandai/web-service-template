@@ -9,7 +9,7 @@ import Root          from 'client/components/root';
 import ClientR       from 'client/libs/r';
 import {slog}        from 'libs/slog';
 import Utils         from 'server/libs/utils';
-import {view}        from '../view';
+import {view}        from './view';
 
 import express = require('express');
 
