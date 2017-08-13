@@ -8,6 +8,7 @@ export interface TabItem
 {
     name    : string;
     label   : string;
+    url?    : string;
     onClick : () => void;
 }
 
@@ -36,7 +37,7 @@ export default class Tabs extends React.Component<TabsProps, {}>
 
             return (
                 <div key={i} className="wst-tab">
-                    <Button margin="0" onClick={item.onClick}>{item.label}</Button>
+                    <Button margin="0" url={item.url} onClick={item.onClick}>{item.label}</Button>
                 </div>
             );
         });

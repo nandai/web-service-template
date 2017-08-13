@@ -26,9 +26,9 @@ export default class HomeView extends React.Component<HomeViewProps, {}>
         const {store, apps} = this.props;
         const items : TabItem[] =
         [
-            {name:'login',  label:'LOGIN',  onClick:store.onLogin},
-            {name:'signup', label:'SIGNUP', onClick:store.onSignup},
-            {name:'about',  label:'ABOUT',  onClick:store.onAbout}
+            {name:'login',  label:'LOGIN',  url:'/',       onClick:store.onLogin},
+            {name:'signup', label:'SIGNUP', url:'/signup', onClick:store.onSignup},
+            {name:'about',  label:'ABOUT',  url:'/about',  onClick:store.onAbout}
         ];
 
         const page = apps.getPage();
