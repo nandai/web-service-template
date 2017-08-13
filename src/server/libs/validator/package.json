@@ -1,0 +1,4 @@
+{
+    "main":    "validator.js",
+    "typings": "validator.ts"
+}

@@ -1,0 +1,4 @@
+{
+    "main":    "users-view.js",
+    "typings": "users-view.tsx"
+}

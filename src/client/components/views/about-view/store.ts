@@ -9,7 +9,7 @@ export namespace storeNS
     {
     }
 
-    export function init(src : Store) : BaseStore
+    export function init(src : Store) : Store
     {
         const store : Store =
         {

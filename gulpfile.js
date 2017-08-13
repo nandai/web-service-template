@@ -71,11 +71,27 @@ gulp.task('remove-client-log', function()
 });
 
 /**
+ * copy-package-json
+ */
+gulp.task('copy-package-json', function()
+{
+    const src =
+    [
+        './src/**/package.json'
+    ];
+
+    return gulp
+        .src(src)
+        .pipe(gulp.dest('./build'))
+        .pipe(gulp.dest('./build-client'));
+});
+
+/**
  * browserify
  */
 gulp.task('browserify', function ()
 {
-    const src = './build-client/client/main/index.js';
+    const src = './build-client/client/main/main.js';
     const dest = './www/static/wst.js';
 
     browserify({entries: [src]})
@@ -94,6 +110,7 @@ gulp.task('javascript', function (callback)
     return runSequence(
         'typescript',
         'remove-client-log',
+        'copy-package-json',
         'browserify',
         callback
     )

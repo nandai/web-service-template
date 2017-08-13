@@ -1,0 +1,4 @@
+{
+    "main":    "settings-account-email-change-view.js",
+    "typings": "settings-account-email-change-view.tsx"
+}

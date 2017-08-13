@@ -1,0 +1,4 @@
+{
+    "main":    "settings-account-password-view.js",
+    "typings": "settings-account-password-view.tsx"
+}

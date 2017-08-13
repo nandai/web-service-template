@@ -1,0 +1,4 @@
+{
+    "main":    "sms-view.js",
+    "typings": "sms-view.tsx"
+}

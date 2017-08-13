@@ -1,0 +1,4 @@
+{
+    "main":    "join-view.js",
+    "typings": "join-view.tsx"
+}

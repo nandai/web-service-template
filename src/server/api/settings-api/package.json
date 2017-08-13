@@ -1,0 +1,4 @@
+{
+    "main":    "settings-api.js",
+    "typings": "settings-api.ts"
+}

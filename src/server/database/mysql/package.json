@@ -1,0 +1,4 @@
+{
+    "main":    "mysql.js",
+    "typings": "mysql.ts"
+}

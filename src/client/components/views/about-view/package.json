@@ -1,0 +1,4 @@
+{
+    "main":    "about-view.js",
+    "typings": "about-view.tsx"
+}

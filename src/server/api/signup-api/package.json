@@ -1,0 +1,4 @@
+{
+    "main":    "signup-api.js",
+    "typings": "signup-api.ts"
+}

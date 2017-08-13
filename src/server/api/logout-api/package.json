@@ -1,0 +1,4 @@
+{
+    "main":    "logout-api.js",
+    "typings": "logout-api.ts"
+}

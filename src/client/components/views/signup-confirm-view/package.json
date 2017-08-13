@@ -1,0 +1,4 @@
+{
+    "main":    "signup-confirm-view.js",
+    "typings": "signup-confirm-view.tsx"
+}

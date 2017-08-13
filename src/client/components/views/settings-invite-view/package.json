@@ -1,0 +1,4 @@
+{
+    "main":    "settings-invite-view.js",
+    "typings": "settings-invite-view.tsx"
+}

@@ -1,0 +1,4 @@
+{
+    "main":    "signup-view.js",
+    "typings": "signup-view.tsx"
+}

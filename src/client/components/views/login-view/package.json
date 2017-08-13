@@ -1,0 +1,4 @@
+{
+    "main":    "login-view.js",
+    "typings": "login-view.tsx"
+}

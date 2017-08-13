@@ -1,0 +1,4 @@
+{
+    "main":    "login-api.js",
+    "typings": "login-api.ts"
+}
