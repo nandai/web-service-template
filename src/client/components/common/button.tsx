@@ -89,7 +89,9 @@ export default class Button extends React.Component<ButtonProps, {}>
         e.preventDefault();
         document.body.focus();
 
-        if (Button.noReaction === false) {
+        if (Button.noReaction === false)
+        {
+            Button.noReaction = true;
             this.props.onClick();
         }
     }
