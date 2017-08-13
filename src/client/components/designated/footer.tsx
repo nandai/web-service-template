@@ -10,7 +10,7 @@ export default class Footer extends React.Component<{}, {}>
      */
     render() : JSX.Element
     {
-        // iOS safariのバグに対応するため、通常のdivで高さを確保しつつfixedのdivでヘッダを実装する
+        // 通常のdivで高さを確保しつつfixedのdivでヘッダを実装する
         return (
             <div className="footer">
                 <div className="footer-fixed">

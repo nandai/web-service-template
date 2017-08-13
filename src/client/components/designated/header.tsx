@@ -33,7 +33,7 @@ export default class Header extends React.Component<HeaderProps, {}>
         const headerFixedClassName = 'header-fixed' + (store.online === false ? ' offline' : '');
         const name = (account ? account.name : '');
 
-        // iOS safariのバグに対応するため、通常のdivで高さを確保しつつfixedのdivでヘッダを実装する
+        // 通常のdivで高さを確保しつつfixedのdivでヘッダを実装する
         return (
             <div className="header">
                 <div className={headerFixedClassName}>

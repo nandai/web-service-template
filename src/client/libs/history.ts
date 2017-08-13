@@ -16,7 +16,7 @@ interface HistoryHandler
 export default class History
 {
     private static onHistory : HistoryHandler = null;
-    private static count = 0;
+    private static count = 1;
 
     /**
      * コールバック設定

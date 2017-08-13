@@ -135,7 +135,7 @@ export default class HomeApp extends App
     /**
      *
      */
-    private setName(name : storeNS.Name)
+    private setName(name : storeNS.Name = 'login')
     {
         const {store} = this;
         const app = this.subApps[name];
