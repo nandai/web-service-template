@@ -36,8 +36,7 @@ export default class Root extends React.Component<RootProps, {}>
             break;
         }
 
-        const bgEl =    this.createBgElement(apps);
-        const guardEl = this.createClickGuardElement(apps);
+        const bgEl = this.createBgElement(apps);
 
         return (
             <div className='root'>
@@ -45,7 +44,6 @@ export default class Root extends React.Component<RootProps, {}>
                     {bgEl}
                 </div>
                 {page.elements}
-                {guardEl}
             </div>
         );
     }
@@ -68,20 +66,6 @@ export default class Root extends React.Component<RootProps, {}>
                     </div>
                 );
             }
-        }
-
-        return el;
-    }
-
-    /**
-     * クリックガード生成
-     */
-    private createClickGuardElement(apps : Apps) : JSX.Element
-    {
-        let el : JSX.Element;
-
-        if (apps.isDuringTransition()) {
-            el = <div className='root-click-guard' />;
         }
 
         return el;

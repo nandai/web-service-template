@@ -17,6 +17,7 @@ interface ButtonProps
 
 export default class Button extends React.Component<ButtonProps, {}>
 {
+    static noReaction = false;
     static defaultProps : ButtonProps =
     {
         className: null,
@@ -87,6 +88,9 @@ export default class Button extends React.Component<ButtonProps, {}>
     {
         e.preventDefault();
         document.body.focus();
-        this.props.onClick();
+
+        if (Button.noReaction === false) {
+            this.props.onClick();
+        }
     }
 }

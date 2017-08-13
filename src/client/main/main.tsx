@@ -9,6 +9,7 @@ import {Response}           from 'libs/response';
 import {slog}               from 'libs/slog';
 import SettingsApi          from '../api/settings-api';
 import {App}                from '../app/app';
+import Button               from '../components/common/button';
 import Root                 from '../components/root';
 import {BaseStore}          from '../components/views/base-store';
 import History, {Direction} from '../libs/history';
@@ -68,8 +69,11 @@ class Main
     @bind
     render() : void
     {
+        const {apps} = this.data;
+        Button.noReaction = apps.isDuringTransition();
+
         ReactDOM.render(
-            <Root apps={this.data.apps} />,
+            <Root apps={apps} />,
             document.getElementById('root'));
     }
 
