@@ -70,7 +70,11 @@ class Main
     render() : void
     {
         const {apps} = this.data;
-        Button.noReaction = apps.isDuringTransition();
+        const isDuringTransition = apps.isDuringTransition();
+
+        if (Button.noReaction && isDuringTransition === false) {
+            setTimeout(() => Button.noReaction = false, 100);
+        }
 
         ReactDOM.render(
             <Root apps={apps} />,

@@ -16,7 +16,8 @@ interface HistoryHandler
 export default class History
 {
     private static onHistory : HistoryHandler = null;
-    private static count = 1;
+    private static count = 0;
+    private static isBack = false;
 
     /**
      * コールバック設定
@@ -70,6 +71,7 @@ export default class History
      */
     static back() : void
     {
+        History.isBack = true;
         history.back();
     }
 
@@ -82,7 +84,7 @@ export default class History
         // log.d('count:' + History.count);
         let direction : Direction;
 
-        if (e.state > History.count)
+        if (e.state > History.count && History.isBack === false)
         {
             History.count++;
             direction = 'forward';
@@ -90,6 +92,7 @@ export default class History
         else
         {
             History.count--;
+            History.isBack = false;
             direction = 'back';
         }
 
