@@ -84,4 +84,47 @@ export default class Utils
         ua = ua.toLowerCase();
         return /android|iphone/.test(ua);
     }
+
+    /**
+     * モバイルブラウザのバウンスを無効にする
+     */
+    private static touchY = 0;
+    static disableBounceScroll() : void
+    {
+        document.body.addEventListener('touchstart', (e) =>
+        {
+            Utils.touchY = e.touches[0].screenY;
+        });
+
+        document.body.addEventListener('touchmove', (e) =>
+        {
+            let el = e.target as HTMLElement;
+            const moveY = e.touches[0].screenY;
+            let noScroll = true;
+
+            while (el !== null)
+            {
+                if (el.offsetHeight < el.scrollHeight)
+                {
+                    if (Utils.touchY < moveY && el.scrollTop === 0) {
+                        break;
+                    }
+
+                    if (Utils.touchY > moveY && el.scrollTop === el.scrollHeight - el.offsetHeight) {
+                        break;
+                    }
+
+                    noScroll = false;
+                    break;
+                }
+                el = el.parentElement;
+            }
+
+            if (noScroll) {
+                e.preventDefault();
+            }
+
+            Utils.touchY = moveY;
+        });
+    }
 }
