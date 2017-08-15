@@ -1,6 +1,6 @@
 {
   "name": "web-service-template",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "description": "web service template",
   "main": "main.js",
   "dependencies": {
@@ -11,7 +11,7 @@
     "@types/lodash": "^4.14.72",
     "@types/mongodb": "^2.2.9",
     "@types/mysql": "0.0.34",
-    "@types/node": "^8.0.20",
+    "@types/node": "^8.0.22",
     "@types/node-uuid": "0.0.28",
     "@types/nodemailer": "^3.1.1",
     "@types/passport": "^0.3.3",
@@ -27,7 +27,7 @@
     "@types/validator": "^6.2.2",
     "@types/websocket": "0.0.34",
     "authy": "^1.2.0",
-    "ava": "^0.21.0",
+    "ava": "^0.22.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-latest": "^6.24.1",
     "bind-decorator": "^1.0.11",
