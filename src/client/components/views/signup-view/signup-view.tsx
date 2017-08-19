@@ -38,7 +38,7 @@ export default class SignupView extends React.Component<SignupViewProps, {}>
         const disabled = (store.loading === true);
 
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <ViewContents>
                     <form style={{marginTop:'48px'}}>
                         <Button onClick={store.onTwitter} >{R.text(R.SIGNUP_WITH_TWITTER,  locale)}</Button>

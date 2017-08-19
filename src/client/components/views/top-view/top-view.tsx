@@ -27,7 +27,7 @@ export default class TopView extends React.Component<TopViewProps, {}>
         const {locale} = store;
 
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <Header store={store} />
                 <ViewContents>
                     <Button onClick={store.onSettings} url="/settings"       >{R.text(R.GO_SETTINGS, locale)}</Button>

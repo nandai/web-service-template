@@ -30,7 +30,7 @@ export default class LoginView extends React.Component<LoginViewProps, {}>
         const {message} = response;
 
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <ViewContents>
                     <form style={{marginTop:'48px'}}>
                         <Button onClick={store.onTwitter} >{R.text(R.LOGIN_WITH_TWITTER,  locale)}</Button>

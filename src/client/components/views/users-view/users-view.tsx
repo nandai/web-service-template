@@ -35,7 +35,7 @@ export default class UsersView extends React.Component<UsersViewProps, {}>
         });
 
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <Header store={store} />
                 <ViewContents>
                     <List url="/users/${id}" items={items} onClick={store.onUser} />

@@ -31,7 +31,7 @@ export default class InviteView extends React.Component<InviteViewProps, {}>
         const {message} = response;
 
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <Header store={store} />
                 <ViewContents>
                     <form>

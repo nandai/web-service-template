@@ -37,7 +37,7 @@ export default class ForgetView extends React.Component<ForgetViewProps, {}>
         );
 
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <Header store={store} />
                 <ViewContents>
                     <form>

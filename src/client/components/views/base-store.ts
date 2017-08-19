@@ -14,18 +14,8 @@ export interface BaseStore
 
 export function initBaseStore(dest : BaseStore, src : BaseStore) : void
 {
-    const srcPage = src.page || {};
-
     dest.locale =   src.locale;
     dest.account =  src.account || null;
     dest.online =  (src.online !== undefined ? src.online : true);
-    dest.page =
-    {
-        active:              (srcPage.active        !== undefined ? srcPage.active        : true),
-        displayStatus:       (srcPage.displayStatus !== undefined ? srcPage.displayStatus : 'displayed'),
-        effect:              dest.page.effect,
-        highPriorityEffect:  null,
-        direction:           'forward',
-        onPageTransitionEnd: srcPage.onPageTransitionEnd
-    };
+    dest.page = pageNS.factory(src.page, dest.page.effect);
 }

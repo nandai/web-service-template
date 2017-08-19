@@ -55,7 +55,7 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
         }
 
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <Header store={store} />
                 <ViewContents>
                     <Button onClick={store.onTwitter} >{twitterLabel}</Button>

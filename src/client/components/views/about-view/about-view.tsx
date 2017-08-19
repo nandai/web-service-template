@@ -21,7 +21,7 @@ export default class AboutView extends React.Component<AboutViewProps, {}>
     {
         const {store} = this.props;
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <ViewContents>
                     <p style={{textAlign:'center'}}>
                         <a href="https://github.com/nandai/web-service-template" target="_blank">https://github.com/nandai/web-service-template</a>

@@ -31,7 +31,7 @@ export default class SettingsAccountEmailChangeView extends React.Component<Sett
         const {message} = response;
 
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <Header store={store} />
                 <ViewContents>
                     <form>

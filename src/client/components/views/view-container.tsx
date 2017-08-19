@@ -5,11 +5,11 @@ import bind          from 'bind-decorator';
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 
-import {BaseStore}   from 'client/components/views/base-store';
+import {pageNS}      from 'client/libs/page';
 
 interface ViewContainerProps
 {
-    store   : BaseStore;
+    page    : pageNS.Page;
     zIndex? : number;
 }
 
@@ -21,8 +21,7 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
     render() : JSX.Element
     {
         const {props} = this;
-        const {store, zIndex} = props;
-        const {page} = store;
+        const {page, zIndex} = props;
         const {active, displayStatus, direction} = page;
         const effect = page.highPriorityEffect || page.effect || 'fade';
         let className = 'view-container';
@@ -50,7 +49,7 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
 
         if (el === e.target)
         {
-            const {page} = this.props.store;
+            const {page} = this.props;
             page.onPageTransitionEnd(page);
         }
     }

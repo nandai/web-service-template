@@ -17,4 +17,19 @@ export namespace pageNS
         direction?           : Direction;
         onPageTransitionEnd? : (page : Page) => void;
     }
+
+    export function factory(srcPage : Page, effect : Effect) : Page
+    {
+        srcPage = srcPage || {};
+        const page : Page =
+        {
+            active:              (srcPage.active        !== undefined ? srcPage.active        : true),
+            displayStatus:       (srcPage.displayStatus !== undefined ? srcPage.displayStatus : 'displayed'),
+            effect,
+            highPriorityEffect:  null,
+            direction:           'forward',
+            onPageTransitionEnd: srcPage.onPageTransitionEnd
+        };
+        return page;
+    }
 }

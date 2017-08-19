@@ -34,7 +34,7 @@ export default class HomeView extends React.Component<HomeViewProps, {}>
         const page = apps.getPage();
 
         return (
-            <ViewContainer store={store}>
+            <ViewContainer page={store.page}>
                 <Header    store={store} />
                 <div style={{position:'relative', flexGrow:1}}>
                     {page.elements}
