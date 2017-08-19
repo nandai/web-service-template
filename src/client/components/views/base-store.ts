@@ -1,28 +1,15 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Direction} from 'client/libs/history';
-import {Response}  from 'libs/response';
-
-export type Effect = 'fade' | 'slide';
-type DisplayStatus = 'hidden' | 'preparation' | 'showing' | 'displayed';
-
-interface Page
-{
-    active?              : boolean;
-    displayStatus?       : DisplayStatus;
-    effect?              : Effect;
-    highPriorityEffect?  : Effect;
-    direction?           : Direction;
-    onPageTransitionEnd? : (store : BaseStore) => void;
-}
+import {pageNS}   from 'client/libs/page';
+import {Response} from 'libs/response';
 
 export interface BaseStore
 {
     locale?  : string;
     account? : Response.Account;
     online?  : boolean;
-    page?    : Page;
+    page?    : pageNS.Page;
 }
 
 export function initBaseStore(dest : BaseStore, src : BaseStore) : void

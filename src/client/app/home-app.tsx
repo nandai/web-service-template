@@ -6,10 +6,10 @@ import * as React           from 'react';
 
 import {App}                from 'client/app/app';
 import Apps                 from 'client/app/apps';
-import {BaseStore}          from 'client/components/views/base-store';
 import HomeView             from 'client/components/views/home-view';
 import {storeNS}            from 'client/components/views/home-view/store';
 import History, {Direction} from 'client/libs/history';
+import {pageNS}             from 'client/libs/page';
 import Utils                from 'client/libs/utils';
 import {slog}               from 'libs/slog';
 import AboutApp             from './about-app';
@@ -209,9 +209,9 @@ export default class HomeApp extends App
      * ページ遷移終了イベント
      */
     @bind
-    onPageTransitionEnd(store : BaseStore)
+    onPageTransitionEnd(page : pageNS.Page)
     {
-        if (this.apps.changeDisplayStatus(store)) {
+        if (this.apps.changeDisplayStatus(page)) {
             App.render();
         }
     }

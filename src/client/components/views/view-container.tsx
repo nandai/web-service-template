@@ -9,7 +9,8 @@ import {BaseStore}   from 'client/components/views/base-store';
 
 interface ViewContainerProps
 {
-    store : BaseStore;
+    store   : BaseStore;
+    zIndex? : number;
 }
 
 export default class ViewContainer extends React.Component<ViewContainerProps, {}>
@@ -20,7 +21,7 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
     render() : JSX.Element
     {
         const {props} = this;
-        const {store} = props;
+        const {store, zIndex} = props;
         const {page} = store;
         const {active, displayStatus, direction} = page;
         const effect = page.highPriorityEffect || page.effect || 'fade';
@@ -31,8 +32,9 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
         else if (active)                          {className += ` ${effect} active`;}
         else                                      {className += ` ${effect} inactive ${direction}`;}
 
+        const style = (zIndex ? {zIndex} : {});
         return (
-            <div className={className} onTransitionEnd={this.onTransitionEnd}>
+            <div className={className} style={style} onTransitionEnd={this.onTransitionEnd}>
                 {props.children}
             </div>
         );
@@ -48,8 +50,8 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
 
         if (el === e.target)
         {
-            const {store} = this.props;
-            store.page.onPageTransitionEnd(store);
+            const {page} = this.props.store;
+            page.onPageTransitionEnd(page);
         }
     }
 }

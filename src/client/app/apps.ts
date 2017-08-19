@@ -1,9 +1,9 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {App}               from 'client/app/app';
-import {BaseStore, Effect} from 'client/components/views/base-store';
-import Utils               from 'client/libs/utils';
+import {App}    from 'client/app/app';
+import {pageNS} from 'client/libs/page';
+import Utils    from 'client/libs/utils';
 
 export default class Apps
 {
@@ -82,9 +82,9 @@ export default class Apps
     /**
      * displayStatusを変更する
      */
-    changeDisplayStatus(store : BaseStore) : boolean
+    changeDisplayStatus(page : pageNS.Page) : boolean
     {
-        const {active, displayStatus} = store.page;
+        const {active, displayStatus} = page;
         let changed = false;
 
         if (active)
@@ -183,8 +183,8 @@ export interface AppTransition
 {
     appName1     : string;
     appName2     : string;
-    effect1?     : Effect;
-    effect2?     : Effect;
+    effect1?     : pageNS.Effect;
+    effect2?     : pageNS.Effect;
     effectDelay? : number;
     bgTheme?     : string;
 }

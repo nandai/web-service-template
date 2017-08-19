@@ -13,6 +13,7 @@ import Button               from '../components/common/button';
 import Root                 from '../components/root';
 import {BaseStore}          from '../components/views/base-store';
 import History, {Direction} from '../libs/history';
+import {pageNS}             from '../libs/page';
 import R                    from '../libs/r';
 import {SocketEventData}    from '../libs/socket-event-data';
 import Utils                from '../libs/utils';
@@ -121,14 +122,14 @@ class Main
      * ページ遷移終了イベント
      */
     @bind
-    onPageTransitionEnd(store : BaseStore)
+    onPageTransitionEnd(page : pageNS.Page)
     {
         const log = slog.stepIn('Main', 'onPageTransitionEnd');
-        const {displayStatus} = store.page;
+        const {displayStatus} = page;
 
-        if (this.data.apps.changeDisplayStatus(store))
+        if (this.data.apps.changeDisplayStatus(page))
         {
-            log.d(`displayStatus changed. (${displayStatus} -> ${store.page.displayStatus})`);
+            log.d(`displayStatus changed. (${displayStatus} -> ${page.displayStatus})`);
             this.render();
         }
 
