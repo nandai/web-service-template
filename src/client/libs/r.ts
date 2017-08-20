@@ -19,6 +19,7 @@ export default class R
             'countryCode':                'Country Code (e.g.+1)',
             'currentPassword':            'Current password',
             'deleteAccount':              'Delete account',
+            'doesDeleteAccount':          'Are you sure you want to delete account?',
             'email':                      'Email',
             'errorNetwork':               'Failed to connect to network',
             'forbidden':                  'FORBIDDEN',
@@ -40,6 +41,7 @@ export default class R
             'logout':                     'Log out',
             'newPassword':                'New password',
             'newPasswordAgain':           'New password again',
+            'no':                         'No',
             'notFound':                   'NOT FOUND',
             'password':                   'Password',
             'phoneNo':                    'Phone No (e.g.123-456-7890)',
@@ -67,7 +69,8 @@ export default class R
             'user':                       'User',
             'userName':                   'User name',
             'userList':                   'User list',
-            'withdrawal':                 'Withdrawal'
+            'withdrawal':                 'Withdrawal',
+            'yes':                        'Yes'
         },
 
         'ja':
@@ -80,6 +83,7 @@ export default class R
             'countryCode':                '国コード (例:+81)',
             'currentPassword':            '現在のパスワード',
             'deleteAccount':              'アカウントを削除する',
+            'doesDeleteAccount':          'アカウントを削除してもよろしいですか？',
             'email':                      'メールアドレス',
             'errorNetwork':               '通信に失敗しました。インターネットに接続されているか確認してください。',
             'forbidden':                  'FORBIDDEN',
@@ -101,6 +105,7 @@ export default class R
             'logout':                     'ログアウト',
             'newPassword':                '新しいパスワード',
             'newPasswordAgain':           'パスワードの確認',
+            'no':                         'いいえ',
             'notFound':                   'NOT FOUND',
             'password':                   'パスワード',
             'phoneNo':                    '電話番号 (例:03-1234-5678)',
@@ -128,7 +133,8 @@ export default class R
             'user':                       'ユーザー',
             'userName':                   'ユーザー名',
             'userList':                   'ユーザー一覧',
-            'withdrawal':                 '退会'
+            'withdrawal':                 '退会',
+            'yes':                        'はい'
         }
     };
 
@@ -140,6 +146,7 @@ export default class R
     static COUNTRY_CODE =                  'countryCode';
     static CURRENT_PASSWORD =              'currentPassword';
     static DELETE_ACCOUNT =                'deleteAccount';
+    static DOES_DELETE_ACCOUNT =           'doesDeleteAccount';
     static EMAIL =                         'email';
     static ERROR_NETWORK =                 'errorNetwork';
     static FORBIDDEN =                     'forbidden';
@@ -161,6 +168,7 @@ export default class R
     static LOGOUT =                        'logout';
     static NEW_PASSWORD =                  'newPassword';
     static NEW_PASSWORD_AGAIN =            'newPasswordAgain';
+    static NO =                            'no';
     static NOT_FOUND =                     'notFound';
     static PASSWORD =                      'password';
     static PHONE_NO =                      'phoneNo';
@@ -189,6 +197,7 @@ export default class R
     static USER_NAME =                     'userName';
     static USER_LIST =                     'userList';
     static WITHDRAWAL =                    'withdrawal';
+    static YES =                           'yes';
 
     /**
      * 文字列を取得する

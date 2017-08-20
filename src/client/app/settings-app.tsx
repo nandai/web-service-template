@@ -9,6 +9,7 @@ import {App}        from 'client/app/app';
 import SettingsView from 'client/components/views/settings-view';
 import {storeNS}    from 'client/components/views/settings-view/store';
 import History      from 'client/libs/history';
+import {pageNS}     from 'client/libs/page';
 import Utils        from 'client/libs/utils';
 import {Response}   from 'libs/response';
 import {slog}       from 'libs/slog';
@@ -33,15 +34,20 @@ export default class SettingsApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
-        this.store.onTwitter =  this.onTwitter;
-        this.store.onFacebook = this.onFacebook;
-        this.store.onGoogle =   this.onGoogle;
-        this.store.onGithub =   this.onGithub;
-        this.store.onEmail =    this.onEmail;
-        this.store.onPassword = this.onPassword;
-        this.store.onAccount =  this.onAccount;
-        this.store.onLeave =    this.onLeave;
-        this.store.onBack =     this.onBack;
+        this.store.onTwitter =    this.onTwitter;
+        this.store.onFacebook =   this.onFacebook;
+        this.store.onGoogle =     this.onGoogle;
+        this.store.onGithub =     this.onGithub;
+        this.store.onEmail =      this.onEmail;
+        this.store.onPassword =   this.onPassword;
+        this.store.onAccount =    this.onAccount;
+        this.store.onLeave =      this.onLeave;
+        this.store.onBack =       this.onBack;
+        this.store.onLeaveOK =    this.onLeaveOK;
+        this.store.onCloseModal = this.onCloseModal;
+        this.store.modalPage.active = false;
+        this.store.modalPage.displayStatus = 'hidden';
+        this.store.modalPage.onPageTransitionEnd = this.onPageTransitionEnd;
     }
 
     /**
@@ -187,9 +193,27 @@ export default class SettingsApp extends App
      * onLeave
      */
     @bind
-    private async onLeave()
+    private onLeave()
     {
-        const log = slog.stepIn(SettingsApp.CLS_NAME, 'onLeave');
+        pageNS.next(this.store.modalPage, App.render);
+    }
+
+    @bind
+    private onPageTransitionEnd(_page : pageNS.Page)
+    {
+        pageNS.next(this.store.modalPage, App.render);
+    }
+
+    @bind
+    private onCloseModal()
+    {
+        pageNS.next(this.store.modalPage, App.render);
+    }
+
+    @bind
+    private async onLeaveOK()
+    {
+        const log = slog.stepIn(SettingsApp.CLS_NAME, 'onLeaveOK');
         const {store} = this;
 
         try

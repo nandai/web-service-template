@@ -4,6 +4,7 @@
 import * as React    from 'react';
 
 import Button        from 'client/components/common/button';
+import Modal         from 'client/components/common/modal';
 import Text          from 'client/components/common/text';
 import Header        from 'client/components/designated/header';
 import ViewContainer from 'client/components/views/view-container';
@@ -70,6 +71,11 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
                     <Text>{account.name}　{loginDt}</Text>
                     <Text error={response.status !== Response.Status.OK}>{store.message || message.general}</Text>
                 </ViewContents>
+                <Modal locale =   {locale}
+                       page =     {store.modalPage}
+                       message =  {R.text(R.DOES_DELETE_ACCOUNT, locale)}
+                       onOK =     {store.onLeaveOK}
+                       onCancel = {store.onCloseModal} />
             </ViewContainer>
         );
     }

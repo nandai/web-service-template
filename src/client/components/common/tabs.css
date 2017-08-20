@@ -2,6 +2,7 @@
 {
     position: relative;
     display:  flex;
+    background-color: rgb(49, 182, 162);
 
     & > .wst-tab
     {

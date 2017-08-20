@@ -323,7 +323,6 @@ window.addEventListener('DOMContentLoaded', async () =>
     const main = new Main();
     main.init();
 
-    Utils.disableBounceScroll();
     await updateCurrentRoute(main.data, url, false);
 
     main.render();

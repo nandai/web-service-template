@@ -14,8 +14,8 @@ export interface TabItem
 
 interface TabsProps
 {
-    active : string;
-    items  : TabItem[];
+    active? : string;
+    items   : TabItem[];
 }
 
 export default class Tabs extends React.Component<TabsProps, {}>
@@ -27,7 +27,7 @@ export default class Tabs extends React.Component<TabsProps, {}>
     {
         const {props} = this;
         const {items} = props;
-        let index = 0;
+        let index = -1;
 
         const elements = items.map((item, i) =>
         {
@@ -42,15 +42,20 @@ export default class Tabs extends React.Component<TabsProps, {}>
             );
         });
 
-        const count = items.length;
-        const left =  `${100 / count * index}%`;
-        const width = `${100 / count}%`;
-        const style = {left, width};
+        let activeEl : JSX.Element;
+        if (index >= 0)
+        {
+            const count = items.length;
+            const left =  `${100 / count * index}%`;
+            const width = `${100 / count}%`;
+            const style = {left, width};
+            activeEl = <div className="wst-tab-active" style={style} />;
+        }
 
         return (
             <div className="wst-tabs">
                 {elements}
-                <div className="wst-tab-active" style={style} />
+                {activeEl}
             </div>
         );
     }
