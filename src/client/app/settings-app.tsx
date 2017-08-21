@@ -45,8 +45,6 @@ export default class SettingsApp extends App
         this.store.onBack =       this.onBack;
         this.store.onLeaveOK =    this.onLeaveOK;
         this.store.onCloseModal = this.onCloseModal;
-        this.store.modalPage.active = false;
-        this.store.modalPage.displayStatus = 'hidden';
         this.store.modalPage.onPageTransitionEnd = this.onPageTransitionEnd;
     }
 

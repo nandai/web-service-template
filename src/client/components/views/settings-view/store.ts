@@ -46,6 +46,9 @@ export namespace storeNS
             unlinkProviderResponse: {status:Response.Status.OK, message:{}}
         };
         initBaseStore(store, src);
+
+        store.modalPage.active = false;
+        store.modalPage.displayStatus = 'hidden';
         return store;
     }
 }

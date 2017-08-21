@@ -29,11 +29,8 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
     render() : JSX.Element
     {
         const {store} = this.props;
-        const {locale, account} = store;
-
-        if (account === null) {
-            return null;
-        }
+        const {locale} = store;
+        const account = store.account || store.prevAccount;
 
         const response = store.unlinkProviderResponse;
         const {message} = response;
@@ -83,7 +80,8 @@ export default class SettingsView extends React.Component<SettingsViewProps, {}>
     private getLinkLabel(provider : string, key : string) : string
     {
         const {store} = this.props;
-        const format = R.text(store.account[key]
+        const account = store.account || store.prevAccount;
+        const format = R.text(account[key]
             ? R.UNLINK_PROVIDER
             : R.LINK_PROVIDER, store.locale);
         return CommonUtils.formatString(format, {provider});

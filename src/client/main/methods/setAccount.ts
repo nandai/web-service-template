@@ -17,6 +17,7 @@ export function setAccount(data : Data, account : Response.Account) : void
     data.routes.forEach((route) =>
     {
         const {store} = route.app;
+        store.prevAccount = store.account;
         store.account = _.clone(account);
     });
 }

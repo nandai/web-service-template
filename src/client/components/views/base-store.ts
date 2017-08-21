@@ -6,10 +6,11 @@ import {Response} from 'libs/response';
 
 export interface BaseStore
 {
-    locale?  : string;
-    account? : Response.Account;
-    online?  : boolean;
-    page?    : pageNS.Page;
+    locale?      : string;
+    account?     : Response.Account;
+    prevAccount? : Response.Account;    // accountの１つ前の状態
+    online?      : boolean;
+    page?        : pageNS.Page;
 }
 
 export function initBaseStore(dest : BaseStore, src : BaseStore) : void
