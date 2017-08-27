@@ -34,7 +34,7 @@ export default class AboutApp
         try
         {
             const title = ClientR.text(ClientR.ABOUT, locale);
-            const app = new ClientApp({locale, name:'about'});
+            const app = new ClientApp({locale, url:'/about'});
             const contents = ReactDOM.renderToString(<Root app={app} />);
             res.send(view(title, 'wst.js', contents, app.store));
             log.stepOut();

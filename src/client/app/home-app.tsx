@@ -23,12 +23,7 @@ export default class HomeApp extends App
 {
     private static CLS_NAME = 'HomeApp';
     store   : storeNS.Store;
-    subApps :
-    {
-        login  : LoginApp;
-        signup : SignupApp;
-        about  : AboutApp;
-    };
+    subApps : {[url : string] : App};
 
     /**
      * @constructor
@@ -48,9 +43,9 @@ export default class HomeApp extends App
 
         this.subApps =
         {
-            login:  new LoginApp( this.store.loginStore),
-            signup: new SignupApp(this.store.signupStore),
-            about:  new AboutApp( this.store.aboutStore)
+            '/':       new LoginApp( this.store.loginStore),
+            '/signup': new SignupApp(this.store.signupStore),
+            '/about':  new AboutApp( this.store.aboutStore)
         };
 
         for (const name in this.subApps)
@@ -61,7 +56,7 @@ export default class HomeApp extends App
             page.onPageTransitionEnd = this.onPageTransitionEnd;
         }
 
-        this.setName(this.store.name);
+        this.setUrl(this.store.url);
     }
 
     /**
@@ -85,7 +80,7 @@ export default class HomeApp extends App
             subApp.init(params, message);
         }
 
-        this.setName(this.pathnameToName());
+        this.setUrl(location.pathname);
         return super.init(params);
     }
 
@@ -95,22 +90,6 @@ export default class HomeApp extends App
     view(i : number) : JSX.Element
     {
         return <HomeView key={i} store={this.store} apps={this.apps} />;
-    }
-
-    /**
-     *
-     */
-    private pathnameToName() : storeNS.Name
-    {
-        const convert : {[pathname : string] : storeNS.Name} =
-        {
-            '/':       'login',
-            '/signup': 'signup',
-            '/about':  'about'
-        };
-
-        const {pathname} = location;
-        return convert[pathname];
     }
 
     /**
@@ -132,10 +111,10 @@ export default class HomeApp extends App
     /**
      *
      */
-    private setName(name : storeNS.Name = 'login')
+    private setUrl(url : string)
     {
         const {store} = this;
-        const app = this.subApps[name];
+        const app = this.subApps[url];
 
         if (! this.apps)
         {
@@ -146,15 +125,15 @@ export default class HomeApp extends App
         else
         {
             // 二度目以降
-            if (store.name !== name)
+            if (store.url !== url)
             {
-                const i = this.getSubAppIndex(store.name);
-                const j = this.getSubAppIndex(name);
+                const i = this.getSubAppIndex(store.url);
+                const j = this.getSubAppIndex(url);
                 const direction : Direction = (i < j ? 'forward' : 'back');
 
-                for (const name2 in this.subApps)
+                for (const url2 in this.subApps)
                 {
-                    const subApp : App = this.subApps[name2];
+                    const subApp : App = this.subApps[url2];
                     const {page} = subApp.store;
                     page.direction = direction;
                 }
@@ -169,7 +148,7 @@ export default class HomeApp extends App
             }
         }
 
-        store.name = name;
+        store.url = url;
     }
 
     /**

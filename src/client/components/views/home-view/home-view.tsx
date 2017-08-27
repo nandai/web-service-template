@@ -26,9 +26,9 @@ export default class HomeView extends React.Component<HomeViewProps, {}>
         const {store, apps} = this.props;
         const items : TabItem[] =
         [
-            {name:'login',  label:'LOGIN',  url:'/',       onClick:store.onLogin},
-            {name:'signup', label:'SIGNUP', url:'/signup', onClick:store.onSignup},
-            {name:'about',  label:'ABOUT',  url:'/about',  onClick:store.onAbout}
+            {name:'/',       label:'LOGIN',  url:'/',       onClick:store.onLogin},
+            {name:'/signup', label:'SIGNUP', url:'/signup', onClick:store.onSignup},
+            {name:'/about',  label:'ABOUT',  url:'/about',  onClick:store.onAbout}
         ];
 
         const page = apps.getPage();
@@ -40,7 +40,7 @@ export default class HomeView extends React.Component<HomeViewProps, {}>
                     {page.elements}
                 </div>
                 <Footer>
-                    <Tabs active={store.name} items={items} />
+                    <Tabs active={store.url} items={items} />
                 </Footer>
             </ViewContainer>
         );

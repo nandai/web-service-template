@@ -8,11 +8,9 @@ import {storeNS as signupStoreNS} from '../signup-view/store';
 
 export namespace storeNS
 {
-    export type Name = 'login' | 'signup' | 'about';
-
     export interface Store extends BaseStore
     {
-        name?        : Name;
+        url?         : string;
         onLogin?     : () => void;
         onSignup?    : () => void;
         onAbout?     : () => void;
@@ -36,7 +34,7 @@ export namespace storeNS
         const store : Store =
         {
             page:     {effect:'fade'},
-            name:     src.name,
+            url:      src.url,
             onLogin:  src.onLogin,
             onSignup: src.onSignup,
             onAbout:  src.onAbout,
