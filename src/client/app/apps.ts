@@ -5,6 +5,12 @@ import {App}    from 'client/app/app';
 import {pageNS} from 'client/libs/page';
 import Utils    from 'client/libs/utils';
 
+export interface AppsOptions
+{
+    transitions? : AppTransition[];
+    effectDelay? : number;
+}
+
 export default class Apps
 {
     private apps        : App[];
@@ -17,7 +23,7 @@ export default class Apps
     /**
      * @constructor
      */
-    constructor(app : App, options : {transitions? : AppTransition[], effectDelay? : number} = {})
+    constructor(app : App, options : AppsOptions = {})
     {
         this.apps =       [app];
         this.currentApp =  app;

@@ -54,7 +54,7 @@ export default class SignupApp
             }
 
             const title = ClientR.text(ClientR.SIGNUP, locale);
-            const app = new ClientApp({locale, url:'/signup', signupStore:{message}});
+            const app = new ClientApp({locale, url:'/signup', homeTabsStore:{signupStore:{message}}});
             const contents = ReactDOM.renderToString(<Root app={app} />);
             res.send(view(title, 'wst.js', contents, app.store));
             log.stepOut();

@@ -1,47 +1,32 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {storeNS as aboutStoreNS}  from '../about-view/store';
-import {BaseStore, initBaseStore} from '../base-store';
-import {storeNS as loginStoreNS}  from '../login-view/store';
-import {storeNS as signupStoreNS} from '../signup-view/store';
+import {BaseStore, initBaseStore}   from '../base-store';
+import {storeNS as forgetStoreNS}   from '../forget-view/store';
+import {storeNS as homeTabsStoreNS} from '../home-tabs-view/store';
 
 export namespace storeNS
 {
     export interface Store extends BaseStore
     {
-        url?         : string;
-        onLogin?     : () => void;
-        onSignup?    : () => void;
-        onAbout?     : () => void;
-
-        loginStore?  : loginStoreNS .Store;
-        signupStore? : signupStoreNS.Store;
-        aboutStore?  : aboutStoreNS .Store;
+        homeTabsStore? : homeTabsStoreNS.Store;
+        forgetStore?   : forgetStoreNS.Store;
     }
 
     export function init(src : Store) : Store
     {
-        const loginStore = loginStoreNS.init(src.loginStore || {});
-        initBaseStore(loginStore, src);
+        const homeTabsStore = homeTabsStoreNS.init(src.homeTabsStore || {});
+        initBaseStore(homeTabsStore, src);
 
-        const signupStore = signupStoreNS.init(src.signupStore || {});
-        initBaseStore(signupStore, src);
-
-        const aboutStore = aboutStoreNS.init(src.aboutStore || {});
-        initBaseStore(aboutStore, src);
+        const forgetStore = forgetStoreNS.init(src.forgetStore || {});
+        initBaseStore(forgetStore, src);
 
         const store : Store =
         {
-            page:     {effect:'fade'},
-            url:      src.url,
-            onLogin:  src.onLogin,
-            onSignup: src.onSignup,
-            onAbout:  src.onAbout,
+            page: {effect:'fade'},
 
-            loginStore,
-            signupStore,
-            aboutStore
+            homeTabsStore,
+            forgetStore
         };
         initBaseStore(store, src);
 

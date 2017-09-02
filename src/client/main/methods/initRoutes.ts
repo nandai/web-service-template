@@ -2,7 +2,6 @@
  * (C) 2016-2017 printf.jp
  */
 import ForbiddenApp                  from 'client/app/forbidden-app';
-import ForgetApp                     from 'client/app/forget-app';
 import HomeApp                       from 'client/app/home-app';
 import JoinApp                       from 'client/app/join-app';
 import NotFoundApp                   from 'client/app/not-found-app';
@@ -39,7 +38,7 @@ export function initRoutes(data : Data)
         {url:'/signup',                        app:homeApp,                             title:R.text(R.SIGNUP,                        locale)},
         {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                locale), query:true},
         {url:'/join',                          app:new JoinApp(),                       title:R.text(R.JOIN,                          locale), query:true},
-        {url:'/forget',                        app:new ForgetApp(),                     title:R.text(R.GO_FORGET,                     locale)},
+        {url:'/forget',                        app:homeApp,                             title:R.text(R.GO_FORGET,                     locale)},
         {url:'/reset',                         app:new ResetApp(),                      title:R.text(R.RESET_PASSWORD,                locale), query:true},
         {url:'/settings',                      app:new SettingsApp(),                   title:R.text(R.SETTINGS,                      locale), auth:true},
         {url:'/settings/account',              app:new SettingsAccountApp(),            title:R.text(R.SETTINGS_ACCOUNT,              locale), auth:true},
