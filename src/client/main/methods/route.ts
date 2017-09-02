@@ -10,7 +10,6 @@ export interface Route
 {
     url    : string;
     app    : App;
-    title  : string;
     query? : boolean;
     auth?  : boolean;
 }

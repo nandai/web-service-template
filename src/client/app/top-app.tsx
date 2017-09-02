@@ -9,6 +9,7 @@ import {App}      from 'client/app/app';
 import TopView    from 'client/components/views/top-view';
 import {storeNS}  from 'client/components/views/top-view/store';
 import History    from 'client/libs/history';
+import R          from 'client/libs/r';
 import Utils      from 'client/libs/utils';
 import {slog}     from 'libs/slog';
 
@@ -32,6 +33,8 @@ export default class TopApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.title = R.text(R.TOP, this.store.locale);
+
         this.store.onSettings = this.onSettings;
         this.store.onInvite =   this.onInvite;
         this.store.onUsers =    this.onUsers;

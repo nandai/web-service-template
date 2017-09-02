@@ -8,6 +8,7 @@ import SettingsApi        from 'client/api/settings-api';
 import {App}              from 'client/app/app';
 import SettingsInviteView from 'client/components/views/settings-invite-view';
 import {storeNS}          from 'client/components/views/settings-invite-view/store';
+import R                  from 'client/libs/r';
 import Utils              from 'client/libs/utils';
 import {Response}         from 'libs/response';
 import {slog}             from 'libs/slog';
@@ -32,6 +33,8 @@ export default class SettingsInviteApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.title = R.text(R.SETTINGS_INVITE, this.store.locale);
+
         this.store.onEmailChange = this.onEmailChange;
         this.store.onInvite =      this.onInvite;
         this.store.onBack =        this.onBack;

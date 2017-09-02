@@ -9,6 +9,7 @@ import {App}       from 'client/app/app';
 import SmsView     from 'client/components/views/sms-view';
 import {storeNS}   from 'client/components/views/sms-view/store';
 import History     from 'client/libs/history';
+import R           from 'client/libs/r';
 import Utils       from 'client/libs/utils';
 import {Response}  from 'libs/response';
 import {slog}      from 'libs/slog';
@@ -36,6 +37,8 @@ export default class SmsApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.title = R.text(R.AUTH_SMS, this.store.locale);
+
         this.store.onSmsCodeChange = this.onSmsCodeChange;
         this.store.onSend =          this.onSend;
     }

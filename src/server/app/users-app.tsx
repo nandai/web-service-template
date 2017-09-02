@@ -1,16 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom/server';
-
-import ClientApp     from 'client/app/users-app';
-import Root          from 'client/components/root';
-import ClientR       from 'client/libs/r';
-import {slog}        from 'libs/slog';
-import SettingsApi   from 'server/api/settings-api';
-import UserApi       from 'server/api/user-api';
-import {view}        from './view';
+import ClientApp   from 'client/app/users-app';
+import {slog}      from 'libs/slog';
+import SettingsApi from 'server/api/settings-api';
+import UserApi     from 'server/api/user-api';
+import {view}      from './view';
 
 import express = require('express');
 
@@ -36,10 +31,8 @@ export default class UsersApp
         const data2 = await UserApi.getUserList();
         const {account} =  data1;
         const {userList} = data2;
-        const title = ClientR.text(ClientR.USER_LIST, locale);
         const app = new ClientApp({locale, account, userList});
-        const contents = ReactDOM.renderToString(<Root app={app} />);
-        res.send(view(title, 'wst.js', contents, app.store));
+        res.send(view(app));
         log.stepOut();
     }
 }

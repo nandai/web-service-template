@@ -1,12 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React       from 'react';
-import * as ReactDOM    from 'react-dom/server';
-
 import ClientApp        from 'client/app/settings-account-password-app';
-import Root             from 'client/components/root';
-import ClientR          from 'client/libs/r';
 import {slog}           from 'libs/slog';
 import SettingsApi      from 'server/api/settings-api';
 import Utils            from 'server/libs/utils';
@@ -39,10 +34,8 @@ export default class SettingsAccountPasswordApp
             const {account} = data;
             if (account.email)
             {
-                const title = ClientR.text(ClientR.SETTINGS_ACCOUNT_PASSWORD, locale);
                 const app = new ClientApp({locale, account});
-                const contents = ReactDOM.renderToString(<Root app={app} />);
-                res.send(view(title, 'wst.js', contents, app.store));
+                res.send(view(app));
             }
             else
             {

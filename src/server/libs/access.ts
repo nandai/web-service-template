@@ -11,8 +11,8 @@ import Cookie                from './cookie';
 import R                     from './r';
 import Utils                 from './utils';
 
-import express =    require('express');
 import bodyParser = require('body-parser');
+import express =    require('express');
 
 /**
  * Access

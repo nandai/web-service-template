@@ -9,6 +9,7 @@ import {App}             from 'client/app/app';
 import UsersView         from 'client/components/views/users-view';
 import {storeNS}         from 'client/components/views/users-view/store';
 import History           from 'client/libs/history';
+import R                 from 'client/libs/r';
 import {SocketEventData} from 'client/libs/socket-event-data';
 import Utils             from 'client/libs/utils';
 import {Response}        from 'libs/response';
@@ -34,6 +35,8 @@ export default class UsersApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.title = R.text(R.USER_LIST, this.store.locale);
+
         this.store.onUser = this.onUser;
         this.store.onBack = this.onBack;
     }

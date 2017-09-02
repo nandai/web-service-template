@@ -6,6 +6,7 @@ import * as React from 'react';
 import {App}      from 'client/app/app';
 import AboutView  from 'client/components/views/about-view';
 import {storeNS}  from 'client/components/views/about-view/store';
+import R          from 'client/libs/r';
 import Utils      from 'client/libs/utils';
 
 /**
@@ -27,6 +28,7 @@ export default class AboutApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.title = R.text(R.ABOUT, this.store.locale);
     }
 
     /**

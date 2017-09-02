@@ -1,12 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React       from 'react';
-import * as ReactDOM    from 'react-dom/server';
-
 import ClientApp        from 'client/app/home-app';
-import Root             from 'client/components/root';
-import ClientR          from 'client/libs/r';
 import {slog}           from 'libs/slog';
 import SessionAgent     from 'server/agents/session-agent';
 import SignupConfirmApp from 'server/app/signup-confirm-app';
@@ -53,10 +48,8 @@ export default class SignupApp
                 await SessionAgent.update(session);
             }
 
-            const title = ClientR.text(ClientR.SIGNUP, locale);
             const app = new ClientApp({locale, url:'/signup', homeTabsStore:{signupStore:{message}}});
-            const contents = ReactDOM.renderToString(<Root app={app} />);
-            res.send(view(title, 'wst.js', contents, app.store));
+            res.send(view(app));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

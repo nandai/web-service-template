@@ -5,6 +5,7 @@ import * as React    from 'react';
 
 import {App}         from 'client/app/app';
 import ForbiddenView from 'client/components/views/forbidden-view';
+import R             from 'client/libs/r';
 import Utils         from 'client/libs/utils';
 import {BaseStore}   from '../components/views/base-store';
 
@@ -18,12 +19,16 @@ export default class ForbiddenApp extends App
     /**
      * @constructor
      */
-    constructor()
+    constructor(ssrStore? : BaseStore)
     {
         super();
 
-        const ssrStore = Utils.getSsrStore<BaseStore>();
+        if (! ssrStore) {
+            ssrStore = Utils.getSsrStore<BaseStore>();
+        }
+
         this.store = ssrStore;
+        this.title = R.text(R.FORBIDDEN, this.store.locale);
     }
 
     /**

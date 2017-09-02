@@ -8,6 +8,7 @@ import SignupApi   from 'client/api/signup-api';
 import {App}       from 'client/app/app';
 import JoinView    from 'client/components/views/join-view';
 import {storeNS}   from 'client/components/views/join-view/store';
+import R           from 'client/libs/r';
 import Utils       from 'client/libs/utils';
 import {Response}  from 'libs/response';
 import {slog}      from 'libs/slog';
@@ -33,6 +34,8 @@ export default class JoinApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.title = R.text(R.JOIN, this.store.locale);
+
         this.store.onPasswordChange = this.onPasswordChange;
         this.store.onJoin =           this.onJoin;
     }

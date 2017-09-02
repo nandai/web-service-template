@@ -8,6 +8,7 @@ import {App}             from 'client/app/app';
 import UserView          from 'client/components/views/user-view';
 import {storeNS}         from 'client/components/views/user-view/store';
 import History           from 'client/libs/history';
+import R                 from 'client/libs/r';
 import {SocketEventData} from 'client/libs/socket-event-data';
 import Utils             from 'client/libs/utils';
 import {Response}        from 'libs/response';
@@ -31,6 +32,8 @@ export default class UserApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.title = R.text(R.USER, this.store.locale);
+
         this.store.onBack = this.onBack;
     }
 

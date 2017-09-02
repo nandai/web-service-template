@@ -1,10 +1,17 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {BaseStore} from 'client/components/views/base-store';
-import ClientR     from 'client/libs/r';
-import SettingsApi from 'server/api/settings-api';
-import Config      from 'server/config';
+import * as React    from 'react';
+import * as ReactDOM from 'react-dom/server';
+
+import {App}         from 'client/app/app';
+import ForbiddenApp  from 'client/app/forbidden-app';
+import NotFoundApp   from 'client/app/not-found-app';
+import Root          from 'client/components/root';
+import {pageNS}      from 'client/libs/page';
+import {slog}        from 'libs/slog';
+import SettingsApi   from 'server/api/settings-api';
+import Config        from 'server/config';
 
 import express = require('express');
 import fs =      require('fs');
@@ -34,9 +41,16 @@ export function loadCss()
 /**
  * view
  */
-export function view(title : string, js : string, contents : string, store) : string
+export function view(app : App, url? : string) : string
 {
     // NOTE:<body ontouchstart="">はスマホでタッチした時に:activeを効かせるための設定
+    const js = 'wst.js';
+    const contents = ReactDOM.renderToString(<Root app={app} />);
+
+    let title = '';
+    if (url)     {title = app.getTitle(url);}
+    if (! title) {title = app.title;}
+
     const html = `
 <!DOCTYPE html>
 <html>
@@ -46,7 +60,7 @@ export function view(title : string, js : string, contents : string, store) : st
     <title>${title}</title>
 
     <script>
-        var ssrStore = ${JSON.stringify(store)};
+        var ssrStore = ${JSON.stringify(app.store)};
     </script>
 
     <style>
@@ -69,7 +83,7 @@ export function view(title : string, js : string, contents : string, store) : st
  */
 export function forbidden(req : express.Request, res : express.Response)
 {
-    return sendAbnormal(req, res, ClientR.FORBIDDEN, 403);
+    return sendAbnormal(req, res, ForbiddenApp, 403);
 }
 
 /**
@@ -77,27 +91,32 @@ export function forbidden(req : express.Request, res : express.Response)
  */
 export function notFound(req : express.Request, res : express.Response)
 {
-    return sendAbnormal(req, res, ClientR.NOT_FOUND, 404);
+    return sendAbnormal(req, res, NotFoundApp, 404);
 }
 
 /**
  * 異常レスポンス送信
  */
-function sendAbnormal(req : express.Request, res : express.Response, phrase : string, status : number)
+function sendAbnormal(
+    req       : express.Request,
+    res       : express.Response,
+    ClientApp : typeof ForbiddenApp | typeof NotFoundApp,
+    status    : number)
 {
+    const log = slog.stepIn('view.tsx', 'sendAbnormal');
     return new Promise(async (resolve : () => void, reject) =>
     {
         try
         {
             const locale = req.ext.locale;
-            const title = ClientR.text(phrase, locale);
             const data = await SettingsApi.getAccount(req);
             const {account} = data;
-            const page = {active:true};
-            const store : BaseStore = {locale, account, page};
-            res.status(status).send(view(title, 'wst.js', '', store));
+            const page : pageNS.Page = {active:true, displayStatus:'displayed'};
+            const app = new ClientApp({locale, account, page});
+            res.status(status).send(view(app));
+            log.stepOut();
             resolve();
         }
-        catch (err) {reject(err);}
+        catch (err) {log.stepOut(); reject(err);}
     });
 }

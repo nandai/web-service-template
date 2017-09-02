@@ -8,6 +8,7 @@ import SignupApi  from 'client/api/signup-api';
 import {App}      from 'client/app/app';
 import SignupView from 'client/components/views/signup-view';
 import {storeNS}  from 'client/components/views/signup-view/store';
+import R          from 'client/libs/r';
 import Utils      from 'client/libs/utils';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
@@ -33,6 +34,8 @@ export default class SignupApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.title = R.text(R.SIGNUP, this.store.locale);
+
         this.store.onTwitter =        this.onTwitter;
         this.store.onFacebook =       this.onFacebook;
         this.store.onGoogle =         this.onGoogle;

@@ -24,10 +24,11 @@ export function updateCurrentRoute(data : Data, url : string, isInit : boolean, 
 
         let route =    routeResult.route;
         const params = routeResult.params;
+        const title = route.app.getTitle(url) || route.app.title;
 
         if (data.currentRoute !== route)
         {
-            log.d(route.title);
+            log.d(title);
             if (isInit)
             {
                 try
@@ -49,7 +50,7 @@ export function updateCurrentRoute(data : Data, url : string, isInit : boolean, 
             }
         }
 
-        document.title = route.title;
+        document.title = title;
         log.stepOut();
         resolve();
     });

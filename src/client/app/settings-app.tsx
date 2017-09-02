@@ -10,6 +10,7 @@ import SettingsView from 'client/components/views/settings-view';
 import {storeNS}    from 'client/components/views/settings-view/store';
 import History      from 'client/libs/history';
 import {pageNS}     from 'client/libs/page';
+import R            from 'client/libs/r';
 import Utils        from 'client/libs/utils';
 import {Response}   from 'libs/response';
 import {slog}       from 'libs/slog';
@@ -34,6 +35,8 @@ export default class SettingsApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.title = R.text(R.SETTINGS, this.store.locale);
+
         this.store.onTwitter =    this.onTwitter;
         this.store.onFacebook =   this.onFacebook;
         this.store.onGoogle =     this.onGoogle;

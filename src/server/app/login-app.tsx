@@ -1,21 +1,16 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
-import * as ReactDOM from 'react-dom/server';
-
-import ClientApp     from 'client/app/home-app';
-import Root          from 'client/components/root';
-import ClientR       from 'client/libs/r';
-import {slog}        from 'libs/slog';
-import SessionAgent  from 'server/agents/session-agent';
-import SmsApp        from 'server/app/sms-app';
-import TopApp        from 'server/app/top-app';
-import Cookie        from 'server/libs/cookie';
-import R             from 'server/libs/r';
-import Utils         from 'server/libs/utils';
-import {Session}     from 'server/models/session';
-import {view}        from './view';
+import ClientApp    from 'client/app/home-app';
+import {slog}       from 'libs/slog';
+import SessionAgent from 'server/agents/session-agent';
+import SmsApp       from 'server/app/sms-app';
+import TopApp       from 'server/app/top-app';
+import Cookie       from 'server/libs/cookie';
+import R            from 'server/libs/r';
+import Utils        from 'server/libs/utils';
+import {Session}    from 'server/models/session';
+import {view}       from './view';
 
 import express = require('express');
 
@@ -66,10 +61,8 @@ export default class LoginApp
                 await SessionAgent.update(session);
             }
 
-            const title = ClientR.text(ClientR.LOGIN, locale);
             const app = new ClientApp({locale, url:'/', homeTabsStore:{loginStore:{message}}});
-            const contents = ReactDOM.renderToString(<Root app={app} />);
-            res.send(view(title, 'wst.js', contents, app.store));
+            res.send(view(app, '/'));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

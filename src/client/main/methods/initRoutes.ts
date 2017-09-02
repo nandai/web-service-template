@@ -17,8 +17,6 @@ import SmsApp                        from 'client/app/sms-app';
 import TopApp                        from 'client/app/top-app';
 import UserApp                       from 'client/app/user-app';
 import UsersApp                      from 'client/app/users-app';
-import R                             from 'client/libs/r';
-import Utils                         from 'client/libs/utils';
 import {Data}                        from './data';
 
  /**
@@ -26,31 +24,30 @@ import {Data}                        from './data';
   */
 export function initRoutes(data : Data)
 {
-    const locale = Utils.getLocale();
     const homeApp =     new HomeApp();
     const notFoundApp = new NotFoundApp();
 
     data.routes =
     [
-        {url:'/',                              app:new TopApp(),                        title:R.text(R.TOP,                           locale), auth:true},
-        {url:'/',                              app:homeApp,                             title:R.text(R.LOGIN,                         locale)},
-        {url:'/',                              app:new SmsApp(),                        title:R.text(R.AUTH_SMS,                      locale), query:true},
-        {url:'/signup',                        app:homeApp,                             title:R.text(R.SIGNUP,                        locale)},
-        {url:'/signup',                        app:new SignupConfirmApp(),              title:R.text(R.SIGNUP_CONFIRM,                locale), query:true},
-        {url:'/join',                          app:new JoinApp(),                       title:R.text(R.JOIN,                          locale), query:true},
-        {url:'/forget',                        app:homeApp,                             title:R.text(R.GO_FORGET,                     locale)},
-        {url:'/reset',                         app:new ResetApp(),                      title:R.text(R.RESET_PASSWORD,                locale), query:true},
-        {url:'/settings',                      app:new SettingsApp(),                   title:R.text(R.SETTINGS,                      locale), auth:true},
-        {url:'/settings/account',              app:new SettingsAccountApp(),            title:R.text(R.SETTINGS_ACCOUNT,              locale), auth:true},
-        {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       title:R.text(R.SETTINGS_ACCOUNT_EMAIL,        locale), auth:true},
-        {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), title:R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE, locale), query:true},
-        {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    title:R.text(R.SETTINGS_ACCOUNT_PASSWORD,     locale), auth:true},
-        {url:'/settings/invite',               app:new SettingsInviteApp(),             title:R.text(R.SETTINGS_INVITE,               locale), auth:true},
-        {url:'/users/:id',                     app:new UserApp(),                       title:R.text(R.USER,                          locale)},
-        {url:'/users',                         app:new UsersApp(),                      title:R.text(R.USER_LIST,                     locale)},
-        {url:'/about',                         app:homeApp,                             title:R.text(R.ABOUT,                         locale)},
-        {url:'403',                            app:new ForbiddenApp(),                  title:R.text(R.FORBIDDEN,                     locale)},
-        {url:'404',                            app:notFoundApp,                         title:R.text(R.NOT_FOUND,                     locale)},
-        {url:'404',                            app:notFoundApp,                         title:R.text(R.NOT_FOUND,                     locale), query:true}
+        {url:'/',                              app:new TopApp(),                        auth:true},
+        {url:'/',                              app:homeApp},
+        {url:'/',                              app:new SmsApp(),                        query:true},
+        {url:'/signup',                        app:homeApp},
+        {url:'/signup',                        app:new SignupConfirmApp(),              query:true},
+        {url:'/join',                          app:new JoinApp(),                       query:true},
+        {url:'/forget',                        app:homeApp},
+        {url:'/reset',                         app:new ResetApp(),                      query:true},
+        {url:'/settings',                      app:new SettingsApp(),                   auth:true},
+        {url:'/settings/account',              app:new SettingsAccountApp(),            auth:true},
+        {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       auth:true},
+        {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), query:true},
+        {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    auth:true},
+        {url:'/settings/invite',               app:new SettingsInviteApp(),             auth:true},
+        {url:'/users/:id',                     app:new UserApp()},
+        {url:'/users',                         app:new UsersApp()},
+        {url:'/about',                         app:homeApp},
+        {url:'403',                            app:new ForbiddenApp()},
+        {url:'404',                            app:notFoundApp},
+        {url:'404',                            app:notFoundApp,                         query:true}
     ];
 }

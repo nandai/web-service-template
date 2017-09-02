@@ -14,6 +14,7 @@ type SetUrlResult = 'nomatch' | 'match' | 'transition';
 export abstract class App
 {
     abstract store    : BaseStore;
+    title             : string;
     apps              : Apps;
     appsOptions       : AppsOptions = {};
     protected subApps : {[url : string] : App} = {};
@@ -139,6 +140,30 @@ export abstract class App
 
         store.url = url;
         return result;
+    }
+
+    /**
+     * タイトル取得
+     */
+    getTitle(url : string) : string
+    {
+        const app = this.subApps[url];
+
+        if (app) {
+            return app.title;
+        }
+
+        for (const _url in this.subApps)
+        {
+            const subApp : App = this.subApps[_url];
+            const title = subApp.getTitle(url);
+
+            if (title) {
+                return title;
+            }
+        }
+
+        return null;
     }
 
     /**
