@@ -34,6 +34,7 @@ export default class ResetApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/reset';
         this.title = R.text(R.RESET_PASSWORD, this.store.locale);
 
         this.store.onPasswordChange = this.onPasswordChange;

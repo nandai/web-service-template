@@ -24,7 +24,8 @@ export function updateCurrentRoute(data : Data, url : string, isInit : boolean, 
 
         let route =    routeResult.route;
         const params = routeResult.params;
-        const title = route.app.getTitle(url) || route.app.title;
+        const targetApp = route.app.getTargetApp(url) || route.app;
+        const title = targetApp.title;
 
         if (data.currentRoute !== route)
         {

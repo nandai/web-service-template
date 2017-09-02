@@ -28,6 +28,7 @@ export default class ForbiddenApp extends App
         }
 
         this.store = ssrStore;
+        this.url = '403';
         this.title = R.text(R.FORBIDDEN, this.store.locale);
     }
 

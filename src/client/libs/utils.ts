@@ -36,6 +36,10 @@ export default class Utils
      */
     static getParamsFromUrl(url : string, format : string) : any
     {
+        if (! url || ! format) {
+            return null;
+        }
+
         const formatKeys = format.split('/');
         const urlKeys = url.split('/');
         const count = formatKeys.length;

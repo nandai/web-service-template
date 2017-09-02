@@ -35,6 +35,7 @@ export default class SettingsAccountApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/settings/account';
         this.title = R.text(R.SETTINGS_ACCOUNT, this.store.locale);
 
         this.store.onNameChange =        this.onNameChange;

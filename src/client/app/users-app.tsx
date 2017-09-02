@@ -35,6 +35,7 @@ export default class UsersApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/users';
         this.title = R.text(R.USER_LIST, this.store.locale);
 
         this.store.onUser = this.onUser;

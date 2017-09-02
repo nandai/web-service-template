@@ -46,10 +46,8 @@ export function view(app : App, url? : string) : string
     // NOTE:<body ontouchstart="">はスマホでタッチした時に:activeを効かせるための設定
     const js = 'wst.js';
     const contents = ReactDOM.renderToString(<Root app={app} />);
-
-    let title = '';
-    if (url)     {title = app.getTitle(url);}
-    if (! title) {title = app.title;}
+    const targetApp = app.getTargetApp(url) || app;
+    const title = targetApp.title;
 
     const html = `
 <!DOCTYPE html>

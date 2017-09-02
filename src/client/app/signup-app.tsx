@@ -34,6 +34,7 @@ export default class SignupApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/signup';
         this.title = R.text(R.SIGNUP, this.store.locale);
 
         this.store.onTwitter =        this.onTwitter;

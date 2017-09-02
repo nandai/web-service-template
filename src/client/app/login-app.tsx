@@ -35,6 +35,7 @@ export default class LoginApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/';
         this.title = R.text(R.LOGIN, this.store.locale);
 
         this.store.onTwitter =        this.onTwitter;

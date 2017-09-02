@@ -40,11 +40,11 @@ export default class HomeTabsApp extends App
         this.store.onAbout =  this.onAbout;
 
         this.subApps =
-        {
-            '/':       new LoginApp( this.store.loginStore),
-            '/signup': new SignupApp(this.store.signupStore),
-            '/about':  new AboutApp( this.store.aboutStore)
-        };
+        [
+            new LoginApp( this.store.loginStore),
+            new SignupApp(this.store.signupStore),
+            new AboutApp( this.store.aboutStore)
+        ];
 
         this.initSubApps();
     }

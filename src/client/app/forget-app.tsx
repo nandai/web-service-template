@@ -33,6 +33,7 @@ export default class ForgetApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/forget';
         this.title = R.text(R.GO_FORGET, this.store.locale);
 
         this.store.onEmailChange = this.onEmailChange;

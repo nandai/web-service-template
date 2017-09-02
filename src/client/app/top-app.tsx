@@ -33,6 +33,7 @@ export default class TopApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/';
         this.title = R.text(R.TOP, this.store.locale);
 
         this.store.onSettings = this.onSettings;

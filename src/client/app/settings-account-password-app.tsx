@@ -33,6 +33,7 @@ export default class SettingsAccountPasswordApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/settings/account/password';
         this.title = R.text(R.SETTINGS_ACCOUNT_PASSWORD, this.store.locale);
 
         this.store.onOldPasswordChange = this.onOldPasswordChange;

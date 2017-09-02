@@ -34,10 +34,10 @@ export default class HomeApp extends App
         this.appsOptions = {effectDelay:500};
 
         this.subApps =
-        {
-            'home-tabs': new HomeTabsApp(this.store.homeTabsStore),
-            '/forget':   new ForgetApp(  this.store.forgetStore)
-        };
+        [
+            new HomeTabsApp(this.store.homeTabsStore),
+            new ForgetApp(  this.store.forgetStore)
+        ];
 
         this.initSubApps();
     }

@@ -28,6 +28,7 @@ export default class AboutApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/about';
         this.title = R.text(R.ABOUT, this.store.locale);
     }
 

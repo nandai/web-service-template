@@ -34,6 +34,7 @@ export default class JoinApp extends App
         }
 
         this.store = storeNS.init(ssrStore);
+        this.url = '/join';
         this.title = R.text(R.JOIN, this.store.locale);
 
         this.store.onPasswordChange = this.onPasswordChange;
