@@ -32,11 +32,11 @@ class Main
 {
     data : Data =
     {
-        apps:         null,
-        targetApp:    null,
-        currentRoute: null,
-        routes:       null,
-        account:      null
+        apps:       null,
+        currentApp: null,
+        targetApp:  null,
+        routes:     null,
+        account:    null
     };
 
     /**
@@ -100,11 +100,11 @@ class Main
                 page.highPriorityEffect = null;
             });
 
-            const prevApp = data.currentRoute.app;
+            const prevApp = data.currentApp;
             await updateCurrentRoute(data, location.pathname, true, message);
             this.render();
 
-            if (prevApp !== data.currentRoute.app)
+            if (prevApp !== data.currentApp)
             {
                 const {apps} = data;
                 setTimeout(() =>
@@ -183,9 +183,8 @@ class Main
 
             if (account)
             {
-                const route = data.currentRoute;
                 const params = Utils.getParamsFromUrl(location.pathname, data.targetApp.url);
-                await route.app.init(params);
+                await data.currentApp.init(params);
 
                 this.deliverUpdateAccount(account);
             }

@@ -9,9 +9,9 @@ import {Route}    from './route';
 
 export interface Data
 {
-    apps         : Apps;
-    targetApp    : App;
-    currentRoute : Route;
-    routes       : Route[];
-    account      : Response.Account;
+    apps       : Apps;
+    currentApp : App;
+    targetApp  : App;
+    routes     : Route[];
+    account    : Response.Account;
 }

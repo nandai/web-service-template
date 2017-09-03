@@ -11,7 +11,7 @@ import {Route}               from './route';
  */
 export function setCurrentRoute(data : Data, app : App, route : Route) : void
 {
-    if (data.currentRoute === null)
+    if (data.apps === null)
     {
         // 初回設定時
         const options =
@@ -27,8 +27,8 @@ export function setCurrentRoute(data : Data, app : App, route : Route) : void
         data.apps.setNextApp(route.app);
     }
 
+    data.currentApp = route.app;
     data.targetApp = app;
-    data.currentRoute = route;
 }
 
 const transitions : AppTransition[] =

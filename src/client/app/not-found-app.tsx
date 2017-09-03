@@ -29,7 +29,6 @@ export default class NotFoundApp extends App
 
         this.store = ssrStore;
         this.url = '404';
-        this.query = null;
         this.title = R.text(R.NOT_FOUND, this.store.locale);
     }
 
