@@ -8,7 +8,6 @@ import {App} from 'client/app/app';
  */
 export interface Route
 {
-    url    : string;
     app    : App;
     query? : boolean;
     auth?  : boolean;

@@ -24,30 +24,26 @@ import {Data}                        from './data';
   */
 export function initRoutes(data : Data)
 {
-    const homeApp =     new HomeApp();
     const notFoundApp = new NotFoundApp();
 
     data.routes =
     [
-        {url:'/',                              app:new TopApp(),                        auth:true},
-        {url:'/',                              app:homeApp},
-        {url:'/',                              app:new SmsApp(),                        query:true},
-        {url:'/signup',                        app:homeApp},
-        {url:'/signup',                        app:new SignupConfirmApp(),              query:true},
-        {url:'/join',                          app:new JoinApp(),                       query:true},
-        {url:'/forget',                        app:homeApp},
-        {url:'/reset',                         app:new ResetApp(),                      query:true},
-        {url:'/settings',                      app:new SettingsApp(),                   auth:true},
-        {url:'/settings/account',              app:new SettingsAccountApp(),            auth:true},
-        {url:'/settings/account/email',        app:new SettingsAccountEmailApp(),       auth:true},
-        {url:'/settings/account/email/change', app:new SettingsAccountEmailChangeApp(), query:true},
-        {url:'/settings/account/password',     app:new SettingsAccountPasswordApp(),    auth:true},
-        {url:'/settings/invite',               app:new SettingsInviteApp(),             auth:true},
-        {url:'/users/:id',                     app:new UserApp()},
-        {url:'/users',                         app:new UsersApp()},
-        {url:'/about',                         app:homeApp},
-        {url:'403',                            app:new ForbiddenApp()},
-        {url:'404',                            app:notFoundApp},
-        {url:'404',                            app:notFoundApp,                         query:true}
+        {app:new TopApp(),                        auth:true},
+        {app:new HomeApp()},
+        {app:new SmsApp(),                        query:true},
+        {app:new SignupConfirmApp(),              query:true},
+        {app:new JoinApp(),                       query:true},
+        {app:new ResetApp(),                      query:true},
+        {app:new SettingsApp(),                   auth:true},
+        {app:new SettingsAccountApp(),            auth:true},
+        {app:new SettingsAccountEmailApp(),       auth:true},
+        {app:new SettingsAccountEmailChangeApp(), query:true},
+        {app:new SettingsAccountPasswordApp(),    auth:true},
+        {app:new SettingsInviteApp(),             auth:true},
+        {app:new UserApp()},
+        {app:new UsersApp()},
+        {app:new ForbiddenApp()},
+        {app:notFoundApp},
+        {app:notFoundApp,                         query:true}
     ];
 }

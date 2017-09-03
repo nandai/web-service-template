@@ -33,6 +33,7 @@ class Main
     data : Data =
     {
         apps:         null,
+        targetApp:    null,
         currentRoute: null,
         routes:       null,
         account:      null
@@ -183,7 +184,7 @@ class Main
             if (account)
             {
                 const route = data.currentRoute;
-                const params = Utils.getParamsFromUrl(location.pathname, route.url);
+                const params = Utils.getParamsFromUrl(location.pathname, data.targetApp.url);
                 await route.app.init(params);
 
                 this.deliverUpdateAccount(account);
@@ -268,7 +269,7 @@ class Main
         const isLogin = (data.account === null && account);
         setAccount(data, account);
 
-        if (isLogin && data.currentRoute.url === '/')
+        if (isLogin && location.pathname === '/')
         {
             History.pushState('/');
         }

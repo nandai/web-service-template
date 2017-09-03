@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {App}   from 'client/app/app';
 import Utils   from 'client/libs/utils';
 import {Data}  from './data';
 import {Route} from './route';
@@ -10,12 +11,14 @@ import {Route} from './route';
  */
 export function getRoute(data : Data, url : string)
 {
-    let route : Route = null;
+    let route     : Route = null;
+    let targetApp : App = null;
     let params;
 
     for (const _route of data.routes)
     {
-        params = Utils.getParamsFromUrl(url, _route.url);
+        targetApp = _route.app.getTargetApp(url) || _route.app;
+        params = Utils.getParamsFromUrl(url, targetApp.url);
 
         if (params === null) {
             continue;
@@ -38,5 +41,5 @@ export function getRoute(data : Data, url : string)
         }
     }
 
-    return {route, params};
+    return {route, targetApp, params};
 }

@@ -1,6 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import {App}                 from 'client/app/app';
 import Apps, {AppTransition} from 'client/app/apps';
 import {Data}                from './data';
 import {Route}               from './route';
@@ -8,7 +9,7 @@ import {Route}               from './route';
 /**
  * カレントRoute設定
  */
-export function setCurrentRoute(data : Data, route : Route) : void
+export function setCurrentRoute(data : Data, app : App, route : Route) : void
 {
     if (data.currentRoute === null)
     {
@@ -26,6 +27,7 @@ export function setCurrentRoute(data : Data, route : Route) : void
         data.apps.setNextApp(route.app);
     }
 
+    data.targetApp = app;
     data.currentRoute = route;
 }
 

@@ -149,7 +149,6 @@ export abstract class App
     {
         for (const subApp of this.subApps)
         {
-            console.log(subApp.url);
             const params = Utils.getParamsFromUrl(url, subApp.url);
 
             if (params) {

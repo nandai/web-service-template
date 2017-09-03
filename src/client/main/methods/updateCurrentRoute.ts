@@ -22,12 +22,12 @@ export function updateCurrentRoute(data : Data, url : string, isInit : boolean, 
             routeResult = getRoute(data, '404');
         }
 
-        let route =    routeResult.route;
-        const params = routeResult.params;
-        const targetApp = route.app.getTargetApp(url) || route.app;
+        let route =       routeResult.route;
+        let targetApp =   routeResult.targetApp;
+        const params =    routeResult.params;
         const title = targetApp.title;
 
-        if (data.currentRoute !== route)
+        if (data.targetApp !== targetApp)
         {
             log.d(title);
             if (isInit)
@@ -35,19 +35,20 @@ export function updateCurrentRoute(data : Data, url : string, isInit : boolean, 
                 try
                 {
                     await route.app.init(params, message);
-                    setCurrentRoute(data, route);
+                    setCurrentRoute(data, targetApp, route);
                 }
                 catch (err)
                 {
                     console.warn(err.message);
                     routeResult = getRoute(data, '404');
-                    route = routeResult.route;
-                    setCurrentRoute(data, route);
+                    route =     routeResult.route;
+                    targetApp = routeResult.targetApp;
+                    setCurrentRoute(data, targetApp, route);
                 }
             }
             else
             {
-                setCurrentRoute(data, route);
+                setCurrentRoute(data, targetApp, route);
             }
         }
 
