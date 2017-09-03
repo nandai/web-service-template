@@ -21,7 +21,7 @@ export abstract class App
     title             : string;
     apps              : Apps;
     appsOptions       : AppsOptions = {};
-    protected subApps : App[] = [];
+    /*protected*/ subApps : App[] = [];
     static render     : () => void;
 
     /**

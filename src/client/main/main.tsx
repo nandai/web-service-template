@@ -2,26 +2,16 @@
  * (C) 2016-2017 printf.jp
  */
 import bind                 from 'bind-decorator';
-import * as React           from 'react';
-import * as ReactDOM        from 'react-dom';
 
 import {Response}           from 'libs/response';
 import {slog}               from 'libs/slog';
 import SettingsApi          from '../api/settings-api';
 import {App}                from '../app/app';
-import Button               from '../components/common/button';
-import Root                 from '../components/root';
-import {BaseStore}          from '../components/views/base-store';
 import History, {Direction} from '../libs/history';
-import {pageNS}             from '../libs/page';
 import R                    from '../libs/r';
 import {SocketEventData}    from '../libs/socket-event-data';
 import Utils                from '../libs/utils';
-import {Data}               from './methods/data';
-import {initRoutes}         from './methods/initRoutes';
-import {setAccount}         from './methods/setAccount';
-import {setOnline}          from './methods/setOnline';
-import {updateCurrentRoute} from './methods/updateCurrentRoute';
+import MainApp              from './main-app';
 
 import socketIO = require('socket.io-client');
 
@@ -30,14 +20,7 @@ import socketIO = require('socket.io-client');
  */
 class Main
 {
-    data : Data =
-    {
-        apps:       null,
-        currentApp: null,
-        targetApp:  null,
-        routes:     null,
-        account:    null
-    };
+    mainApp : MainApp;
 
     /**
      * 初期化
@@ -45,19 +28,9 @@ class Main
     init()
     {
         const log = slog.stepIn('Main', 'init');
-        const {data} = this;
 
         App.render = this.render;
-
-        initRoutes(data);
-        data.routes.forEach((route) =>
-        {
-            const {app} = route;
-            app.store.page.onPageTransitionEnd = this.onPageTransitionEnd;
-        });
-
-        const ssrStore = Utils.getSsrStore<BaseStore>();
-        setAccount(data, ssrStore.account);
+        this.mainApp = new MainApp();
 
         this.connectSocket();
 
@@ -71,16 +44,7 @@ class Main
     @bind
     render() : void
     {
-        const {apps} = this.data;
-        const isDuringTransition = apps.isDuringTransition();
-
-        if (Button.noReaction && isDuringTransition === false) {
-            setTimeout(() => Button.noReaction = false, 100);
-        }
-
-        ReactDOM.render(
-            <Root apps={apps} />,
-            document.getElementById('root'));
+        this.mainApp.render();
     }
 
     /**
@@ -92,21 +56,20 @@ class Main
         const log = slog.stepIn('Main', 'onHistory');
         return new Promise(async (resolve) =>
         {
-            const {data} = this;
-            data.routes.forEach((route) =>
+            this.mainApp.subApps.forEach((subApp) =>
             {
-                const {page} = route.app.store;
+                const {page} = subApp.store;
                 page.direction = direction;
                 page.highPriorityEffect = null;
             });
 
-            const prevApp = data.currentApp;
-            await updateCurrentRoute(data, location.pathname, true, message);
+            const prevApp = this.mainApp.currentApp;
+            await this.mainApp.updateCurrentApp(location.pathname, true, message);
             this.render();
 
-            if (prevApp !== data.currentApp)
+            if (prevApp !== this.mainApp.currentApp)
             {
-                const {apps} = data;
+                const {apps} = this.mainApp;
                 setTimeout(() =>
                 {
                     apps.setActiveNextApp();
@@ -120,31 +83,13 @@ class Main
     }
 
     /**
-     * ページ遷移終了イベント
-     */
-    @bind
-    onPageTransitionEnd(page : pageNS.Page)
-    {
-        const log = slog.stepIn('Main', 'onPageTransitionEnd');
-        const {displayStatus} = page;
-
-        if (this.data.apps.changeDisplayStatus(page))
-        {
-            log.d(`displayStatus changed. (${displayStatus} -> ${page.displayStatus})`);
-            this.render();
-        }
-
-        log.stepOut();
-    }
-
-    /**
      * ソケットイベント通知
      */
     private notifySocketEvent(data : SocketEventData) : void
     {
-        this.data.routes.forEach((route) =>
+        this.mainApp.subApps.forEach((subApp) =>
         {
-            route.app.notifySocketEvent(data);
+            subApp.notifySocketEvent(data);
         });
     }
 
@@ -175,16 +120,15 @@ class Main
 
         try
         {
-            const {data} = this;
-            setOnline(data, true);
+            this.mainApp.setOnline(true);
 
             const res : Response.GetAccount = await SettingsApi.getAccount();
             const {account} = res;
 
             if (account)
             {
-                const params = Utils.getParamsFromUrl(location.pathname, data.targetApp.url);
-                await data.currentApp.init(params);
+                const params = Utils.getParamsFromUrl(location.pathname, this.mainApp.targetApp.url);
+                await this.mainApp.currentApp.init(params);
 
                 this.deliverUpdateAccount(account);
             }
@@ -205,7 +149,7 @@ class Main
     private onDisconnect(reason : string) : void
     {
         const log = slog.stepIn('Main', 'onDisconnect');
-        setOnline(this.data, false);
+        this.mainApp.setOnline(false);
         this.render();
         log.w(reason);
         log.stepOut();
@@ -264,9 +208,8 @@ class Main
      */
     private deliverUpdateAccount(account : Response.Account) : void
     {
-        const {data} = this;
-        const isLogin = (data.account === null && account);
-        setAccount(data, account);
+        const isLogin = (this.mainApp.account === null && account);
+        this.mainApp.setAccount(account);
 
         if (isLogin && location.pathname === '/')
         {
@@ -283,10 +226,9 @@ class Main
      */
     private deliverLogout() : void
     {
-        const {data} = this;
-        setAccount(data, null);
+        this.mainApp.setAccount(null);
 
-        if (data.targetApp.auth)
+        if (this.mainApp.targetApp.auth)
         {
             History.pushState('/');
         }
@@ -322,7 +264,7 @@ window.addEventListener('DOMContentLoaded', async () =>
     const main = new Main();
     main.init();
 
-    await updateCurrentRoute(main.data, url, false);
+    await main.mainApp.updateCurrentApp(url, false);
 
     main.render();
     log.stepOut();
