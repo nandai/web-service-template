@@ -285,10 +285,9 @@ class Main
     private deliverLogout() : void
     {
         const {data} = this;
-        const route = data.currentRoute;
         setAccount(data, null);
 
-        if (route.auth)
+        if (data.targetApp.auth)
         {
             History.pushState('/');
         }

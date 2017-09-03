@@ -34,6 +34,7 @@ export default class SettingsInviteApp extends App
 
         this.store = storeNS.init(ssrStore);
         this.url = '/settings/invite';
+        this.auth = true;
         this.title = R.text(R.SETTINGS_INVITE, this.store.locale);
 
         this.store.onEmailChange = this.onEmailChange;

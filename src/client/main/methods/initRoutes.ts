@@ -24,26 +24,23 @@ import {Data}                        from './data';
   */
 export function initRoutes(data : Data)
 {
-    const notFoundApp = new NotFoundApp();
-
     data.routes =
     [
-        {app:new TopApp(),                        auth:true},
+        {app:new TopApp()},
         {app:new HomeApp()},
-        {app:new SmsApp(),                        query:true},
-        {app:new SignupConfirmApp(),              query:true},
-        {app:new JoinApp(),                       query:true},
-        {app:new ResetApp(),                      query:true},
-        {app:new SettingsApp(),                   auth:true},
-        {app:new SettingsAccountApp(),            auth:true},
-        {app:new SettingsAccountEmailApp(),       auth:true},
-        {app:new SettingsAccountEmailChangeApp(), query:true},
-        {app:new SettingsAccountPasswordApp(),    auth:true},
-        {app:new SettingsInviteApp(),             auth:true},
+        {app:new SmsApp()},
+        {app:new SignupConfirmApp()},
+        {app:new JoinApp()},
+        {app:new ResetApp()},
+        {app:new SettingsApp()},
+        {app:new SettingsAccountApp()},
+        {app:new SettingsAccountEmailApp()},
+        {app:new SettingsAccountEmailChangeApp()},
+        {app:new SettingsAccountPasswordApp()},
+        {app:new SettingsInviteApp()},
         {app:new UserApp()},
         {app:new UsersApp()},
         {app:new ForbiddenApp()},
-        {app:notFoundApp},
-        {app:notFoundApp,                         query:true}
+        {app:new NotFoundApp()}
     ];
 }

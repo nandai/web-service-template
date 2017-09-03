@@ -16,6 +16,8 @@ export abstract class App
 {
     abstract store    : BaseStore;
     url               : string;
+    query             : boolean = false;
+    auth              : boolean = false;
     title             : string;
     apps              : Apps;
     appsOptions       : AppsOptions = {};

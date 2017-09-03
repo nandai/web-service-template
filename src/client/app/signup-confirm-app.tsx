@@ -35,6 +35,7 @@ export default class SignupConfirmApp extends App
 
         this.store = storeNS.init(ssrStore);
         this.url = '/signup';
+        this.query = true;
         this.title = R.text(R.SIGNUP_CONFIRM, this.store.locale);
 
         this.store.onPasswordChange = this.onPasswordChange;

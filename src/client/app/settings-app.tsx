@@ -36,6 +36,7 @@ export default class SettingsApp extends App
 
         this.store = storeNS.init(ssrStore);
         this.url = '/settings';
+        this.auth = true;
         this.title = R.text(R.SETTINGS, this.store.locale);
 
         this.store.onTwitter =    this.onTwitter;

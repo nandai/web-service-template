@@ -38,6 +38,7 @@ export default class SmsApp extends App
 
         this.store = storeNS.init(ssrStore);
         this.url = '/';
+        this.query = true;
         this.title = R.text(R.AUTH_SMS, this.store.locale);
 
         this.store.onSmsCodeChange = this.onSmsCodeChange;

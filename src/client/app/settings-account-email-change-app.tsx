@@ -35,6 +35,7 @@ export default class SettingsAccountEmailChangeApp extends App
 
         this.store = storeNS.init(ssrStore);
         this.url = '/settings/account/email/change';
+        this.query = true;
         this.title = R.text(R.SETTINGS_ACCOUNT_EMAIL_CHANGE, this.store.locale);
 
         this.store.onPasswordChange = this.onPasswordChange;

@@ -19,22 +19,17 @@ export function getRoute(data : Data, url : string)
     {
         targetApp = _route.app.getTargetApp(url) || _route.app;
         params = Utils.getParamsFromUrl(url, targetApp.url);
+        const {auth, query} = targetApp;
 
         if (params === null) {
             continue;
         }
 
-        if (_route.auth && data.account === null) {
+        if (auth && data.account === null) {
             continue;
         }
 
-        if (_route.query !== true && location.search === '')
-        {
-            route = _route;
-            break;
-        }
-
-        if (_route.query === true && location.search !== '')
+        if (query === false || location.search !== '')
         {
             route = _route;
             break;
