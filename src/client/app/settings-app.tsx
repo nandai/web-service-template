@@ -202,7 +202,7 @@ export default class SettingsApp extends App
     }
 
     @bind
-    private onPageTransitionEnd(_page : pageNS.Page)
+    protected onPageTransitionEnd(_page : pageNS.Page)
     {
         pageNS.next(this.store.modalPage, App.render);
     }

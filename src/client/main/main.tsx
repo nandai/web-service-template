@@ -56,7 +56,7 @@ class Main
         const log = slog.stepIn('Main', 'onHistory');
         return new Promise(async (resolve) =>
         {
-            this.mainApp.subApps.forEach((subApp) =>
+            this.mainApp.childApps.forEach((subApp) =>
             {
                 const {page} = subApp.store;
                 page.direction = direction;
@@ -87,7 +87,7 @@ class Main
      */
     private notifySocketEvent(data : SocketEventData) : void
     {
-        this.mainApp.subApps.forEach((subApp) =>
+        this.mainApp.childApps.forEach((subApp) =>
         {
             subApp.notifySocketEvent(data);
         });
@@ -127,7 +127,7 @@ class Main
 
             if (account)
             {
-                const params = Utils.getParamsFromUrl(location.pathname, this.mainApp.targetApp.url);
+                const params = Utils.getParamsFromUrl(location.pathname, this.mainApp.deepestApp.url);
                 await this.mainApp.currentApp.init(params);
 
                 this.deliverUpdateAccount(account);
@@ -228,7 +228,7 @@ class Main
     {
         this.mainApp.setAccount(null);
 
-        if (this.mainApp.targetApp.auth)
+        if (this.mainApp.deepestApp.auth)
         {
             History.pushState('/');
         }

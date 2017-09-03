@@ -8,7 +8,6 @@ import {App}          from 'client/app/app';
 import {HomeTabsView} from 'client/components/views/home-tabs-view';
 import {storeNS}      from 'client/components/views/home-tabs-view/store';
 import History        from 'client/libs/history';
-import {pageNS}       from 'client/libs/page';
 import Utils          from 'client/libs/utils';
 import {slog}         from 'libs/slog';
 import AboutApp       from './about-app';
@@ -39,7 +38,7 @@ export default class HomeTabsApp extends App
         this.store.onSignup = this.onSignup;
         this.store.onAbout =  this.onAbout;
 
-        this.subApps =
+        this.childApps =
         [
             new LoginApp( this.store.loginStore),
             new SignupApp(this.store.signupStore),
@@ -54,15 +53,12 @@ export default class HomeTabsApp extends App
      */
     initSubApps() : void
     {
-        for (const name in this.subApps)
+        for (const childApp of this.childApps)
         {
-            const subApp : App = this.subApps[name];
-            const {page} = subApp.store;
+            const {page} = childApp.store;
             page.active = false;
             page.onPageTransitionEnd = this.onPageTransitionEnd;
         }
-
-        // this.setUrl(this.store.url);
     }
 
     /**
@@ -121,16 +117,5 @@ export default class HomeTabsApp extends App
         const log = slog.stepIn(HomeTabsApp.CLS_NAME, 'onAbout');
         History.replaceState('/about');
         log.stepOut();
-    }
-
-    /**
-     * ページ遷移終了イベント
-     */
-    @bind
-    private onPageTransitionEnd(page : pageNS.Page)
-    {
-        if (this.apps.changeDisplayStatus(page)) {
-            App.render();
-        }
     }
 }

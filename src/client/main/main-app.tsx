@@ -1,7 +1,6 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import bind                          from 'bind-decorator';
 import * as React                    from 'react';
 import * as ReactDOM                 from 'react-dom';
 
@@ -26,7 +25,6 @@ import UsersApp                      from 'client/app/users-app';
 import Button                        from 'client/components/common/button';
 import Root                          from 'client/components/root';
 import {BaseStore}                   from 'client/components/views/base-store';
-import {pageNS}                      from 'client/libs/page';
 import Utils                         from 'client/libs/utils';
 import {Response}                    from 'libs/response';
 import {slog}                        from 'libs/slog';
@@ -38,7 +36,7 @@ export default class MainApp extends App
     store = null;
     account    : Response.Account;
     currentApp : App = null;
-    targetApp  : App = null;
+    deepestApp : App = null;
 
     /**
      * @constructor
@@ -53,7 +51,7 @@ export default class MainApp extends App
             effectDelay: 500
         };
 
-        this.subApps =
+        this.childApps =
         [
             new TopApp(),
             new HomeApp(),
@@ -84,10 +82,9 @@ export default class MainApp extends App
      */
     initSubApps() : void
     {
-        for (const name in this.subApps)
+        for (const childApp of this.childApps)
         {
-            const subApp : App = this.subApps[name];
-            const {page} = subApp.store;
+            const {page} = childApp.store;
             page.onPageTransitionEnd = this.onPageTransitionEnd;
         }
     }
@@ -126,17 +123,6 @@ export default class MainApp extends App
     }
 
     /**
-     * ページ遷移終了イベント
-     */
-    @bind
-    private onPageTransitionEnd(page : pageNS.Page)
-    {
-        if (this.apps.changeDisplayStatus(page)) {
-            App.render();
-        }
-    }
-
-    /**
      * 各appのstoreにアカウント設定
      */
     setAccount(account : Response.Account) : void
@@ -144,7 +130,7 @@ export default class MainApp extends App
         account = account || null;
         this.account = account;
 
-        this.subApps.forEach((subApp) =>
+        this.childApps.forEach((subApp) =>
         {
             const {store} = subApp;
             store.prevAccount = store.account;
@@ -157,9 +143,9 @@ export default class MainApp extends App
      */
     setOnline(online : boolean) : void
     {
-        this.subApps.forEach((subApp) =>
+        this.childApps.forEach((childApp) =>
         {
-            const store = subApp.store;
+            const store = childApp.store;
             store.online = online;
         });
     }
@@ -167,7 +153,7 @@ export default class MainApp extends App
     /**
      * カレントApp設定
      */
-    private setCurrentApp(currentApp : App, targetApp : App) : void
+    private setCurrentApp(currentApp : App, deepestApp : App) : void
     {
         if (! this.apps)
         {
@@ -181,7 +167,7 @@ export default class MainApp extends App
         }
 
         this.currentApp = currentApp;
-        this.targetApp =  targetApp;
+        this.deepestApp = deepestApp;
     }
 
     /**
@@ -189,15 +175,15 @@ export default class MainApp extends App
      */
     private getRoute(url : string)
     {
-        let routeApp  : App = null;
-        let targetApp : App = null;
+        let rootApp    : App = null;
+        let deepestApp : App = null;
         let params;
 
-        for (const subApp of this.subApps)
+        for (const childApp of this.childApps)
         {
-            targetApp = subApp.getTargetApp(url) || subApp;
-            params = Utils.getParamsFromUrl(url, targetApp.url);
-            const {auth, query} = targetApp;
+            deepestApp = childApp.findApp(url) || childApp;
+            params = Utils.getParamsFromUrl(url, deepestApp.url);
+            const {auth, query} = deepestApp;
 
             if (params === null) {
                 continue;
@@ -209,12 +195,12 @@ export default class MainApp extends App
 
             if (query === false || location.search !== '')
             {
-                routeApp = subApp;
+                rootApp = childApp;
                 break;
             }
         }
 
-        return {routeApp, targetApp, params};
+        return {rootApp, deepestApp, params};
     }
 
     /**
@@ -229,37 +215,37 @@ export default class MainApp extends App
         return new Promise(async (resolve : () => void) =>
         {
             let routeResult = this.getRoute(url);
-            if (routeResult.routeApp === null) {
+            if (routeResult.rootApp === null) {
                 routeResult = this.getRoute('404');
             }
 
-            let routeApp =  routeResult.routeApp;
-            let targetApp = routeResult.targetApp;
-            const params =  routeResult.params;
-            const title = targetApp.title;
+            let rootApp =    routeResult.rootApp;
+            let deepestApp = routeResult.deepestApp;
+            const params =   routeResult.params;
+            const title = deepestApp.title;
 
-            if (this.targetApp !== targetApp)
+            if (this.deepestApp !== deepestApp)
             {
                 log.d(title);
                 if (isInit)
                 {
                     try
                     {
-                        await routeApp.init(params, message);
-                        this.setCurrentApp(routeApp, targetApp);
+                        await rootApp.init(params, message);
+                        this.setCurrentApp(rootApp, deepestApp);
                     }
                     catch (err)
                     {
                         console.warn(err.message);
                         routeResult = this.getRoute('404');
-                        routeApp =  routeResult.routeApp;
-                        targetApp = routeResult.targetApp;
-                        this.setCurrentApp(routeApp, targetApp);
+                        rootApp =    routeResult.rootApp;
+                        deepestApp = routeResult.deepestApp;
+                        this.setCurrentApp(rootApp, deepestApp);
                     }
                 }
                 else
                 {
-                    this.setCurrentApp(routeApp, targetApp);
+                    this.setCurrentApp(rootApp, deepestApp);
                 }
             }
 

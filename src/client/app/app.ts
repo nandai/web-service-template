@@ -6,6 +6,7 @@ import bind                 from 'bind-decorator';
 import Apps, {AppsOptions}  from 'client/app/apps';
 import {BaseStore}          from 'client/components/views/base-store';
 import History, {Direction} from 'client/libs/history';
+import {pageNS}             from 'client/libs/page';
 import {SocketEventData}    from 'client/libs/socket-event-data';
 import Utils                from 'client/libs/utils';
 import {slog}               from 'libs/slog';
@@ -14,15 +15,15 @@ type SetUrlResult = 'nomatch' | 'match' | 'transition';
 
 export abstract class App
 {
-    abstract store    : BaseStore;
-    url               : string;
-    query             : boolean = false;
-    auth              : boolean = false;
-    title             : string;
-    apps              : Apps;
-    appsOptions       : AppsOptions = {};
-    /*protected*/ subApps : App[] = [];
-    static render     : () => void;
+    abstract store : BaseStore;
+    url            : string;
+    query          : boolean = false;
+    auth           : boolean = false;
+    title          : string;
+    apps           : Apps;
+    appsOptions    : AppsOptions = {};
+    childApps      : App[] = [];
+    static render  : () => void;
 
     /**
      * toString
@@ -42,14 +43,14 @@ export abstract class App
             let result : SetUrlResult = 'nomatch';
             let pathname = location.pathname;
 
-            for (const subApp of this.subApps)
+            for (const childApp of this.childApps)
             {
-                const result2 = await subApp.init(params, message) as SetUrlResult;
+                const result2 = await childApp.init(params, message) as SetUrlResult;
 
                 if (result2 !== 'nomatch')
                 {
                     result = result2;
-                    pathname = subApp.url;
+                    pathname = childApp.url;
                 }
             }
 
@@ -67,14 +68,14 @@ export abstract class App
     abstract view(i : number) : JSX.Element;
 
     /**
-     *
+     * 子Appのインデックスを取得
      */
-    private getSubAppIndex(url : string)
+    private getChildAppIndex(url : string)
     {
         let i = 0;
-        for (const subApp of this.subApps)
+        for (const childApp of this.childApps)
         {
-            if (subApp.url === url) {
+            if (childApp.url === url) {
                 return i;
             }
             i++;
@@ -88,16 +89,16 @@ export abstract class App
     protected setUrl(url : string) : SetUrlResult
     {
         const {store} = this;
-        const index = this.getSubAppIndex(url);
-        let app = this.subApps[index];
+        const index = this.getChildAppIndex(url);
+        let app = this.childApps[index];
 
         if (! app)
         {
-            for (const subApp of this.subApps)
+            for (const childApp of this.childApps)
             {
-                if (subApp.setUrl(url) !== 'nomatch')
+                if (childApp.setUrl(url) !== 'nomatch')
                 {
-                    app = subApp;
+                    app = childApp;
                     break;
                 }
             }
@@ -119,13 +120,13 @@ export abstract class App
             // 二度目以降
             if (store.url !== url)
             {
-                const i = this.getSubAppIndex(store.url);
-                const j = this.getSubAppIndex(url);
+                const i = this.getChildAppIndex(store.url);
+                const j = this.getChildAppIndex(url);
                 const direction : Direction = (i < j ? 'forward' : 'back');
 
-                for (const subApp of this.subApps)
+                for (const childApp of this.childApps)
                 {
-                    const {page} = subApp.store;
+                    const {page} = childApp.store;
                     page.direction = direction;
                 }
 
@@ -145,25 +146,25 @@ export abstract class App
     }
 
     /**
-     * URLが一致するAppを取得する
+     * URLが一致するAppを検索する
      */
-    getTargetApp(url : string) : App
+    findApp(url : string) : App
     {
-        for (const subApp of this.subApps)
+        for (const childApp of this.childApps)
         {
-            const params = Utils.getParamsFromUrl(url, subApp.url);
+            const params = Utils.getParamsFromUrl(url, childApp.url);
 
             if (params) {
-                return subApp;
+                return childApp;
             }
         }
 
-        for (const subApp of this.subApps)
+        for (const childApp of this.childApps)
         {
-            const findApp = subApp.getTargetApp(url);
+            const grandsonApp = childApp.findApp(url);
 
-            if (findApp) {
-                return findApp;
+            if (grandsonApp) {
+                return grandsonApp;
             }
         }
 
@@ -186,5 +187,16 @@ export abstract class App
         const log = slog.stepIn('App', 'onBack');
         History.back();
         log.stepOut();
+    }
+
+    /**
+     * ページ遷移終了イベント
+     */
+    @bind
+    protected onPageTransitionEnd(page : pageNS.Page)
+    {
+        if (this.apps.changeDisplayStatus(page)) {
+            App.render();
+        }
     }
 }
