@@ -37,21 +37,8 @@ export default class HomeApp extends App
             new ForgetApp(  this.store.forgetStore)
         ];
 
-        this.initSubApps();
+        this.initChildApps();
         this.setUrl(this.store.url);
-    }
-
-    /**
-     *
-     */
-    initSubApps() : void
-    {
-        for (const childApp of this.childApps)
-        {
-            const {page} = childApp.store;
-            page.active = false;
-            page.onPageTransitionEnd = this.onPageTransitionEnd;
-        }
     }
 
     /**

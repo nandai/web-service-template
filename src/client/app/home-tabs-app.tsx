@@ -45,20 +45,7 @@ export default class HomeTabsApp extends App
             new AboutApp( this.store.aboutStore)
         ];
 
-        this.initSubApps();
-    }
-
-    /**
-     *
-     */
-    initSubApps() : void
-    {
-        for (const childApp of this.childApps)
-        {
-            const {page} = childApp.store;
-            page.active = false;
-            page.onPageTransitionEnd = this.onPageTransitionEnd;
-        }
+        this.initChildApps();
     }
 
     /**

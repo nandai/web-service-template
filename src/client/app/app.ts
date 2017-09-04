@@ -31,6 +31,19 @@ export abstract class App
     abstract toString() : string;
 
     /**
+     *
+     */
+    protected initChildApps(active = false) : void
+    {
+        for (const childApp of this.childApps)
+        {
+            const {page} = childApp.store;
+            page.active = active;
+            page.onPageTransitionEnd = this.onPageTransitionEnd;
+        }
+    }
+
+    /**
      * 初期化
      *
      * @param   params  URLに含まれるパラメータ（Utils.getParamsFromUrl参照）

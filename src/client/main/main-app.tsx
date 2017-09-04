@@ -71,22 +71,10 @@ export default class MainApp extends App
             new NotFoundApp()
         ];
 
-        this.initSubApps();
+        this.initChildApps(true);
 
         const ssrStore = Utils.getSsrStore<BaseStore>();
         this.setAccount(ssrStore.account);
-    }
-
-    /**
-     *
-     */
-    initSubApps() : void
-    {
-        for (const childApp of this.childApps)
-        {
-            const {page} = childApp.store;
-            page.onPageTransitionEnd = this.onPageTransitionEnd;
-        }
     }
 
     /**
