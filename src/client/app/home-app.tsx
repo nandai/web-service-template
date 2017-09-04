@@ -38,7 +38,7 @@ export default class HomeApp extends App
         ];
 
         this.initChildApps();
-        this.setUrl(this.store.url);
+        this.setUrl(this.store.currentUrl);
     }
 
     /**

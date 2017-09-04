@@ -38,7 +38,7 @@ export class HomeTabsView extends React.Component<HomeTabsViewProps, {}>
                     {page.elements}
                 </div>
                 <Footer>
-                    <Tabs active={store.url} items={items} />
+                    <Tabs active={store.currentUrl} items={items} />
                 </Footer>
             </ViewContainer>
         );

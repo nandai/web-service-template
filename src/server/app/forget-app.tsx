@@ -24,7 +24,7 @@ export default class ForgetApp
     {
         const log = slog.stepIn(ForgetApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
-        const app = new ClientApp({locale, url:'/forget'});
+        const app = new ClientApp({locale, currentUrl:'/forget'});
         res.send(view(app, '/forget'));
         log.stepOut();
     }

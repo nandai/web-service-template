@@ -131,9 +131,9 @@ export abstract class App
         else
         {
             // 二度目以降
-            if (store.url !== url)
+            if (store.currentUrl !== url)
             {
-                const i = this.getChildAppIndex(store.url);
+                const i = this.getChildAppIndex(store.currentUrl);
                 const j = this.getChildAppIndex(url);
                 const direction : Direction = (i < j ? 'forward' : 'back');
 
@@ -154,7 +154,7 @@ export abstract class App
             }
         }
 
-        store.url = url;
+        store.currentUrl = url;
         return result;
     }
 

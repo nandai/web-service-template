@@ -28,7 +28,7 @@ export default class AboutApp
 
         try
         {
-            const app = new ClientApp({locale, url:'/about'});
+            const app = new ClientApp({locale, currentUrl:'/about'});
             res.send(view(app, '/about'));
             log.stepOut();
         }

@@ -7,7 +7,7 @@ import {Response} from 'libs/response';
 export interface BaseStore
 {
     locale?      : string;
-    url?         : string;
+    currentUrl?  : string;
     account?     : Response.Account;
     prevAccount? : Response.Account;    // accountの１つ前の状態
     online?      : boolean;
@@ -16,9 +16,9 @@ export interface BaseStore
 
 export function initBaseStore(dest : BaseStore, src : BaseStore) : void
 {
-    dest.locale =   src.locale;
-    dest.url =      src.url;
-    dest.account =  src.account || null;
-    dest.online =  (src.online !== undefined ? src.online : true);
+    dest.locale =     src.locale;
+    dest.currentUrl = src.currentUrl;
+    dest.account =    src.account || null;
+    dest.online =    (src.online !== undefined ? src.online : true);
     dest.page = pageNS.factory(src.page, dest.page.effect);
 }

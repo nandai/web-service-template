@@ -48,8 +48,8 @@ export default class SignupApp
                 await SessionAgent.update(session);
             }
 
-            const app = new ClientApp({locale, url:'/signup', homeTabsStore:{signupStore:{message}}});
-            res.send(view(app));
+            const app = new ClientApp({locale, currentUrl:'/signup', homeTabsStore:{signupStore:{message}}});
+            res.send(view(app, '/signup'));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

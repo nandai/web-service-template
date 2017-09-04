@@ -61,7 +61,7 @@ export default class LoginApp
                 await SessionAgent.update(session);
             }
 
-            const app = new ClientApp({locale, url:'/', homeTabsStore:{loginStore:{message}}});
+            const app = new ClientApp({locale, currentUrl:'/', homeTabsStore:{loginStore:{message}}});
             res.send(view(app, '/'));
             log.stepOut();
         }
