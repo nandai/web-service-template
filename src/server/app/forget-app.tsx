@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import ClientApp from 'client/app/home-app';
+import {storeNS} from 'client/components/views/forget-view/store';
 import {slog}    from 'libs/slog';
 import {view}    from './view';
 
@@ -24,7 +25,8 @@ export default class ForgetApp
     {
         const log = slog.stepIn(ForgetApp.CLS_NAME, 'index');
         const locale = req.ext.locale;
-        const app = new ClientApp({locale, currentUrl:'/forget'});
+        const store : storeNS.Store = {locale, currentUrl:'/forget'};
+        const app = new ClientApp(store);
         res.send(view(app, '/forget'));
         log.stepOut();
     }

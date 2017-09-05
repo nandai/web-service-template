@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import ClientApp        from 'client/app/home-app';
+import {storeNS}        from 'client/components/views/signup-view/store';
 import {slog}           from 'libs/slog';
 import SessionAgent     from 'server/agents/session-agent';
 import SignupConfirmApp from 'server/app/signup-confirm-app';
@@ -48,7 +49,8 @@ export default class SignupApp
                 await SessionAgent.update(session);
             }
 
-            const app = new ClientApp({locale, currentUrl:'/signup', homeTabsStore:{signupStore:{message}}});
+            const store : storeNS.Store = {locale, currentUrl:'/signup', message};
+            const app = new ClientApp(store);
             res.send(view(app, '/signup'));
             log.stepOut();
         }

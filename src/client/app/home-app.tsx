@@ -33,8 +33,8 @@ export default class HomeApp extends App
 
         this.childApps =
         [
-            new HomeTabsApp(this.store.homeTabsStore),
-            new ForgetApp(  this.store.forgetStore)
+            new HomeTabsApp(ssrStore),
+            new ForgetApp(  ssrStore)
         ];
 
         this.initChildApps();

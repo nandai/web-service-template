@@ -40,9 +40,9 @@ export default class HomeTabsApp extends App
 
         this.childApps =
         [
-            new LoginApp( this.store.loginStore),
-            new SignupApp(this.store.signupStore),
-            new AboutApp( this.store.aboutStore)
+            new LoginApp( ssrStore),
+            new SignupApp(ssrStore),
+            new AboutApp( ssrStore)
         ];
 
         this.initChildApps();

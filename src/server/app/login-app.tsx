@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import ClientApp    from 'client/app/home-app';
+import {storeNS}    from 'client/components/views/login-view/store';
 import {slog}       from 'libs/slog';
 import SessionAgent from 'server/agents/session-agent';
 import SmsApp       from 'server/app/sms-app';
@@ -61,7 +62,8 @@ export default class LoginApp
                 await SessionAgent.update(session);
             }
 
-            const app = new ClientApp({locale, currentUrl:'/', homeTabsStore:{loginStore:{message}}});
+            const store : storeNS.Store = {locale, currentUrl:'/', message};
+            const app = new ClientApp(store);
             res.send(view(app, '/'));
             log.stepOut();
         }

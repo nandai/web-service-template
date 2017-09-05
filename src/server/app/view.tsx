@@ -58,7 +58,7 @@ export function view(app : App, url? : string) : string
     <title>${title}</title>
 
     <script>
-        var ssrStore = ${JSON.stringify(app.store)};
+        var ssrStore = ${JSON.stringify(deepestApp.store)};
     </script>
 
     <style>

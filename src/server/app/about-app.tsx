@@ -2,6 +2,7 @@
  * (C) 2016-2017 printf.jp
  */
 import ClientApp from 'client/app/home-app';
+import {storeNS} from 'client/components/views/about-view/store';
 import {slog}    from 'libs/slog';
 import Utils     from 'server/libs/utils';
 import {view}    from './view';
@@ -28,7 +29,8 @@ export default class AboutApp
 
         try
         {
-            const app = new ClientApp({locale, currentUrl:'/about'});
+            const store : storeNS.Store = {locale, currentUrl:'/about'};
+            const app = new ClientApp(store);
             res.send(view(app, '/about'));
             log.stepOut();
         }
