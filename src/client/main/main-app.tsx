@@ -44,6 +44,7 @@ export default class MainApp extends App
     constructor()
     {
         super();
+        const ssrStore = Utils.getSsrStore<BaseStore>();
 
         this.appsOptions =
         {
@@ -53,27 +54,25 @@ export default class MainApp extends App
 
         this.childApps =
         [
-            new TopApp(),
-            new HomeApp(),
-            new SmsApp(),
-            new SignupConfirmApp(),
-            new JoinApp(),
-            new ResetApp(),
-            new SettingsApp(),
-            new SettingsAccountApp(),
-            new SettingsAccountEmailApp(),
-            new SettingsAccountEmailChangeApp(),
-            new SettingsAccountPasswordApp(),
-            new SettingsInviteApp(),
-            new UserApp(),
-            new UsersApp(),
-            new ForbiddenApp(),
-            new NotFoundApp()
+            new TopApp(ssrStore),
+            new HomeApp(ssrStore),
+            new SmsApp(ssrStore),
+            new SignupConfirmApp(ssrStore),
+            new JoinApp(ssrStore),
+            new ResetApp(ssrStore),
+            new SettingsApp(ssrStore),
+            new SettingsAccountApp(ssrStore),
+            new SettingsAccountEmailApp(ssrStore),
+            new SettingsAccountEmailChangeApp(ssrStore),
+            new SettingsAccountPasswordApp(ssrStore),
+            new SettingsInviteApp(ssrStore),
+            new UserApp(ssrStore),
+            new UsersApp(ssrStore),
+            new ForbiddenApp(ssrStore),
+            new NotFoundApp(ssrStore)
         ];
 
         this.initChildApps(true);
-
-        const ssrStore = Utils.getSsrStore<BaseStore>();
         this.setAccount(ssrStore.account);
     }
 

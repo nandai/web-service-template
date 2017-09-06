@@ -11,7 +11,6 @@ import {storeNS}         from 'client/components/views/users-view/store';
 import History           from 'client/libs/history';
 import R                 from 'client/libs/r';
 import {SocketEventData} from 'client/libs/socket-event-data';
-import Utils             from 'client/libs/utils';
 import {Response}        from 'libs/response';
 import {slog}            from 'libs/slog';
 
@@ -26,13 +25,9 @@ export default class UsersApp extends App
     /**
      * @constructor
      */
-    constructor(ssrStore? : storeNS.Store)
+    constructor(ssrStore : storeNS.Store)
     {
         super();
-
-        if (! ssrStore) {
-            ssrStore = Utils.getSsrStore<storeNS.Store>();
-        }
 
         this.store = storeNS.init(ssrStore);
         this.url = '/users';

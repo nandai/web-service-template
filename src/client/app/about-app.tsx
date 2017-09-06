@@ -7,7 +7,6 @@ import {App}      from 'client/app/app';
 import AboutView  from 'client/components/views/about-view';
 import {storeNS}  from 'client/components/views/about-view/store';
 import R          from 'client/libs/r';
-import Utils      from 'client/libs/utils';
 
 /**
  * about app
@@ -19,13 +18,9 @@ export default class AboutApp extends App
     /**
      * @constructor
      */
-    constructor(ssrStore? : storeNS.Store)
+    constructor(ssrStore : storeNS.Store)
     {
         super();
-
-        if (! ssrStore) {
-            ssrStore = Utils.getSsrStore<storeNS.Store>();
-        }
 
         this.store = storeNS.init(ssrStore);
         this.url = '/about';

@@ -9,7 +9,6 @@ import {App}      from 'client/app/app';
 import ForgetView from 'client/components/views/forget-view';
 import {storeNS}  from 'client/components/views/forget-view/store';
 import R          from 'client/libs/r';
-import Utils      from 'client/libs/utils';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
 
@@ -24,13 +23,9 @@ export default class ForgetApp extends App
     /**
      * @constructor
      */
-    constructor(ssrStore? : storeNS.Store)
+    constructor(ssrStore : storeNS.Store)
     {
         super();
-
-        if (! ssrStore) {
-            ssrStore = Utils.getSsrStore<storeNS.Store>();
-        }
 
         this.store = storeNS.init(ssrStore);
         this.url = '/forget';

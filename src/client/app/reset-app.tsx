@@ -9,7 +9,6 @@ import {App}       from 'client/app/app';
 import ResetView   from 'client/components/views/reset-view';
 import {storeNS}   from 'client/components/views/reset-view/store';
 import R           from 'client/libs/r';
-import Utils       from 'client/libs/utils';
 import {Response}  from 'libs/response';
 import {slog}      from 'libs/slog';
 import CommonUtils from 'libs/utils';
@@ -25,13 +24,9 @@ export default class ResetApp extends App
     /**
      * @constructor
      */
-    constructor(ssrStore? : storeNS.Store)
+    constructor(ssrStore : storeNS.Store)
     {
         super();
-
-        if (! ssrStore) {
-            ssrStore = Utils.getSsrStore<storeNS.Store>();
-        }
 
         this.store = storeNS.init(ssrStore);
         this.url = '/reset';

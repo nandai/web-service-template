@@ -8,7 +8,6 @@ import {App}          from 'client/app/app';
 import {HomeTabsView} from 'client/components/views/home-tabs-view';
 import {storeNS}      from 'client/components/views/home-tabs-view/store';
 import History        from 'client/libs/history';
-import Utils          from 'client/libs/utils';
 import {slog}         from 'libs/slog';
 import AboutApp       from './about-app';
 import LoginApp       from './login-app';
@@ -25,13 +24,9 @@ export default class HomeTabsApp extends App
     /**
      * @constructor
      */
-    constructor(ssrStore? : storeNS.Store)
+    constructor(ssrStore : storeNS.Store)
     {
         super();
-
-        if (! ssrStore) {
-            ssrStore = Utils.getSsrStore<storeNS.Store>();
-        }
 
         this.store = storeNS.init(ssrStore);
         this.store.onLogin =  this.onLogin;

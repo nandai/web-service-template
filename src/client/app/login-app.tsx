@@ -10,7 +10,6 @@ import LoginView  from 'client/components/views/login-view';
 import {storeNS}  from 'client/components/views/login-view/store';
 import History    from 'client/libs/history';
 import R          from 'client/libs/r';
-import Utils      from 'client/libs/utils';
 import {Request}  from 'libs/request';
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
@@ -26,13 +25,9 @@ export default class LoginApp extends App
     /**
      * @constructor
      */
-    constructor(ssrStore? : storeNS.Store)
+    constructor(ssrStore : storeNS.Store)
     {
         super();
-
-        if (! ssrStore) {
-            ssrStore = Utils.getSsrStore<storeNS.Store>();
-        }
 
         this.store = storeNS.init(ssrStore);
         this.url = '/';

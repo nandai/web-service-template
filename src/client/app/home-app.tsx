@@ -6,7 +6,6 @@ import * as React  from 'react';
 import {App}       from 'client/app/app';
 import HomeView    from 'client/components/views/home-view';
 import {storeNS}   from 'client/components/views/home-view/store';
-import Utils       from 'client/libs/utils';
 import ForgetApp   from './forget-app';
 import HomeTabsApp from './home-tabs-app';
 
@@ -20,13 +19,9 @@ export default class HomeApp extends App
     /**
      * @constructor
      */
-    constructor(ssrStore? : storeNS.Store)
+    constructor(ssrStore : storeNS.Store)
     {
         super();
-
-        if (! ssrStore) {
-            ssrStore = Utils.getSsrStore<storeNS.Store>();
-        }
 
         this.store = storeNS.init(ssrStore);
         this.appsOptions = {effectDelay:500};
