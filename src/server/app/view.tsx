@@ -42,9 +42,9 @@ export function loadCss()
 /**
  * App生成
  */
-function createApp(store : BaseStore, search : string) : App
+function createApp(store : BaseStore, hasQuery : boolean) : App
 {
-    const routeResult = mainApp.getRoute(store.currentUrl, store.account, search);
+    const routeResult = mainApp.getRoute(store.currentUrl, store.account, hasQuery);
     const app = routeResult.rootApp.factory(store);
     return app;
 }
@@ -52,18 +52,18 @@ function createApp(store : BaseStore, search : string) : App
 /**
  * view
  */
-export function view(req : express.Request, store : BaseStore = {}, options : {url? : string, search? : string} = {}) : string
+export function view(req : express.Request, store : BaseStore = {}, options : {url? : string} = {}) : string
 {
     store.locale = req.ext.locale;
     store.currentUrl = options.url || req.path;
 
-    // NOTE:<body ontouchstart="">はスマホでタッチした時に:activeを効かせるための設定
-    const app = createApp(store, options.search);
+    const app = createApp(store, Object.keys(req.query).length > 0);
     const js = 'wst.js';
     const contents = ReactDOM.renderToString(<Root app={app} />);
     const deepestApp = app.findApp(store.currentUrl) || app;
     const title = deepestApp.title;
 
+    // NOTE:<body ontouchstart="">はスマホでタッチした時に:activeを効かせるための設定
     const html = `
 <!DOCTYPE html>
 <html>

@@ -49,7 +49,7 @@ export default class ResetApp
                     break;
                 }
 
-                res.send(view(req, {}, {search:`id=${resetId}`}));
+                res.send(view(req));
             }
             while (false);
             log.stepOut();

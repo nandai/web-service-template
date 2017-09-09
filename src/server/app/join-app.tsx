@@ -49,7 +49,7 @@ export default class JoinApp
                     break;
                 }
 
-                res.send(view(req, {}, {search:`id=${inviteId}`}));
+                res.send(view(req));
             }
             while (false);
             log.stepOut();

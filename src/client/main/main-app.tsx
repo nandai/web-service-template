@@ -165,10 +165,20 @@ export default class MainApp extends App
     /**
      * route取得
      */
-    getRoute(url : string, account? : Response.Account, search? : string)
+    getRoute(url : string, account? : Response.Account, hasQuery? : boolean)
     {
         account = account || this.account;
-        search = search || (typeof location === 'object' ? location.search : '');
+        if (hasQuery === undefined)
+        {
+            if (typeof location === 'object')
+            {
+                hasQuery = (location.search !== '');
+            }
+            else
+            {
+                hasQuery = false;
+            }
+        }
 
         let rootApp    : App = null;
         let deepestApp : App = null;
@@ -188,11 +198,11 @@ export default class MainApp extends App
                 continue;
             }
 
-            if (query && search === '') {
+            if (query && hasQuery === false) {
                 continue;
             }
 
-            if (query === false && search !== '') {
+            if (query === false && hasQuery) {
                 continue;
             }
 

@@ -47,7 +47,7 @@ export default class SmsApp
                     break;
                 }
 
-                res.send(view(req, {}, {search:`id=${smsId}`}));
+                res.send(view(req));
             }
             while (false);
             log.stepOut();
