@@ -47,6 +47,14 @@ export default class TopApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new TopApp(store);
+    }
+
+    /**
      * 初期化
      */
     init(params, message? : string)

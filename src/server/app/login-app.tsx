@@ -1,7 +1,6 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import ClientApp    from 'client/app/home-app';
 import {storeNS}    from 'client/components/views/login-view/store';
 import {slog}       from 'libs/slog';
 import SessionAgent from 'server/agents/session-agent';
@@ -62,9 +61,8 @@ export default class LoginApp
                 await SessionAgent.update(session);
             }
 
-            const store : storeNS.Store = {locale, currentUrl:'/', message};
-            const app = new ClientApp(store);
-            res.send(view(app, '/'));
+            const store : storeNS.Store = {message};
+            res.send(view(req, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}

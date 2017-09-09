@@ -1,11 +1,8 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import ClientApp from 'client/app/home-app';
-import {storeNS} from 'client/components/views/about-view/store';
-import {slog}    from 'libs/slog';
-import Utils     from 'server/libs/utils';
-import {view}    from './view';
+import {slog} from 'libs/slog';
+import {view} from './view';
 
 import express = require('express');
 
@@ -22,18 +19,10 @@ export default class AboutApp
      * @param   req httpリクエスト
      * @param   res httpレスポンス
      */
-    static async index(req : express.Request, res : express.Response)
+    static index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(AboutApp.CLS_NAME, 'index');
-        const locale = req.ext.locale;
-
-        try
-        {
-            const store : storeNS.Store = {locale, currentUrl:'/about'};
-            const app = new ClientApp(store);
-            res.send(view(app, '/about'));
-            log.stepOut();
-        }
-        catch (err) {Utils.internalServerError(err, res, log);}
+        res.send(view(req));
+        log.stepOut();
     }
 }

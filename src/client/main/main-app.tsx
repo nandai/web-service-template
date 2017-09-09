@@ -44,7 +44,11 @@ export default class MainApp extends App
     constructor()
     {
         super();
-        const ssrStore = Utils.getSsrStore<BaseStore>();
+
+        let ssrStore : BaseStore = {locale:'ja', page:{}};
+        if (typeof window === 'object') {
+            ssrStore = Utils.getSsrStore<BaseStore>();
+        }
 
         this.appsOptions =
         {
@@ -69,7 +73,8 @@ export default class MainApp extends App
             new UserApp(ssrStore),
             new UsersApp(ssrStore),
             new ForbiddenApp(ssrStore),
-            new NotFoundApp(ssrStore)
+            new NotFoundApp(ssrStore),
+            new NotFoundApp(ssrStore, true)
         ];
 
         this.initChildApps(true);
@@ -160,8 +165,11 @@ export default class MainApp extends App
     /**
      * route取得
      */
-    private getRoute(url : string)
+    getRoute(url : string, account? : Response.Account, search? : string)
     {
+        account = account || this.account;
+        search = search || (typeof location === 'object' ? location.search : '');
+
         let rootApp    : App = null;
         let deepestApp : App = null;
         let params;
@@ -176,15 +184,20 @@ export default class MainApp extends App
                 continue;
             }
 
-            if (auth && this.account === null) {
+            if (auth && ! account) {
                 continue;
             }
 
-            if (query === false || location.search !== '')
-            {
-                rootApp = childApp;
-                break;
+            if (query && search === '') {
+                continue;
             }
+
+            if (query === false && search !== '') {
+                continue;
+            }
+
+            rootApp = childApp;
+            break;
         }
 
         return {rootApp, deepestApp, params};

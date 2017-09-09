@@ -46,6 +46,14 @@ export default class SettingsInviteApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new SettingsInviteApp(store);
+    }
+
+    /**
      * 初期化
      */
     init(params, _message? : string)

@@ -46,6 +46,14 @@ export default class SettingsAccountEmailChangeApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new SettingsAccountEmailChangeApp(store);
+    }
+
+    /**
      * view
      */
     view(i : number) : JSX.Element

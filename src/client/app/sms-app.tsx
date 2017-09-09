@@ -49,6 +49,14 @@ export default class SmsApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new SmsApp(store);
+    }
+
+    /**
      * 初期化
      */
     init(params, _message? : string)

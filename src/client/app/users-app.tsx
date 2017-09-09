@@ -46,6 +46,14 @@ export default class UsersApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new UsersApp(store);
+    }
+
+    /**
      * 初期化
      */
     init(_params, _message? : string)

@@ -5,10 +5,10 @@ import * as React    from 'react';
 import * as ReactDOM from 'react-dom/server';
 
 import {App}         from 'client/app/app';
-import ForbiddenApp  from 'client/app/forbidden-app';
-import NotFoundApp   from 'client/app/not-found-app';
 import Root          from 'client/components/root';
+import {BaseStore}   from 'client/components/views/base-store';
 import {pageNS}      from 'client/libs/page';
+import MainApp       from 'client/main/main-app';
 import {slog}        from 'libs/slog';
 import SettingsApi   from 'server/api/settings-api';
 import Config        from 'server/config';
@@ -18,6 +18,7 @@ import fs =      require('fs');
 import path =    require('path');
 
 let css : string = '';
+const mainApp = new MainApp();
 
 /**
  * cssをロードする
@@ -39,14 +40,28 @@ export function loadCss()
 }
 
 /**
+ * App生成
+ */
+function createApp(store : BaseStore, search : string) : App
+{
+    const routeResult = mainApp.getRoute(store.currentUrl, store.account, search);
+    const app = routeResult.rootApp.factory(store);
+    return app;
+}
+
+/**
  * view
  */
-export function view(app : App, url? : string) : string
+export function view(req : express.Request, store : BaseStore = {}, options : {url? : string, search? : string} = {}) : string
 {
+    store.locale = req.ext.locale;
+    store.currentUrl = options.url || req.path;
+
     // NOTE:<body ontouchstart="">はスマホでタッチした時に:activeを効かせるための設定
+    const app = createApp(store, options.search);
     const js = 'wst.js';
     const contents = ReactDOM.renderToString(<Root app={app} />);
-    const deepestApp = app.findApp(url) || app;
+    const deepestApp = app.findApp(store.currentUrl) || app;
     const title = deepestApp.title;
 
     const html = `
@@ -81,7 +96,7 @@ export function view(app : App, url? : string) : string
  */
 export function forbidden(req : express.Request, res : express.Response)
 {
-    return sendAbnormal(req, res, ForbiddenApp, 403);
+    return sendAbnormal(req, res, 403);
 }
 
 /**
@@ -89,29 +104,28 @@ export function forbidden(req : express.Request, res : express.Response)
  */
 export function notFound(req : express.Request, res : express.Response)
 {
-    return sendAbnormal(req, res, NotFoundApp, 404);
+    return sendAbnormal(req, res, 404);
 }
 
 /**
  * 異常レスポンス送信
  */
 function sendAbnormal(
-    req       : express.Request,
-    res       : express.Response,
-    ClientApp : typeof ForbiddenApp | typeof NotFoundApp,
-    status    : number)
+    req    : express.Request,
+    res    : express.Response,
+    status : number)
 {
     const log = slog.stepIn('view.tsx', 'sendAbnormal');
     return new Promise(async (resolve : () => void, reject) =>
     {
         try
         {
-            const locale = req.ext.locale;
             const data = await SettingsApi.getAccount(req);
             const {account} = data;
             const page : pageNS.Page = {active:true, displayStatus:'displayed'};
-            const app = new ClientApp({locale, account, page});
-            res.status(status).send(view(app));
+            const store : BaseStore = {account, page};
+
+            res.status(status).send(view(req, store, {url:status.toString()}));
             log.stepOut();
             resolve();
         }

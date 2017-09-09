@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import ClientApp        from 'client/app/settings-account-password-app';
+import {storeNS}        from 'client/components/views/settings-account-password-view/store';
 import {slog}           from 'libs/slog';
 import SettingsApi      from 'server/api/settings-api';
 import Utils            from 'server/libs/utils';
@@ -26,16 +26,14 @@ export default class SettingsAccountPasswordApp
     static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsAccountPasswordApp.CLS_NAME, 'index');
-        const locale = req.ext.locale;
-
         try
         {
             const data = await SettingsApi.getAccount(req);
             const {account} = data;
             if (account.email)
             {
-                const app = new ClientApp({locale, account});
-                res.send(view(app));
+                const store : storeNS.Store = {account};
+                res.send(view(req, store));
             }
             else
             {

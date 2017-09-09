@@ -46,6 +46,14 @@ export default class JoinApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new JoinApp(store);
+    }
+
+    /**
      * view
      */
     view(i : number) : JSX.Element

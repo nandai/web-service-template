@@ -1,7 +1,6 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import ClientApp        from 'client/app/reset-app';
 import {slog}           from 'libs/slog';
 import AccountAgent     from 'server/agents/account-agent';
 import Utils            from 'server/libs/utils';
@@ -25,8 +24,6 @@ export default class ResetApp
     static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(ResetApp.CLS_NAME, 'index');
-        const locale = req.ext.locale;
-
         try
         {
             do
@@ -52,8 +49,7 @@ export default class ResetApp
                     break;
                 }
 
-                const app = new ClientApp({locale});
-                res.send(view(app));
+                res.send(view(req, {}, {search:`id=${resetId}`}));
             }
             while (false);
             log.stepOut();

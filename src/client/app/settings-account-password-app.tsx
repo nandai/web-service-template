@@ -48,6 +48,14 @@ export default class SettingsAccountPasswordApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new SettingsAccountPasswordApp(store);
+    }
+
+    /**
      * 初期化
      */
     init(params, _message? : string)

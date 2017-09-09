@@ -18,12 +18,13 @@ export default class NotFoundApp extends App
     /**
      * @constructor
      */
-    constructor(ssrStore : BaseStore)
+    constructor(ssrStore : BaseStore, query = false)
     {
         super();
 
         this.store = ssrStore;
         this.url = '404';
+        this.query = query;
         this.title = R.text(R.NOT_FOUND, this.store.locale);
     }
 
@@ -33,6 +34,14 @@ export default class NotFoundApp extends App
     toString() : string
     {
         return 'NotFoundApp';
+    }
+
+    /**
+     * factory
+     */
+    factory(store : BaseStore) : App
+    {
+        return new NotFoundApp(store);
     }
 
     /**

@@ -1,7 +1,6 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import ClientApp        from 'client/app/sms-app';
 import {slog}           from 'libs/slog';
 import Utils            from 'server/libs/utils';
 import {Session}        from 'server/models/session';
@@ -23,8 +22,6 @@ export default class SmsApp
     static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn('SmsApp', 'index');
-        const locale = req.ext.locale;
-
         try
         {
             do
@@ -50,8 +47,7 @@ export default class SmsApp
                     break;
                 }
 
-                const app = new ClientApp({locale});
-                res.send(view(app));
+                res.send(view(req, {}, {search:`id=${smsId}`}));
             }
             while (false);
             log.stepOut();

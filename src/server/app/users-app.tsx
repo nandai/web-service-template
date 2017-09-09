@@ -1,10 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import ClientApp   from 'client/app/users-app';
+import {storeNS}   from 'client/components/views/users-view/store';
 import {slog}      from 'libs/slog';
 import SettingsApi from 'server/api/settings-api';
 import UserApi     from 'server/api/user-api';
+import Utils       from 'server/libs/utils';
 import {view}      from './view';
 
 import express = require('express');
@@ -25,14 +26,17 @@ export default class UsersApp
     static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(UsersApp.CLS_NAME, 'index');
-        const locale = req.ext.locale;
+        try
+        {
+            const data1 = await SettingsApi.getAccount(req);
+            const data2 = await UserApi.getUserList();
+            const {account} =  data1;
+            const {userList} = data2;
+            const store : storeNS.Store = {account, userList};
 
-        const data1 = await SettingsApi.getAccount(req);
-        const data2 = await UserApi.getUserList();
-        const {account} =  data1;
-        const {userList} = data2;
-        const app = new ClientApp({locale, account, userList});
-        res.send(view(app));
-        log.stepOut();
+            res.send(view(req, store));
+            log.stepOut();
+        }
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 }

@@ -9,9 +9,10 @@ import ResetApi                      from './api/reset-api';
 import SettingsApi                   from './api/settings-api';
 import SignupApi                     from './api/signup-api';
 import UserApi                       from './api/user-api';
+import AboutApp                      from './app/about-app';
 import ForgetApp                     from './app/forget-app';
-import HomeApp                       from './app/home-app';
 import JoinApp                       from './app/join-app';
+import LoginApp                      from './app/login-app';
 import ResetApp                      from './app/reset-app';
 import SettingsAccountApp            from './app/settings-account-app';
 import SettingsAccountEmailApp       from './app/settings-account-email-app';
@@ -19,6 +20,7 @@ import SettingsAccountEmailChangeApp from './app/settings-account-email-change-a
 import SettingsAccountPasswordApp    from './app/settings-account-password-app';
 import SettingsApp                   from './app/settings-app';
 import SettingsInviteApp             from './app/settings-invite-app';
+import SignupApp                     from './app/signup-app';
 import UserApp                       from './app/user-app';
 import UsersApp                      from './app/users-app';
 import {loadCss}                     from './app/view';
@@ -225,9 +227,9 @@ class Initializer
 
         // const provider = ':provider(twitter|facebook|google)';   // TODO:delete
 
-        this.app.get('/',       HomeApp  .login);
-        this.app.get('/signup', HomeApp  .signup);
-        this.app.get('/about',  HomeApp  .about);
+        this.app.get('/',       LoginApp .index);
+        this.app.get('/signup', SignupApp.index);
+        this.app.get('/about',  AboutApp .index);
         this.app.get('/join',   JoinApp  .index);
         this.app.get('/forget', ForgetApp.index);
         this.app.get('/reset',  ResetApp .index);

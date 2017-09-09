@@ -47,6 +47,14 @@ export default class ResetApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new ResetApp(store);
+    }
+
+    /**
      * view
      */
     view(i : number) : JSX.Element

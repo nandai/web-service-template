@@ -45,6 +45,14 @@ export default class HomeApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new HomeApp(store);
+    }
+
+    /**
      * view
      */
     view(i : number) : JSX.Element

@@ -52,6 +52,14 @@ export default class SettingsAccountApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new SettingsAccountApp(store);
+    }
+
+    /**
      * 初期化
      */
     init(params, _message? : string)

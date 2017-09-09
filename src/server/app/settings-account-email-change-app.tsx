@@ -1,7 +1,6 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import ClientApp        from 'client/app/settings-account-email-change-app';
 import {slog}           from 'libs/slog';
 import AccountAgent     from 'server/agents/account-agent';
 import Utils            from 'server/libs/utils';
@@ -26,8 +25,6 @@ export default class SettingsAccountEmailChangeApp
     static async index(req : express.Request, res : express.Response)
     {
         const log = slog.stepIn(SettingsAccountEmailChangeApp.CLS_NAME, 'index');
-        const locale = req.ext.locale;
-
         try
         {
             do
@@ -53,8 +50,7 @@ export default class SettingsAccountEmailChangeApp
                     break;
                 }
 
-                const app = new ClientApp({locale});
-                res.send(view(app));
+                res.send(view(req));
             }
             while (false);
             log.stepOut();

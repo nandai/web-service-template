@@ -46,6 +46,14 @@ export default class SignupConfirmApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : storeNS.Store) : App
+    {
+        return new SignupConfirmApp(store);
+    }
+
+    /**
      * view
      */
     view(i : number) : JSX.Element

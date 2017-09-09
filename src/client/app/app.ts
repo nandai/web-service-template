@@ -31,6 +31,14 @@ export abstract class App
     abstract toString() : string;
 
     /**
+     * factory
+     */
+    factory(_store : BaseStore) : App
+    {
+        return null;
+    }
+
+    /**
      *
      */
     protected initChildApps(active = false) : void

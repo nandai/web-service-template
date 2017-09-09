@@ -36,6 +36,14 @@ export default class ForbiddenApp extends App
     }
 
     /**
+     * factory
+     */
+    factory(store : BaseStore) : App
+    {
+        return new ForbiddenApp(store);
+    }
+
+    /**
      * view
      */
     view(i : number) : JSX.Element

@@ -1,7 +1,7 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import ClientApp    from 'client/app/settings-app';
+import {storeNS}    from 'client/components/views/settings-view/store';
 import {slog}       from 'libs/slog';
 import SessionAgent from 'server/agents/session-agent';
 import SettingsApi  from 'server/api/settings-api';
@@ -49,8 +49,9 @@ export default class SettingsApp
 
             const data = await SettingsApi.getAccount(req);
             const {account} = data;
-            const app = new ClientApp({locale, account, message});
-            res.send(view(app));
+            const store : storeNS.Store = {account, message};
+
+            res.send(view(req, store));
             log.stepOut();
         }
         catch (err) {Utils.internalServerError(err, res, log);}
