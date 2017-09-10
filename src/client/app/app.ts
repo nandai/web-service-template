@@ -1,29 +1,30 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import bind                 from 'bind-decorator';
+import bind                   from 'bind-decorator';
 
-import Apps, {AppsOptions}  from 'client/app/apps';
-import {BaseStore}          from 'client/components/views/base-store';
-import History, {Direction} from 'client/libs/history';
-import {pageNS}             from 'client/libs/page';
-import {SocketEventData}    from 'client/libs/socket-event-data';
-import Utils                from 'client/libs/utils';
-import {slog}               from 'libs/slog';
+import {BaseStore}            from 'client/components/views/base-store';
+import History, {Direction}   from 'client/libs/history';
+import {pageNS}               from 'client/libs/page';
+import PageTransition, {
+       PageTransitionOptions} from 'client/libs/page-transition';
+import {SocketEventData}      from 'client/libs/socket-event-data';
+import Utils                  from 'client/libs/utils';
+import {slog}                 from 'libs/slog';
 
 type SetUrlResult = 'nomatch' | 'match' | 'transition';
 
 export abstract class App
 {
-    abstract store : BaseStore;
-    url            : string;
-    query          : boolean = false;
-    auth           : boolean = false;
-    title          : string;
-    apps           : Apps;
-    appsOptions    : AppsOptions = {};
-    childApps      : App[] = [];
-    static render  : () => void;
+    abstract store        : BaseStore;
+    url                   : string;
+    query                 : boolean = false;
+    auth                  : boolean = false;
+    title                 : string;
+    pageTransition        : PageTransition;
+    pageTransitionOptions : PageTransitionOptions = {};
+    childApps             : App[] = [];
+    static render         : () => void;
 
     /**
      * toString
@@ -130,11 +131,11 @@ export abstract class App
         }
 
         let result : SetUrlResult = 'match';
-        if (! this.apps)
+        if (! this.pageTransition)
         {
             // 初回設定時
             app.store.page.active = true;
-            this.apps = new Apps(app, this.appsOptions);
+            this.pageTransition = new PageTransition(app, this.pageTransitionOptions);
         }
         else
         {
@@ -151,14 +152,14 @@ export abstract class App
                     page.direction = direction;
                 }
 
-                this.apps.setNextApp(app);
+                this.pageTransition.setNextApp(app);
                 result = 'transition';
 
                 setTimeout(() =>
                 {
-                    this.apps.setActiveNextApp();
+                    this.pageTransition.setActiveNextApp();
                     App.render();
-                }, this.apps.getEffectDelay());
+                }, this.pageTransition.getEffectDelay());
             }
         }
 
@@ -216,7 +217,7 @@ export abstract class App
     @bind
     protected onPageTransitionEnd(page : pageNS.Page)
     {
-        if (this.apps.changeDisplayStatus(page)) {
+        if (this.pageTransition.changeDisplayStatus(page)) {
             App.render();
         }
     }

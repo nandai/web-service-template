@@ -3,16 +3,16 @@
  */
 import * as React      from 'react';
 
-import Apps            from 'client/app/apps';
 import Tabs, {TabItem} from 'client/components/common/tabs';
 import Footer          from 'client/components/designated/footer';
 import ViewContainer   from 'client/components/views/view-container';
+import PageTransition  from 'client/libs/page-transition';
 import {storeNS}       from './store';
 
 interface HomeTabsViewProps
 {
-    store : storeNS.Store;
-    apps  : Apps;
+    store          : storeNS.Store;
+    pageTransition : PageTransition;
 }
 
 export class HomeTabsView extends React.Component<HomeTabsViewProps, {}>
@@ -22,7 +22,7 @@ export class HomeTabsView extends React.Component<HomeTabsViewProps, {}>
      */
     render() : JSX.Element
     {
-        const {store, apps} = this.props;
+        const {store, pageTransition} = this.props;
         const items : TabItem[] =
         [
             {name:'/',       label:'LOGIN',  url:'/',       onClick:store.onLogin},
@@ -30,7 +30,7 @@ export class HomeTabsView extends React.Component<HomeTabsViewProps, {}>
             {name:'/about',  label:'ABOUT',  url:'/about',  onClick:store.onAbout}
         ];
 
-        const page = apps.getPage();
+        const page = pageTransition.getPage();
 
         return (
             <ViewContainer page={store.page}>

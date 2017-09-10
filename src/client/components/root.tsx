@@ -1,15 +1,15 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React from 'react';
+import * as React     from 'react';
 
-import {App}      from 'client/app/app';
-import Apps       from 'client/app/apps';
+import {App}          from 'client/app/app';
+import PageTransition from 'client/libs/page-transition';
 
 interface RootProps
 {
-    apps? : Apps;
-    app?  : App;  // SSR用
+    pageTransition? : PageTransition;
+    app?            : App;  // SSR用
 }
 
 export default class Root extends React.Component<RootProps, {}>
@@ -20,13 +20,13 @@ export default class Root extends React.Component<RootProps, {}>
     render() : JSX.Element
     {
         const {props} = this;
-        let {apps} = props;
+        let {pageTransition} = props;
 
         if (props.app) {
-            apps = new Apps(props.app);
+            pageTransition = new PageTransition(props.app);
         }
 
-        const page = apps.getPage();
+        const page = pageTransition.getPage();
         let bgClassName = 'root-background';
 
         switch (page.bgTheme)
@@ -36,7 +36,7 @@ export default class Root extends React.Component<RootProps, {}>
             break;
         }
 
-        const bgEl = this.createBgElement(apps);
+        const bgEl = this.createBgElement(pageTransition);
 
         return (
             <div className='root'>
@@ -51,13 +51,13 @@ export default class Root extends React.Component<RootProps, {}>
     /**
      * バックグラウンド生成
      */
-    private createBgElement(apps : Apps) : JSX.Element
+    private createBgElement(pageTransition : PageTransition) : JSX.Element
     {
         let el : JSX.Element;
 
-        if (apps.isDuringTransition())
+        if (pageTransition.isDuringTransition())
         {
-            const effectDelay = apps.getEffectDelay();
+            const effectDelay = pageTransition.getEffectDelay();
             if (effectDelay >= 500)
             {
                 el = (

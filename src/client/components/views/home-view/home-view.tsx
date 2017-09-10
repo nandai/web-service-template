@@ -1,17 +1,17 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import * as React    from 'react';
+import * as React     from 'react';
 
-import Apps          from 'client/app/apps';
-import Header        from 'client/components/designated/header';
-import ViewContainer from 'client/components/views/view-container';
-import {storeNS}     from './store';
+import Header         from 'client/components/designated/header';
+import ViewContainer  from 'client/components/views/view-container';
+import PageTransition from 'client/libs/page-transition';
+import {storeNS}      from './store';
 
 interface HomeViewProps
 {
-    store : storeNS.Store;
-    apps  : Apps;
+    store          : storeNS.Store;
+    pageTransition : PageTransition;
 }
 
 export default class HomeView extends React.Component<HomeViewProps, {}>
@@ -21,8 +21,8 @@ export default class HomeView extends React.Component<HomeViewProps, {}>
      */
     render() : JSX.Element
     {
-        const {store, apps} = this.props;
-        const page = apps.getPage();
+        const {store, pageTransition} = this.props;
+        const page = pageTransition.getPage();
 
         return (
             <ViewContainer page={store.page}>

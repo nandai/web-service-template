@@ -1,17 +1,17 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import bind                 from 'bind-decorator';
+import bind              from 'bind-decorator';
 
-import {Response}           from 'libs/response';
-import {slog}               from 'libs/slog';
-import SettingsApi          from '../api/settings-api';
-import {App}                from '../app/app';
-import History, {Direction} from '../libs/history';
-import R                    from '../libs/r';
-import {SocketEventData}    from '../libs/socket-event-data';
-import Utils                from '../libs/utils';
-import MainApp              from './main-app';
+import {Response}        from 'libs/response';
+import {slog}            from 'libs/slog';
+import SettingsApi       from '../api/settings-api';
+import {App}             from '../app/app';
+import History           from '../libs/history';
+import R                 from '../libs/r';
+import {SocketEventData} from '../libs/socket-event-data';
+import Utils             from '../libs/utils';
+import MainApp           from './main-app';
 
 import socketIO = require('socket.io-client');
 
@@ -33,8 +33,6 @@ class Main
         this.mainApp = new MainApp();
 
         this.connectSocket();
-
-        History.setCallback(this.onHistory);
         log.stepOut();
     }
 
@@ -45,41 +43,6 @@ class Main
     render() : void
     {
         this.mainApp.render();
-    }
-
-    /**
-     * pushstate, popstate event
-     */
-    @bind
-    private onHistory(direction : Direction, message? : string)
-    {
-        const log = slog.stepIn('Main', 'onHistory');
-        return new Promise(async (resolve) =>
-        {
-            this.mainApp.childApps.forEach((subApp) =>
-            {
-                const {page} = subApp.store;
-                page.direction = direction;
-                page.highPriorityEffect = null;
-            });
-
-            const prevApp = this.mainApp.currentApp;
-            await this.mainApp.updateCurrentApp(location.pathname, true, message);
-            this.render();
-
-            if (prevApp !== this.mainApp.currentApp)
-            {
-                const {apps} = this.mainApp;
-                setTimeout(() =>
-                {
-                    apps.setActiveNextApp();
-                    this.render();
-                }, apps.getEffectDelay());
-            }
-
-            log.stepOut();
-            resolve();
-        });
     }
 
     /**

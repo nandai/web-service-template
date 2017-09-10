@@ -1,11 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
+import bind                          from 'bind-decorator';
 import * as React                    from 'react';
 import * as ReactDOM                 from 'react-dom';
 
 import {App}                         from 'client/app/app';
-import Apps, {AppTransition}         from 'client/app/apps';
 import ForbiddenApp                  from 'client/app/forbidden-app';
 import HomeApp                       from 'client/app/home-app';
 import JoinApp                       from 'client/app/join-app';
@@ -25,6 +25,9 @@ import UsersApp                      from 'client/app/users-app';
 import Button                        from 'client/components/common/button';
 import Root                          from 'client/components/root';
 import {BaseStore}                   from 'client/components/views/base-store';
+import History, {Direction}          from 'client/libs/history';
+import PageTransition, {
+       PageTransitionSetting}        from 'client/libs/page-transition';
 import Utils                         from 'client/libs/utils';
 import {Response}                    from 'libs/response';
 import {slog}                        from 'libs/slog';
@@ -46,13 +49,15 @@ export default class MainApp extends App
         super();
 
         let ssrStore : BaseStore = {locale:'ja', page:{}};
-        if (typeof window === 'object') {
-            ssrStore = Utils.getSsrStore<BaseStore>();
+        if (typeof window === 'object')
+        {
+            ssrStore = window['ssrStore'];
+            History.setCallback(this.onHistory);
         }
 
-        this.appsOptions =
+        this.pageTransitionOptions =
         {
-            transitions,
+            settings:    pageTransitionSettings,
             effectDelay: 500
         };
 
@@ -94,15 +99,15 @@ export default class MainApp extends App
      */
     render() : void
     {
-        const {apps} = this;
-        const isDuringTransition = apps.isDuringTransition();
+        const {pageTransition} = this;
+        const isDuringTransition = pageTransition.isDuringTransition();
 
         if (Button.noReaction && isDuringTransition === false) {
             setTimeout(() => Button.noReaction = false, 100);
         }
 
         ReactDOM.render(
-            <Root apps={apps} />,
+            <Root pageTransition={pageTransition} />,
             document.getElementById('root'));
     }
 
@@ -147,15 +152,15 @@ export default class MainApp extends App
      */
     private setCurrentApp(currentApp : App, deepestApp : App) : void
     {
-        if (! this.apps)
+        if (! this.pageTransition)
         {
             // 初回設定時
-            this.apps = new Apps(currentApp, this.appsOptions);
+            this.pageTransition = new PageTransition(currentApp, this.pageTransitionOptions);
         }
         else
         {
             // 二度目以降
-            this.apps.setNextApp(currentApp);
+            this.pageTransition.setNextApp(currentApp);
         }
 
         this.currentApp = currentApp;
@@ -264,9 +269,44 @@ export default class MainApp extends App
             resolve();
         });
     }
+
+    /**
+     * pushstate, popstate event
+     */
+    @bind
+    private onHistory(direction : Direction, message? : string)
+    {
+        const log = slog.stepIn('Main', 'onHistory');
+        return new Promise(async (resolve) =>
+        {
+            this.childApps.forEach((childApp) =>
+            {
+                const {page} = childApp.store;
+                page.direction = direction;
+                page.highPriorityEffect = null;
+            });
+
+            const prevApp = this.currentApp;
+            await this.updateCurrentApp(location.pathname, true, message);
+            this.render();
+
+            if (prevApp !== this.currentApp)
+            {
+                const {pageTransition} = this;
+                setTimeout(() =>
+                {
+                    pageTransition.setActiveNextApp();
+                    this.render();
+                }, pageTransition.getEffectDelay());
+            }
+
+            log.stepOut();
+            resolve();
+        });
+    }
 }
 
-const transitions : AppTransition[] =
+const pageTransitionSettings : PageTransitionSetting[] =
 [
     {
         appName1:    'HomeApp',

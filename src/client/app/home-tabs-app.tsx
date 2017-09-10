@@ -65,7 +65,7 @@ export default class HomeTabsApp extends App
      */
     view(i : number) : JSX.Element
     {
-        return <HomeTabsView key={i} store={this.store} apps={this.apps} />;
+        return <HomeTabsView key={i} store={this.store} pageTransition={this.pageTransition} />;
     }
 
     /**

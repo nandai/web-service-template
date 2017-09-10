@@ -24,7 +24,7 @@ export default class HomeApp extends App
         super();
 
         this.store = storeNS.init(ssrStore);
-        this.appsOptions = {effectDelay:500};
+        this.pageTransitionOptions = {effectDelay:500};
 
         this.childApps =
         [
@@ -57,6 +57,6 @@ export default class HomeApp extends App
      */
     view(i : number) : JSX.Element
     {
-        return <HomeView key={i} store={this.store} apps={this.apps} />;
+        return <HomeView key={i} store={this.store} pageTransition={this.pageTransition} />;
     }
 }

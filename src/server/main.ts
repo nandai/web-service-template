@@ -126,7 +126,7 @@ class Initializer
     {
         if (Config.hasFacebook())
         {
-            const options : passportFacebook.IStrategyOption =
+            const options : passportFacebook.StrategyOption =
             {
                 clientID:     Config.FACEBOOK_APPID,
                 clientSecret: Config.FACEBOOK_APPSECRET,

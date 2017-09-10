@@ -72,14 +72,6 @@ export default class Utils
     }
 
     /**
-     * Server Side Rendering Store を取得する
-     */
-    static getSsrStore<T>() : T
-    {
-        return window['ssrStore'];
-    }
-
-    /**
      * モバイルかどうかを調べる
      */
     static isMobile() : boolean
