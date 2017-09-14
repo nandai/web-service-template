@@ -44,8 +44,12 @@ export function loadCss()
  */
 function createApp(store : BaseStore, hasQuery : boolean) : App
 {
+    const log = slog.stepIn('view.tsx', 'createApp');
     const routeResult = mainApp.getRoute(store.currentUrl, store.account, hasQuery);
     const app = routeResult.rootApp.factory(store);
+
+    app.display();
+    log.stepOut();
     return app;
 }
 
@@ -54,6 +58,7 @@ function createApp(store : BaseStore, hasQuery : boolean) : App
  */
 export function view(req : express.Request, store : BaseStore = {}, options : {url? : string} = {}) : string
 {
+    const log = slog.stepIn('view.tsx', 'view');
     store.locale = req.ext.locale;
     store.currentUrl = options.url || req.path;
 
@@ -88,6 +93,7 @@ export function view(req : express.Request, store : BaseStore = {}, options : {u
 </html>
     `;
 
+    log.stepOut();
     return html;
 }
 

@@ -42,12 +42,25 @@ export abstract class App
     /**
      *
      */
-    protected initChildApps(active = false) : void
+    display() : void
+    {
+        const {page} = this.store;
+        page.active = true;
+        page.displayStatus = 'displayed';
+
+        for (const childApp of this.childApps) {
+            childApp.display();
+        }
+    }
+
+    /**
+     * 子Appの初期化
+     */
+    protected initChildApps() : void
     {
         for (const childApp of this.childApps)
         {
             const {page} = childApp.store;
-            page.active = active;
             page.onPageTransitionEnd = this.onPageTransitionEnd;
         }
     }
@@ -60,6 +73,7 @@ export abstract class App
      */
     init(params, message? : string)
     {
+        const log = slog.stepIn('App', 'init');
         return new Promise(async (resolve/* : (isSet : boolean) => void*/) =>
         {
             let result : SetUrlResult = 'nomatch';
@@ -80,6 +94,7 @@ export abstract class App
                 result = this.setUrl(pathname);
             }
 
+            log.stepOut();
             resolve(result);
         });
     }
@@ -100,6 +115,11 @@ export abstract class App
             if (childApp.url === url) {
                 return i;
             }
+
+            if (childApp.pageTransition && childApp.getChildAppIndex(url) !== -1) {
+                return i;
+            }
+
             i++;
         }
         return -1;
@@ -110,6 +130,7 @@ export abstract class App
      */
     protected setUrl(url : string) : SetUrlResult
     {
+        const log = slog.stepIn('App', 'setUrl');
         const {store} = this;
         const index = this.getChildAppIndex(url);
         let app = this.childApps[index];
@@ -126,7 +147,9 @@ export abstract class App
             }
         }
 
-        if (! app) {
+        if (! app)
+        {
+            log.stepOut();
             return 'nomatch';
         }
 
@@ -140,9 +163,15 @@ export abstract class App
         else
         {
             // 二度目以降
-            if (store.currentUrl !== url)
+            const i = this.getChildAppIndex(History.referrerUrl);
+            if (i === -1)
             {
-                const i = this.getChildAppIndex(store.currentUrl);
+                log.stepOut();
+                return 'nomatch';
+            }
+
+            if (History.referrerUrl !== url)
+            {
                 const j = this.getChildAppIndex(url);
                 const direction : Direction = (i < j ? 'forward' : 'back');
 
@@ -164,6 +193,8 @@ export abstract class App
         }
 
         store.currentUrl = url;
+
+        log.stepOut();
         return result;
     }
 

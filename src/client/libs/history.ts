@@ -18,6 +18,8 @@ export default class History
     private static onHistory : HistoryHandler = null;
     private static count = 0;
     private static isBack = false;
+    static referrerUrl = '';
+    static currentUrl = (typeof location !== 'undefined' ? location.pathname : '');
 
     /**
      * コールバック設定
@@ -33,6 +35,9 @@ export default class History
      */
     private static emit(direction : Direction, message? : string) : void
     {
+        History.referrerUrl = History.currentUrl;
+        History.currentUrl = location.pathname;
+
         if (History.onHistory) {
             History.onHistory(direction, message);
         }

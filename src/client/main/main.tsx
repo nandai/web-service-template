@@ -21,6 +21,7 @@ import socketIO = require('socket.io-client');
 class Main
 {
     mainApp : MainApp;
+    private isReconnection = false;
 
     /**
      * 初期化
@@ -65,6 +66,7 @@ class Main
         const log = slog.stepIn('Main', 'connectSocket');
         const io = socketIO.connect();
         io.on('connect',             this.onConnect);
+        io.on('reconnect',           this.onReconnect);
         io.on('disconnect',          this.onDisconnect);
         io.on('notifyUpdateAccount', this.onNotifyUpdateAccount);
         io.on('notifyUpdateUser',    this.onNotifyUpdateUser);
@@ -85,24 +87,38 @@ class Main
         {
             this.mainApp.setOnline(true);
 
-            const res : Response.GetAccount = await SettingsApi.getAccount();
-            const {account} = res;
-
-            if (account)
+            if (this.isReconnection)
             {
-                const params = Utils.getParamsFromUrl(location.pathname, this.mainApp.deepestApp.url);
-                await this.mainApp.currentApp.init(params);
+                const res : Response.GetAccount = await SettingsApi.getAccount();
+                const {account} = res;
 
-                this.deliverUpdateAccount(account);
-            }
-            else
-            {
-                this.deliverLogout();
+                if (account)
+                {
+                    const params = Utils.getParamsFromUrl(location.pathname, this.mainApp.deepestApp.url);
+                    await this.mainApp.currentApp.init(params);
+
+                    this.deliverUpdateAccount(account);
+                }
+                else
+                {
+                    this.deliverLogout();
+                }
             }
 
             log.stepOut();
         }
         catch (err) {log.w(err.message); log.stepOut();}
+    }
+
+    /**
+     * reconnect event
+     */
+    @bind
+    private onReconnect() : void
+    {
+        const log = slog.stepIn('Main', 'onReconnect');
+        this.isReconnection = true;
+        log.stepOut();
     }
 
     /**

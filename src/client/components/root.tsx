@@ -5,6 +5,7 @@ import * as React     from 'react';
 
 import {App}          from 'client/app/app';
 import PageTransition from 'client/libs/page-transition';
+import {slog}         from 'libs/slog';
 
 interface RootProps
 {
@@ -19,6 +20,7 @@ export default class Root extends React.Component<RootProps, {}>
      */
     render() : JSX.Element
     {
+        const log = slog.stepIn('Root', 'render');
         const {props} = this;
         let {pageTransition} = props;
 
@@ -37,8 +39,8 @@ export default class Root extends React.Component<RootProps, {}>
         }
 
         const bgEl = this.createBgElement(pageTransition);
-
-        return (
+        const el =
+        (
             <div className='root'>
                 <div className={bgClassName}>
                     {bgEl}
@@ -46,6 +48,9 @@ export default class Root extends React.Component<RootProps, {}>
                 {page.elements}
             </div>
         );
+
+        log.stepOut();
+        return el;
     }
 
     /**
@@ -53,6 +58,7 @@ export default class Root extends React.Component<RootProps, {}>
      */
     private createBgElement(pageTransition : PageTransition) : JSX.Element
     {
+        const log = slog.stepIn('Root', 'createBgElement');
         let el : JSX.Element;
 
         if (pageTransition.isDuringTransition())
@@ -68,6 +74,7 @@ export default class Root extends React.Component<RootProps, {}>
             }
         }
 
+        log.stepOut();
         return el;
     }
 }

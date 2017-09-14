@@ -23,8 +23,8 @@ export namespace pageNS
         srcPage = srcPage || {};
         const page : Page =
         {
-            active:              (srcPage.active        !== undefined ? srcPage.active        : true),
-            displayStatus:       (srcPage.displayStatus !== undefined ? srcPage.displayStatus : 'displayed'),
+            active:              (srcPage.active        !== undefined ? srcPage.active        : false),
+            displayStatus:       (srcPage.displayStatus !== undefined ? srcPage.displayStatus : 'hidden'),
             effect,
             highPriorityEffect:  null,
             direction:           'forward',

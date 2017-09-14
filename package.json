@@ -31,7 +31,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-latest": "^6.24.1",
     "bind-decorator": "^1.0.11",
-    "body-parser": "^1.18.0",
+    "body-parser": "^1.18.1",
     "browserify": "^14.4.0",
     "compression": "^1.7.0",
     "cookie-parser": "^1.4.3",

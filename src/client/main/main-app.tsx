@@ -82,7 +82,7 @@ export default class MainApp extends App
             new NotFoundApp(ssrStore, true)
         ];
 
-        this.initChildApps(true);
+        this.initChildApps();
         this.setAccount(ssrStore.account);
     }
 
@@ -156,6 +156,7 @@ export default class MainApp extends App
         {
             // 初回設定時
             this.pageTransition = new PageTransition(currentApp, this.pageTransitionOptions);
+            currentApp.store.page.active = true;
         }
         else
         {

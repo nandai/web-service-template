@@ -4,6 +4,7 @@
 import {App}    from 'client/app/app';
 import {pageNS} from 'client/libs/page';
 import Utils    from 'client/libs/utils';
+import {slog}   from 'libs/slog';
 
 /**
  * ページ遷移
@@ -150,6 +151,7 @@ export default class PageTransition
      */
     getEffectDelay() : number
     {
+        const log = slog.stepIn('PageTransition', 'getEffectDelay');
         const {currentSetting} = this;
         let {effectDelay} =  this;
 
@@ -157,7 +159,10 @@ export default class PageTransition
             effectDelay = currentSetting.effectDelay;
         }
 
-        return Math.max(effectDelay, Utils.isMobile() ? 200 : 10);
+        effectDelay = Math.max(effectDelay, Utils.isMobile() ? 200 : 10);
+
+        log.stepOut();
+        return effectDelay;
     }
 
     /**
@@ -165,11 +170,15 @@ export default class PageTransition
      */
     getPage()
     {
+        const log = slog.stepIn('PageTransition', 'getPage');
         const {currentSetting} = this;
-        return {
+        const result = {
             elements: this.apps.map((app, i) => app.view(i)),
             bgTheme:  (currentSetting ? currentSetting.bgTheme : null)
         };
+
+        log.stepOut();
+        return result;
     }
 
     /**
@@ -177,15 +186,28 @@ export default class PageTransition
      */
     isDuringTransition() : boolean
     {
-        if (this.nextApp !== null || this.currentApp.store.page.displayStatus !== 'displayed') {
-            return true;
-        }
+        const log = slog.stepIn('PageTransition', 'isDuringTransition');
+        log.d(this.currentApp.store.page.displayStatus.toString());
 
-        if (this.currentApp.pageTransition) {
-            return this.currentApp.pageTransition.isDuringTransition();
-        }
+        let result = false;
+        do
+        {
+            if (this.nextApp !== null || this.currentApp.store.page.displayStatus !== 'displayed')
+            {
+                result = true;
+                break;
+            }
 
-        return false;
+            if (this.currentApp.pageTransition)
+            {
+                result = this.currentApp.pageTransition.isDuringTransition();
+                break;
+            }
+        }
+        while (false);
+
+        log.stepOut();
+        return result;
     }
 }
 
