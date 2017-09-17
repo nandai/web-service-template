@@ -7,7 +7,7 @@ export type Direction = 'forward' | 'back';
 
 interface HistoryHandler
 {
-    (direction : Direction, massage? : string) : void;
+    (massage? : string) : void;
 }
 
 /**
@@ -20,6 +20,7 @@ export default class History
     private static isBack = false;
     static referrerUrl = '';
     static currentUrl = (typeof location !== 'undefined' ? location.pathname : '');
+    static direction : Direction;
 
     /**
      * コールバック設定
@@ -36,10 +37,11 @@ export default class History
     private static emit(direction : Direction, message? : string) : void
     {
         History.referrerUrl = History.currentUrl;
-        History.currentUrl = location.pathname;
+        History.currentUrl =  location.pathname;
+        History.direction =   direction;
 
         if (History.onHistory) {
-            History.onHistory(direction, message);
+            History.onHistory(message);
         }
     }
 

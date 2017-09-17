@@ -1,8 +1,6 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Direction} from 'client/libs/history';
-
 export namespace pageNS
 {
     export type Effect = 'fade' | 'slide';
@@ -14,7 +12,6 @@ export namespace pageNS
         displayStatus?       : DisplayStatus;
         effect?              : Effect;
         highPriorityEffect?  : Effect;
-        direction?           : Direction;
         onPageTransitionEnd? : (page : Page) => void;
     }
 
@@ -27,7 +24,6 @@ export namespace pageNS
             displayStatus:       (srcPage.displayStatus !== undefined ? srcPage.displayStatus : 'hidden'),
             effect,
             highPriorityEffect:  null,
-            direction:           'forward',
             onPageTransitionEnd: srcPage.onPageTransitionEnd
         };
         return page;

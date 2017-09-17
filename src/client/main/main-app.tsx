@@ -25,7 +25,7 @@ import UsersApp                      from 'client/app/users-app';
 import Button                        from 'client/components/common/button';
 import Root                          from 'client/components/root';
 import {BaseStore}                   from 'client/components/views/base-store';
-import History, {Direction}          from 'client/libs/history';
+import History                       from 'client/libs/history';
 import PageTransition, {
        PageTransitionSetting}        from 'client/libs/page-transition';
 import Utils                         from 'client/libs/utils';
@@ -275,7 +275,7 @@ export default class MainApp extends App
      * pushstate, popstate event
      */
     @bind
-    private onHistory(direction : Direction, message? : string)
+    private onHistory(message? : string)
     {
         const log = slog.stepIn('Main', 'onHistory');
         return new Promise(async (resolve) =>
@@ -283,7 +283,6 @@ export default class MainApp extends App
             this.childApps.forEach((childApp) =>
             {
                 const {page} = childApp.store;
-                page.direction = direction;
                 page.highPriorityEffect = null;
             });
 

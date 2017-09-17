@@ -5,6 +5,7 @@ import bind          from 'bind-decorator';
 import * as React    from 'react';
 import * as ReactDOM from 'react-dom';
 
+import History       from 'client/libs/history';
 import {pageNS}      from 'client/libs/page';
 
 interface ViewContainerProps
@@ -25,7 +26,8 @@ export default class ViewContainer extends React.Component<ViewContainerProps, {
     {
         const {props} = this;
         const {page, zIndex, backgroundColor} = props;
-        const {active, displayStatus, direction} = page;
+        const {active, displayStatus} = page;
+        const direction = History.direction;
         const effect = page.highPriorityEffect || page.effect || 'fade';
         let className = 'view-container';
 

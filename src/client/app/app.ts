@@ -4,7 +4,7 @@
 import bind                   from 'bind-decorator';
 
 import {BaseStore}            from 'client/components/views/base-store';
-import History, {Direction}   from 'client/libs/history';
+import History                from 'client/libs/history';
 import {pageNS}               from 'client/libs/page';
 import PageTransition, {
        PageTransitionOptions} from 'client/libs/page-transition';
@@ -77,7 +77,7 @@ export abstract class App
         return new Promise(async (resolve/* : (isSet : boolean) => void*/) =>
         {
             let result : SetUrlResult = 'nomatch';
-            let pathname = location.pathname;
+            const pathname = location.pathname;
 
             for (const childApp of this.childApps)
             {
@@ -86,7 +86,7 @@ export abstract class App
                 if (result2 !== 'nomatch')
                 {
                     result = result2;
-                    pathname = childApp.url;
+//                  pathname = childApp.url;
                 }
             }
 
@@ -173,13 +173,7 @@ export abstract class App
             if (History.referrerUrl !== url)
             {
                 const j = this.getChildAppIndex(url);
-                const direction : Direction = (i < j ? 'forward' : 'back');
-
-                for (const childApp of this.childApps)
-                {
-                    const {page} = childApp.store;
-                    page.direction = direction;
-                }
+                History.direction = (i < j ? 'forward' : 'back');
 
                 this.pageTransition.setNextApp(app);
                 result = 'transition';
