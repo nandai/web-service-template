@@ -32,6 +32,7 @@ class Main
 
         App.render = this.render;
         this.mainApp = new MainApp();
+        window['mainApp'] = this.mainApp;   // デバッグ用
 
         this.connectSocket();
         log.stepOut();

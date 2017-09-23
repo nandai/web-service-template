@@ -5,6 +5,7 @@ import * as React   from 'react';
 
 import {App}        from 'client/app/app';
 import NotFoundView from 'client/components/views/not-found-view';
+import {storeNS}    from 'client/components/views/not-found-view/store';
 import R            from 'client/libs/r';
 import {BaseStore}  from '../components/views/base-store';
 
@@ -22,7 +23,7 @@ export default class NotFoundApp extends App
     {
         super();
 
-        this.store = ssrStore;
+        this.store = storeNS.init(ssrStore);
         this.url = '404';
         this.query = query;
         this.title = R.text(R.NOT_FOUND, this.store.locale);

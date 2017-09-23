@@ -52,6 +52,8 @@ export default class MainApp extends App
         if (typeof window === 'object')
         {
             ssrStore = window['ssrStore'];
+            ssrStore.page.active = false;
+            ssrStore.page.displayStatus = 'hidden';
             History.setCallback(this.onHistory);
         }
 
@@ -150,13 +152,23 @@ export default class MainApp extends App
     /**
      * カレントApp設定
      */
-    private setCurrentApp(currentApp : App, deepestApp : App) : void
+    private setCurrentApp(apps : App[]) : void
     {
+        const currentApp = apps[0];
+        const deepestApp = apps[apps.length - 1];
+
         if (! this.pageTransition)
         {
             // 初回設定時
             this.pageTransition = new PageTransition(currentApp, this.pageTransitionOptions);
             currentApp.store.page.active = true;
+
+            apps.forEach((app) =>
+            {
+                const {page} = app.store;
+                page.active = true;
+                page.displayStatus = 'displayed';
+            });
         }
         else
         {
@@ -173,6 +185,9 @@ export default class MainApp extends App
      */
     getRoute(url : string, account? : Response.Account, hasQuery? : boolean)
     {
+        const log = slog.stepIn('MainApp', 'getRoute');
+        log.d(`url: ${url}`);
+
         account = account || this.account;
         if (hasQuery === undefined)
         {
@@ -186,13 +201,18 @@ export default class MainApp extends App
             }
         }
 
-        let rootApp    : App = null;
-        let deepestApp : App = null;
+        let routeApps : App[] = null;
         let params;
 
         for (const childApp of this.childApps)
         {
-            deepestApp = childApp.findApp(url) || childApp;
+            const apps = childApp.findApp(url);
+            if (apps === null) {
+                continue;
+            }
+            apps.forEach((app, i) => log.d(`apps[${i}].name: ${app.toString()}`));
+
+            const deepestApp = apps[apps.length - 1];
             params = Utils.getParamsFromUrl(url, deepestApp.url);
             const {auth, query} = deepestApp;
 
@@ -212,11 +232,12 @@ export default class MainApp extends App
                 continue;
             }
 
-            rootApp = childApp;
+            routeApps = apps;
             break;
         }
 
-        return {rootApp, deepestApp, params};
+        log.stepOut();
+        return {routeApps, params};
     }
 
     /**
@@ -231,13 +252,14 @@ export default class MainApp extends App
         return new Promise(async (resolve : () => void) =>
         {
             let routeResult = this.getRoute(url);
-            if (routeResult.rootApp === null) {
+            if (routeResult.routeApps === null) {
                 routeResult = this.getRoute('404');
             }
 
-            let rootApp =    routeResult.rootApp;
-            let deepestApp = routeResult.deepestApp;
-            const params =   routeResult.params;
+            let routeApps =  routeResult.routeApps;
+            const {params} = routeResult;
+            let rootApp =    routeApps[0];
+            let deepestApp = routeApps[routeApps.length - 1];
             const title = deepestApp.title;
 
             if (this.deepestApp !== deepestApp)
@@ -248,20 +270,21 @@ export default class MainApp extends App
                     try
                     {
                         await rootApp.init(params, message);
-                        this.setCurrentApp(rootApp, deepestApp);
+                        this.setCurrentApp(routeApps);
                     }
                     catch (err)
                     {
                         console.warn(err.message);
                         routeResult = this.getRoute('404');
-                        rootApp =    routeResult.rootApp;
-                        deepestApp = routeResult.deepestApp;
-                        this.setCurrentApp(rootApp, deepestApp);
+                        routeApps =  routeResult.routeApps;
+                        rootApp =    routeApps[0];
+                        deepestApp = routeApps[routeApps.length - 1];
+                        this.setCurrentApp(routeApps);
                     }
                 }
                 else
                 {
-                    this.setCurrentApp(rootApp, deepestApp);
+                    this.setCurrentApp(routeApps);
                 }
             }
 

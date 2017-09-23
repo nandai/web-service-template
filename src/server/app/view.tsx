@@ -46,11 +46,34 @@ function createApp(store : BaseStore, hasQuery : boolean) : App
 {
     const log = slog.stepIn('view.tsx', 'createApp');
     const routeResult = mainApp.getRoute(store.currentUrl, store.account, hasQuery);
-    const app = routeResult.rootApp.factory(store);
+    const {routeApps} = routeResult;
+    const app = routeApps[0].factory(store);
 
-    app.display();
+    setActive(app, routeApps);
+
     log.stepOut();
     return app;
+}
+
+/**
+ * ページをアクティブにする
+ */
+function setActive(app : App, routeApps : App[]) : void
+{
+    for (const routeApp of routeApps)
+    {
+        if (app.toString() === routeApp.toString())
+        {
+            const {page} = app.store;
+            page.active = true;
+            page.displayStatus = 'displayed';
+            break;
+        }
+    }
+
+    for (const childApp of app.childApps) {
+        setActive(childApp, routeApps);
+    }
 }
 
 /**
@@ -65,7 +88,8 @@ export function view(req : express.Request, store : BaseStore = {}, options : {u
     const app = createApp(store, Object.keys(req.query).length > 0);
     const js = 'wst.js';
     const contents = ReactDOM.renderToString(<Root app={app} />);
-    const deepestApp = app.findApp(store.currentUrl) || app;
+    const apps = app.findApp(store.currentUrl);
+    const deepestApp = apps[apps.length - 1];
     const title = deepestApp.title;
 
     // NOTE:<body ontouchstart="">はスマホでタッチした時に:activeを効かせるための設定

@@ -40,20 +40,6 @@ export abstract class App
     }
 
     /**
-     *
-     */
-    display() : void
-    {
-        const {page} = this.store;
-        page.active = true;
-        page.displayStatus = 'displayed';
-
-        for (const childApp of this.childApps) {
-            childApp.display();
-        }
-    }
-
-    /**
      * 子Appの初期化
      */
     protected initChildApps() : void
@@ -195,26 +181,30 @@ export abstract class App
     /**
      * URLが一致するAppを検索する
      */
-    findApp(url : string) : App
+    findApp(url : string) : App[]
     {
-        for (const childApp of this.childApps)
-        {
-            const params = Utils.getParamsFromUrl(url, childApp.url);
+        const log = slog.stepIn('App', 'findApp');
+        const params = Utils.getParamsFromUrl(url, this.url);
 
-            if (params) {
-                return childApp;
-            }
+        if (params)
+        {
+            log.stepOut();
+            return [this];
         }
 
         for (const childApp of this.childApps)
         {
-            const grandsonApp = childApp.findApp(url);
+            const apps = childApp.findApp(url);
 
-            if (grandsonApp) {
-                return grandsonApp;
+            if (apps)
+            {
+                apps.unshift(this);
+                log.stepOut();
+                return apps;
             }
         }
 
+        log.stepOut();
         return null;
     }
 
@@ -244,6 +234,29 @@ export abstract class App
     {
         if (this.pageTransition.changeDisplayStatus(page)) {
             App.render();
+        }
+    }
+
+    /**
+     * 【デバッグ用】
+     * 全ページのステータスを出力する
+     */
+    debugOutputAllPageStatus(space = '') : void
+    {
+        const name = this.toString();
+
+        if (this.store)
+        {
+            const {page} = this.store;
+            console.log(`${space}[${name}] active:${page.active} displayStatus:${page.displayStatus}`);
+        }
+        else
+        {
+            console.log(`${space}[${name}]`);
+        }
+
+        for (const childApp of this.childApps) {
+            childApp.debugOutputAllPageStatus(space + '  ');
         }
     }
 }

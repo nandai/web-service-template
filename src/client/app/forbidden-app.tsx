@@ -5,6 +5,7 @@ import * as React    from 'react';
 
 import {App}         from 'client/app/app';
 import ForbiddenView from 'client/components/views/forbidden-view';
+import {storeNS}     from 'client/components/views/forbidden-view/store';
 import R             from 'client/libs/r';
 import {BaseStore}   from '../components/views/base-store';
 
@@ -22,7 +23,7 @@ export default class ForbiddenApp extends App
     {
         super();
 
-        this.store = ssrStore;
+        this.store = storeNS.init(ssrStore);
         this.url = '403';
         this.title = R.text(R.FORBIDDEN, this.store.locale);
     }
