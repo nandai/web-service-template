@@ -65,8 +65,7 @@ function setActive(app : App, routeApps : App[]) : void
         if (app.toString() === routeApp.toString())
         {
             const {page} = app.store;
-            page.active = true;
-            page.displayStatus = 'displayed';
+            pageNS.forceDisplayed(page);
             break;
         }
     }

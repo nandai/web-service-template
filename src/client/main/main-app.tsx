@@ -26,6 +26,7 @@ import Button                        from 'client/components/common/button';
 import Root                          from 'client/components/root';
 import {BaseStore}                   from 'client/components/views/base-store';
 import History                       from 'client/libs/history';
+import {pageNS}                      from 'client/libs/page';
 import PageTransition, {
        PageTransitionSetting}        from 'client/libs/page-transition';
 import Utils                         from 'client/libs/utils';
@@ -161,14 +162,7 @@ export default class MainApp extends App
         {
             // 初回設定時
             this.pageTransition = new PageTransition(currentApp, this.pageTransitionOptions);
-            currentApp.store.page.active = true;
-
-            apps.forEach((app) =>
-            {
-                const {page} = app.store;
-                page.active = true;
-                page.displayStatus = 'displayed';
-            });
+            apps.forEach((app) => pageNS.forceDisplayed(app.store.page));
         }
         else
         {
@@ -309,19 +303,8 @@ export default class MainApp extends App
                 page.highPriorityEffect = null;
             });
 
-            const prevApp = this.currentApp;
             await this.updateCurrentApp(location.pathname, true, message);
             this.render();
-
-            if (prevApp !== this.currentApp)
-            {
-                const {pageTransition} = this;
-                setTimeout(() =>
-                {
-                    pageTransition.setActiveNextApp();
-                    this.render();
-                }, pageTransition.getEffectDelay());
-            }
 
             log.stepOut();
             resolve();

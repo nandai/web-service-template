@@ -32,7 +32,7 @@ export namespace pageNS
     /**
      * 次の状態へ
      */
-    export function next(page : Page, render : () => void) : void
+    export function next(page : Page, render : () => void, effectDelay = 0) : void
     {
         if (page.displayStatus === 'hidden')
         {
@@ -44,7 +44,7 @@ export namespace pageNS
                 page.active = true;
                 page.displayStatus = 'showing';
                 render();
-            });
+            }, effectDelay);
         }
 
         else if (page.displayStatus === 'showing')
@@ -65,5 +65,11 @@ export namespace pageNS
             }
             render();
         }
+    }
+
+    export function forceDisplayed(page : Page) : void
+    {
+        page.active = true;
+        page.displayStatus = 'displayed';
     }
 }

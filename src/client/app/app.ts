@@ -163,12 +163,6 @@ export abstract class App
 
                 this.pageTransition.setNextApp(app);
                 result = 'transition';
-
-                setTimeout(() =>
-                {
-                    this.pageTransition.setActiveNextApp();
-                    App.render();
-                }, this.pageTransition.getEffectDelay());
             }
         }
 

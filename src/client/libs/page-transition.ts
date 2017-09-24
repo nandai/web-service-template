@@ -50,8 +50,6 @@ export default class PageTransition
             // 次のページをアクティブにする準備（この時点では非アクティブ）
             this.apps = this.addOrReplaceApp(nextApp);
             this.nextApp = nextApp;
-            this.nextApp.store.page.active = false;
-            this.nextApp.store.page.displayStatus = 'preparation';
             this.currentSetting = null;
 
             // 優先する遷移エフェクトがあればそれを設定する
@@ -76,6 +74,8 @@ export default class PageTransition
                     break;
                 }
             }
+
+            pageNS.next(this.nextApp.store.page, App.render, this.getEffectDelay());
         }
     }
 
