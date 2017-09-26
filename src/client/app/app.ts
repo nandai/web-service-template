@@ -44,11 +44,25 @@ export abstract class App
      */
     protected initChildApps() : void
     {
+        const log = slog.stepIn('App', 'initChildApps');
+
         for (const childApp of this.childApps)
         {
             const {page} = childApp.store;
             page.onPageTransitionEnd = this.onPageTransitionEnd;
         }
+
+        if (this.store)
+        {
+            const index = this.getChildAppIndex(this.store.currentUrl);
+            if (index !== -1)
+            {
+                const app = this.childApps[index];
+                this.pageTransition = new PageTransition(app, this.pageTransitionOptions);
+            }
+        }
+
+        log.stepOut();
     }
 
     /**
@@ -114,7 +128,7 @@ export abstract class App
     /**
      *
      */
-    protected setUrl(url : string) : SetUrlResult
+    private setUrl(url : string) : SetUrlResult
     {
         const log = slog.stepIn('App', 'setUrl');
         const {store} = this;
@@ -143,7 +157,7 @@ export abstract class App
         if (! this.pageTransition)
         {
             // 初回設定時
-            app.store.page.active = true;
+            pageNS.forceDisplayed(app.store.page);
             this.pageTransition = new PageTransition(app, this.pageTransitionOptions);
         }
         else

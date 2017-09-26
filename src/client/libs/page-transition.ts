@@ -172,7 +172,8 @@ export default class PageTransition
     {
         const log = slog.stepIn('PageTransition', 'getPage');
         const {currentSetting} = this;
-        const result = {
+        const result =
+        {
             elements: this.apps.map((app, i) => app.view(i)),
             bgTheme:  (currentSetting ? currentSetting.bgTheme : null)
         };
