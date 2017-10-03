@@ -109,7 +109,7 @@ export default class MainApp extends App
             setTimeout(() => Button.noReaction = false, 100);
         }
 
-        ReactDOM.render(
+        ReactDOM.hydrate(
             <Root pageTransition={pageTransition} />,
             document.getElementById('root'));
     }

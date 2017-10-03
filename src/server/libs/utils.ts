@@ -250,13 +250,22 @@ export default class Utils
             const smtpOptions : smtp.SmtpOptions =
             {
                 host: Config.SMTP_HOST,
-                port: Config.SMTP_PORT,
-                auth:
+                port: Config.SMTP_PORT
+            };
+
+            if (Config.SMTP_USER && Config.SMTP_PASSWORD)
+            {
+                smtpOptions.auth =
                 {
                     user: Config.SMTP_USER,
                     pass: Config.SMTP_PASSWORD
-                }
-            };
+                };
+            }
+            else
+            {
+                smtpOptions.tls = {rejectUnauthorized:false};
+            }
+
             const transport = smtp(smtpOptions);
             const transporter = mailer.createTransport(transport);
             const mailOptions : mailer.SendMailOptions =

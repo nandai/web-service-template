@@ -178,6 +178,10 @@ export abstract class App
                 this.pageTransition.setNextApp(app);
                 result = 'transition';
             }
+            else
+            {
+                pageNS.forceDisplayed(this.childApps[i].store.page);
+            }
         }
 
         store.currentUrl = url;
