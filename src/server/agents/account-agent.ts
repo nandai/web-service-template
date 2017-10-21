@@ -456,31 +456,32 @@ export default class AccountAgent
             return null;
         }
 
+        const niu = Utils.nullIfUndefined;
         const model : Account =
         {
-            id:                     data.id                     || null,
-            name:                   data.name                   || null,
-            user_name:              data.user_name              || null,
-            twitter:                data.twitter                || null,
-            facebook:               data.facebook               || null,
-            google:                 data.google                 || null,
-            github:                 data.github                 || null,
-            email:                  data.email                  || null,
-            password:               data.password               || null,
-            country_code:           data.country_code           || null,
-            phone_no:               data.phone_no               || null,
-            international_phone_no: data.international_phone_no || null,
-            authy_id:               data.authy_id               || null,
-            two_factor_auth:        data.two_factor_auth        || null,
-            signup_id:              data.signup_id              || null,
-            invite_id:              data.invite_id              || null,
-            reset_id:               data.reset_id               || null,
-            change_id:              data.change_id              || null,
-            change_email:           data.change_email           || null,
-            crypto_type:            data.crypto_type            || null,
-            created_at:             data.created_at             || null,
-            updated_at:             data.updated_at             || null,
-            deleted_at:             data.deleted_at             || null
+            id:                     niu(data.id),
+            name:                   niu(data.name),
+            user_name:              niu(data.user_name),
+            twitter:                niu(data.twitter),
+            facebook:               niu(data.facebook),
+            google:                 niu(data.google),
+            github:                 niu(data.github),
+            email:                  niu(data.email),
+            password:               niu(data.password),
+            country_code:           niu(data.country_code),
+            phone_no:               niu(data.phone_no),
+            international_phone_no: niu(data.international_phone_no),
+            authy_id:               niu(data.authy_id),
+            two_factor_auth:        niu(data.two_factor_auth),
+            signup_id:              niu(data.signup_id),
+            invite_id:              niu(data.invite_id),
+            reset_id:               niu(data.reset_id),
+            change_id:              niu(data.change_id),
+            change_email:           niu(data.change_email),
+            crypto_type:            niu(data.crypto_type),
+            created_at:             niu(data.created_at),
+            updated_at:             niu(data.updated_at),
+            deleted_at:             niu(data.deleted_at)
         };
         return model;
     }

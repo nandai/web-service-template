@@ -377,4 +377,12 @@ export default class Utils
             });
         });
     }
+
+    /**
+     * valueがundefinedならnullを返す
+     */
+    static nullIfUndefined(value) : any
+    {
+        return (value !== undefined ? value : null);
+    }
 }

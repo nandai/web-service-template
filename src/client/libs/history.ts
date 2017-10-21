@@ -20,7 +20,7 @@ export default class History
     private static isBack = false;
     static referrerUrl = '';
     static currentUrl = (typeof location !== 'undefined' ? location.pathname : '');
-    static direction : Direction;
+    static direction : Direction = 'forward';
 
     /**
      * コールバック設定

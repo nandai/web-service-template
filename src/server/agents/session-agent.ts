@@ -141,17 +141,18 @@ export default class SessionAgent
             return null;
         }
 
+        const niu = Utils.nullIfUndefined;
         const model : Session =
         {
-            id:         data.id         || null,
-            account_id: data.account_id || null,
-            command_id: data.command_id || null,
-            message_id: data.message_id || null,
-            sms_id:     data.sms_id     || null,
-            sms_code:   data.sms_code   || null,
-            authy_uuid: data.authy_uuid || null,
-            created_at: data.created_at || null,
-            updated_at: data.updated_at || null
+            id:         niu(data.id),
+            account_id: niu(data.account_id),
+            command_id: niu(data.command_id),
+            message_id: niu(data.message_id),
+            sms_id:     niu(data.sms_id),
+            sms_code:   niu(data.sms_code),
+            authy_uuid: niu(data.authy_uuid),
+            created_at: niu(data.created_at),
+            updated_at: niu(data.updated_at)
         };
         return model;
     }

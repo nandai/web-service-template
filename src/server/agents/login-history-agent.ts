@@ -91,12 +91,13 @@ export default class LoginHistoryAgent
             return null;
         }
 
+        const niu = Utils.nullIfUndefined;
         const model : LoginHistory =
         {
-            id:         data.id         || null,
-            account_id: data.account_id || null,
-            device:     data.device     || null,
-            login_at:   data.login_at   || null
+            id:         niu(data.id),
+            account_id: niu(data.account_id),
+            device:     niu(data.device),
+            login_at:   niu(data.login_at)
         };
         return model;
     }

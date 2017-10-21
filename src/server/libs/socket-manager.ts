@@ -247,18 +247,7 @@ export default class SocketManager
         const room = accountRoom(accountId);
         const ns = SocketManager.io.to(room);
 
-        if (room in ns.adapter.rooms)
-        {
-            log.d(`送信数: ${ns.adapter.rooms[room].length}`);
-//          ns.emit('notifyUpdateAccount', account);
-        }
-        else
-        {
-            log.d(`${room} は存在しません。`);
-        }
-
-        ns.emit('notifyUpdateAccount', account);    // roomが存在しなくてもnsを取得した以上はemit()しないと
-                                                    // なぜかその後の送信がされなくなってしまう
+        ns.emit('notifyUpdateAccount', account);
         log.stepOut();
     }
 
@@ -298,7 +287,7 @@ export default class SocketManager
             if (cond.accountId) {room = accountRoom(cond.accountId);}
 
             let ns = SocketManager.io.to(room);
-            log.d(`送信数: ${ns.adapter.rooms[room].length}`);
+//          log.d(`送信数: ${ns.adapter.rooms[room].length}`);
             ns.emit('notifyLogout');
 
             ns = SocketManager.io.to(room);             // emit後のnsを続けて使うとns.clients()のコールバックで
