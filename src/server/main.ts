@@ -45,8 +45,10 @@ import compression =      require('compression');
 import cookieParser =     require('cookie-parser');
 import express =          require('express');
 import expressDomain =    require('express-domain-middleware');
+import graphqlHTTP =      require('express-graphql');
 import session =          require('express-session');
 import fs =               require('fs');
+import graphql =          require('graphql');
 import helmet =           require('helmet');
 import https =            require('https');
 import log4js =           require('log4js');
@@ -55,6 +57,23 @@ import passportFacebook = require('passport-facebook');
 import passportGithub =   require('passport-github');
 import passportGoogle =   require('passport-google-oauth');
 import passportTwitter =  require('passport-twitter');
+
+const schema = graphql.buildSchema(`
+type User {
+    id:          Int
+    accountName: String
+    name:        String
+}
+
+type Query {
+  user(id: Int, name: String): User
+}
+`);
+
+class GraphqlRoot
+{
+    static user = UserApi.onGetUserForGraphQL;
+}
 
 /**
  * イニシャライザ
@@ -301,6 +320,12 @@ class Initializer
         this.app.get('/auth/facebook/callback', Facebook.customCallback, Facebook.callback);
         this.app.get('/auth/google/callback',   Google  .customCallback, Google  .callback);
         this.app.get('/auth/github/callback',   Github  .customCallback, Github  .callback);
+
+        this.app.use('/graphql', graphqlHTTP({
+            schema,
+            rootValue: GraphqlRoot,
+            graphiql: true,
+          }));
 
         this.app.use(Access.notFound);
     }

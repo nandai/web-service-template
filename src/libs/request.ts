@@ -34,7 +34,8 @@ export namespace Request
 
     export interface GetUser
     {
-        id : string;
+        id?   : number | string;
+        name? : string;
     }
 
     export interface Github

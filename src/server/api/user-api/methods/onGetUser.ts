@@ -1,10 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {Request}    from 'libs/request';
-import {slog}       from 'libs/slog';
-import Utils        from 'server/libs/utils';
-import {getUser}    from './getUser';
+import {Request}  from 'libs/request';
+import {Response} from 'libs/response';
+import {slog}     from 'libs/slog';
+import Utils      from 'server/libs/utils';
+import {getUser}  from './getUser';
 
 import express = require('express');
 
@@ -39,4 +40,24 @@ export async function onGetUser(req : express.Request, res : express.Response)
         log.stepOut();
     }
     catch (err) {Utils.internalServerError(err, res, log);}
+}
+
+/**
+ * GraphQLバージョン
+ */
+export function onGetUserForGraphQL(param : Request.GetUser)
+{
+    const log = slog.stepIn('UserApi', 'onGetUserForGraphQL');
+    return new Promise(async (resolve : (user : Response.User) => void, reject) =>
+    {
+        try
+        {
+            param.id = param.id || param.name;
+            const data = await getUser(param, null);
+
+            log.stepOut();
+            resolve(data.user);
+        }
+        catch (err) {log.stepOut(); reject(err);}
+    });
 }

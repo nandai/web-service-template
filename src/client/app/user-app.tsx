@@ -61,9 +61,11 @@ export default class UserApp extends App
                 const {store} = this;
                 if (store.online)
                 {
-                    const res : Response.GetUser = await UserApi.getUser({id:params.id});
+//                  const res : Response.GetUser = await UserApi.getUser(          {id:params.id});
+                    const res : Response.GetUser = await UserApi.getUserForGraphQL({id:params.id});
 
-                    if (res.status !== Response.Status.OK || res.user === null)
+                    // if (res.status !== Response.Status.OK || res.user === null)
+                    if (res.user === null)
                     {
                         reject(new Error('user not found.'));
                     }

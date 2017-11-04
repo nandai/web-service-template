@@ -8,7 +8,8 @@
         "noUnusedLocals": true,
         "baseUrl": "./src",
         "sourceMap": false,
-        "removeComments": false
+        "removeComments": false,
+        "lib": ["es6", "dom", "esnext"]
     },
     "exclude": [
         "node_modules"

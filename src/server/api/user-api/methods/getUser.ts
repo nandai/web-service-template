@@ -27,7 +27,7 @@ export function getUser(param : Request.GetUser, _req : express.Request)
             if (id)
             {
                 if (isNaN(Number(id))) {
-                    account = await AccountAgent.findByUserName(id);
+                    account = await AccountAgent.findByUserName(id as string);
                 } else {
                     account = await AccountAgent.find(Number(id));
                 }

@@ -26,6 +26,32 @@ export default class UserApi extends Api
         });
     }
 
+    static getUserForGraphQL(param : Request.GetUser)
+    {
+        return new Promise(async (resolve : (res : Response.GetUser) => void, reject) =>
+        {
+            const log = slog.stepIn(UserApi.CLS_NAME_2, 'getUserForGraphQL');
+            const url = `/graphql`;
+            let args : string;
+
+            if (isNaN(Number(param.id))) {
+                args = `name:"${param.id}"`;
+            } else {
+                args = `id:${param.id}`;
+            }
+
+            const obj = {query: `query {user(${args}) {id, accountName, name}}`};
+            const result = await Api.sendPostRequest(url, obj);
+
+            if ('data' in result.data) {
+                result.data = result.data.data;
+            }
+
+            log.stepOut();
+            Api.result(result.ok, result.data, resolve, reject);
+        });
+    }
+
     /**
      * ユーザー一覧取得
      */
