@@ -30,6 +30,7 @@ import MySQL                         from './database/mysql';
 import Access                        from './libs/access';
 import Authy                         from './libs/authy';
 import {expressExtension}            from './libs/express-extension';
+import GraphqlRoot, {schema}         from './libs/graphql-root';
 import R                             from './libs/r';
 import {SessionStore}                from './libs/session-store';
 import SocketManager                 from './libs/socket-manager';
@@ -48,7 +49,6 @@ import expressDomain =    require('express-domain-middleware');
 import graphqlHTTP =      require('express-graphql');
 import session =          require('express-session');
 import fs =               require('fs');
-import graphql =          require('graphql');
 import helmet =           require('helmet');
 import https =            require('https');
 import log4js =           require('log4js');
@@ -57,23 +57,6 @@ import passportFacebook = require('passport-facebook');
 import passportGithub =   require('passport-github');
 import passportGoogle =   require('passport-google-oauth');
 import passportTwitter =  require('passport-twitter');
-
-const schema = graphql.buildSchema(`
-type User {
-    id:          Int
-    accountName: String
-    name:        String
-}
-
-type Query {
-  user(id: Int, name: String): User
-}
-`);
-
-class GraphqlRoot
-{
-    static user = UserApi.onGetUserForGraphQL;
-}
 
 /**
  * イニシャライザ

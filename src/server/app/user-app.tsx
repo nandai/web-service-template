@@ -30,7 +30,8 @@ export default class UserApp
 
         try
         {
-            const data = await UserApi.getUser({id}, req);
+//          const data = await UserApi.getUser(          {id}, req);
+            const data = await UserApi.getUserForGraphQL({id});
             const {user} = data;
 
             if (user)
