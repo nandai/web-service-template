@@ -67,4 +67,23 @@ export default class UserApi extends Api
             Api.result(ok, data, resolve, reject);
         });
     }
+
+    static getUserListForGraphQL()
+    {
+        return new Promise(async (resolve : (res : Response.GetUserList) => void, reject) =>
+        {
+            const log = slog.stepIn(UserApi.CLS_NAME_2, 'getUserListForGraphQL');
+            const url = `/graphql`;
+
+            const obj = {query: `query {userList {id, accountName, name}}`};
+            const result = await Api.sendPostRequest(url, obj);
+
+            if ('data' in result.data) {
+                result.data = result.data.data;
+            }
+
+            log.stepOut();
+            Api.result(result.ok, result.data, resolve, reject);
+        });
+    }
 }

@@ -65,7 +65,8 @@ export default class UsersApp extends App
                 const {store} = this;
                 if (store.online)
                 {
-                    const res : Response.GetUserList = await UserApi.getUserList();
+//                  const res : Response.GetUserList = await UserApi.getUserList();
+                    const res : Response.GetUserList = await UserApi.getUserListForGraphQL();
                     store.userList = res.userList;
                 }
                 resolve();

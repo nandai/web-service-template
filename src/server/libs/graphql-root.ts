@@ -1,11 +1,11 @@
 /**
  * (C) 2016-2017 printf.jp
  */
-import {buildSchema}         from 'graphql';
+import {buildSchema}             from 'graphql';
 
-import {onGetUserForGraphQL} from 'server/api/user-api/methods/onGetUser';
-import {Message,
-        RandomDice}          from './graphql-experiments';
+import {onGetUserForGraphQL}     from 'server/api/user-api/methods/onGetUser';
+import {onGetUserListForGraphQL} from 'server/api/user-api/methods/onGetUserList';
+import {Message, RandomDice}     from './graphql-experiments';
 
 export const schema = buildSchema(`
 type User {
@@ -22,6 +22,7 @@ type RandomDice {
 
 type Query {
     user(id: Int, name: String): User
+    userList: [User]
     getDice(numSides: Int): RandomDice
 }
 `);
@@ -38,7 +39,8 @@ type Mutation {
 
 export class GraphqlRoot
 {
-    static user = onGetUserForGraphQL;
+    static user =     onGetUserForGraphQL;
+    static userList = onGetUserListForGraphQL;
 
     // 以下実験用
     static getDice = ({numSides}) => new RandomDice(numSides);

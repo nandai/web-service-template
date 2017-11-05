@@ -29,7 +29,8 @@ export default class UsersApp
         try
         {
             const data1 = await SettingsApi.getAccount(req);
-            const data2 = await UserApi.getUserList();
+//          const data2 = await UserApi.getUserList();
+            const data2 = await UserApi.getUserListForGraphQL();
             const {account} =  data1;
             const {userList} = data2;
             const store : storeNS.Store = {account, userList};
