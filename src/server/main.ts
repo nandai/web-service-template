@@ -30,7 +30,10 @@ import MySQL                         from './database/mysql';
 import Access                        from './libs/access';
 import Authy                         from './libs/authy';
 import {expressExtension}            from './libs/express-extension';
-import GraphqlRoot, {schema}         from './libs/graphql-root';
+import {authSchema,
+        GraphqlAuthRoot,
+        GraphqlRoot,
+        schema}         from './libs/graphql-root';
 import R                             from './libs/r';
 import {SessionStore}                from './libs/session-store';
 import SocketManager                 from './libs/socket-manager';
@@ -307,8 +310,15 @@ class Initializer
         this.app.use('/graphql', graphqlHTTP({
             schema,
             rootValue: GraphqlRoot,
-            graphiql: true,
-          }));
+            graphiql: (process.env.NODE_ENV === 'development'),
+        }));
+
+        this.app.use('/graphql-auth', Access.auth);
+        this.app.use('/graphql-auth', graphqlHTTP({
+            schema: authSchema,
+            rootValue: GraphqlAuthRoot,
+            graphiql: (process.env.NODE_ENV === 'development'),
+        }));
 
         this.app.use(Access.notFound);
     }

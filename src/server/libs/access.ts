@@ -219,10 +219,22 @@ export default class Access
         try
         {
             const session : Session = req.ext.session;
-            if (session.account_id === null || session.sms_id)
+            const graphqlPath = '/';    // main.tsでthis.app.use('/graphql-auth', Access.auth);としているので
+                                        // /graphql-authへのアクセスによってここへ来た場合req.pathは'/'になる
+            let pass = false;
+
+            if (req.method === 'GET' && req.path === graphqlPath) {
+                pass = true;
+            }
+
+            if (session.account_id !== null && session.sms_id === null) {
+                pass = true;
+            }
+
+            if (pass === false)
             {
                 // 未認証
-                if (req.path.startsWith('/api/'))
+                if (req.path.startsWith('/api/') || req.path === graphqlPath)
                 {
                     const locale = req.ext.locale;
                     res.ext.error(Response.Status.FAILED, R.text(R.NO_LOGIN, locale));
