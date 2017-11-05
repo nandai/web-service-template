@@ -33,7 +33,7 @@ import {expressExtension}            from './libs/express-extension';
 import {authSchema,
         GraphqlAuthRoot,
         GraphqlRoot,
-        schema}         from './libs/graphql-root';
+        schema}                      from './libs/graphql-root';
 import R                             from './libs/r';
 import {SessionStore}                from './libs/session-store';
 import SocketManager                 from './libs/socket-manager';

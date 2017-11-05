@@ -11,7 +11,7 @@ import mysql = require('mysql');
  */
 export default class Database
 {
-    private static pool : mysql.IPool;
+    private static pool : mysql.Pool;
 
     /**
      * 初期化
@@ -25,7 +25,7 @@ export default class Database
             {
                 if (Config.hasMySQL())
                 {
-                    const config : mysql.IPoolConfig =
+                    const config : mysql.PoolConfig =
                     {
                         host:     Config.DB_HOST,
                         user:     Config.DB_USER,
@@ -63,7 +63,7 @@ export default class Database
     {
         return new Promise((resolve : (conn : Connection) => void, reject : (err : Error) => void) =>
         {
-            Database.pool.getConnection((err: mysql.IError, connection: mysql.IConnection) =>
+            Database.pool.getConnection((err: mysql.MysqlError, connection: mysql.Connection) =>
             {
                 if (err)
                 {
@@ -108,12 +108,12 @@ export default class Database
  */
 class Connection
 {
-    private connection : mysql.IConnection;
+    private connection : mysql.Connection;
 
     /**
      * @constructor
      */
-    constructor(connection : mysql.IConnection)
+    constructor(connection : mysql.Connection)
     {
         this.connection = connection;
     }
@@ -126,7 +126,7 @@ class Connection
         return new Promise((resolve : (results) => void, reject : (err : Error) => void) =>
         {
             const log = slog.stepIn('Connection', 'query');
-            const query = this.connection.query(sql, values, (err: mysql.IError, results) =>
+            const query = this.connection.query(sql, values, (err: mysql.MysqlError, results) =>
             {
                 if (err)
                 {
@@ -152,7 +152,7 @@ class Connection
      */
     release() : void
     {
-        this.connection.release();
+        this.connection.destroy();
         this.connection = null;
     }
 }
