@@ -6,9 +6,9 @@ import Config   from 'server/config';
 import Utils    from 'server/libs/utils';
 import Provider from './provider';
 
-import express =        require('express');
-import google =         require('googleapis');
-import passportGoogle = require('passport-google-oauth');
+import * as express        from 'express';
+import {google}            from 'googleapis';
+import * as passportGoogle from 'passport-google-oauth';
 
 const plus = google.plus('v1');
 

@@ -103,7 +103,7 @@ export default class Provider
         {
             try
             {
-                const user : PassportUser = req.user;
+                const user = <PassportUser>req.user;
 
                 self.id = null;
                 await self.inquiry(user.accessToken, user.refreshToken);

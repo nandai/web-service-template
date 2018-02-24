@@ -17,9 +17,9 @@ export default class Header extends React.Component<HeaderProps, {}>
     /**
      * @constructor
      */
-    constructor()
+    constructor(props : HeaderProps)
     {
-        super();
+        super(props);
         this.onClick = this.onClick;
     }
 

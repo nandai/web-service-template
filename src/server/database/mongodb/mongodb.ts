@@ -27,7 +27,7 @@ export default class Database
                 if (Config.hasMongoDB())
                 {
                     const url = Config.MONGO_URL;
-                    Database.db = await mongodb.MongoClient.connect(url);
+                    Database.db = await mongodb.connect(url);
                 }
 
                 log.stepOut();
