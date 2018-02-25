@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}   from 'libs/slog';
 import Config   from 'server/config';
@@ -45,7 +45,7 @@ export default class Github extends Provider
     }
 
     /**
-     * Twitterからのコールバック用
+     * GitHubからのコールバック用
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -68,7 +68,7 @@ export default class Github extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, _refreshToken : string)
+    protected inquiry(accessToken : string, _refreshToken : string) : Promise<void>
     {
         const log = slog.stepIn(Github.CLS_NAME_2, 'inquiry');
         const self = this;

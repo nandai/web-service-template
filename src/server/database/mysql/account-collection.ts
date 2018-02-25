@@ -1,11 +1,11 @@
 /**
- * (C) 2016-2017 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}    from 'libs/slog';
 import {Account} from 'server/models/account';
 import DB        from '.';
 
-import _ = require('lodash');
+import * as _ from 'lodash';
 
 /**
  * アカウントコレクション
@@ -19,25 +19,18 @@ export default class AccountCollection
      *
      * @param   model   アカウント
      */
-    static add(model : Account)
+    static async add(model : Account) : Promise<Account>
     {
         const log = slog.stepIn(AccountCollection.CLS_NAME, 'add');
-        return new Promise(async (resolve : (model : Account) => void, reject) =>
-        {
-            try
-            {
-                const sql = 'INSERT INTO account SET ?';
-                const values = model;
-                const results = await DB.query(sql, values);
+        const sql = 'INSERT INTO account SET ?';
+        const values = model;
+        const results = await DB.query(sql, values);
 
-                const newModel = _.clone(model);
-                newModel.id = results.insertId;
+        const newModel = _.clone(model);
+        newModel.id = results.insertId;
 
-                log.stepOut();
-                resolve(newModel);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        log.stepOut();
+        return newModel;
     }
 
     /**
@@ -47,22 +40,13 @@ export default class AccountCollection
      *
      * @return  なし
      */
-    static update(model : Account)
+    static async update(model : Account) : Promise<void>
     {
         const log = slog.stepIn(AccountCollection.CLS_NAME, 'update');
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            try
-            {
-                const sql = 'UPDATE account SET ? WHERE id=?';
-                const values = [model, model.id];
-                await DB.query(sql, values);
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const sql = 'UPDATE account SET ? WHERE id=?';
+        const values = [model, model.id];
+        await DB.query(sql, values);
+        log.stepOut();
     }
 
     /**
@@ -72,22 +56,13 @@ export default class AccountCollection
      *
      * @return  なし
      */
-    static remove(accountId : number)
+    static async remove(accountId : number) : Promise<void>
     {
         const log = slog.stepIn(AccountCollection.CLS_NAME, 'remove');
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            try
-            {
-                const sql = 'DELETE FROM account WHERE id=?';
-                const values = accountId;
-                await DB.query(sql, values);
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const sql = 'DELETE FROM account WHERE id=?';
+        const values = accountId;
+        await DB.query(sql, values);
+        log.stepOut();
     }
 
     /**
@@ -98,22 +73,14 @@ export default class AccountCollection
      *
      * @return  Account。該当するアカウントを返す
      */
-    static findByCondition(fieldName : string, value)
+    static async findByCondition(fieldName : string, value) : Promise<any>
     {
         const log = slog.stepIn(AccountCollection.CLS_NAME, 'findByCondition');
-        return new Promise(async (resolve : (results) => void, reject) =>
-        {
-            try
-            {
-                const sql = 'SELECT * FROM account WHERE ??=?';
-                const values = [fieldName, value];
-                const results = await DB.query(sql, values);
-
-                log.stepOut();
-                resolve(results);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const sql = 'SELECT * FROM account WHERE ??=?';
+        const values = [fieldName, value];
+        const results = await DB.query(sql, values);
+        log.stepOut();
+        return results;
     }
 
     /**
@@ -124,30 +91,22 @@ export default class AccountCollection
      *
      * @return  Authy ID
      */
-    static findAuthyId(internationalPhoneNo : string, excludeAccountId? : number)
+    static async findAuthyId(internationalPhoneNo : string, excludeAccountId? : number) : Promise<number>
     {
         const log = slog.stepIn(AccountCollection.CLS_NAME, 'findAuthyId');
-        return new Promise(async (resolve : (authyId : number) => void, reject) =>
+        let sql = 'SELECT authy_id FROM account WHERE international_phone_no=?';
+        const values : any[] = [internationalPhoneNo];
+
+        if (excludeAccountId)
         {
-            try
-            {
-                let sql = 'SELECT authy_id FROM account WHERE international_phone_no=?';
-                const values : any[] = [internationalPhoneNo];
+            sql += ' AND id<>?';
+            values.push(excludeAccountId);
+        }
 
-                if (excludeAccountId)
-                {
-                    sql += ' AND id<>?';
-                    values.push(excludeAccountId);
-                }
-
-                const results = await DB.query(sql, values);
-                const authyId = (results.length === 1 ? results[0].authy_id : null);
-
-                log.stepOut();
-                resolve(authyId);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const results = await DB.query(sql, values);
+        const authyId = (results.length === 1 ? results[0].authy_id : null);
+        log.stepOut();
+        return authyId;
     }
 
     /**
@@ -155,33 +114,25 @@ export default class AccountCollection
      *
      * @return  Account[]。該当するアカウントの一覧を返す
      */
-    static findList(cond : AccountFindListCondition = {})
+    static async findList(cond : AccountFindListCondition = {}) : Promise<any>
     {
         const log = slog.stepIn(AccountCollection.CLS_NAME, 'findList');
-        return new Promise(async (resolve : (results) => void, reject) =>
+        let sql : string;
+        let values;
+
+        if (cond.registered) {
+            sql = 'SELECT * FROM account WHERE signup_id IS NULL AND invite_id IS NULL';
+        }
+
+        if (cond.internationalPhoneNo)
         {
-            try
-            {
-                let sql : string;
-                let values;
+            sql = 'SELECT * FROM account WHERE international_phone_no=?';
+            values = cond.internationalPhoneNo;
+        }
 
-                if (cond.registered) {
-                    sql = 'SELECT * FROM account WHERE signup_id IS NULL AND invite_id IS NULL';
-                }
-
-                if (cond.internationalPhoneNo)
-                {
-                    sql = 'SELECT * FROM account WHERE international_phone_no=?';
-                    values = cond.internationalPhoneNo;
-                }
-
-                const results = await DB.query(sql, values);
-
-                log.stepOut();
-                resolve(results);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const results = await DB.query(sql, values);
+        log.stepOut();
+        return results;
     }
 }
 

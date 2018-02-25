@@ -1,11 +1,11 @@
 /**
- * (C) 2016-2017 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog} from 'libs/slog';
 import Config from 'server/config';
 
-import mongodb =       require('mongodb');
-import autoIncrement = require("mongodb-autoincrement");
+import * as mongodb from 'mongodb';
+import * as autoIncrement from 'mongodb-autoincrement';
 
 /**
  * データベース
@@ -17,33 +17,29 @@ export default class Database
     /**
      * 初期化
      */
-    static init()
+    static async init() : Promise<void>
     {
-        return new Promise(async (resolve : () => void) =>
+        const log = slog.stepIn('MongoDB', 'init');
+        try
         {
-            const log = slog.stepIn('MongoDB', 'init');
-            try
+            if (Config.hasMongoDB())
             {
-                if (Config.hasMongoDB())
-                {
-                    const url = Config.MONGO_URL;
-                    Database.db = await mongodb.connect(url);
-                }
-
-                log.stepOut();
-                resolve();
+                const url = Config.MONGO_URL;
+                Database.db = await mongodb.connect(url);
             }
-            catch (err)
-            {
-                console.error('MongoDBの初期化に失敗しました。');
-                console.error(err.message);
-                log.e(err.message);
-                log.stepOut();
 
-                // すぐに終了するとログが出力されないので数秒待ってから終了する
-                setTimeout(() => process.exit(-1), 3000);
-            }
-        });
+            log.stepOut();
+        }
+        catch (err)
+        {
+            console.error('MongoDBの初期化に失敗しました。');
+            console.error(err.message);
+            log.e(err.message);
+            log.stepOut();
+
+            // すぐに終了するとログが出力されないので数秒待ってから終了する
+            setTimeout(() => process.exit(-1), 3000);
+        }
     }
 
     static collection(name : string) : Collection
@@ -106,35 +102,28 @@ class Collection
         return this.collection.deleteOne(filter);
     }
 
-    find(filter : object, orderBy? : object, pos : {offset? : number, limit? : number} = {})
+    async find(filter : object, orderBy? : object, pos : {offset? : number, limit? : number} = {}) : Promise<any[]>
     {
-        return new Promise(async (resolve : (results : any[]) => void, reject) =>
-        {
-            const log = slog.stepIn('Collection', 'find');
-            try
-            {
-                log.d(`${this.name}:${JSON.stringify(filter, null, 2)}`);
-                let cursor = await this.collection.find(filter);
+        const log = slog.stepIn('Collection', 'find');
+        log.d(`${this.name}:${JSON.stringify(filter, null, 2)}`);
+        let cursor = await this.collection.find(filter);
 
-                if (orderBy) {
-                    cursor = cursor.sort(orderBy);
-                }
+        if (orderBy) {
+            cursor = cursor.sort(orderBy);
+        }
 
-                if (pos.offset) {
-                    cursor = cursor.skip(pos.offset);
-                }
+        if (pos.offset) {
+            cursor = cursor.skip(pos.offset);
+        }
 
-                if (pos.limit) {
-                    cursor = cursor.limit(pos.limit);
-                }
+        if (pos.limit) {
+            cursor = cursor.limit(pos.limit);
+        }
 
-                const results = await cursor.toArray();
+        const results = await cursor.toArray();
 
-                log.d(`取得件数：${results.length} 件`);
-                log.stepOut();
-                resolve(results);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        log.d(`取得件数：${results.length} 件`);
+        log.stepOut();
+        return results;
     }
 }

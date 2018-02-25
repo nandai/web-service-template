@@ -1,5 +1,5 @@
 /**
- * (C) 2016-2017 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {Response} from 'libs/response';
 import {slog}     from 'libs/slog';
@@ -12,42 +12,39 @@ import nodeValidator = require('validator');
 /**
  * メールアドレス検証
  */
-export function email(aEmail : string, accountId : number, alreadyExistsAccount : Account, locale : string)
+export async function email(aEmail : string, accountId : number, alreadyExistsAccount : Account, locale : string) : Promise<ValidationResult>
 {
-    return new Promise(async (resolve : (result : ValidationResult) => void) =>
+    const log = slog.stepIn('Validator', 'email');
+    let status = Response.Status.FAILED;
+    let message : string;
+
+    do
     {
-        const log = slog.stepIn('Validator', 'email');
-        let status = Response.Status.FAILED;
-        let message : string;
-
-        do
+        if (! aEmail || nodeValidator.isEmail(aEmail) === false)
         {
-            if (! aEmail || nodeValidator.isEmail(aEmail) === false)
-            {
-                message = R.text(R.INVALID_EMAIL, locale);
-                break;
-            }
-
-            if (alreadyExistsAccount && alreadyExistsAccount.id !== accountId)
-            {
-                message = R.text(R.ALREADY_EXISTS_EMAIL, locale);
-                break;
-            }
-
-            const hostname = aEmail.split('@')[1];
-            if (await Utils.existsHost(hostname) === false)
-            {
-                message = R.text(R.INVALID_EMAIL, locale);
-                break;
-            }
-
-            status = Response.Status.OK;
+            message = R.text(R.INVALID_EMAIL, locale);
+            break;
         }
-        while (false);
 
-        log.stepOut();
-        resolve({status, message});
-    });
+        if (alreadyExistsAccount && alreadyExistsAccount.id !== accountId)
+        {
+            message = R.text(R.ALREADY_EXISTS_EMAIL, locale);
+            break;
+        }
+
+        const hostname = aEmail.split('@')[1];
+        if (await Utils.existsHost(hostname) === false)
+        {
+            message = R.text(R.INVALID_EMAIL, locale);
+            break;
+        }
+
+        status = Response.Status.OK;
+    }
+    while (false);
+
+    log.stepOut();
+    return {status, message};
 }
 
 interface ValidationResult

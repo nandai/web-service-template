@@ -71,49 +71,42 @@ export async function onJoin(req : express.Request, res : express.Response)
 /**
  * 検証
  */
-export function isJoinValid(param : Request.Join, account : Account, locale : string)
+export async function isJoinValid(param : Request.Join, account : Account, locale : string) : Promise<ValidationResult>
 {
-    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
+    const log = slog.stepIn('SignupApi', 'isJoinValid');
+    const response : Response.Join = {status:Response.Status.OK, message:{}};
+    const {password} = param;
+
+    do
     {
-        const log = slog.stepIn('SignupApi', 'isJoinValid');
-        try
+        // アカウント存在検証
+        if (account === null)
         {
-            const response : Response.Join = {status:Response.Status.OK, message:{}};
-            const {password} = param;
-
-            do
-            {
-                // アカウント存在検証
-                if (account === null)
-                {
-                    // 参加画面で参加を完了させた後、再度参加を完了させようとした場合にここに到達する想定。
-                    // 招待IDで該当するアカウントがないということが必ずしも参加済みを意味するわけではないが、
-                    // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、登録済みというメッセージでOK。
-                    response.status = Response.Status.FAILED;
-                    response.message.general = R.text(R.ALREADY_JOIN, locale);
-                    break;
-                }
-
-                // パスワード検証
-                const passwordResult = Validator.password({password}, locale);
-
-                if (passwordResult.status !== Response.Status.OK)
-                {
-                    response.status =           passwordResult.status;
-                    response.message.password = passwordResult.password;
-                }
-            }
-            while (false);
-
-            if (response.status !== Response.Status.OK) {
-                log.w(JSON.stringify(response, null, 2));
-            }
-
-            log.stepOut();
-            resolve({response});
+            // 参加画面で参加を完了させた後、再度参加を完了させようとした場合にここに到達する想定。
+            // 招待IDで該当するアカウントがないということが必ずしも参加済みを意味するわけではないが、
+            // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので、登録済みというメッセージでOK。
+            response.status = Response.Status.FAILED;
+            response.message.general = R.text(R.ALREADY_JOIN, locale);
+            break;
         }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+
+        // パスワード検証
+        const passwordResult = Validator.password({password}, locale);
+
+        if (passwordResult.status !== Response.Status.OK)
+        {
+            response.status =           passwordResult.status;
+            response.message.password = passwordResult.password;
+        }
+    }
+    while (false);
+
+    if (response.status !== Response.Status.OK) {
+        log.w(JSON.stringify(response, null, 2));
+    }
+
+    log.stepOut();
+    return {response};
 }
 
 interface ValidationResult

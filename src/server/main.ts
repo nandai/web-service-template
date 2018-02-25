@@ -71,35 +71,30 @@ class Initializer
     /**
      * 初期化
      */
-    init(app : express.Express)
+    async init(app : express.Express) : Promise<void>
     {
-        return new Promise(async (resolve : () => void) =>
-        {
-            Config.load();
-            R     .load();
-            loadCss();
+        Config.load();
+        R     .load();
+        loadCss();
 
-            await MongoDB.init();
-            await MySQL  .init();
-            Authy        .init();
+        await MongoDB.init();
+        await MySQL  .init();
+        Authy        .init();
 
-            this.app = app;
-            this.app.use(helmet.hidePoweredBy());
-            this.app.use(helmet.noSniff());
-            this.app.use(helmet.frameguard({action:'deny'}));
-            this.app.use(helmet.xssFilter());
-            this.app.use(helmet.noCache());
-            this.app.use(compression({level:6}));
-            this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
-            this.app.use(expressDomain);
-            this.app.use(expressExtension);
-            this.app.use(cookieParser());
-            this.app.use(bodyParser.urlencoded({extended:true}));
-            this.app.use(Access.jsonBodyParser);
-            this.app.use(Access.logger);
-
-            resolve();
-        });
+        this.app = app;
+        this.app.use(helmet.hidePoweredBy());
+        this.app.use(helmet.noSniff());
+        this.app.use(helmet.frameguard({action:'deny'}));
+        this.app.use(helmet.xssFilter());
+        this.app.use(helmet.noCache());
+        this.app.use(compression({level:6}));
+        this.app.use(express.static(Config.STATIC_DIR));    // 静的コンテンツの設定は最初に行う
+        this.app.use(expressDomain);
+        this.app.use(expressExtension);
+        this.app.use(cookieParser());
+        this.app.use(bodyParser.urlencoded({extended:true}));
+        this.app.use(Access.jsonBodyParser);
+        this.app.use(Access.logger);
     }
 
     /**
@@ -225,9 +220,15 @@ class Initializer
         const loginCommand =  command('login');
         const linkCommand =   command('link');
 
+        const googleOptions = {
+//          accessType: 'offline',
+//          prompt:     'consent',
+            scope:      ['https://www.googleapis.com/auth/plus.login']
+        };
+
         const authTwitter =  passport.authenticate('twitter');
         const authFacebook = passport.authenticate('facebook');
-        const authGoogle =   passport.authenticate('google', {scope:['https://www.googleapis.com/auth/plus.login']});
+        const authGoogle =   passport.authenticate('google', googleOptions);
         const authGithub =   passport.authenticate('github');
 
         // const provider = ':provider(twitter|facebook|google)';   // TODO:delete

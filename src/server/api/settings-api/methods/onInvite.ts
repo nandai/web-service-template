@@ -60,78 +60,64 @@ export async function onInvite(req : express.Request, res : express.Response)
 /**
  * 検証
  */
-export function isInviteValid(param : Request.Invite, alreadyExistsAccount : Account, locale : string)
+export async function isInviteValid(param : Request.Invite, alreadyExistsAccount : Account, locale : string) : Promise<ValidationResult>
 {
-    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
+    const log = slog.stepIn('SettingsApi', 'isInviteValid');
+    const response : Response.Invite = {status:Response.Status.OK, message:{}};
+    const {email} = param;
+
+    do
     {
-        const log = slog.stepIn('SettingsApi', 'isInviteValid');
-        try
+        // メールアドレス検証
+        const resultEmail = await Validator.email(email, 0, alreadyExistsAccount, locale);
+
+        if (resultEmail.status !== Response.Status.OK)
         {
-            const response : Response.Invite = {status:Response.Status.OK, message:{}};
-            const {email} = param;
-
-            do
-            {
-                // メールアドレス検証
-                const resultEmail = await Validator.email(email, 0, alreadyExistsAccount, locale);
-
-                if (resultEmail.status !== Response.Status.OK)
-                {
-                    response.status =        resultEmail.status;
-                    response.message.email = resultEmail.message;
-                }
-            }
-            while (false);
-
-            if (response.status !== Response.Status.OK) {
-                log.w(JSON.stringify(response, null, 2));
-            }
-
-            log.stepOut();
-            resolve({response});
+            response.status =        resultEmail.status;
+            response.message.email = resultEmail.message;
         }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+    }
+    while (false);
+
+    if (response.status !== Response.Status.OK) {
+        log.w(JSON.stringify(response, null, 2));
+    }
+
+    log.stepOut();
+    return {response};
 }
 
 /**
  * 実行
  */
-function execInvite(param : Request.Invite, locale : string)
+async function execInvite(param : Request.Invite, locale : string) : Promise<Response.Invite>
 {
-    return new Promise(async (resolve : (response : Response.Invite) => void, reject) =>
+    const log = slog.stepIn('SettingsApi', 'execInvite');
+    const response : Response.Invite = {status:Response.Status.FAILED, message:{}};
+    const {email} = param;
+
+    const invite_id = Utils.createRandomText(32);
+    const url = Utils.generateUrl('join', invite_id);
+    const template = R.mail(R.NOTICE_INVITE, locale);
+    const contents = CommonUtils.formatString(template.contents, {url});
+    const result = await Utils.sendMail(template.subject, email, contents);
+
+    if (result)
     {
-        const log = slog.stepIn('SettingsApi', 'execInvite');
-        try
-        {
-            const response : Response.Invite = {status:Response.Status.FAILED, message:{}};
-            const {email} = param;
+        response.status = Response.Status.OK;
+        response.message.general = R.text(R.INVITE_MAIL_SENDED, locale);
 
-            const invite_id = Utils.createRandomText(32);
-            const url = Utils.generateUrl('join', invite_id);
-            const template = R.mail(R.NOTICE_INVITE, locale);
-            const contents = CommonUtils.formatString(template.contents, {url});
-            const result = await Utils.sendMail(template.subject, email, contents);
+        const name = email.substr(0, email.indexOf('@'));
+        const account : Account = {name, email, invite_id};
+        await AccountAgent.add(account);
+    }
+    else
+    {
+        response.message.email = R.text(R.COULD_NOT_SEND_INVITE_MAIL, locale);
+    }
 
-            if (result)
-            {
-                response.status = Response.Status.OK;
-                response.message.general = R.text(R.INVITE_MAIL_SENDED, locale);
-
-                const name = email.substr(0, email.indexOf('@'));
-                const account : Account = {name, email, invite_id};
-                await AccountAgent.add(account);
-            }
-            else
-            {
-                response.message.email = R.text(R.COULD_NOT_SEND_INVITE_MAIL, locale);
-            }
-
-            log.stepOut();
-            resolve(response);
-        }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+    log.stepOut();
+    return response;
 }
 
 interface ValidationResult

@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}   from 'libs/slog';
 import Config   from 'server/config';
@@ -40,7 +40,7 @@ export default class Facebook extends Provider
     }
 
     /**
-     * Twitterからのコールバック用
+     * Facebookからのコールバック用
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -63,30 +63,22 @@ export default class Facebook extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, _refreshToken : string)
+    protected async inquiry(accessToken : string, _refreshToken : string) : Promise<void>
     {
         const log = slog.stepIn(Facebook.CLS_NAME_2, 'inquiry');
-        const self = this;
-
-        return new Promise(async (resolve : () => void) =>
+        try
         {
-            try
-            {
-                const success = await self.validateAccessToken(accessToken);
+            const success = await this.validateAccessToken(accessToken);
 
-                if (success) {
-                    await self.me(accessToken);
-                }
-
-                resolve();
+            if (success) {
+                await this.me(accessToken);
             }
-            catch (err)
-            {
-                log.d(err);
-                log.stepOut();
-                resolve();
-            }
-        });
+        }
+        catch (err)
+        {
+            log.d(err);
+            log.stepOut();
+        }
     }
 
     /**

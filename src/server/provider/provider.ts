@@ -21,7 +21,7 @@ import twilio =   require('twilio');
 /**
  * プロバイダ
  */
-export default class Provider
+export default abstract class Provider
 {
     private static CLS_NAME = 'Provider';
 
@@ -94,257 +94,252 @@ export default class Provider
      * @param   res             httpレスポンス
      * @param   sugnupCallback  サインアップコールバック
      */
-    protected signupOrLogin(req : express.Request, res : express.Response, signupCallback? : (account : Account) => Promise<boolean>)
+    protected async signupOrLogin(
+        req : express.Request,
+        res : express.Response,
+        signupCallback? : (account : Account) => Promise<boolean>) : Promise<void>
     {
         const log = slog.stepIn(Provider.CLS_NAME, 'signupOrLogin');
         const self = this;
 
-        return new Promise(async (resolve : () => void) =>
+        try
         {
-            try
+            const user = <PassportUser>req.user;
+
+            self.id = null;
+            await self.inquiry(user.accessToken, user.refreshToken);
+
+            if (self.id === null)
             {
-                const user = <PassportUser>req.user;
+                log.w('プロバイダにアカウントが存在しない。');
+                res.status(400).send('!?');
+                log.stepOut();
+                return;
+            }
 
-                self.id = null;
-                await self.inquiry(user.accessToken, user.refreshToken);
+            const findAccount = await AccountAgent.findByProviderId(user.provider, self.id);
+            const session : Session = req.ext.session;
+            const command =           req.ext.command;
 
-                if (self.id === null)
+            if (session === undefined) {
+                log.e('sessionがありません。');
+            }
+
+            switch (command)
+            {
+                case 'signup':
                 {
-                    log.w('プロバイダにアカウントが存在しない。');
-                    res.status(400).send('!?');
-                    log.stepOut();
-                    resolve();
-                    return;
-                }
-
-                const findAccount = await AccountAgent.findByProviderId(user.provider, self.id);
-                const session : Session = req.ext.session;
-                const command =           req.ext.command;
-
-                if (session === undefined) {
-                    log.e('sessionがありません。');
-                }
-
-                switch (command)
-                {
-                    case 'signup':
-                    {
-                        // サインアップ処理
+                    // サインアップ処理
 //                      if (findAccount === null)
 //                      if (findAccount === null || findAccount.signup_id)
-                        if (findAccount === null || findAccount.signup_id || findAccount.invite_id)
+                    if (findAccount === null || findAccount.signup_id || findAccount.invite_id)
+                    {
+                        if (session.account_id === null)
                         {
-                            if (session.account_id === null)
+                            log.i('サインアップ可能。ログインもしていないので、サインアップを続行し、トップ画面へ移動する');
+
+                            // アカウント作成
+                            let account = self.createAccount(user);
+
+                            if (findAccount === null)
                             {
-                                log.i('サインアップ可能。ログインもしていないので、サインアップを続行し、トップ画面へ移動する');
+                                account = await AccountAgent.add(account);
+                            }
+                            else
+                            {
+                                // 仮登録中のメールアドレスのアカウントに新たなサインアップIDを設定する
+                                account.id =        findAccount.id;
+                                account.invite_id = findAccount.invite_id;
+                                await AccountAgent.update(account);
+                            }
 
-                                // アカウント作成
-                                let account = self.createAccount(user);
-
-                                if (findAccount === null)
-                                {
-                                    account = await AccountAgent.add(account);
-                                }
-                                else
-                                {
-                                    // 仮登録中のメールアドレスのアカウントに新たなサインアップIDを設定する
-                                    account.id =        findAccount.id;
-                                    account.invite_id = findAccount.invite_id;
-                                    await AccountAgent.update(account);
-                                }
-
-                                if (signupCallback)
-                                {
-                                    const result = await signupCallback(account);
-                                    if (result === false) {
-                                        await AccountAgent.remove(account.id);
-                                    }
-                                }
-                                else
-                                {
-                                    // セッション更新
-                                    session.account_id = account.id;
-                                    await SessionAgent.update(session);
-
-                                    // ログイン履歴作成
-                                    const loginHistory : LoginHistory =
-                                    {
-                                        account_id: account.id,
-                                        device:     req.headers['user-agent'] as string
-                                    };
-                                    await LoginHistoryAgent.add(loginHistory, session.id);
-
-                                    // トップ画面へ
-                                    await self.sendResponse(req, res, session, '/');
+                            if (signupCallback)
+                            {
+                                const result = await signupCallback(account);
+                                if (result === false) {
+                                    await AccountAgent.remove(account.id);
                                 }
                             }
                             else
                             {
-                                log.i('サインアップ可能だが、ログイン中なので、サインアップはせず、サインアップ画面へ移動する');
+                                // セッション更新
+                                session.account_id = account.id;
+                                await SessionAgent.update(session);
 
-                                // サインアップ画面へ
-                                await self.sendResponse(req, res, session, '/signup', R.CANNOT_SIGNUP);
+                                // ログイン履歴作成
+                                const loginHistory : LoginHistory =
+                                {
+                                    account_id: account.id,
+                                    device:     req.headers['user-agent'] as string
+                                };
+                                await LoginHistoryAgent.add(loginHistory, session.id);
+
+                                // トップ画面へ
+                                await self.sendResponse(req, res, session, '/');
                             }
                         }
                         else
                         {
-                            log.i('サインアップ済みなので、サインアップはせず、サインアップ画面へ移動する');
+                            log.i('サインアップ可能だが、ログイン中なので、サインアップはせず、サインアップ画面へ移動する');
 
                             // サインアップ画面へ
-                            await self.sendResponse(req, res, session, '/signup', R.ALREADY_SIGNUP);
+                            await self.sendResponse(req, res, session, '/signup', R.CANNOT_SIGNUP);
                         }
-                        break;
                     }
-
-                    case 'login':
+                    else
                     {
-                        // ログイン処理
-                        if (findAccount)
+                        log.i('サインアップ済みなので、サインアップはせず、サインアップ画面へ移動する');
+
+                        // サインアップ画面へ
+                        await self.sendResponse(req, res, session, '/signup', R.ALREADY_SIGNUP);
+                    }
+                    break;
+                }
+
+                case 'login':
+                {
+                    // ログイン処理
+                    if (findAccount)
+                    {
+                        if (SessionAgent.isLogin(session) === false)
                         {
-                            if (SessionAgent.isLogin(session) === false)
+                            log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
+                            let phrase : string;
+                            let isTwoFactorAuth = AccountAgent.canTwoFactorAuth(findAccount);
+
+                            if (isTwoFactorAuth)
                             {
-                                log.i('サインアップ済み。ログインはしていないので、ログインを続行し、トップ画面へ移動する');
-                                let phrase : string;
-                                let isTwoFactorAuth = AccountAgent.canTwoFactorAuth(findAccount);
+                                let success = false;
+                                let smsCode : string;
 
-                                if (isTwoFactorAuth)
+                                switch (findAccount.two_factor_auth)
                                 {
-                                    let success = false;
-                                    let smsCode : string;
+                                    case 'SMS':
+                                        smsCode = Utils.createRandomText(6, true);
 
-                                    switch (findAccount.two_factor_auth)
-                                    {
-                                        case 'SMS':
-                                            smsCode = Utils.createRandomText(6, true);
+                                        // ログインコードをSMS送信
+                                        const locale = req.ext.locale;
+                                        const message = R.text(R.SMS_LOGIN_CODE, locale);
+                                        success = await this.sendSms(findAccount.international_phone_no, `${message}：${smsCode}`);
+                                        break;
 
-                                            // ログインコードをSMS送信
-                                            const locale = req.ext.locale;
-                                            const message = R.text(R.SMS_LOGIN_CODE, locale);
-                                            success = await this.sendSms(findAccount.international_phone_no, `${message}：${smsCode}`);
-                                            break;
-
-                                        case 'Authy':
-                                            if (findAccount.authy_id)
-                                            {
-                                                session.authy_uuid = await Authy.sendApprovalRequest(findAccount.authy_id);
-                                                success = (session.authy_uuid !== null);
-                                            }
-                                            break;
-                                    }
-
-                                    if (success)
-                                    {
-                                        session.account_id = findAccount.id;
-                                        session.sms_id = Utils.createRandomText(32);
-                                        session.sms_code = smsCode;
-                                        await SessionAgent.update(session);
-                                        await AccountAgent.update(findAccount);
-                                        await self.sendResponse(req, res, session, '/', null, session.sms_id);
-                                    }
-                                    else
-                                    {
-                                        isTwoFactorAuth = false;
-                                        phrase = R.COULD_NOT_SEND_SMS;
-                                    }
+                                    case 'Authy':
+                                        if (findAccount.authy_id)
+                                        {
+                                            session.authy_uuid = await Authy.sendApprovalRequest(findAccount.authy_id);
+                                            success = (session.authy_uuid !== null);
+                                        }
+                                        break;
                                 }
 
-                                if (isTwoFactorAuth === false)
+                                if (success)
                                 {
-                                    // セッション作成
                                     session.account_id = findAccount.id;
+                                    session.sms_id = Utils.createRandomText(32);
+                                    session.sms_code = smsCode;
                                     await SessionAgent.update(session);
-
-                                    // ログイン履歴作成
-                                    const loginHistory : LoginHistory =
-                                    {
-                                        account_id: findAccount.id,
-                                        device:     req.headers['user-agent'] as string
-                                    };
-                                    await LoginHistoryAgent.add(loginHistory, session.id);
-
-                                    // トップ画面へ
-                                    await self.sendResponse(req, res, session, '/', phrase);
-                                }
-                            }
-                            else
-                            {
-                                if (session.account_id === findAccount.id)
-                                {
-                                    log.i('サインアップ済み。既に同じアカウントでログインしているので、トップ画面へ移動するだけ');
-
-                                    // トップ画面へ
-                                    await self.sendResponse(req, res, session, '/');
+                                    await AccountAgent.update(findAccount);
+                                    await self.sendResponse(req, res, session, '/', null, session.sms_id);
                                 }
                                 else
                                 {
-                                    log.i('サインアップ済みだが、別のアカウントでログイン中なので、トップ画面ではなくログイン画面へ移動する');
-
-                                    // ログイン画面へ
-                                    await self.sendResponse(req, res, session, '/', R.ALREADY_LOGIN_ANOTHER_ACCOUNT);
+                                    isTwoFactorAuth = false;
+                                    phrase = R.COULD_NOT_SEND_SMS;
                                 }
+                            }
+
+                            if (isTwoFactorAuth === false)
+                            {
+                                // セッション作成
+                                session.account_id = findAccount.id;
+                                await SessionAgent.update(session);
+
+                                // ログイン履歴作成
+                                const loginHistory : LoginHistory =
+                                {
+                                    account_id: findAccount.id,
+                                    device:     req.headers['user-agent'] as string
+                                };
+                                await LoginHistoryAgent.add(loginHistory, session.id);
+
+                                // トップ画面へ
+                                await self.sendResponse(req, res, session, '/', phrase);
                             }
                         }
                         else
                         {
-                            log.i('サインアップしていないので、ログイン画面へ移動する');
-
-                            // ログイン画面へ
-                            await self.sendResponse(req, res, session, '/', R.INCORRECT_ACCOUNT);
-                        }
-                        break;
-                    }
-
-                    case 'link':
-                    {
-                        // 紐づけ処理
-                        if (findAccount === null)
-                        {
-                            if (session.account_id)
+                            if (session.account_id === findAccount.id)
                             {
-                                log.i('紐づけ可能。ログインしているので、紐づけを続行し、設定画面へ移動する');
+                                log.i('サインアップ済み。既に同じアカウントでログインしているので、トップ画面へ移動するだけ');
 
-                                // アカウント更新
-                                const account = await AccountAgent.find(session.account_id);
-                                account[user.provider] = self.id;
-                                await AccountAgent.update(account);
-
-                                // 設定画面へ
-                                await self.sendResponse(req, res, session, '/settings');
+                                // トップ画面へ
+                                await self.sendResponse(req, res, session, '/');
                             }
                             else
                             {
+                                log.i('サインアップ済みだが、別のアカウントでログイン中なので、トップ画面ではなくログイン画面へ移動する');
+
+                                // ログイン画面へ
+                                await self.sendResponse(req, res, session, '/', R.ALREADY_LOGIN_ANOTHER_ACCOUNT);
                             }
+                        }
+                    }
+                    else
+                    {
+                        log.i('サインアップしていないので、ログイン画面へ移動する');
+
+                        // ログイン画面へ
+                        await self.sendResponse(req, res, session, '/', R.INCORRECT_ACCOUNT);
+                    }
+                    break;
+                }
+
+                case 'link':
+                {
+                    // 紐づけ処理
+                    if (findAccount === null)
+                    {
+                        if (session.account_id)
+                        {
+                            log.i('紐づけ可能。ログインしているので、紐づけを続行し、設定画面へ移動する');
+
+                            // アカウント更新
+                            const account = await AccountAgent.find(session.account_id);
+                            account[user.provider] = self.id;
+                            await AccountAgent.update(account);
+
+                            // 設定画面へ
+                            await self.sendResponse(req, res, session, '/settings');
                         }
                         else
                         {
-                            // 設定画面へ
-                            await self.sendResponse(req, res, session, '/settings', R.CANNOT_LINK);
                         }
-                        break;
                     }
-
-                    default:
+                    else
                     {
-                        log.e(`command '${command}' が正しくありません。`);
-                        res.status(400).send('!?');
-                        break;
+                        // 設定画面へ
+                        await self.sendResponse(req, res, session, '/settings', R.CANNOT_LINK);
                     }
+                    break;
                 }
 
-                log.stepOut();
-                resolve();
+                default:
+                {
+                    log.e(`command '${command}' が正しくありません。`);
+                    res.status(400).send('!?');
+                    break;
+                }
             }
-            catch (err) {Utils.internalServerError(err, res, log);}
-        });
+
+            log.stepOut();
+        }
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**
      * プロバイダに問い合わせる
      */
-    protected inquiry(_accessToken : string, _refreshToken : string)
-    {
-        return new Promise((_resolve : () => void, reject) => reject());
-    }
+    protected abstract inquiry(_accessToken : string, _refreshToken : string) : Promise<void>;
 
     /**
      * アカウント作成
@@ -359,50 +354,52 @@ export default class Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(req : express.Request, res : express.Response, session : Session, redirect : string, phrase? : string, smsId? : string)
+    protected async sendResponse(
+        req      : express.Request,
+        res      : express.Response,
+        session  : Session,
+        redirect : string,
+        phrase?  : string,
+        smsId?   : string) : Promise<void>
     {
         const log = slog.stepIn(Provider.CLS_NAME, 'sendResponse');
-        return new Promise(async (resolve : () => void) =>
+        try
         {
-            try
+            if (req.path.startsWith('/api/'))
             {
-                if (req.path.startsWith('/api/'))
-                {
-                    const message = '不要と思われた処理に侵入！';
-                    log.e(message);
-                    res.ext.badRequest(message);
+                const message = '不要と思われた処理に侵入！';
+                log.e(message);
+                res.ext.badRequest(message);
 
-                //     if (phrase)
-                //     {
-                //         const locale = req.ext.locale;
-                //         res.ext.error(Response.Status.FAILED, R.text(phrase, locale));
-                //     }
-                //     else
-                //     {
-                //         const data = {status:Response.Status.OK, smsId:smsId, sessionId:session.id};
-                //         res.json(data);
-                //     }
-                }
-                else
-                {
-                    if (phrase)
-                    {
-                        session.message_id = phrase;
-                        await SessionAgent.update(session);
-                    }
-
-                    if (smsId) {
-                        redirect += `?id=${smsId}`;
-                    }
-
-                    res.redirect(redirect);
-                }
-
-                log.stepOut();
-                resolve();
+            //     if (phrase)
+            //     {
+            //         const locale = req.ext.locale;
+            //         res.ext.error(Response.Status.FAILED, R.text(phrase, locale));
+            //     }
+            //     else
+            //     {
+            //         const data = {status:Response.Status.OK, smsId:smsId, sessionId:session.id};
+            //         res.json(data);
+            //     }
             }
-            catch (err) {Utils.internalServerError(err, res, log);}
-        });
+            else
+            {
+                if (phrase)
+                {
+                    session.message_id = phrase;
+                    await SessionAgent.update(session);
+                }
+
+                if (smsId) {
+                    redirect += `?id=${smsId}`;
+                }
+
+                res.redirect(redirect);
+            }
+
+            log.stepOut();
+        }
+        catch (err) {Utils.internalServerError(err, res, log);}
     }
 
     /**

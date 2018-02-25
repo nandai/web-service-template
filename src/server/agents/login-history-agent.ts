@@ -1,5 +1,5 @@
 /**
- * (C) 2016-2017 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import AccountAgent      from 'server/agents/account-agent';
 import Config            from 'server/config';
@@ -31,29 +31,20 @@ export default class LoginHistoryAgent
      *
      * @return  なし
      */
-    static async add(model : LoginHistory, sessionId : string)
+    static async add(model : LoginHistory, sessionId : string) : Promise<void>
     {
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            try
-            {
-                const newModel = LoginHistoryAgent.toModel(model);
-                delete newModel.id;
-                newModel.login_at = Utils.now();
+        const newModel = LoginHistoryAgent.toModel(model);
+        delete newModel.id;
+        newModel.login_at = Utils.now();
 
-                await collection().add(newModel);
+        await collection().add(newModel);
 
-                // クライアントに通知
-                const accountId = newModel.account_id;
-                const account = await AccountAgent.find(accountId);
+        // クライアントに通知
+        const accountId = newModel.account_id;
+        const account = await AccountAgent.find(accountId);
 
-                await SocketManager.setAccountId(sessionId, accountId);
-                SocketManager.notifyUpdateAccount(accountId, Converter.accountToResponse(account, newModel));
-
-                resolve();
-            }
-            catch (err) {reject(err);}
-        });
+        await SocketManager.setAccountId(sessionId, accountId);
+        SocketManager.notifyUpdateAccount(accountId, Converter.accountToResponse(account, newModel));
     }
 
     /**
@@ -61,19 +52,11 @@ export default class LoginHistoryAgent
      *
      * @param   account_id  アカウントID
      */
-    static findLatest(account_id : number)
+    static async findLatest(account_id : number) : Promise<LoginHistory>
     {
-        return new Promise(async (resolve : (model : LoginHistory) => void, reject) =>
-        {
-            try
-            {
-                const data = await collection().findLatest(account_id);
-                const model = LoginHistoryAgent.toModel(data);
-
-                resolve(model);
-            }
-            catch (err) {reject(err);}
-        });
+        const data = await collection().findLatest(account_id);
+        const model = LoginHistoryAgent.toModel(data);
+        return model;
     }
 
     /**

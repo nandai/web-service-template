@@ -5,7 +5,7 @@ import {slog}         from 'libs/slog';
 import {LoginHistory} from 'server/models/login-history';
 import DB             from '.';
 
-import _ = require('lodash');
+import * as _ from 'lodash';
 
 /**
  * ログイン履歴モデル
@@ -21,25 +21,18 @@ export default class LoginHistoryCollection
      *
      * @return  なし
      */
-    static add(model : LoginHistory)
+    static async add(model : LoginHistory) : Promise<LoginHistory>
     {
         const log = slog.stepIn(LoginHistoryCollection.CLS_NAME, 'add');
-        return new Promise(async (resolve : (model : LoginHistory) => void, reject) =>
-        {
-            try
-            {
-                const sql = 'INSERT INTO login_history SET ?';
-                const values = model;
-                const results = await DB.query(sql, values);
+        const sql = 'INSERT INTO login_history SET ?';
+        const values = model;
+        const results = await DB.query(sql, values);
 
-                const newModel = _.clone(model);
-                newModel.id = results.insertId;
+        const newModel = _.clone(model);
+        newModel.id = results.insertId;
 
-                log.stepOut();
-                resolve(newModel);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        log.stepOut();
+        return newModel;
     }
 
     /**
@@ -47,21 +40,13 @@ export default class LoginHistoryCollection
      *
      * @param   account_id  アカウントID
      */
-    static findLatest(account_id : number)
+    static async findLatest(account_id : number) : Promise<any>
     {
         const log = slog.stepIn(LoginHistoryCollection.CLS_NAME, 'findLatest');
-        return new Promise(async (resolve : (results) => void, reject) =>
-        {
-            try
-            {
-                const sql = 'SELECT * FROM login_history WHERE ? ORDER BY id DESC LIMIT 1 OFFSET 1';
-                const values = {account_id};
-                const results = await DB.query(sql, values);
-
-                log.stepOut();
-                resolve(results);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const sql = 'SELECT * FROM login_history WHERE ? ORDER BY id DESC LIMIT 1 OFFSET 1';
+        const values = {account_id};
+        const results = await DB.query(sql, values);
+        log.stepOut();
+        return results;
     }
 }

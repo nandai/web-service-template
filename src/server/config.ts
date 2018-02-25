@@ -230,7 +230,7 @@ export default class Config
     }
 
     /**
-     * Githubの設定があるかどうか調べる
+     * GitHubの設定があるかどうか調べる
      */
     static hasGithub() : boolean
     {

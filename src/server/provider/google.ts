@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}   from 'libs/slog';
 import Config   from 'server/config';
@@ -41,7 +41,7 @@ export default class Google extends Provider
     }
 
     /**
-     * Twitterからのコールバック用
+     * Googleからのコールバック用
      *
      * @param   req httpリクエスト
      * @param   res httpレスポンス
@@ -64,7 +64,7 @@ export default class Google extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, refreshToken : string)
+    protected inquiry(accessToken : string, refreshToken : string) : Promise<void>
     {
         const log = slog.stepIn(Google.CLS_NAME_2, 'inquiry');
         const self = this;

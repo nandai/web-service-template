@@ -1,5 +1,5 @@
 /**
- * (C) 2016-2017 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}            from 'libs/slog';
 import LoginHistoryAgent from 'server/agents/login-history-agent';
@@ -32,32 +32,25 @@ export default class AccountAgent
      *
      * @param   model   アカウント
      */
-    static add(model : Account)
+    static async add(model : Account) : Promise<Account>
     {
-        return new Promise(async (resolve : (model : Account) => void, reject) =>
-        {
-            try
-            {
-                // 追加のデータを設定して、
-                const newModel = AccountAgent.toModel(model);
-                delete newModel.id;
-                newModel.international_phone_no = AccountAgent.international_phone_no(model);
-                newModel.crypto_type = 1;
-                newModel.created_at = Utils.now();
+        // 追加のデータを設定して、
+        const newModel = AccountAgent.toModel(model);
+        delete newModel.id;
+        newModel.international_phone_no = AccountAgent.international_phone_no(model);
+        newModel.crypto_type = 1;
+        newModel.created_at = Utils.now();
 
-                // 暗号化して、
-                let encryptModel = AccountAgent.toModel(newModel);
-                AccountAgent.encrypt(encryptModel);
+        // 暗号化して、
+        let encryptModel = AccountAgent.toModel(newModel);
+        AccountAgent.encrypt(encryptModel);
 
-                // ストレージに追加して、
-                encryptModel = await collection().add(encryptModel);
+        // ストレージに追加して、
+        encryptModel = await collection().add(encryptModel);
 
-                // 暗号化前のデータにidを設定して、それを返す
-                newModel.id = encryptModel.id;
-                resolve(newModel);
-            }
-            catch (err) {reject(err);}
-        });
+        // 暗号化前のデータにidを設定して、それを返す
+        newModel.id = encryptModel.id;
+        return newModel;
     }
 
     /**
@@ -67,38 +60,31 @@ export default class AccountAgent
      *
      * @return  なし
      */
-    static async update(model : Account)
+    static async update(model : Account) : Promise<void>
     {
         const log = slog.stepIn(AccountAgent.CLS_NAME, 'update');
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            try
-            {
-                // 追加のデータを設定して、
-                const newModel = AccountAgent.toModel(model);
-                newModel.international_phone_no = AccountAgent.international_phone_no(model);
-                newModel.crypto_type = 1;
-                newModel.updated_at = Utils.now();
 
-                // 暗号化して、
-                AccountAgent.encrypt(newModel);
+        // 追加のデータを設定して、
+        const newModel = AccountAgent.toModel(model);
+        newModel.international_phone_no = AccountAgent.international_phone_no(model);
+        newModel.crypto_type = 1;
+        newModel.updated_at = Utils.now();
 
-                // 更新する
-                await collection().update(newModel);
+        // 暗号化して、
+        AccountAgent.encrypt(newModel);
 
-                // クライアントに通知
-                const accountId = newModel.id;
-                const loginHistory = await LoginHistoryAgent.findLatest(accountId);
-                SocketManager.notifyUpdateAccount(accountId, Converter.accountToResponse(model, loginHistory));
+        // 更新する
+        await collection().update(newModel);
 
-                const user = Converter.accountToUserResponse(model);
-                SocketManager.notifyUpdateUser(user);
+        // クライアントに通知
+        const accountId = newModel.id;
+        const loginHistory = await LoginHistoryAgent.findLatest(accountId);
+        SocketManager.notifyUpdateAccount(accountId, Converter.accountToResponse(model, loginHistory));
 
-                log.stepOut();
-                resolve();
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const user = Converter.accountToUserResponse(model);
+        SocketManager.notifyUpdateUser(user);
+
+        log.stepOut();
     }
 
     /**
@@ -108,23 +94,14 @@ export default class AccountAgent
      *
      * @return  なし
      */
-    static async remove(accountId : number)
+    static async remove(accountId : number) : Promise<void>
     {
         const log = slog.stepIn(AccountAgent.CLS_NAME, 'logout');
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            try
-            {
-                await collection().remove(accountId);
+        await collection().remove(accountId);
 
-                // クライアントに通知
-                await SocketManager.notifyDeleteUser(accountId);
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        // クライアントに通知
+        await SocketManager.notifyDeleteUser(accountId);
+        log.stepOut();
     }
 
     /**
@@ -135,28 +112,21 @@ export default class AccountAgent
      *
      * @return  Account。該当するアカウントを返す
      */
-    private static findByCondition(fieldName : string, value)
+    private static async findByCondition(fieldName : string, value) : Promise<Account>
     {
-        return new Promise(async (resolve : (model : Account) => void, reject) =>
+        let model : Account = null;
+        if (value !== null)
         {
-            try
-            {
-                let model : Account = null;
-                if (value !== null)
-                {
-                    const data = await collection().findByCondition(fieldName, value);
-                    model = AccountAgent.toModel(data);
+            const data = await collection().findByCondition(fieldName, value);
+            model = AccountAgent.toModel(data);
 
-                    if (model)
-                    {
-                        AccountAgent.decrypt(model);
-                        model.international_phone_no = AccountAgent.international_phone_no(model);
-                    }
-                }
-                resolve(model);
+            if (model)
+            {
+                AccountAgent.decrypt(model);
+                model.international_phone_no = AccountAgent.international_phone_no(model);
             }
-            catch (err) {reject(err);}
-        });
+        }
+        return model;
     }
 
     /**
@@ -166,7 +136,7 @@ export default class AccountAgent
      *
      * @return  Account。該当するアカウントを返す
      */
-    static async find(accountId : number)
+    static find(accountId : number)
     {
         return AccountAgent.findByCondition('id', accountId);
     }
@@ -178,7 +148,7 @@ export default class AccountAgent
      *
      * @return  Account。該当するアカウントを返す
      */
-    static async findByUserName(userName : string)
+    static findByUserName(userName : string)
     {
         return AccountAgent.findByCondition('user_name', userName);
     }
@@ -190,7 +160,7 @@ export default class AccountAgent
      *
      * @return  Account。該当するアカウントを返す
      */
-    static async findBySignupId(signupId : string)
+    static findBySignupId(signupId : string)
     {
         return AccountAgent.findByCondition('signup_id', signupId);
     }
@@ -202,7 +172,7 @@ export default class AccountAgent
      *
      * @return  Account。該当するアカウントを返す
      */
-    static async findByInviteId(inviteId : string)
+    static findByInviteId(inviteId : string)
     {
         return AccountAgent.findByCondition('invite_id', inviteId);
     }
@@ -214,7 +184,7 @@ export default class AccountAgent
      *
      * @return  Account。該当するアカウントを返す
      */
-    static async findByResetId(resetId : string)
+    static findByResetId(resetId : string)
     {
         return AccountAgent.findByCondition('reset_id', resetId);
     }
@@ -226,7 +196,7 @@ export default class AccountAgent
      *
      * @return  Account。該当するアカウントを返す
      */
-    static async findByChangeId(changeId : string)
+    static findByChangeId(changeId : string)
     {
         return AccountAgent.findByCondition('change_id', changeId);
     }
@@ -239,49 +209,41 @@ export default class AccountAgent
      *
      * @return  Account。該当するアカウントを返す
      */
-    static findByProviderId(provider : string, id : string)
+    static async findByProviderId(provider : string, id : string) : Promise<Account>
     {
         const log = slog.stepIn(AccountAgent.CLS_NAME, 'findByProviderId');
-        return new Promise(async (resolve : (model : Account) => void, reject) =>
+        let account : Account = null;
+        if (id)
         {
-            try
+            if (provider !== 'twitter'
+            &&  provider !== 'facebook'
+            &&  provider !== 'google'
+            &&  provider !== 'github'
+            &&  provider !== 'email')
             {
-                let account : Account = null;
-                if (id)
-                {
-                    if (provider !== 'twitter'
-                    &&  provider !== 'facebook'
-                    &&  provider !== 'google'
-                    &&  provider !== 'github'
-                    &&  provider !== 'email')
-                    {
-                        log.e('provider not supported.');
-                        log.stepOut();
-                        resolve(null);
-                        return;
-                    }
-
-                    const email = id;
-                    if (provider === 'email')
-                    {
-                        // メールアドレスの場合、まずは暗号化してある前提で検索
-                        id = Utils.encrypt(id, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-                    }
-
-                    account = await AccountAgent.findByCondition(provider, id);
-
-                    if (account === null && provider === 'email')
-                    {
-                        // 見つからなければ平文で検索
-                        account = await AccountAgent.findByCondition(provider, email);
-                    }
-                }
-
+                log.e('provider not supported.');
                 log.stepOut();
-                resolve(account);
+                return null;
             }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+
+            const email = id;
+            if (provider === 'email')
+            {
+                // メールアドレスの場合、まずは暗号化してある前提で検索
+                id = Utils.encrypt(id, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+            }
+
+            account = await AccountAgent.findByCondition(provider, id);
+
+            if (account === null && provider === 'email')
+            {
+                // 見つからなければ平文で検索
+                account = await AccountAgent.findByCondition(provider, email);
+            }
+        }
+
+        log.stepOut();
+        return account;
     }
 
     /**
@@ -292,7 +254,7 @@ export default class AccountAgent
      *
      * @return  Authy ID
      */
-    static async findAuthyId(internationalPhoneNo : string, excludeAccountId? : number)
+    static findAuthyId(internationalPhoneNo : string, excludeAccountId? : number)
     {
         internationalPhoneNo = Utils.encrypt(internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
         return collection().findAuthyId(internationalPhoneNo, excludeAccountId);
@@ -303,24 +265,17 @@ export default class AccountAgent
      *
      * @return  Account[]。該当するアカウントの一覧を返す
      */
-    static findList(cond : {registered? : boolean, internationalPhoneNo? : string} = {})
+    static async findList(cond : {registered? : boolean, internationalPhoneNo? : string} = {}) : Promise<Account[]>
     {
-        return new Promise(async (resolve : (models : Account[]) => void, reject) =>
-        {
-            try
-            {
-                if (cond.internationalPhoneNo) {
-                    cond.internationalPhoneNo = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
-                }
+        if (cond.internationalPhoneNo) {
+            cond.internationalPhoneNo = Utils.encrypt(cond.internationalPhoneNo, Config.CRYPTO_KEY, Config.CRYPTO_IV);
+        }
 
-                const data = await collection().findList(cond);
-                const models = AccountAgent.toModels(data);
+        const data = await collection().findList(cond);
+        const models = AccountAgent.toModels(data);
 
-                AccountAgent.decrypts(models);
-                resolve(models);
-            }
-            catch (err) {reject(err);}
-        });
+        AccountAgent.decrypts(models);
+        return models;
     }
 
     /**

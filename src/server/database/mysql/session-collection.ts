@@ -1,5 +1,5 @@
 /**
- * (C) 2016-2017 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}    from 'libs/slog';
 import {Session} from 'server/models/session';
@@ -15,22 +15,14 @@ export default class SessionCollection
     /**
      * セッションを追加する
      */
-    static add(model : Session)
+    static async add(model : Session) : Promise<Session>
     {
         const log = slog.stepIn(SessionCollection.CLS_NAME, 'add');
-        return new Promise(async (resolve : (model : Session) => void, reject) =>
-        {
-            try
-            {
-                const sql = 'INSERT INTO session SET ?';
-                const values = model;
-                await DB.query(sql, values);
-
-                log.stepOut();
-                resolve(model);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const sql = 'INSERT INTO session SET ?';
+        const values = model;
+        await DB.query(sql, values);
+        log.stepOut();
+        return model;
     }
 
     /**
@@ -41,35 +33,26 @@ export default class SessionCollection
      *
      * @return  なし
      */
-    static update(model : Session, cond : SessionFindCondition)
+    static async update(model : Session, cond : SessionFindCondition) : Promise<void>
     {
         const log = slog.stepIn(SessionCollection.CLS_NAME, 'update');
-        return new Promise(async (resolve : () => void, reject) =>
+        const sql = 'UPDATE session SET ? WHERE ??=?';
+        const values : any[] = [model];
+
+        if (cond.sessionId)
         {
-            try
-            {
-                const sql = 'UPDATE session SET ? WHERE ??=?';
-                const values : any[] = [model];
+            values.push('id');
+            values.push(cond.sessionId);
+        }
 
-                if (cond.sessionId)
-                {
-                    values.push('id');
-                    values.push(cond.sessionId);
-                }
+        if (cond.accountId)
+        {
+            values.push('account_id');
+            values.push(cond.accountId);
+        }
 
-                if (cond.accountId)
-                {
-                    values.push('account_id');
-                    values.push(cond.accountId);
-                }
-
-                await DB.query(sql, values);
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        await DB.query(sql, values);
+        log.stepOut();
     }
 
     /**
@@ -79,22 +62,14 @@ export default class SessionCollection
      *
      * @return  Session。該当するセッションを返す
      */
-    static find(sessionId : string)
+    static async find(sessionId : string) : Promise<any>
     {
         const log = slog.stepIn(SessionCollection.CLS_NAME, 'find');
-        return new Promise(async (resolve : (results) => void, reject) =>
-        {
-            try
-            {
-                const sql = 'SELECT * FROM session WHERE id=?';
-                const values = sessionId;
-                const results = await DB.query(sql, values);
-
-                log.stepOut();
-                resolve(results);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const sql = 'SELECT * FROM session WHERE id=?';
+        const values = sessionId;
+        const results = await DB.query(sql, values);
+        log.stepOut();
+        return results;
     }
 }
 

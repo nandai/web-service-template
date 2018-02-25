@@ -66,47 +66,40 @@ export async function onSignupEmail(req : express.Request, res : express.Respons
 /**
  * 検証
  */
-export function isSignupEmailValid(param : Request.SignupEmail, alreadyExistsAccount : Account, locale : string)
+export async function isSignupEmailValid(param : Request.SignupEmail, alreadyExistsAccount : Account, locale : string) : Promise<ValidationResult>
 {
-    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
+    const log = slog.stepIn('SignupApi', 'isSignupEmailValid');
+    const response : Response.SignupEmail = {status:Response.Status.OK, message:{}};
+    const {email, password} = param;
+
+    do
     {
-        const log = slog.stepIn('SignupApi', 'isSignupEmailValid');
-        try
+        // メールアドレス検証
+        const resultEmail = await Validator.email(email, 0, alreadyExistsAccount, locale);
+
+        if (resultEmail.status !== Response.Status.OK)
         {
-            const response : Response.SignupEmail = {status:Response.Status.OK, message:{}};
-            const {email, password} = param;
-
-            do
-            {
-                // メールアドレス検証
-                const resultEmail = await Validator.email(email, 0, alreadyExistsAccount, locale);
-
-                if (resultEmail.status !== Response.Status.OK)
-                {
-                    response.status =        resultEmail.status;
-                    response.message.email = resultEmail.message;
-                }
-
-                // パスワード検証
-                const passwordResult = Validator.password({password}, locale);
-
-                if (passwordResult.status !== Response.Status.OK)
-                {
-                    response.status =           passwordResult.status;
-                    response.message.password = passwordResult.password;
-                }
-            }
-            while (false);
-
-            if (response.status !== Response.Status.OK) {
-                log.w(JSON.stringify(response, null, 2));
-            }
-
-            log.stepOut();
-            resolve({response});
+            response.status =        resultEmail.status;
+            response.message.email = resultEmail.message;
         }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+
+        // パスワード検証
+        const passwordResult = Validator.password({password}, locale);
+
+        if (passwordResult.status !== Response.Status.OK)
+        {
+            response.status =           passwordResult.status;
+            response.message.password = passwordResult.password;
+        }
+    }
+    while (false);
+
+    if (response.status !== Response.Status.OK) {
+        log.w(JSON.stringify(response, null, 2));
+    }
+
+    log.stepOut();
+    return {response};
 }
 
 interface ValidationResult

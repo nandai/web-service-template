@@ -1,5 +1,5 @@
 /**
- * (C) 2016-2017 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}    from 'libs/slog';
 import {Account} from 'server/models/account';
@@ -23,20 +23,12 @@ export default class DeleteAccountCollection
      *
      * @param   account アカウント
      */
-    static add(model : Account)
+    static async add(model : Account) : Promise<Account>
     {
         const log = slog.stepIn(DeleteAccountCollection.CLS_NAME, 'add');
-        return new Promise(async (resolve : (model : Account) => void, reject) =>
-        {
-            try
-            {
-                const collection = DeleteAccountCollection.collection();
-                await collection.insert(model);
-
-                log.stepOut();
-                resolve(model);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const collection = DeleteAccountCollection.collection();
+        await collection.insert(model);
+        log.stepOut();
+        return model;
     }
 }

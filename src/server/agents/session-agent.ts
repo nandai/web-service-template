@@ -1,5 +1,5 @@
 /**
- * (C) 2016-2017 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}            from 'libs/slog';
 import Config            from 'server/config';
@@ -51,7 +51,6 @@ export default class SessionAgent
     {
         const newModel = SessionAgent.toModel(model);
         newModel.updated_at = Utils.now();
-
         return collection().update(newModel, {sessionId:newModel.id});
     }
 
@@ -62,28 +61,19 @@ export default class SessionAgent
      *
      * @return  なし
      */
-    static async logout(cond : {sessionId? : string, accountId? : number})
+    static async logout(cond : {sessionId? : string, accountId? : number}) : Promise<void>
     {
         const log = slog.stepIn(SessionAgent.CLS_NAME, 'logout');
-        return new Promise(async (resolve : () => void, reject) =>
+        const model : Session =
         {
-            try
-            {
-                const model : Session =
-                {
-                    account_id: null,
-                    updated_at: Utils.now()
-                };
-                await collection().update(model, cond);
+            account_id: null,
+            updated_at: Utils.now()
+        };
+        await collection().update(model, cond);
 
-                // クライアントに通知
-                await SocketManager.notifyLogout(cond);
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        // クライアントに通知
+        await SocketManager.notifyLogout(cond);
+        log.stepOut();
     }
 
     /**
@@ -93,19 +83,11 @@ export default class SessionAgent
      *
      * @return  Session。該当するセッションを返す
      */
-    static find(sessionId : string)
+    static async find(sessionId : string) : Promise<Session>
     {
-        return new Promise(async (resolve : (model : Session) => void, reject) =>
-        {
-            try
-            {
-                const data = await collection().find(sessionId);
-                const model = SessionAgent.toModel(data);
-
-                resolve(model);
-            }
-            catch (err) {reject(err);}
-        });
+        const data = await collection().find(sessionId);
+        const model = SessionAgent.toModel(data);
+        return model;
     }
 
     /**

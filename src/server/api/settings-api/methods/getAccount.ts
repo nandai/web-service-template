@@ -16,34 +16,27 @@ import express = require('express');
 /**
  * アカウント取得
  */
-export function getAccount(req : express.Request)
+export async function getAccount(req : express.Request) : Promise<Response.GetAccount>
 {
-    return new Promise(async (resolve : (data : Response.GetAccount) => void, reject) =>
+    const log = slog.stepIn('SettingsApi', 'getAccount');
+    const session    : Session = req.ext.session;
+    let account      : Account =      null;
+    let loginHistory : LoginHistory = null;
+
+    if (SessionAgent.isLogin(session))
     {
-        const log = slog.stepIn('SettingsApi', 'getAccount');
-        try
-        {
-            const session    : Session = req.ext.session;
-            let account      : Account =      null;
-            let loginHistory : LoginHistory = null;
+        const {account_id} = session;
 
-            if (SessionAgent.isLogin(session))
-            {
-                const {account_id} = session;
+        account =      await AccountAgent.find(account_id);
+        loginHistory = await LoginHistoryAgent.findLatest(account_id);
+    }
 
-                account =      await AccountAgent.find(account_id);
-                loginHistory = await LoginHistoryAgent.findLatest(account_id);
-            }
+    const data : Response.GetAccount =
+    {
+        status:  Response.Status.OK,
+        account: Converter.accountToResponse(account, loginHistory)
+    };
 
-            const data : Response.GetAccount =
-            {
-                status:  Response.Status.OK,
-                account: Converter.accountToResponse(account, loginHistory)
-            };
-
-            log.stepOut();
-            resolve(data);
-        }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+    log.stepOut();
+    return data;
 }

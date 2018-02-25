@@ -70,60 +70,53 @@ export async function onChangeEmail(req : express.Request, res : express.Respons
 /**
  * 検証
  */
-export function isChangeEmailValid(param : Request.ChangeEmail, account : Account, locale : string)
+export async function isChangeEmailValid(param : Request.ChangeEmail, account : Account, locale : string) : Promise<ValidationResult>
 {
-    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
-    {
         const log = slog.stepIn('SettingsApi', 'isChangeEmailValid');
-        try
+        const response : Response.ChangeEmail = {status:Response.Status.OK, message:{}};
+        const {password} = param;
+
+        do
         {
-            const response : Response.ChangeEmail = {status:Response.Status.OK, message:{}};
-            const {password} = param;
-
-            do
+            if (account === null)
             {
-                if (account === null)
-                {
-                    // メールアドレス設定の確認画面でメールアドレスの設定を完了させた後、再度メールアドレスの設定を完了させようとした場合にここに到達する想定。
-                    // 変更IDで該当するアカウントがないということが必ずしもメールアドレスの設定済みを意味するわけではないが、
-                    // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので変更済みというメッセージでOK。
-                    response.status = Response.Status.FAILED;
-                    response.message.general = R.text(R.ALREADY_EMAIL_CHANGED, locale);
-                    break;
-                }
-
-                // メールアドレス変更メールを送信してから確認までの間に同じメールアドレスが本登録される可能性があるため、
-                // メールアドレスの重複チェックを行う
-                const changeEmail = account.change_email;
-                const alreadyExistsAccount = await AccountAgent.findByProviderId('email', changeEmail);
-
-                if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
-                {
-                    response.status = Response.Status.FAILED;
-                    response.message.general = R.text(R.ALREADY_EXISTS_EMAIL, locale);
-                    break;
-                }
-
-                // パスワードチェック
-                const hashPassword = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
-
-                if (hashPassword !== account.password)
-                {
-                    response.status = Response.Status.FAILED;
-                    response.message.password = R.text(R.INVALID_PASSWORD, locale);
-                }
-            }
-            while (false);
-
-            if (response.status !== Response.Status.OK) {
-                log.w(JSON.stringify(response, null, 2));
+                // メールアドレス設定の確認画面でメールアドレスの設定を完了させた後、再度メールアドレスの設定を完了させようとした場合にここに到達する想定。
+                // 変更IDで該当するアカウントがないということが必ずしもメールアドレスの設定済みを意味するわけではないが、
+                // 第三者が直接このAPIをコールするなど、想定以外のケースでなければありえないので変更済みというメッセージでOK。
+                response.status = Response.Status.FAILED;
+                response.message.general = R.text(R.ALREADY_EMAIL_CHANGED, locale);
+                break;
             }
 
-            log.stepOut();
-            resolve({response});
+            // メールアドレス変更メールを送信してから確認までの間に同じメールアドレスが本登録される可能性があるため、
+            // メールアドレスの重複チェックを行う
+            const changeEmail = account.change_email;
+            const alreadyExistsAccount = await AccountAgent.findByProviderId('email', changeEmail);
+
+            if (alreadyExistsAccount !== null && alreadyExistsAccount.signup_id === null)
+            {
+                response.status = Response.Status.FAILED;
+                response.message.general = R.text(R.ALREADY_EXISTS_EMAIL, locale);
+                break;
+            }
+
+            // パスワードチェック
+            const hashPassword = Utils.getHashPassword(account.email, password, Config.PASSWORD_SALT);
+
+            if (hashPassword !== account.password)
+            {
+                response.status = Response.Status.FAILED;
+                response.message.password = R.text(R.INVALID_PASSWORD, locale);
+            }
         }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+        while (false);
+
+        if (response.status !== Response.Status.OK) {
+            log.w(JSON.stringify(response, null, 2));
+        }
+
+        log.stepOut();
+        return {response};
 }
 
 interface ValidationResult

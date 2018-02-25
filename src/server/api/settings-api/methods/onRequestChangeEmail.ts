@@ -150,49 +150,42 @@ export async function onRequestChangeEmail(req : express.Request, res : express.
 /**
  * 検証
  */
-export function isRequestChangeEmailValid(param : Request.RequestChangeEmail, myAccount : Account, locale : string)
+export async function isRequestChangeEmailValid(param : Request.RequestChangeEmail, myAccount : Account, locale : string) : Promise<ValidationResult>
 {
-    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
+    const log = slog.stepIn('SettingsApi', 'isRequestChangeEmailValid');
+    const response : Response.RequestChangeEmail = {status:Response.Status.OK, message:{}};
+    const {email} = param;
+
+    do
     {
-        const log = slog.stepIn('SettingsApi', 'isRequestChangeEmailValid');
-        try
+        if (email)
         {
-            const response : Response.RequestChangeEmail = {status:Response.Status.OK, message:{}};
-            const {email} = param;
+            const alreadyExistsAccount = await AccountAgent.findByProviderId('email', email);
+            const resultEmail = await Validator.email(email, myAccount.id, alreadyExistsAccount, locale);
 
-            do
+            if (resultEmail.status !== Response.Status.OK)
             {
-                if (email)
-                {
-                    const alreadyExistsAccount = await AccountAgent.findByProviderId('email', email);
-                    const resultEmail = await Validator.email(email, myAccount.id, alreadyExistsAccount, locale);
-
-                    if (resultEmail.status !== Response.Status.OK)
-                    {
-                        response.status =        resultEmail.status;
-                        response.message.email = resultEmail.message;
-                    }
-                }
-                else
-                {
-                    if (AccountAgent.canUnlink(myAccount, 'email') === false)
-                    {
-                        response.status = Response.Status.FAILED;
-                        response.message.email = R.text(R.CANNOT_EMPTY_EMAIL, locale);
-                    }
-                }
+                response.status =        resultEmail.status;
+                response.message.email = resultEmail.message;
             }
-            while (false);
-
-            if (response.status !== Response.Status.OK) {
-                log.w(JSON.stringify(response, null, 2));
-            }
-
-            log.stepOut();
-            resolve({response});
         }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+        else
+        {
+            if (AccountAgent.canUnlink(myAccount, 'email') === false)
+            {
+                response.status = Response.Status.FAILED;
+                response.message.email = R.text(R.CANNOT_EMPTY_EMAIL, locale);
+            }
+        }
+    }
+    while (false);
+
+    if (response.status !== Response.Status.OK) {
+        log.w(JSON.stringify(response, null, 2));
+    }
+
+    log.stepOut();
+    return {response};
 }
 
 interface ValidationResult

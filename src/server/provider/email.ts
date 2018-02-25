@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {Response}     from 'libs/response';
 import {slog}         from 'libs/slog';
@@ -43,37 +43,34 @@ export default class Email extends Provider
         try
         {
             const email = new Email();
-            await email.signupOrLogin(req, res, (account : Account) : Promise<boolean> =>
+            await email.signupOrLogin(req, res, async (account : Account) : Promise<boolean> =>
             {
-                return new Promise(async (resolve : BooleanResolve) =>
+                const url = Utils.generateUrl('signup', account.signup_id);
+                const locale = req.ext.locale;
+                const template = R.mail(R.NOTICE_SIGNUP, locale);
+                const contents = CommonUtils.formatString(template.contents, {url});
+                const result = await Utils.sendMail(template.subject, account.email, contents);
+                let data : Response.SignupEmail;
+
+                if (result)
                 {
-                    const url = Utils.generateUrl('signup', account.signup_id);
-                    const locale = req.ext.locale;
-                    const template = R.mail(R.NOTICE_SIGNUP, locale);
-                    const contents = CommonUtils.formatString(template.contents, {url});
-                    const result = await Utils.sendMail(template.subject, account.email, contents);
-                    let data : Response.SignupEmail;
-
-                    if (result)
+                    data =
                     {
-                        data =
-                        {
-                            status:  Response.Status.OK,
-                            message: {general:R.text(R.SIGNUP_MAIL_SENDED, locale)}
-                        };
-                    }
-                    else
+                        status:  Response.Status.OK,
+                        message: {general:R.text(R.SIGNUP_MAIL_SENDED, locale)}
+                    };
+                }
+                else
+                {
+                    data =
                     {
-                        data =
-                        {
-                            status:  Response.Status.FAILED,
-                            message: {general:R.text(R.COULD_NOT_SEND_SIGNUP_MAIL, locale)}
-                        };
-                    }
+                        status:  Response.Status.FAILED,
+                        message: {general:R.text(R.COULD_NOT_SEND_SIGNUP_MAIL, locale)}
+                    };
+                }
 
-                    res.json(data);
-                    resolve(result);
-                });
+                res.json(data);
+                return result;
             });
             log.stepOut();
         }
@@ -86,17 +83,11 @@ export default class Email extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, _refreshToken : string)
+    protected async inquiry(accessToken : string, _refreshToken : string) : Promise<void>
     {
         const log = slog.stepIn(Email.CLS_NAME_2, 'inquiry');
-        const self = this;
-
-        return new Promise((resolve : () => void) =>
-        {
-            self.id = accessToken;  // email
-            log.stepOut();
-            resolve();
-        });
+        this.id = accessToken;  // email
+        log.stepOut();
     }
 
     /**
@@ -118,34 +109,36 @@ export default class Email extends Provider
     /**
      * レスポンスを送信する
      */
-    protected sendResponse(req : express.Request, res : express.Response, _session : Session, _redirect : string, phrase? : string, smsId? : string)
+    protected async sendResponse(
+        req       : express.Request,
+        res       : express.Response,
+        _session  : Session,
+        _redirect : string,
+        phrase?   : string,
+        smsId?    : string) : Promise<void>
     {
         const log = slog.stepIn(Email.CLS_NAME_2, 'sendResponse');
-        return new Promise((resolve : () => void) =>
+        const locale = req.ext.locale;
+
+        if (phrase && phrase !== R.COULD_NOT_SEND_SMS)
         {
-            const locale = req.ext.locale;
-
-            if (phrase && phrase !== R.COULD_NOT_SEND_SMS)
-            {
-                if (phrase === R.INCORRECT_ACCOUNT) {
-                    phrase =   R.INVALID_EMAIL_AUTH;
-                }
-
-                res.ext.error(Response.Status.FAILED, R.text(phrase, locale));
-            }
-            else
-            {
-                const data : Response.LoginEmail = {status:Response.Status.OK, smsId, message:{}};
-
-                if (phrase) {
-                    data.message.general = R.text(phrase, locale);
-                }
-
-                res.json(data);
+            if (phrase === R.INCORRECT_ACCOUNT) {
+                phrase =   R.INVALID_EMAIL_AUTH;
             }
 
-            log.stepOut();
-            resolve();
-        });
+            res.ext.error(Response.Status.FAILED, R.text(phrase, locale));
+        }
+        else
+        {
+            const data : Response.LoginEmail = {status:Response.Status.OK, smsId, message:{}};
+
+            if (phrase) {
+                data.message.general = R.text(phrase, locale);
+            }
+
+            res.json(data);
+        }
+
+        log.stepOut();
     }
 }

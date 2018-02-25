@@ -74,80 +74,73 @@ export async function onChangePassword(req : express.Request, res : express.Resp
 /**
  * 検証
  */
-export function isChangePasswordValid(param : Request.ChangePassword, myAccountId : number, locale : string)
+export async function isChangePasswordValid(param : Request.ChangePassword, myAccountId : number, locale : string) : Promise<ValidationResult>
 {
-    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
+    const log = slog.stepIn('SettingsApi', 'isChangePasswordValid');
+    const response : Response.ChangePassword = {status:Response.Status.OK, message:{}};
+    const {oldPassword, newPassword, confirm} = param;
+
+    let account : Account = null;
+
+    do
     {
-        const log = slog.stepIn('SettingsApi', 'isChangePasswordValid');
-        try
+        // パスワード検証
+        const passwordResult = Validator.password({password:newPassword, confirm, canNull:true}, locale);
+
+        if (passwordResult.status !== Response.Status.OK)
         {
-            const response : Response.ChangePassword = {status:Response.Status.OK, message:{}};
-            const {oldPassword, newPassword, confirm} = param;
-
-            let account : Account = null;
-
-            do
-            {
-                // パスワード検証
-                const passwordResult = Validator.password({password:newPassword, confirm, canNull:true}, locale);
-
-                if (passwordResult.status !== Response.Status.OK)
-                {
-                    response.status =              passwordResult.status;
-                    response.message.newPassword = passwordResult.password;
-                    response.message.confirm =     passwordResult.confirm;
-                }
-
-                // アカウント存在検証
-                account = await AccountAgent.find(myAccountId);
-
-                if (account === null)
-                {
-                    response.status = Response.Status.FAILED;
-                    response.message.general = R.text(R.ACCOUNT_NOT_FOUND, locale);
-                    break;
-                }
-
-                // メールアドレスが設定されているかどうか
-                if (account.email === null)
-                {
-                    response.status = Response.Status.FAILED;
-                    response.message.general = R.text(R.CANNOT_SET_PASSWORD, locale);
-                }
-
-                // パスワードを未設定にする場合は他に認証手段があるかどうか
-                if (newPassword === null)
-                {
-                    if (AccountAgent.canUnlink(account, 'email') === false)
-                    {
-                        response.status = Response.Status.FAILED;
-                        response.message.newPassword = R.text(R.CANNOT_NO_SET_PASSWORD, locale);
-                    }
-                }
-
-                // 現在のパスワードと現在のパスワードとして入力されたパスワードが一致するかどうか
-                if (account.password !== null || oldPassword !== null)
-                {
-                    const hashPassword = Utils.getHashPassword(account.email, oldPassword, Config.PASSWORD_SALT);
-
-                    if (hashPassword !== account.password)
-                    {
-                        response.status = Response.Status.FAILED;
-                        response.message.oldPassword = R.text(R.INVALID_PASSWORD, locale);
-                    }
-                }
-            }
-            while (false);
-
-            if (response.status !== Response.Status.OK) {
-                log.w(JSON.stringify(response, null, 2));
-            }
-
-            log.stepOut();
-            resolve({response, account});
+            response.status =              passwordResult.status;
+            response.message.newPassword = passwordResult.password;
+            response.message.confirm =     passwordResult.confirm;
         }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+
+        // アカウント存在検証
+        account = await AccountAgent.find(myAccountId);
+
+        if (account === null)
+        {
+            response.status = Response.Status.FAILED;
+            response.message.general = R.text(R.ACCOUNT_NOT_FOUND, locale);
+            break;
+        }
+
+        // メールアドレスが設定されているかどうか
+        if (account.email === null)
+        {
+            response.status = Response.Status.FAILED;
+            response.message.general = R.text(R.CANNOT_SET_PASSWORD, locale);
+        }
+
+        // パスワードを未設定にする場合は他に認証手段があるかどうか
+        if (newPassword === null)
+        {
+            if (AccountAgent.canUnlink(account, 'email') === false)
+            {
+                response.status = Response.Status.FAILED;
+                response.message.newPassword = R.text(R.CANNOT_NO_SET_PASSWORD, locale);
+            }
+        }
+
+        // 現在のパスワードと現在のパスワードとして入力されたパスワードが一致するかどうか
+        if (account.password !== null || oldPassword !== null)
+        {
+            const hashPassword = Utils.getHashPassword(account.email, oldPassword, Config.PASSWORD_SALT);
+
+            if (hashPassword !== account.password)
+            {
+                response.status = Response.Status.FAILED;
+                response.message.oldPassword = R.text(R.INVALID_PASSWORD, locale);
+            }
+        }
+    }
+    while (false);
+
+    if (response.status !== Response.Status.OK) {
+        log.w(JSON.stringify(response, null, 2));
+    }
+
+    log.stepOut();
+    return {response, account};
 }
 
 interface ValidationResult

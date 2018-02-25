@@ -1,5 +1,5 @@
 /**
- * (C) 2016 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}   from 'libs/slog';
 import Config   from 'server/config';
@@ -62,7 +62,7 @@ export default class Twitter extends Provider
      * @param   accessToken     アクセストークン
      * @param   refreshToken    リフレッシュトークン
      */
-    protected inquiry(accessToken : string, refreshToken : string)
+    protected inquiry(accessToken : string, refreshToken : string) : Promise<void>
     {
         const log = slog.stepIn(Twitter.CLS_NAME_2, 'inquiry');
         return new Promise((resolve : () => void) =>
@@ -71,10 +71,10 @@ export default class Twitter extends Provider
             {
                 const provider = new twit(
                 {
-                    consumer_key:         Config.TWITTER_CONSUMER_KEY,
-                    consumer_secret:      Config.TWITTER_CONSUMER_SECRET,
-                    access_token:         accessToken,
-                    access_token_secret : refreshToken
+                    consumer_key:        Config.TWITTER_CONSUMER_KEY,
+                    consumer_secret:     Config.TWITTER_CONSUMER_SECRET,
+                    access_token:        accessToken,
+                    access_token_secret: refreshToken
                 });
 
                 provider

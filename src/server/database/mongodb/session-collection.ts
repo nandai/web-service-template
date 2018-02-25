@@ -1,5 +1,5 @@
 /**
- * (C) 2016-2017 printf.jp
+ * (C) 2016-2018 printf.jp
  */
 import {slog}    from 'libs/slog';
 import {Session} from 'server/models/session';
@@ -21,21 +21,13 @@ export default class SessionCollection
     /**
      * セッションを追加する
      */
-    static add(model : Session)
+    static async add(model : Session) : Promise<Session>
     {
         const log = slog.stepIn(SessionCollection.CLS_NAME, 'add');
-        return new Promise(async (resolve : (model : Session) => void, reject) =>
-        {
-            try
-            {
-                const collection = SessionCollection.collection();
-                await collection.insert(model);
-
-                log.stepOut();
-                resolve(model);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const collection = SessionCollection.collection();
+        await collection.insert(model);
+        log.stepOut();
+        return model;
     }
 
     /**
@@ -46,31 +38,22 @@ export default class SessionCollection
      *
      * @return  なし
      */
-    static update(model : Session, cond : SessionFindCondition)
+    static async update(model : Session, cond : SessionFindCondition) : Promise<void>
     {
         const log = slog.stepIn(SessionCollection.CLS_NAME, 'update');
-        return new Promise(async (resolve : () => void, reject) =>
-        {
-            try
-            {
-                const filter : Session = {};
+        const filter : Session = {};
 
-                if (cond.sessionId) {
-                    filter.id = cond.sessionId;
-                }
+        if (cond.sessionId) {
+            filter.id = cond.sessionId;
+        }
 
-                if (cond.accountId) {
-                    filter.account_id = cond.accountId;
-                }
+        if (cond.accountId) {
+            filter.account_id = cond.accountId;
+        }
 
-                const collection = SessionCollection.collection();
-                await collection.update(filter, {$set:model});
-
-                log.stepOut();
-                resolve();
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        const collection = SessionCollection.collection();
+        await collection.update(filter, {$set:model});
+        log.stepOut();
     }
 
     /**
@@ -80,23 +63,16 @@ export default class SessionCollection
      *
      * @return  Session。該当するセッションを返す
      */
-    static find(sessionId : string)
+    static async find(sessionId : string) : Promise<any>
     {
         const log = slog.stepIn(SessionCollection.CLS_NAME, 'find');
-        return new Promise(async (resolve : (results) => void, reject) =>
-        {
-            try
-            {
-                const filter : Session = {id:sessionId};
+        const filter : Session = {id:sessionId};
 
-                const collection = SessionCollection.collection();
-                const results = await collection.find(filter);
+        const collection = SessionCollection.collection();
+        const results = await collection.find(filter);
 
-                log.stepOut();
-                resolve(results);
-            }
-            catch (err) {log.stepOut(); reject(err);}
-        });
+        log.stepOut();
+        return results;
     }
 }
 

@@ -136,75 +136,68 @@ export async function onSetAccount(req : express.Request, res : express.Response
 /**
  * 検証
  */
-export function isSetAccountValid(param : Request.SetAccount, myAccountId : number, locale : string)
+export async function isSetAccountValid(param : Request.SetAccount, myAccountId : number, locale : string) : Promise<ValidationResult>
 {
-    return new Promise(async (resolve : (result : ValidationResult) => void, reject) =>
+    const log = slog.stepIn('SettingsApi', 'isSetAccountValid');
+    const response : Response.SetAccount = {status:Response.Status.OK, message:{}};
+    const {name, userName, countryCode, phoneNo, twoFactorAuth} = param;
+
+    do
     {
-        const log = slog.stepIn('SettingsApi', 'isSetAccountValid');
-        try
+        // アカウント名チェック
+        const accountNameResult = Validator.accountName(name, locale);
+        if (accountNameResult.status !== Response.Status.OK)
         {
-            const response : Response.SetAccount = {status:Response.Status.OK, message:{}};
-            const {name, userName, countryCode, phoneNo, twoFactorAuth} = param;
-
-            do
-            {
-                // アカウント名チェック
-                const accountNameResult = Validator.accountName(name, locale);
-                if (accountNameResult.status !== Response.Status.OK)
-                {
-                    response.status =       accountNameResult.status;
-                    response.message.name = accountNameResult.message;
-                }
-
-                // ユーザー名チェック
-                const alreadyExistsAccount = await AccountAgent.findByUserName(userName);
-                const userNameResult = Validator.userName(userName, myAccountId, alreadyExistsAccount, locale);
-
-                if (userNameResult.status !== Response.Status.OK)
-                {
-                    response.status =           userNameResult.status;
-                    response.message.userName = userNameResult.message;
-                }
-
-                // 国コードチェック
-                if (countryCode)
-                {
-                    const countries : any[] = lookup.countries({countryCallingCodes:countryCode});
-                    if (countries.length === 0)
-                    {
-                        response.status = Response.Status.FAILED;
-                        response.message.countryCode = R.text(R.INVALID_COUNTRY_CODE, locale);
-                    }
-                }
-
-                // 二段階認証方式チェック
-                if (twoFactorAuth === 'SMS'
-                ||  twoFactorAuth === 'Authy')
-                {
-                    if (countryCode === null || phoneNo === null)
-                    {
-                        response.status = Response.Status.FAILED;
-                        response.message.phoneNo = R.text(R.REQUIRE_COUNTRY_CODE_AND_PHONE_NO, locale);
-                    }
-                }
-
-                else if (twoFactorAuth !== null)
-                {
-                    response.status = Response.Status.BAD_REQUEST;
-                    response.message.general = R.text(R.BAD_REQUEST, locale);
-                }
-            }
-            while (false);
-
-            if (response.status !== Response.Status.OK) {
-                log.w(JSON.stringify(response, null, 2));
-            }
-
-            log.stepOut();
-            resolve({response});
+            response.status =       accountNameResult.status;
+            response.message.name = accountNameResult.message;
         }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+
+        // ユーザー名チェック
+        const alreadyExistsAccount = await AccountAgent.findByUserName(userName);
+        const userNameResult = Validator.userName(userName, myAccountId, alreadyExistsAccount, locale);
+
+        if (userNameResult.status !== Response.Status.OK)
+        {
+            response.status =           userNameResult.status;
+            response.message.userName = userNameResult.message;
+        }
+
+        // 国コードチェック
+        if (countryCode)
+        {
+            const countries : any[] = lookup.countries({countryCallingCodes:countryCode});
+            if (countries.length === 0)
+            {
+                response.status = Response.Status.FAILED;
+                response.message.countryCode = R.text(R.INVALID_COUNTRY_CODE, locale);
+            }
+        }
+
+        // 二段階認証方式チェック
+        if (twoFactorAuth === 'SMS'
+        ||  twoFactorAuth === 'Authy')
+        {
+            if (countryCode === null || phoneNo === null)
+            {
+                response.status = Response.Status.FAILED;
+                response.message.phoneNo = R.text(R.REQUIRE_COUNTRY_CODE_AND_PHONE_NO, locale);
+            }
+        }
+
+        else if (twoFactorAuth !== null)
+        {
+            response.status = Response.Status.BAD_REQUEST;
+            response.message.general = R.text(R.BAD_REQUEST, locale);
+        }
+    }
+    while (false);
+
+    if (response.status !== Response.Status.OK) {
+        log.w(JSON.stringify(response, null, 2));
+    }
+
+    log.stepOut();
+    return {response};
 }
 
 /**

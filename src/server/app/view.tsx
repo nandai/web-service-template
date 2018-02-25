@@ -139,25 +139,17 @@ export function notFound(req : express.Request, res : express.Response)
 /**
  * 異常レスポンス送信
  */
-function sendAbnormal(
+async function sendAbnormal(
     req    : express.Request,
     res    : express.Response,
-    status : number)
+    status : number) : Promise<void>
 {
     const log = slog.stepIn('view.tsx', 'sendAbnormal');
-    return new Promise(async (resolve : () => void, reject) =>
-    {
-        try
-        {
-            const data = await SettingsApi.getAccount(req);
-            const {account} = data;
-            const page : pageNS.Page = {active:true, displayStatus:'displayed'};
-            const store : BaseStore = {account, page};
+    const data = await SettingsApi.getAccount(req);
+    const {account} = data;
+    const page : pageNS.Page = {active:true, displayStatus:'displayed'};
+    const store : BaseStore = {account, page};
 
-            res.status(status).send(view(req, store, {url:status.toString()}));
-            log.stepOut();
-            resolve();
-        }
-        catch (err) {log.stepOut(); reject(err);}
-    });
+    res.status(status).send(view(req, store, {url:status.toString()}));
+    log.stepOut();
 }

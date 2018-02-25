@@ -16,44 +16,40 @@ export default class Database
     /**
      * 初期化
      */
-    static init()
+    static async init(): Promise<void>
     {
-        return new Promise(async (resolve : () => void) =>
+        const log = slog.stepIn('MySQL', 'init');
+        try
         {
-            const log = slog.stepIn('MySQL', 'init');
-            try
+            if (Config.hasMySQL())
             {
-                if (Config.hasMySQL())
+                const config : mysql.PoolConfig =
                 {
-                    const config : mysql.PoolConfig =
-                    {
-                        host:     Config.DB_HOST,
-                        user:     Config.DB_USER,
-                        password: Config.DB_PASSWORD,
-                        database: Config.DB_NAME,
-                        charset:  'utf8mb4',
-                        timezone: 'utc'
-                    };
-                    Database.pool = mysql.createPool(config);
+                    host:     Config.DB_HOST,
+                    user:     Config.DB_USER,
+                    password: Config.DB_PASSWORD,
+                    database: Config.DB_NAME,
+                    charset:  'utf8mb4',
+                    timezone: 'utc'
+                };
+                Database.pool = mysql.createPool(config);
 
-                    const conn = await Database.getConnection();
-                    conn.release();
-                }
-
-                log.stepOut();
-                resolve();
+                const conn = await Database.getConnection();
+                conn.release();
             }
-            catch (err)
-            {
-                console.error('MySQLの初期化に失敗しました。');
-                console.error(err.message);
-                log.e(err.message);
-                log.stepOut();
 
-                // すぐに終了するとログが出力されないので数秒待ってから終了する
-                setTimeout(() => process.exit(-1), 3000);
-            }
-        });
+            log.stepOut();
+        }
+        catch (err)
+        {
+            console.error('MySQLの初期化に失敗しました。');
+            console.error(err.message);
+            log.e(err.message);
+            log.stepOut();
+
+            // すぐに終了するとログが出力されないので数秒待ってから終了する
+            setTimeout(() => process.exit(-1), 3000);
+        }
     }
 
     /**
@@ -80,26 +76,23 @@ export default class Database
     /**
      * クエリー実行
      */
-    static query(sql : string, values?)
+    static async query(sql : string, values?) : Promise<any>
     {
-        return new Promise(async (resolve : (results) => void, reject : (err : Error) => void) =>
+        let conn : Connection;
+        try
         {
-            let conn : Connection;
-            try
-            {
-                conn = await Database.getConnection();
-                const results = await conn.query(sql, values);
+            conn = await Database.getConnection();
+            const results = await conn.query(sql, values);
+            conn.release();
+            return results;
+        }
+        catch (err)
+        {
+            if (conn) {
                 conn.release();
-                resolve(results);
             }
-            catch (err)
-            {
-                if (conn) {
-                    conn.release();
-                }
-                reject(err);
-            }
-        });
+            throw err;
+        }
     }
 }
 
