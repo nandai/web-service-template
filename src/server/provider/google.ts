@@ -80,8 +80,10 @@ export default class Google extends Provider
                     refresh_token: refreshToken
                 });
 
-                plus.people.get({userId:'me', auth:oauth2Client}, (_err, profile) =>
+                plus.people.get({userId:'me', auth:oauth2Client}, (_err, res) =>
                 {
+                    const profile = res.data;
+
 //                  console.log(err);
 //                  console.log(JSON.stringify(profile, null, 2));
 

@@ -31,7 +31,7 @@ test.before(async () =>
 
 test.after.always(() =>
 {
-    return new Promise(async (resolve) =>
+    return new Promise((resolve) =>
     {
         // すぐに終了するとログが出力されないので数秒待ってから終了する
         setTimeout(() =>

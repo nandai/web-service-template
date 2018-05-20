@@ -6,9 +6,9 @@ import Config   from 'server/config';
 import Utils    from 'server/libs/utils';
 import Provider from './provider';
 
-import express =        require('express');
-import github =         require('github');
-import passportGithub = require('passport-github');
+import * as github         from '@octokit/rest';
+import * as express        from 'express';
+import * as passportGithub from 'passport-github';
 
 const options : github.Options =
 {
